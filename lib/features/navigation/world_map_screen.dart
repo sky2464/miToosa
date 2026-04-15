@@ -8,6 +8,7 @@ import '../../features/auth/auth_provider.dart';
 import '../../widgets/hearts_bar.dart';
 import 'track_detail_screen.dart';
 import '../../theme/design_system.dart';
+import '../../data/persistence_provider.dart';
 
 class WorldMapScreen extends ConsumerWidget {
   const WorldMapScreen({super.key});

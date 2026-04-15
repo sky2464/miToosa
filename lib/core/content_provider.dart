@@ -12,6 +12,7 @@ class TrackDefinition {
   final PuzzleRule rule;
   final String icon;
   final int targetLevelCount;
+  final String category;
 
   TrackDefinition({
     required this.id,
@@ -20,6 +21,7 @@ class TrackDefinition {
     required this.rule,
     this.icon = '🧩',
     this.targetLevelCount = 10,
+    this.category = 'Default',
   });
 
   factory TrackDefinition.fromJson(Map<String, dynamic> json) {
@@ -28,6 +30,7 @@ class TrackDefinition {
       name: json['name'],
       subtitle: json['subtitle'],
       rule: PuzzleRule.values.firstWhere((e) => e.name == json['rule']),
+      category: json['category'] ?? 'Default',
       icon: json['icon'] ?? '🧩',
       targetLevelCount: (json['levelCount'] as int?) ?? 10,
     );
