@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'theme/design_system.dart';
 import 'features/auth/login_screen.dart';
+import 'features/main_app/main_app_shell.dart';
+import 'features/auth/auth_provider.dart';
 
 import 'data/hive_persistence_provider.dart';
 import 'core/content_provider.dart';
@@ -19,18 +21,24 @@ void main() async {
   );
 }
 
-class MiToosaApp extends StatelessWidget {
+class MiToosaApp extends ConsumerWidget {
   const MiToosaApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+
     return MaterialApp(
       title: 'miToosa',
       theme: MiToosaTheme.lightTheme,
       darkTheme: MiToosaTheme.darkTheme,
       themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
-      home: const LoginScreen(),
+      home: authState.when(
+        data: (playerId) => const MainAppShell(),
+        loading: () => const LoginScreen(),
+        error: (_, __) => const LoginScreen(),
+      ),
     );
   }
 }

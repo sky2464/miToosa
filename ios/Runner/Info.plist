@@ -66,5 +66,16 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<!-- App Transport Security Settings -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+	</dict>
+	<!-- Required privacy descriptions for App Store submission -->
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>This app does not require local network access.</string>
+	<key>NSBonjourServiceTypes</key>
+	<array/>
 </dict>
 </plist>
