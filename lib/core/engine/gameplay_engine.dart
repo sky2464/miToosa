@@ -36,6 +36,12 @@ class GameplayState {
   final int incorrectAttempts;
   final String? selectedOptionId;
   final GameplayFeedback? feedback;
+  // Hint and run fields (engagement loop v1).
+  final bool hintUsed;
+  final bool isRunActive;
+  final Duration runTimeRemaining;
+  final int levelsInRun;
+  final int levelsCompleted;
 
   int get score => phase is PhaseCompleted ? (phase as PhaseCompleted).score : 0;
 
@@ -45,6 +51,11 @@ class GameplayState {
     this.incorrectAttempts = 0,
     this.selectedOptionId,
     this.feedback,
+    this.hintUsed = false,
+    this.isRunActive = false,
+    this.runTimeRemaining = Duration.zero,
+    this.levelsInRun = 0,
+    this.levelsCompleted = 0,
   });
 
   GameplayState copyWith({
@@ -54,6 +65,11 @@ class GameplayState {
     String? selectedOptionId,
     GameplayFeedback? feedback,
     bool clearFeedback = false,
+    bool? hintUsed,
+    bool? isRunActive,
+    Duration? runTimeRemaining,
+    int? levelsInRun,
+    int? levelsCompleted,
   }) {
     return GameplayState(
       level: level ?? this.level,
@@ -61,6 +77,11 @@ class GameplayState {
       incorrectAttempts: incorrectAttempts ?? this.incorrectAttempts,
       selectedOptionId: selectedOptionId ?? this.selectedOptionId,
       feedback: clearFeedback ? null : (feedback ?? this.feedback),
+      hintUsed: hintUsed ?? this.hintUsed,
+      isRunActive: isRunActive ?? this.isRunActive,
+      runTimeRemaining: runTimeRemaining ?? this.runTimeRemaining,
+      levelsInRun: levelsInRun ?? this.levelsInRun,
+      levelsCompleted: levelsCompleted ?? this.levelsCompleted,
     );
   }
 }

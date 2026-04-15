@@ -151,4 +151,56 @@ class HivePersistenceProvider implements IPersistenceProvider {
       await saveProgress(progress);
     }
   }
+
+  @override
+  Future<void> deductHeart(String playerId) async {
+    final progress = await loadProgress(playerId);
+    progress.deductHeart();
+    await saveProgress(progress);
+  }
+
+  @override
+  Future<bool> refuelHeartsWithDiamond(String playerId) async {
+    final progress = await loadProgress(playerId);
+    final ok = progress.refuelHeartsWithDiamond();
+    if (ok) await saveProgress(progress);
+    return ok;
+  }
+
+  @override
+  Future<void> addDiamond(String playerId, [int count = 1]) async {
+    final progress = await loadProgress(playerId);
+    progress.addDiamond(count);
+    await saveProgress(progress);
+  }
+
+  @override
+  Future<bool> checkAndRefuelHeart(String playerId, DateTime now) async {
+    final progress = await loadProgress(playerId);
+    final ok = progress.checkAndRefuelHeart(now);
+    if (ok) await saveProgress(progress);
+    return ok;
+  }
+
+  @override
+  Future<void> refuelHeartLowerLevel(String playerId) async {
+    final progress = await loadProgress(playerId);
+    progress.refuelHeartLowerLevel();
+    await saveProgress(progress);
+  }
+
+  @override
+  Future<void> markTutorialSeen(String playerId, String worldId) async {
+    final progress = await loadProgress(playerId);
+    progress.markTutorialSeen(worldId);
+    await saveProgress(progress);
+  }
+
+  @override
+  Future<bool> shareAndRefuel(String playerId, DateTime now) async {
+    final progress = await loadProgress(playerId);
+    final granted = progress.shareAndRefuel(now);
+    if (granted) await saveProgress(progress);
+    return granted;
+  }
 }

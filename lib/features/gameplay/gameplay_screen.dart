@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/models/gameplay_level.dart';
 import '../../core/engine/gameplay_engine.dart';
+import '../../core/engine/progression_engine.dart';
 import '../../core/models/puzzle.dart';
 import '../../core/models/shape_item.dart';
 import '../../core/content_provider.dart';
@@ -11,17 +13,25 @@ import '../../core/audio_service.dart';
 import '../../data/hive_persistence_provider.dart';
 import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
+import '../../widgets/hint_button.dart';
+import '../../widgets/how_to_play_modal.dart';
+import '../../widgets/run_timer_overlay.dart';
 import '../auth/auth_provider.dart';
 import 'gameplay_view_model.dart';
 
 class GameplayScreen extends ConsumerStatefulWidget {
   final TrackDefinition track;
   final int levelIndex;
+  /// When true the screen starts a timed run covering [runTotalLevels] levels.
+  final bool isRunMode;
+  final int runTotalLevels;
 
   const GameplayScreen({
     super.key,
     required this.track,
     required this.levelIndex,
+    this.isRunMode = false,
+    this.runTotalLevels = 0,
   });
 
   @override
@@ -35,6 +45,9 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
   late AnimationController _entryController;
   late AnimationController _feedbackController;
   late Animation<double> _feedbackScale;
+  Timer? _runTimer;
+  Duration _runTotalTime = Duration.zero;
+  late final AppLifecycleListener _lifecycleListener;
 
   @override
   void initState() {
@@ -54,14 +67,86 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
       CurvedAnimation(parent: _feedbackController, curve: Curves.elasticOut),
     );
 
+    _lifecycleListener = AppLifecycleListener(
+      onPause: _pauseTimer,
+      onResume: _resumeTimer,
+    );
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(gameplayViewModelProvider(level).notifier).start();
       _entryController.forward();
+      if (widget.isRunMode && widget.runTotalLevels > 0) {
+        _runTotalTime = Duration(minutes: widget.runTotalLevels);
+        ref
+            .read(gameplayViewModelProvider(level).notifier)
+            .startRun(widget.runTotalLevels);
+        _startRunTimer();
+      }
     });
+  }
+
+  void _startRunTimer() {
+    _runTimer?.cancel();
+    _runTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (!mounted) return;
+      final notifier = ref.read(gameplayViewModelProvider(level).notifier);
+      notifier.tickTimer(const Duration(seconds: 1));
+      final state = ref.read(gameplayViewModelProvider(level));
+      if (!state.isRunActive && state.runTimeRemaining == Duration.zero) {
+        _runTimer?.cancel();
+        _showTimeUpBanner();
+      }
+    });
+  }
+
+  void _pauseTimer() => _runTimer?.cancel();
+
+  void _resumeTimer() {
+    final state = ref.read(gameplayViewModelProvider(level));
+    if (state.isRunActive) _startRunTimer();
+  }
+
+  void _showTimeUpBanner() {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showMaterialBanner(
+      MaterialBanner(
+        content: const Text("⏰ Time's up!"),
+        actions: [
+          TextButton(
+            onPressed: () =>
+                ScaffoldMessenger.of(context).hideCurrentMaterialBanner(),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showRunBonusBanner() {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('FULL RUN! 🔥 +1 💎'),
+        backgroundColor: MiToosaTheme.success,
+        duration: Duration(seconds: 4),
+      ),
+    );
+  }
+
+  Future<void> _awardRunBonusDiamond() async {
+    final playerId = ref.read(authProvider).maybeWhen(
+      data: (v) => v,
+      orElse: () => null,
+    );
+    if (playerId == null) return;
+    await HivePersistenceProvider().addDiamond(playerId);
+    ref.invalidate(playerProgressProvider);
   }
 
   @override
   void dispose() {
+    _runTimer?.cancel();
+    _lifecycleListener.dispose();
     _entryController.dispose();
     _feedbackController.dispose();
     super.dispose();
@@ -84,6 +169,15 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
 
     if (isCorrect && mounted) {
       _saveProgress();
+      if (widget.isRunMode) {
+        final bonus = ref
+            .read(gameplayViewModelProvider(level).notifier)
+            .completeLevel();
+        if (bonus) {
+          _showRunBonusBanner();
+          _awardRunBonusDiamond();
+        }
+      }
       setState(() => _animatingTransition = true);
       Future.delayed(const Duration(milliseconds: 1200), () {
         if (!mounted) return;
@@ -101,6 +195,53 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     }
   }
 
+  Future<void> _useHint(int hearts) async {
+    final used = ref
+        .read(gameplayViewModelProvider(level).notifier)
+        .useHint(hearts: hearts);
+    if (!used) return;
+
+    // Deduct heart in persistence
+    final playerId = ref.read(authProvider).maybeWhen(
+      data: (v) => v,
+      orElse: () => null,
+    );
+    if (playerId != null) {
+      await HivePersistenceProvider().deductHeart(playerId);
+      ref.invalidate(playerProgressProvider);
+    }
+
+    // Show hint in bottom sheet
+    if (!mounted) return;
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(MiToosaTheme.radiusLg),
+        ),
+      ),
+      builder: (_) => Padding(
+        padding: const EdgeInsets.all(MiToosaTheme.spacingLg),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(children: [
+              const Icon(Icons.lightbulb_rounded,
+                  color: MiToosaTheme.warning, size: 22),
+              const SizedBox(width: 8),
+              Text('Hint',
+                  style: Theme.of(context).textTheme.headlineMedium),
+            ]),
+            const SizedBox(height: MiToosaTheme.spacingMd),
+            Text(level.hint ?? '', style: Theme.of(context).textTheme.bodyLarge),
+            const SizedBox(height: MiToosaTheme.spacingLg),
+          ],
+        ),
+      ),
+    );
+  }
+
   Future<void> _saveProgress() async {
     final playerId = ref.read(authProvider).maybeWhen(
       data: (value) => value,
@@ -110,7 +251,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     final persistence = HivePersistenceProvider();
     final levelId = '${widget.track.id}_${widget.levelIndex}';
     final state = ref.read(gameplayViewModelProvider(level));
-    final stars = level.stars(state.incorrectAttempts);
+    final stars = level.stars(state.incorrectAttempts, hintUsed: state.hintUsed);
     await persistence.updateLevelStar(playerId, levelId, stars);
 
     // Update XP
@@ -118,6 +259,14 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     final gainedXP = state.score.toInt();
     progress.totalXP = progress.totalXP + gainedXP;
     await persistence.saveProgress(progress);
+
+    // Reward: completing a lower level grants a heart refuel
+    final completedCount = progress.levelStars.values
+        .where((s) => s > 0)
+        .length;
+    if (ProgressionEngine.isLowerLevel(widget.levelIndex, completedCount)) {
+      await persistence.refuelHeartLowerLevel(playerId);
+    }
 
     // Refresh global progress provider so UI (world map / header) shows updated XP
     ref.invalidate(playerProgressProvider);
@@ -145,6 +294,12 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
         child: SafeArea(
           child: Column(
             children: [
+              // ─── Run timer bar ─────────────────────────────
+              if (widget.isRunMode)
+                RunTimerOverlay(
+                  timeRemaining: state.runTimeRemaining,
+                  totalTime: _runTotalTime,
+                ),
               // ─── Header ──────────────────────────────────
               _buildHeader(context, level, state),
               // ─── Scrollable Content ──────────────────────
@@ -193,6 +348,11 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     final theme = Theme.of(context);
     final maxLevels = widget.track.targetLevelCount;
     final progress = (widget.levelIndex + 1) / maxLevels;
+    final progressAsync = ref.watch(playerProgressProvider);
+    final hearts = progressAsync.maybeWhen(
+      data: (p) => p.hearts,
+      orElse: () => 5,
+    );
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(
@@ -225,6 +385,21 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
                   ],
                 ),
               ),
+              // Hint button
+              HintButton(
+                hint: level.hint,
+                hearts: hearts,
+                hintUsed: eng.hintUsed,
+                onUseHint: () => _useHint(hearts),
+                onNoHearts: () => ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'Not enough hearts – use a 💎 or play a lower level',
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 4),
               // Score badge
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -245,6 +420,20 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
                     ),
                   ],
                 ),
+              ),
+              const SizedBox(width: 4),
+              // Reopen how-to-play
+              IconButton(
+                key: const ValueKey('how_to_play_reopen'),
+                onPressed: () => HowToPlayModal.show(
+                  context,
+                  track: widget.track,
+                  onStart: () => Navigator.of(context).pop(),
+                ),
+                icon: Icon(Icons.help_outline_rounded,
+                    color: theme.colorScheme.primary.withValues(alpha: 0.6),
+                    size: 22),
+                tooltip: 'How to play',
               ),
             ],
           ),

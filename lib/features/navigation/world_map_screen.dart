@@ -1,13 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../core/content_provider.dart';
+import '../../data/hive_persistence_provider.dart';
 import '../../data/player_progress.dart';
 import '../../data/player_progress_provider.dart';
+import '../../features/auth/auth_provider.dart';
+import '../../widgets/hearts_bar.dart';
+import '../../widgets/how_to_play_modal.dart';
 import '../gameplay/gameplay_screen.dart';
 import '../../theme/design_system.dart';
 
 class WorldMapScreen extends ConsumerWidget {
   const WorldMapScreen({super.key});
+
+  static const _appShareUrl =
+      'https://apps.apple.com/app/mitoosa/id0000000000'; // replace with real ID
+
+  Future<void> _refuelWithDiamond(WidgetRef ref, BuildContext context) async {
+    final playerId = ref.read(authProvider).maybeWhen(
+      data: (v) => v,
+      orElse: () => null,
+    );
+    if (playerId == null) return;
+    final ok =
+        await HivePersistenceProvider().refuelHeartsWithDiamond(playerId);
+    if (!ok && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Not enough 💎 diamonds')),
+      );
+    }
+    ref.invalidate(playerProgressProvider);
+  }
+
+  Future<void> _shareForHeart(WidgetRef ref, BuildContext context) async {
+    final playerId = ref.read(authProvider).maybeWhen(
+      data: (v) => v,
+      orElse: () => null,
+    );
+    if (playerId == null) return;
+    await Share.share(
+      'Play miToosa with me! $_appShareUrl',
+      subject: 'Check out miToosa',
+    );
+    final granted = await HivePersistenceProvider()
+        .shareAndRefuel(playerId, DateTime.now());
+    ref.invalidate(playerProgressProvider);
+    if (!granted && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Already shared today – come back tomorrow for another ❤')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -54,30 +98,49 @@ class WorldMapScreen extends ConsumerWidget {
                           ),
                         ),
                         const Spacer(),
-                        // XP Badge
+                        // XP Badge + HeartsBar
                         progressAsync.when(
-                          data: (progress) => Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  theme.colorScheme.primary,
-                                  theme.colorScheme.primary.withValues(alpha: 0.7),
-                                ],
+                          data: (progress) => Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              HeartsBar(
+                                hearts: progress.hearts,
+                                diamonds: progress.diamonds,
+                                onRefuelWithDiamond: () =>
+                                    _refuelWithDiamond(ref, context),
+                                onShareForHeart: () =>
+                                    _shareForHeart(ref, context),
                               ),
-                              borderRadius: BorderRadius.circular(MiToosaTheme.radiusMd),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(Icons.bolt, size: 18, color: Colors.white),
-                                const SizedBox(width: 4),
-                                Text(
-                                  '${progress.totalXP} XP',
-                                  style: theme.textTheme.labelLarge?.copyWith(color: Colors.white),
+                              const SizedBox(width: 10),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 14, vertical: 8),
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      theme.colorScheme.primary,
+                                      theme.colorScheme.primary
+                                          .withValues(alpha: 0.7),
+                                    ],
+                                  ),
+                                  borderRadius: BorderRadius.circular(
+                                      MiToosaTheme.radiusMd),
                                 ),
-                              ],
-                            ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(Icons.bolt,
+                                        size: 18, color: Colors.white),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      '${progress.totalXP} XP',
+                                      style: theme.textTheme.labelLarge
+                                          ?.copyWith(color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                           loading: () => const SizedBox.shrink(),
                           error: (_, __) => const SizedBox.shrink(),
@@ -191,7 +254,7 @@ class _StreakCard extends StatelessWidget {
 
 // ─── Track Card ──────────────────────────────────────────────
 
-class _TrackCard extends StatelessWidget {
+class _TrackCard extends ConsumerWidget {
   final TrackDefinition track;
   final PlayerProgress progress;
   final int trackIndex;
@@ -212,7 +275,7 @@ class _TrackCard extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final completed = _completedLevels();
     final total = track.targetLevelCount;
@@ -309,7 +372,27 @@ class _TrackCard extends StatelessWidget {
                   final isCurrent = levelIndex == completed;
 
                   return GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                      // Show tutorial modal on first entry to this world.
+                      if (!progress.seenTutorialWorlds.contains(track.id)) {
+                        if (!context.mounted) return;
+                        final authState = ref.read(authProvider);
+                        final playerId = authState.maybeWhen(
+                          data: (v) => v,
+                          orElse: () => 'local',
+                        );
+                        await HowToPlayModal.show(
+                          context,
+                          track: track,
+                          onStart: () {
+                            Navigator.of(context).pop();
+                          },
+                        );
+                        await HivePersistenceProvider()
+                            .markTutorialSeen(playerId, track.id);
+                        ref.invalidate(playerProgressProvider);
+                      }
+                      if (!context.mounted) return;
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -343,7 +426,7 @@ class _TrackCard extends StatelessWidget {
                           if (isCompleted)
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: List.generate(3, (i) {
+                              children: List.generate(5, (i) {
                                 return Icon(
                                   i < stars
                                       ? Icons.star_rounded

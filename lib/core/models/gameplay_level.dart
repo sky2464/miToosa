@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
 
+import '../engine/progression_engine.dart';
 import 'puzzle.dart';
 import 'shape_item.dart';
 
@@ -64,14 +65,18 @@ class GameplayLevel extends Equatable {
   int score(int incorrectAttempts) {
     final penalty = incorrectAttempts * 20;
     final scaled = (perfectScore * difficultyMultiplier).round();
-    return (scaled - penalty).clamp(10, scaled);
+    // Ensure the floor (10) never exceeds the ceiling (scaled) to avoid
+    // ArgumentError from clamp when scaled < 10 (e.g. low perfectScore
+    // combined with a sub-1.0 adaptive multiplier).
+    final floor = scaled < 10 ? scaled : 10;
+    return (scaled - penalty).clamp(floor, scaled);
   }
 
-  /// Compute star rating (1-3) based on incorrect attempts.
-  int stars(int incorrectAttempts) {
-    if (incorrectAttempts == 0) return 3;
-    if (incorrectAttempts == 1) return 2;
-    return 1;
+  /// Compute star rating (0–5) based on incorrect attempts.
+  /// When [hintUsed] is true the result is capped at 3.
+  int stars(int incorrectAttempts, {bool hintUsed = false}) {
+    final raw = ProgressionEngine.computeStars(incorrectAttempts);
+    return hintUsed ? raw.clamp(0, 3) : raw;
   }
 
   @override

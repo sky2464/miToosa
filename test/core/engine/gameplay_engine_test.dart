@@ -60,11 +60,65 @@ void main() {
       expect(state.incorrectAttempts, 2);
     });
 
-    test('Star rating returns 3 for perfect, 2 for one miss, 1 for more', () {
-      expect(sampleLevel.stars(0), 3);
-      expect(sampleLevel.stars(1), 2);
-      expect(sampleLevel.stars(2), 1);
-      expect(sampleLevel.stars(5), 1);
+    test('Star rating uses 0–5 scale', () {
+      expect(sampleLevel.stars(0), 5);
+      expect(sampleLevel.stars(1), 4);
+      expect(sampleLevel.stars(2), 3);
+      expect(sampleLevel.stars(4), 2);
+      expect(sampleLevel.stars(6), 1);
+      expect(sampleLevel.stars(7), 0);
+    });
+  });
+
+  group('GameplayState — hintUsed and run fields', () {
+    late GameplayLevel level;
+
+    setUp(() {
+      level = GameplayLevel.starterLevel();
+    });
+
+    test('defaults: hintUsed=false, isRunActive=false, runTimeRemaining=zero, levelsInRun=0, levelsCompleted=0', () {
+      final state = GameplayState(level: level);
+      expect(state.hintUsed, false);
+      expect(state.isRunActive, false);
+      expect(state.runTimeRemaining, Duration.zero);
+      expect(state.levelsInRun, 0);
+      expect(state.levelsCompleted, 0);
+    });
+
+    test('copyWith sets hintUsed independently', () {
+      final state = GameplayState(level: level);
+      final updated = state.copyWith(hintUsed: true);
+      expect(updated.hintUsed, true);
+      expect(state.hintUsed, false); // original unchanged
+    });
+
+    test('copyWith sets run fields independently', () {
+      final state = GameplayState(level: level);
+      final updated = state.copyWith(
+        isRunActive: true,
+        runTimeRemaining: const Duration(minutes: 10),
+        levelsInRun: 10,
+        levelsCompleted: 3,
+      );
+      expect(updated.isRunActive, true);
+      expect(updated.runTimeRemaining, const Duration(minutes: 10));
+      expect(updated.levelsInRun, 10);
+      expect(updated.levelsCompleted, 3);
+    });
+
+    test('copyWith without new fields preserves existing values', () {
+      final state = GameplayState(
+        level: level,
+        hintUsed: true,
+        isRunActive: true,
+        levelsInRun: 5,
+      );
+      final updated = state.copyWith(incorrectAttempts: 1);
+      expect(updated.hintUsed, true);
+      expect(updated.isRunActive, true);
+      expect(updated.levelsInRun, 5);
+      expect(updated.incorrectAttempts, 1);
     });
   });
 }

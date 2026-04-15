@@ -10,13 +10,13 @@ enum DifficultyMode { standard, adaptive }
 
 /// Aggregated mastery tier derived from a player's full performance history.
 enum MasteryTier {
-  /// Average stars below 1.8.
+  /// Average stars below 2.5.
   bronze,
 
-  /// Average stars 1.8 – < 2.5.
+  /// Average stars 2.5 – < 4.0.
   silver,
 
-  /// Average stars ≥ 2.5.
+  /// Average stars ≥ 4.0.
   gold,
 }
 
@@ -38,15 +38,48 @@ const double kMultiplierStep = 0.10;
 class ProgressionEngine {
   const ProgressionEngine._();
 
-  /// Returns a star rating (1–3) for a completed level.
+  /// Returns a star rating (0–5) for a completed level.
   ///
-  /// * 0 incorrect → 3 stars
-  /// * 1 incorrect → 2 stars
-  /// * 2+ incorrect → 1 star
+  /// * 0 incorrect → 5 stars
+  /// * 1 incorrect → 4 stars
+  /// * 2 incorrect → 3 stars
+  /// * 3–4 incorrect → 2 stars
+  /// * 5–6 incorrect → 1 star
+  /// * 7+ incorrect → 0 stars
   static int computeStars(int incorrectAttempts) {
-    if (incorrectAttempts == 0) return 3;
-    if (incorrectAttempts == 1) return 2;
-    return 1;
+    if (incorrectAttempts == 0) return 5;
+    if (incorrectAttempts == 1) return 4;
+    if (incorrectAttempts == 2) return 3;
+    if (incorrectAttempts <= 4) return 2;
+    if (incorrectAttempts <= 6) return 1;
+    return 0;
+  }
+
+  /// Migrates [history] from the 1–3 star scale (schema v1) to the 0–5 scale
+  /// (schema v2) by multiplying each entry by 5/3 and rounding.
+  ///
+  /// Returns a new list; the original is not mutated.
+  static List<int> migrateAdaptiveHistory(List<int> history) {
+    return history.map((s) => (s * 5 / 3).round()).toList();
+  }
+
+  /// Returns true if [refuelAt] is not null and is on or before [now],
+  /// meaning a timed heart is due.
+  static bool shouldRefuelByTime(DateTime? refuelAt, DateTime now) {
+    if (refuelAt == null) return false;
+    return !refuelAt.isAfter(now);
+  }
+
+  /// Returns the [DateTime] when the next timed heart refuel is due
+  /// (30 minutes from [now]).
+  static DateTime computeNextRefuelTime(DateTime now) {
+    return now.add(const Duration(minutes: 30));
+  }
+
+  /// Returns true if [completedIndex] is strictly less than [targetIndex],
+  /// meaning the completed level is a lower level (grants +1 heart).
+  static bool isLowerLevel(int completedIndex, int targetIndex) {
+    return completedIndex < targetIndex;
   }
 
   /// Returns XP earned for [score] (⌈score / 10⌉).
@@ -58,8 +91,8 @@ class ProgressionEngine {
   static MasteryTier computeMasteryTier(List<int> history) {
     if (history.isEmpty) return MasteryTier.bronze;
     final avg = history.reduce((a, b) => a + b) / history.length;
-    if (avg >= 2.5) return MasteryTier.gold;
-    if (avg >= 1.8) return MasteryTier.silver;
+    if (avg >= 4.0) return MasteryTier.gold;
+    if (avg >= 2.5) return MasteryTier.silver;
     return MasteryTier.bronze;
   }
 
@@ -74,8 +107,8 @@ class ProgressionEngine {
   /// * Applies at most ±[kMultiplierStep] per evaluation.
   /// * Clamps the result to [[kMultiplierMin], [kMultiplierMax]].
   ///
-  /// Average stars ≥ 2.5 → increase difficulty (good performance).
-  /// Average stars < 1.5 → decrease difficulty (struggling).
+  /// Average stars ≥ 4.0 → increase difficulty (good performance).
+  /// Average stars < 2.0 → decrease difficulty (struggling).
   /// Otherwise         → keep [current] unchanged.
   static double computeAdaptiveMultiplier(
     List<int> history,
@@ -93,12 +126,12 @@ class ProgressionEngine {
     final avgStars = window.reduce((a, b) => a + b) / window.length;
 
     double next = current;
-    if (avgStars >= 2.5) {
+    if (avgStars >= 4.0) {
       next = current + kMultiplierStep; // performing well → increase difficulty
-    } else if (avgStars < 1.5) {
+    } else if (avgStars < 2.0) {
       next = current - kMultiplierStep; // struggling → decrease difficulty
     }
-    // 1.5 ≤ avgStars < 2.5 → maintain current multiplier
+    // 2.0 ≤ avgStars < 4.0 → maintain current multiplier
 
     return next.clamp(kMultiplierMin, kMultiplierMax);
   }
