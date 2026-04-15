@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../theme/design_system.dart';
 import '../navigation/world_map_screen.dart';
 import 'progress_screen.dart';
 import 'leaderboard_screen.dart';
