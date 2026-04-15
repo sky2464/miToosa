@@ -1,0 +1,16 @@
+{
+  "name": "vulnerable_package",
+  "latest": {
+    "version": "1.0.0"
+  },
+  "advisories": [
+    {
+      "id": "CVE-2026-12345",
+      "severity": "CRITICAL",
+      "summary": "Remote code execution vulnerability",
+      "affected": {
+        "versions": [">=1.0.0 <1.0.5"]
+      }
+    }
+  ]
+}

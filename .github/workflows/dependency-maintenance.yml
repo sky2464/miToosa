@@ -62,18 +62,15 @@ jobs:
 
       - name: Create pull request for safe upgrades
         uses: peter-evans/create-pull-request@v5
-        if: |
-          !failure() &&
-          github.event_name == 'schedule'
+        if: "!failure() && github.event_name == 'schedule'"
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: 'chore(deps): upgrade patch/minor dependencies [automated]'
           title: 'chore(deps): safe dependency upgrades available'
-          body: |
+          body: >-
             Automated safe upgrades (patch/minor versions) from pub.dev.
-            - `flutter pub upgrade` applied
-            - `dart analyze` passed ✅
-            - `flutter test` passed ✅ (256 tests)
+            `flutter pub upgrade` applied, `dart analyze` passed ✅,
+            `flutter test` passed ✅ (256 tests).
             All verification gates passed. Ready for review and merge.
           branch: deps/safe-upgrades-${{ github.run_id }}
           base: main
@@ -152,3 +149,4 @@ jobs:
             cat outdated.txt >> "$GITHUB_STEP_SUMMARY"
             echo '```' >> "$GITHUB_STEP_SUMMARY"
           fi
+

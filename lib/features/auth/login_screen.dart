@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../navigation/world_map_screen.dart';
-import '../../data/hive_persistence_provider.dart';
+import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
 import 'auth_provider.dart';
 
@@ -58,15 +58,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     try {
       await Future.delayed(const Duration(milliseconds: 1200));
 
-      final playerId = ref.read(authProvider).maybeWhen(
-        data: (value) => value,
-        orElse: () => null,
-      );
+      final playerId = ref.playerId;
       if (playerId == null) {
         return;
       }
 
-      final persistence = HivePersistenceProvider();
+      final persistence = ref.read(persistenceProvider);
       final progress = await persistence.loadProgress(playerId);
       progress.recordLogin();
       await persistence.saveProgress(progress);
@@ -251,12 +248,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                             const SizedBox(height: 8),
                             OutlinedButton(
                               onPressed: () async {
-                                final playerId = ref.read(authProvider).maybeWhen(
-                                  data: (value) => value,
-                                  orElse: () => null,
-                                );
+                                final playerId = ref.playerId;
                                 if (playerId == null) return;
-                                final persistence = HivePersistenceProvider();
+                                final persistence = ref.read(persistenceProvider);
                                 final progress = await persistence.loadProgress(playerId);
                                 progress.totalXP += 50; // give 50 XP for debug
                                 await persistence.saveProgress(progress);

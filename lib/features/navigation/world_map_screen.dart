@@ -16,10 +16,7 @@ class WorldMapScreen extends ConsumerWidget {
       'https://apps.apple.com/app/mitoosa/id0000000000'; // replace with real ID
 
   Future<void> _refuelWithDiamond(WidgetRef ref, BuildContext context) async {
-    final playerId = ref.read(authProvider).maybeWhen(
-      data: (v) => v,
-      orElse: () => null,
-    );
+    final playerId = ref.playerId;
     if (playerId == null) return;
     final ok =
         await ref.read(persistenceProvider).refuelHeartsWithDiamond(playerId);
@@ -32,10 +29,7 @@ class WorldMapScreen extends ConsumerWidget {
   }
 
   Future<void> _shareForHeart(WidgetRef ref, BuildContext context) async {
-    final playerId = ref.read(authProvider).maybeWhen(
-      data: (v) => v,
-      orElse: () => null,
-    );
+    final playerId = ref.playerId;
     if (playerId == null) return;
     final result = await Share.share(
       'Play miToosa with me! $_appShareUrl',

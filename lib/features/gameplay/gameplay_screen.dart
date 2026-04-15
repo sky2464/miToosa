@@ -10,7 +10,6 @@ import '../../core/models/puzzle.dart';
 import '../../core/models/shape_item.dart';
 import '../../core/content_provider.dart';
 import '../../core/audio_service.dart';
-import '../../data/hive_persistence_provider.dart';
 import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
 import '../../widgets/hint_button.dart';
@@ -134,12 +133,9 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
   }
 
   Future<void> _awardRunBonusDiamond() async {
-    final playerId = ref.read(authProvider).maybeWhen(
-      data: (v) => v,
-      orElse: () => null,
-    );
+    final playerId = ref.playerId;
     if (playerId == null) return;
-    await HivePersistenceProvider().addDiamond(playerId);
+    await ref.read(persistenceProvider).addDiamond(playerId);
     ref.invalidate(playerProgressProvider);
   }
 
@@ -202,12 +198,9 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     if (!used) return;
 
     // Deduct heart in persistence
-    final playerId = ref.read(authProvider).maybeWhen(
-      data: (v) => v,
-      orElse: () => null,
-    );
+    final playerId = ref.playerId;
     if (playerId != null) {
-      await HivePersistenceProvider().deductHeart(playerId);
+      await ref.read(persistenceProvider).deductHeart(playerId);
       ref.invalidate(playerProgressProvider);
     }
 
@@ -243,12 +236,9 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
   }
 
   Future<void> _saveProgress() async {
-    final playerId = ref.read(authProvider).maybeWhen(
-      data: (value) => value,
-      orElse: () => null,
-    );
+    final playerId = ref.playerId;
     if (playerId == null) return;
-    final persistence = HivePersistenceProvider();
+    final persistence = ref.read(persistenceProvider);
     final levelId = '${widget.track.id}_${widget.levelIndex}';
     final state = ref.read(gameplayViewModelProvider(level));
     final stars = level.stars(state.incorrectAttempts, hintUsed: state.hintUsed);

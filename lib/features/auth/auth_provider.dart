@@ -1,9 +1,19 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../data/platform_secure_storage.dart';
 
 part 'auth_provider.g.dart';
+
+/// Convenience extension to extract the current player ID.
+extension AuthPlayerIdX on WidgetRef {
+  /// Returns the current player ID, or `null` if auth is still loading/errored.
+  String? get playerId => read(authProvider).maybeWhen(
+        data: (v) => v,
+        orElse: () => null,
+      );
+}
 
 @riverpod
 class Auth extends _$Auth {

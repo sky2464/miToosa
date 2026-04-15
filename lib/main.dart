@@ -35,7 +35,9 @@ class MiToosaApp extends ConsumerWidget {
       themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
       home: authState.when(
-        data: (playerId) => const MainAppShell(),
+        data: (playerId) => playerId.isEmpty
+            ? const LoginScreen()
+            : const MainAppShell(),
         loading: () => const LoginScreen(),
         error: (_, __) => const LoginScreen(),
       ),

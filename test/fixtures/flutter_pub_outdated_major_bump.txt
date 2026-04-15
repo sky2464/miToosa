@@ -1,0 +1,9 @@
+Checking which dependencies have newer versions available...
+
+Package Name              Current Upgradable Latest Resolved Required
+go_router                 17.1.0  *          18.0.0 17.1.0   ^17.1.0
+share_plus                10.1.4  *          13.0.0 10.1.4   ^10.0.0
+equatable                 2.0.7   2.0.8      2.0.8  2.0.7    ^2.0.0
+
+2 major version bumps blocked by constraints.
+1 upgradable package.

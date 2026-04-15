@@ -10,16 +10,16 @@ GameplayLevel _level({required int perfectScore, double multiplier = 1.0}) {
     retryMessage: 'Retry',
     perfectScore: perfectScore,
     difficultyMultiplier: multiplier,
-    puzzle: Puzzle(
+    puzzle: const Puzzle(
       id: 'test',
       prompt: 'Match',
       rule: PuzzleRule.matchIdentical,
-      targetItems: const [ShapeItem(shape: Shape.circle)],
+      targetItems: [ShapeItem(shape: Shape.circle)],
       options: [
         PuzzleOption(
-            id: 'c', items: const [ShapeItem(shape: Shape.circle)]),
+            id: 'c', items: [ShapeItem(shape: Shape.circle)]),
         PuzzleOption(
-            id: 'w', items: const [ShapeItem(shape: Shape.square)]),
+            id: 'w', items: [ShapeItem(shape: Shape.square)]),
       ],
       correctOptionId: 'c',
     ),

@@ -15,11 +15,9 @@ android {
         targetCompatibility = JavaVersion.VERSION_21
     }
 
-    // No need for explicit kotlinOptions.jvmTarget as it's managed by the java toolchain below.
-    
     java {
         toolchain {
-            languageVersion.set(JavaLanguageVersion.of(25))
+            languageVersion.set(JavaLanguageVersion.of(21))
         }
     }
 

@@ -62,7 +62,7 @@ class ProgressScreen extends ConsumerWidget {
                       icon: Icons.diamond_outlined,
                       label: 'Diamonds',
                       value: diamonds.toString(),
-                      gradient: LinearGradient(
+                      gradient: const LinearGradient(
                         colors: [Colors.cyan, Colors.blue],
                       ),
                     ),
@@ -79,7 +79,7 @@ class ProgressScreen extends ConsumerWidget {
                       icon: Icons.local_fire_department,
                       label: 'Current Streak',
                       value: currentStreak.toString(),
-                      gradient: LinearGradient(
+                      gradient: const LinearGradient(
                         colors: [Colors.orange, Colors.deepOrange],
                       ),
                     ),

@@ -40,7 +40,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 onPageChanged: (index) {
                   setState(() => _currentPage = index);
                 },
-                children: [
+                children: const [
                   _OnboardingPage(
                     icon: '🧩',
                     title: 'Welcome to miToosa',

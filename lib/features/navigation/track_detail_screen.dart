@@ -158,10 +158,10 @@ class TrackDetailScreen extends ConsumerWidget {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: List.generate(
-                                      3,
+                                      5,
                                       (i) => Text(
                                         i < stars ? '⭐' : '☆',
-                                        style: const TextStyle(fontSize: 10),
+                                        style: const TextStyle(fontSize: 8),
                                       ),
                                     ),
                                   ),

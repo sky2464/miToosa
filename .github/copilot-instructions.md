@@ -138,3 +138,30 @@ Skills also activate automatically based on what you're doing — designing an A
 ---
 
 These guidelines make Copilot agents first-class participants in our workflow — use them to accelerate research, testing, and review while keeping humans in the loop for critical decisions.
+
+---
+
+## Dependency & Skill Maintenance
+
+Agents for keeping packages current and skill files aligned with installed versions.
+
+- `@dependency-updater` (`.github/agents/dependency-updater.md`): Queries live `flutter pub outdated`, applies safe minor/patch upgrades, drafts PR descriptions with extracted changelog notes for major bumps. **Never uses memory for version numbers.**
+- `@package-security-scanner` (`.github/agents/package-security-scanner.md`): Scans every direct dependency in `pubspec.yaml` against the pub.dev advisory feed; blocks CI on CRITICAL or HIGH findings.
+- `@tech-stack-skill-generator` (`.github/agents/tech-stack-skill-generator.md`): Reads `pubspec.lock` for exact installed versions, fetches pub.dev docs for those versions, regenerates stale or missing skill files under `.github/skills/`.
+
+### Skills
+
+- `.github/skills/flutter-pub-dependency-management/SKILL.md` — how to read `flutter pub outdated`, choose upgrade commands, and follow commit conventions.
+- `.github/skills/pub-dev-api-usage/SKILL.md` — verified pub.dev REST endpoints for metadata, changelogs, and advisories.
+
+### Scripts & CI
+
+```bash
+bash scripts/dependency_health.sh            # live report
+bash scripts/dependency_health.sh --auto     # report + apply safe upgrades
+bash scripts/dependency_health.sh --full     # report + advisory scan
+bash scripts/regenerate_skills.sh            # check which skills are stale
+bash scripts/regenerate_skills.sh --write    # create/update stale skill files
+```
+
+CI runs weekly via `.github/workflows/dependency-maintenance.yml` (Monday 06:00 UTC) and on `workflow_dispatch`.

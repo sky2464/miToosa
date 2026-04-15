@@ -1,0 +1,18 @@
+{
+  "name": "mixed_package",
+  "latest": {
+    "version": "2.0.0"
+  },
+  "advisories": [
+    {
+      "id": "PSA-001",
+      "severity": "HIGH",
+      "summary": "Authentication bypass"
+    },
+    {
+      "id": "PSA-002",
+      "severity": "MEDIUM",
+      "summary": "Denial of service"
+    }
+  ]
+}

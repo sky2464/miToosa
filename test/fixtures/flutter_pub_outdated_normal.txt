@@ -1,0 +1,10 @@
+Checking which dependencies have newer versions available...
+
+Package Name              Current Upgradable Latest Resolved Required
+go_router                 17.1.0  17.2.1     17.2.1 17.1.0   ^17.1.0
+path_provider_android     2.2.23  2.3.1      2.3.1  2.2.23   any
+shared_preferences        2.5.4   2.5.5      2.5.5  2.5.4    ^2.5.0
+equatable                 2.0.7   2.0.8      2.0.8  2.0.7    ^2.0.0
+flutter_riverpod          3.3.0   3.3.1      3.3.1  3.3.0    ^3.3.0
+
+3 upgradable packages listed.

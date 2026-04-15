@@ -10,7 +10,7 @@ class AudioService {
   static const List<String> _extensions = ['.ogg', '.mp3', '.wav', '.m4a'];
   final AudioPlayer _player = AudioPlayer();
 
-  Future<void> _playByBaseName(String baseName) async {
+  Future<bool> _playByBaseName(String baseName) async {
     for (final ext in _extensions) {
       final candidate = 'assets/audio/$baseName$ext';
       try {
@@ -24,12 +24,13 @@ class AudioService {
         } else {
           await _player.play(BytesSource(data.buffer.asUint8List()));
         }
-        return;
+        return true;
       } catch (_) {
         // asset not found or failed to load; try next extension
         continue;
       }
     }
+    return false;
   }
 
   Future<void> playSuccessPop() async {
@@ -37,8 +38,8 @@ class AudioService {
   }
 
   Future<void> playErrorBuzzer() async {
-    // Try buzzer first, then fall back to boing/pop variants if missing.
-    await _playByBaseName('buzzer');
+    // Try buzzer first, then fall back to boing if missing.
+    if (await _playByBaseName('buzzer')) return;
     await _playByBaseName('boing');
   }
 }

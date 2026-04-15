@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/engine/progression_engine.dart';
-import '../../data/hive_persistence_provider.dart';
 import '../../data/player_progress.dart';
 import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
@@ -91,7 +90,7 @@ class _SettingsBody extends ConsumerWidget {
             onChanged: (enabled) async {
               progress.difficultyMode =
                   enabled ? DifficultyMode.adaptive : DifficultyMode.standard;
-              await HivePersistenceProvider().saveProgress(progress);
+              await ref.read(persistenceProvider).saveProgress(progress);
               ref.invalidate(playerProgressProvider);
             },
           ),

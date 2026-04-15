@@ -20,7 +20,7 @@ void main() {
     });
 
     testWidgets('no badges when hint is null', (tester) async {
-      await tester.pumpWidget(_wrap(HintButton(
+      await tester.pumpWidget(_wrap(const HintButton(
         hint: null,
         hearts: 5,
         hintUsed: false,
@@ -45,7 +45,7 @@ void main() {
 
     testWidgets('shows hint_used_badge when hintUsed=true with hint',
         (tester) async {
-      await tester.pumpWidget(_wrap(HintButton(
+      await tester.pumpWidget(_wrap(const HintButton(
         hint: 'Some hint',
         hearts: 3,
         hintUsed: true,
@@ -57,7 +57,7 @@ void main() {
 
     testWidgets('shows hint_heart_badge when active and hearts > 0',
         (tester) async {
-      await tester.pumpWidget(_wrap(HintButton(
+      await tester.pumpWidget(_wrap(const HintButton(
         hint: 'Pick the odd one out',
         hearts: 2,
         hintUsed: false,
@@ -98,7 +98,7 @@ void main() {
 
     testWidgets('no heart badge when hearts == 0 (button still enabled)',
         (tester) async {
-      await tester.pumpWidget(_wrap(HintButton(
+      await tester.pumpWidget(_wrap(const HintButton(
         hint: 'A hint',
         hearts: 0,
         hintUsed: false,
