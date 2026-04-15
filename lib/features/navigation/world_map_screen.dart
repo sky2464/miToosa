@@ -93,51 +93,57 @@ class WorldMapScreen extends ConsumerWidget {
                         ),
                         const Spacer(),
                         // XP Badge + HeartsBar
-                        progressAsync.when(
-                          data: (progress) => Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              HeartsBar(
-                                hearts: progress.hearts,
-                                diamonds: progress.diamonds,
-                                onRefuelWithDiamond: () =>
-                                    _refuelWithDiamond(ref, context),
-                                onShareForHeart: () =>
-                                    _shareForHeart(ref, context),
-                              ),
-                              const SizedBox(width: 10),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 14, vertical: 8),
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      theme.colorScheme.primary,
-                                      theme.colorScheme.primary
-                                          .withValues(alpha: 0.7),
-                                    ],
+                        Flexible(
+                          child: progressAsync.when(
+                            data: (progress) => SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              reverse: true,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  HeartsBar(
+                                    hearts: progress.hearts,
+                                    diamonds: progress.diamonds,
+                                    onRefuelWithDiamond: () =>
+                                        _refuelWithDiamond(ref, context),
+                                    onShareForHeart: () =>
+                                        _shareForHeart(ref, context),
                                   ),
-                                  borderRadius: BorderRadius.circular(
-                                      MiToosaTheme.radiusMd),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Icon(Icons.bolt,
-                                        size: 18, color: Colors.white),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      '${progress.totalXP} XP',
-                                      style: theme.textTheme.labelLarge
-                                          ?.copyWith(color: Colors.white),
+                                  const SizedBox(width: 10),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 14, vertical: 8),
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          theme.colorScheme.primary,
+                                          theme.colorScheme.primary
+                                              .withValues(alpha: 0.7),
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(
+                                          MiToosaTheme.radiusMd),
                                     ),
-                                  ],
-                                ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(Icons.bolt,
+                                            size: 18, color: Colors.white),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          '${progress.totalXP} XP',
+                                          style: theme.textTheme.labelLarge
+                                              ?.copyWith(color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
+                            loading: () => const SizedBox.shrink(),
+                            error: (_, __) => const SizedBox.shrink(),
                           ),
-                          loading: () => const SizedBox.shrink(),
-                          error: (_, __) => const SizedBox.shrink(),
                         ),
                       ],
                     ),
