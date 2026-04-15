@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../core/content_provider.dart';
-import '../../data/hive_persistence_provider.dart';
 import '../../data/player_progress.dart';
 import '../../data/player_progress_provider.dart';
 import '../../features/auth/auth_provider.dart';
 import '../../widgets/hearts_bar.dart';
-import '../../widgets/how_to_play_modal.dart';
-import '../gameplay/gameplay_screen.dart';
+import 'track_detail_screen.dart';
 import '../../theme/design_system.dart';
 
 class WorldMapScreen extends ConsumerWidget {
@@ -24,7 +22,7 @@ class WorldMapScreen extends ConsumerWidget {
     );
     if (playerId == null) return;
     final ok =
-        await HivePersistenceProvider().refuelHeartsWithDiamond(playerId);
+        await ref.read(persistenceProvider).refuelHeartsWithDiamond(playerId);
     if (!ok && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Not enough 💎 diamonds')),
@@ -39,11 +37,13 @@ class WorldMapScreen extends ConsumerWidget {
       orElse: () => null,
     );
     if (playerId == null) return;
-    await Share.share(
+    final result = await Share.share(
       'Play miToosa with me! $_appShareUrl',
       subject: 'Check out miToosa',
     );
-    final granted = await HivePersistenceProvider()
+    if (result.status != ShareResultStatus.success) return;
+    final granted = await ref
+        .read(persistenceProvider)
         .shareAndRefuel(playerId, DateTime.now());
     ref.invalidate(playerProgressProvider);
     if (!granted && context.mounted) {
@@ -158,23 +158,73 @@ class WorldMapScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: MiToosaTheme.spacingMd),
-              // ─── Track List ───────────────────────────────
+              // ─── Track Grid (grouped by category) ─────────────
               Expanded(
                 child: progressAsync.when(
-                  data: (progress) => ListView.builder(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: MiToosaTheme.spacingMd,
-                    ),
-                    itemCount: tracks.length,
-                    itemBuilder: (context, trackIndex) {
-                      final track = tracks[trackIndex];
-                      return _TrackCard(
-                        track: track,
-                        progress: progress,
-                        trackIndex: trackIndex,
-                      );
-                    },
-                  ),
+                  data: (progress) {
+                    // Group tracks by category
+                    final Map<String, List<TrackDefinition>> grouped = {};
+                    for (final track in tracks) {
+                      grouped.putIfAbsent(track.category, () => []).add(track);
+                    }
+                    final categories = grouped.keys.toList()..sort();
+
+                    return ListView.builder(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: MiToosaTheme.spacingMd,
+                        vertical: MiToosaTheme.spacingMd,
+                      ),
+                      itemCount: categories.length,
+                      itemBuilder: (context, catIndex) {
+                        final category = categories[catIndex];
+                        final categoryTracks = grouped[category]!;
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Category header
+                            Padding(
+                              padding: EdgeInsets.only(
+                                bottom: MiToosaTheme.spacingSm,
+                                top: catIndex == 0 ? 0 : MiToosaTheme.spacingLg,
+                              ),
+                              child: Text(
+                                category,
+                                style: Theme.of(context)
+                                    .textTheme.titleMedium
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.w900,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary,
+                                    ),
+                              ),
+                            ),
+                            // 2-column grid of tracks
+                            GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: MiToosaTheme.spacingMd,
+                                crossAxisSpacing: MiToosaTheme.spacingMd,
+                                childAspectRatio: 0.85,
+                              ),
+                              itemCount: categoryTracks.length,
+                              itemBuilder: (context, trackIndex) {
+                                final track = categoryTracks[trackIndex];
+                                return _TrackCard(
+                                  track: track,
+                                  progress: progress,
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
                   loading: () => const Center(child: CircularProgressIndicator()),
                   error: (_, __) => const Center(child: Text('Failed to load.')),
                 ),
@@ -257,12 +307,10 @@ class _StreakCard extends StatelessWidget {
 class _TrackCard extends ConsumerWidget {
   final TrackDefinition track;
   final PlayerProgress progress;
-  final int trackIndex;
 
   const _TrackCard({
     required this.track,
     required this.progress,
-    required this.trackIndex,
   });
 
   int _completedLevels() {
@@ -281,189 +329,103 @@ class _TrackCard extends ConsumerWidget {
     final total = track.targetLevelCount;
     final progressVal = total > 0 ? completed / total : 0.0;
 
-    // Track colors - rotate through palette
-    final trackColors = [
-      const Color(0xFF7B2CBF),
-      const Color(0xFF3A86FF),
-      const Color(0xFF00B4D8),
-      const Color(0xFFFF8800),
-      const Color(0xFFFF006E),
-      const Color(0xFF06D6A0),
-      const Color(0xFFEF233C),
-      const Color(0xFFFFBE0B),
-      const Color(0xFF9D4EDD),
-      const Color(0xFF00F5D4),
-    ];
-    final trackColor = trackColors[trackIndex % trackColors.length];
-
-    return Card(
-      margin: const EdgeInsets.only(bottom: MiToosaTheme.spacingMd),
-      child: Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
-          tilePadding: const EdgeInsets.symmetric(
-            horizontal: MiToosaTheme.spacingMd,
-            vertical: MiToosaTheme.spacingSm,
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => TrackDetailScreen(track: track),
           ),
-          leading: Container(
-            width: 52,
-            height: 52,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [trackColor, trackColor.withValues(alpha: 0.6)],
-              ),
-              borderRadius: BorderRadius.circular(MiToosaTheme.radiusSm),
-            ),
-            child: Center(
-              child: Text(track.icon, style: const TextStyle(fontSize: 26)),
+        );
+      },
+      child: Card(
+        elevation: 2,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(MiToosaTheme.radiusMd),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                theme.colorScheme.surface,
+                theme.colorScheme.surface.withValues(alpha: 0.8),
+              ],
             ),
           ),
-          title: Text(
-            track.name,
-            style: theme.textTheme.headlineMedium?.copyWith(fontSize: 18),
-          ),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Stack(
             children: [
-              const SizedBox(height: 4),
-              Text(track.subtitle, style: theme.textTheme.bodySmall),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
+              // Background accent
+              Positioned(
+                top: -20,
+                right: -20,
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: theme.colorScheme.primary.withValues(alpha: 0.05),
+                  ),
+                ),
+              ),
+              // Content
+              Padding(
+                padding: const EdgeInsets.all(MiToosaTheme.spacingMd),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Icon
+                    Text(
+                      track.icon,
+                      style: const TextStyle(fontSize: 36),
+                    ),
+                    const SizedBox(height: MiToosaTheme.spacingSm),
+                    // Track name
+                    Text(
+                      track.name,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w900,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const Spacer(),
+                    // Mini progress bar
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(2),
                       child: LinearProgressIndicator(
                         value: progressVal,
-                        minHeight: 4,
-                        backgroundColor: trackColor.withValues(alpha: 0.1),
-                        valueColor: AlwaysStoppedAnimation(trackColor),
+                        minHeight: 3,
+                        backgroundColor: theme.colorScheme.primary
+                            .withValues(alpha: 0.1),
+                        valueColor: AlwaysStoppedAnimation(
+                          theme.colorScheme.primary,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    '$completed/$total',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: trackColor,
+                    const SizedBox(height: MiToosaTheme.spacingSm),
+                    // Completion text
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '$completed / $total',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Text(
+                          '${(progressVal * 100).toStringAsFixed(0)}%',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.primary,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
-          children: [
-            Container(
-              padding: const EdgeInsets.fromLTRB(
-                MiToosaTheme.spacingMd, 0,
-                MiToosaTheme.spacingMd, MiToosaTheme.spacingMd,
-              ),
-              height: 130,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: track.targetLevelCount,
-                itemBuilder: (context, levelIndex) {
-                  final levelKey = '${track.id}_$levelIndex';
-                  final stars = progress.levelStars[levelKey] ?? 0;
-                  final isCompleted = stars > 0;
-                  final isCurrent = levelIndex == completed;
-
-                  return GestureDetector(
-                    onTap: () async {
-                      // Show tutorial modal on first entry to this world.
-                      if (!progress.seenTutorialWorlds.contains(track.id)) {
-                        if (!context.mounted) return;
-                        final authState = ref.read(authProvider);
-                        final playerId = authState.maybeWhen(
-                          data: (v) => v,
-                          orElse: () => 'local',
-                        );
-                        await HowToPlayModal.show(
-                          context,
-                          track: track,
-                          onStart: () {
-                            Navigator.of(context).pop();
-                          },
-                        );
-                        await HivePersistenceProvider()
-                            .markTutorialSeen(playerId, track.id);
-                        ref.invalidate(playerProgressProvider);
-                      }
-                      if (!context.mounted) return;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => GameplayScreen(
-                            track: track,
-                            levelIndex: levelIndex,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      width: 80,
-                      margin: const EdgeInsets.only(right: MiToosaTheme.spacingSm),
-                      decoration: BoxDecoration(
-                        color: isCompleted
-                            ? trackColor.withValues(alpha: 0.08)
-                            : theme.colorScheme.surface,
-                        borderRadius: BorderRadius.circular(MiToosaTheme.radiusMd),
-                        border: Border.all(
-                          color: isCurrent
-                              ? trackColor
-                              : isCompleted
-                                  ? trackColor.withValues(alpha: 0.3)
-                                  : theme.colorScheme.primary.withValues(alpha: 0.08),
-                          width: isCurrent ? 2.5 : 1.5,
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          if (isCompleted)
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: List.generate(5, (i) {
-                                return Icon(
-                                  i < stars
-                                      ? Icons.star_rounded
-                                      : Icons.star_outline_rounded,
-                                  size: 14,
-                                  color: i < stars
-                                      ? MiToosaTheme.warning
-                                      : theme.colorScheme.primary.withValues(alpha: 0.15),
-                                );
-                              }),
-                            )
-                          else
-                            Icon(
-                              isCurrent ? Icons.play_circle_fill_rounded : Icons.lock_outline_rounded,
-                              size: 24,
-                              color: isCurrent
-                                  ? trackColor
-                                  : theme.colorScheme.primary.withValues(alpha: 0.2),
-                            ),
-                          const SizedBox(height: 6),
-                          Text(
-                            '${levelIndex + 1}',
-                            style: theme.textTheme.labelLarge?.copyWith(
-                              color: isCurrent || isCompleted
-                                  ? trackColor
-                                  : theme.colorScheme.primary.withValues(alpha: 0.3),
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
         ),
       ),
     );
