@@ -76,7 +76,7 @@ class ProgressScreen extends ConsumerWidget {
                   Expanded(
                     child: _StatCard(
                       theme: theme,
-                      icon: Icons.flame,
+                      icon: Icons.local_fire_department,
                       label: 'Current Streak',
                       value: currentStreak.toString(),
                       gradient: LinearGradient(
