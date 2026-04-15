@@ -1,0 +1,34 @@
+# Markdown Lint Exclusions
+# 
+# This file excludes generated, vendored, and external files from markdownlint scanning
+# to ensure that CI/CD and local linting behavior remain consistent and noise-free.
+#
+# Categories: Generated/Build, Native Platforms, IDE Caches, Sensitive/Vendored
+# See .vscode/settings.json for related file-exclude patterns to hide these from the workspace.
+
+# Generated and build artifacts
+build/**
+.dart_tool/**
+node_modules/**
+.flutter-plugins-dependencies
+.metadata
+pubspec.lock
+
+# Android/iOS native builds and dependencies
+android/**
+ios/**
+macos/**
+.gradle/**
+
+# IDE and config caches
+.idea/**
+.vscode/**
+*.iml
+
+# Sensitive files and external extensions
+.gemini_security/**
+.git/**
+.vscode-insiders/**
+
+# Test artifacts
+test_file.txt

@@ -1,0 +1,23 @@
+# markdownlint-cli2 configuration
+# This file configures CLI-level globs and exclusions
+# Rule configuration is inherited from .markdownlint.json
+
+globs:
+  - "**/*.{md,mkd,mdwn,mdown,markdown,markdn,mdtxt,mdtext,workbook}"
+  - "!build/**"
+  - "!.dart_tool/**"
+  - "!node_modules/**"
+  - "!android/**"
+  - "!ios/**"
+  - "!macos/**"
+  - "!.gradle/**"
+  - "!.idea/**"
+  - "!.vscode/**"
+  - "!.gemini_security/**"
+  - "!.git/**"
+  - "!.vscode-insiders/**"
+  - "!.flutter-plugins-dependencies"
+  - "!.metadata"
+  - "!pubspec.lock"
+  - "!test_file.txt"
+  - "!*.iml"

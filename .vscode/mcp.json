@@ -1,0 +1,32 @@
+{
+	"servers": {
+		"codacy/codacy-mcp-server": {
+			"type": "stdio",
+			"command": "npx",
+			"args": [
+				"-y",
+				"@codacy/codacy-mcp@latest"
+			],
+			"env": {
+				"CODACY_ACCOUNT_TOKEN": "${input:codacy_account_token}",
+				"CODACY_CLI_VERSION": "${input:codacy_cli_version}"
+			},
+			"gallery": "https://api.mcp.github.com",
+			"version": "1.0.0"
+		}
+	},
+	"inputs": [
+		{
+			"id": "codacy_account_token",
+			"type": "promptString",
+			"description": "Your Codacy Account API token (from app.codacy.com → Account). Required.",
+			"password": true
+		},
+		{
+			"id": "codacy_cli_version",
+			"type": "promptString",
+			"description": "Optional: pin Codacy CLI version used by local analysis (e.g., 2.3.1).",
+			"password": false
+		}
+	]
+}

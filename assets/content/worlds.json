@@ -1,0 +1,186 @@
+[
+  {
+    "id": "track_1",
+    "name": "Pattern Match",
+    "subtitle": "Match identical patterns",
+    "rule": "matchIdentical",
+    "icon": "🧩",
+    "levelCount": 10
+  },
+  {
+    "id": "track_2",
+    "name": "Shape Counter",
+    "subtitle": "Count and calculate",
+    "rule": "countShapes",
+    "icon": "🔢",
+    "levelCount": 10
+  },
+  {
+    "id": "track_3",
+    "name": "Odd One Out",
+    "subtitle": "Find what doesn't belong",
+    "rule": "oddOneOut",
+    "icon": "👁️",
+    "levelCount": 10
+  },
+  {
+    "id": "track_4",
+    "name": "Color Code",
+    "subtitle": "Master color patterns",
+    "rule": "colorPattern",
+    "icon": "🎨",
+    "levelCount": 10
+  },
+  {
+    "id": "track_5",
+    "name": "Missing Piece",
+    "subtitle": "Fill in the blanks",
+    "rule": "findMissing",
+    "icon": "🧠",
+    "levelCount": 10
+  },
+  {
+    "id": "track_6",
+    "name": "Sequence",
+    "subtitle": "Continue the pattern",
+    "rule": "sequenceNext",
+    "icon": "🔄",
+    "levelCount": 10
+  },
+  {
+    "id": "track_7",
+    "name": "Binary Logic",
+    "subtitle": "Think in 0s and 1s",
+    "rule": "binaryDecode",
+    "icon": "💻",
+    "levelCount": 10
+  },
+  {
+    "id": "track_8",
+    "name": "Logic Gates",
+    "subtitle": "AND, OR, XOR puzzles",
+    "rule": "logicGate",
+    "icon": "⚡",
+    "levelCount": 10
+  },
+  {
+    "id": "track_9",
+    "name": "Cipher Break",
+    "subtitle": "Crack the code",
+    "rule": "cipherBreak",
+    "icon": "🔐",
+    "levelCount": 10
+  },
+  {
+    "id": "track_10",
+    "name": "Add & Subtract",
+    "subtitle": "Quick mental math",
+    "rule": "mathAddSub",
+    "icon": "➕",
+    "levelCount": 12
+  },
+  {
+    "id": "track_11",
+    "name": "Multiply & Divide",
+    "subtitle": "Times tables & beyond",
+    "rule": "mathMulDiv",
+    "icon": "✖️",
+    "levelCount": 12
+  },
+  {
+    "id": "track_12",
+    "name": "Powers & Roots",
+    "subtitle": "Exponents & square roots",
+    "rule": "mathExponent",
+    "icon": "📐",
+    "levelCount": 12
+  },
+  {
+    "id": "track_13",
+    "name": "Remainders",
+    "subtitle": "Modulo & division tricks",
+    "rule": "mathModulo",
+    "icon": "🎯",
+    "levelCount": 12
+  },
+  {
+    "id": "track_14",
+    "name": "Fractions",
+    "subtitle": "Simplify & compare",
+    "rule": "mathFraction",
+    "icon": "🍕",
+    "levelCount": 12
+  },
+  {
+    "id": "track_15",
+    "name": "Algebra Lab",
+    "subtitle": "Solve for X",
+    "rule": "mathAlgebra",
+    "icon": "🔬",
+    "levelCount": 12
+  },
+  {
+    "id": "track_16",
+    "name": "Area Master",
+    "subtitle": "Calculate shape areas",
+    "rule": "geometryArea",
+    "icon": "📏",
+    "levelCount": 10
+  },
+  {
+    "id": "track_17",
+    "name": "Angle Finder",
+    "subtitle": "Missing triangle angles",
+    "rule": "geometryAngles",
+    "icon": "📊",
+    "levelCount": 10
+  },
+  {
+    "id": "track_18",
+    "name": "Symmetry Lab",
+    "subtitle": "Lines of symmetry",
+    "rule": "geometrySymmetry",
+    "icon": "🦋",
+    "levelCount": 10
+  },
+  {
+    "id": "track_19",
+    "name": "Gravity Drop",
+    "subtitle": "Which is heavier?",
+    "rule": "physicsGravity",
+    "icon": "⬇️",
+    "levelCount": 10
+  },
+  {
+    "id": "track_20",
+    "name": "Momentum",
+    "subtitle": "Collision direction",
+    "rule": "physicsMomentum",
+    "icon": "💥",
+    "levelCount": 10
+  },
+  {
+    "id": "track_21",
+    "name": "Balance Lab",
+    "subtitle": "Lever equilibrium",
+    "rule": "physicsBalance",
+    "icon": "⚖️",
+    "levelCount": 10
+  },
+  {
+    "id": "track_22",
+    "name": "Number Grid",
+    "subtitle": "Fill the magic grid",
+    "rule": "numberGrid",
+    "icon": "🔲",
+    "levelCount": 10
+  },
+  {
+    "id": "track_23",
+    "name": "Equation Balance",
+    "subtitle": "Make both sides equal",
+    "rule": "balanceEquation",
+    "icon": "🧮",
+    "levelCount": 10
+  }
+]

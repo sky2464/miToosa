@@ -1,0 +1,20 @@
+{
+  "w1-level-0": {
+    "title": "Match Identical",
+    "hint": "Find the exact matching combination of shapes.",
+    "perfectScore": 100,
+    "puzzleRules": ["matchIdentical"]
+  },
+  "w1-level-1": {
+    "title": "Count Shapes",
+    "hint": "Count the number of circles",
+    "perfectScore": 100,
+    "puzzleRules": ["countShapes"]
+  },
+  "w1-level-2": {
+    "title": "Find Missing",
+    "hint": "What comes next?",
+    "perfectScore": 150,
+    "puzzleRules": ["findMissing"]
+  }
+}
