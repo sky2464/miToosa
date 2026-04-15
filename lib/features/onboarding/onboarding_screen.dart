@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
@@ -134,8 +133,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   void _completeOnboarding(WidgetRef ref) {
-    // For now, just pop back. In a real app, this would mark onboarding
-    // as complete in the persistence layer
+    // TODO: Persist onboarding completion state to PlayerProgress
+    // For now, just pop the screen
     Navigator.of(context).pop();
   }
 }
