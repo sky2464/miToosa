@@ -30,10 +30,10 @@ echo "=== miToosa Skill Freshness Check ==="
 echo "Date: $(date -u '+%Y-%m-%d %H:%M UTC')"
 echo ""
 
-# Read direct dependencies from pubspec.yaml
-DIRECT_DEPS=$(grep -E '^\s{2}[a-z_]+:' pubspec.yaml \
-  | grep -v 'flutter:' \
-  | sed 's/://g' \
+# Read direct dependencies from pubspec.yaml (only from dependencies section)
+DIRECT_DEPS=$(sed -n '/^dependencies:/,/^dev_dependencies:/p' pubspec.yaml \
+  | grep -E '^\s{2}[a-z_]+:\s' \
+  | sed 's/:.*//' \
   | sed 's/^[[:space:]]*//' \
   | sort -u)
 
@@ -44,11 +44,11 @@ while IFS= read -r pkg; do
   [[ -z "$pkg" ]] && continue
 
   # Get exact installed version from pubspec.lock
-  INSTALLED=$(grep -A 3 "^  ${pkg}:" pubspec.lock 2>/dev/null \
-    | grep 'version:' \
+  # Each package entry is followed by "version: X.X.X", grab lines until the next package
+  INSTALLED=$(grep -A 50 "^  ${pkg}:" pubspec.lock 2>/dev/null \
+    | grep "^    version:" \
     | head -1 \
-    | sed 's/.*version: "\(.*\)"/\1/' \
-    | tr -d ' ')
+    | sed 's/.*version: "\(.*\)".*/\1/')
 
   if [[ -z "$INSTALLED" ]]; then
     # Package might be an SDK dep (flutter, dart) — skip
@@ -62,6 +62,12 @@ while IFS= read -r pkg; do
     MISSING_COUNT=$((MISSING_COUNT + 1))
 
     if [ "$WRITE" = true ]; then
+      # Validate version format (semantic versioning X.Y.Z)
+      if ! [[ "$INSTALLED" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+        echo "  ERROR: Invalid version format for ${pkg}: '$INSTALLED'" >&2
+        exit 1
+      fi
+      
       mkdir -p "$(dirname "$SKILL_FILE")"
       # Fetch latest readme text from pub.dev (best-effort)
       PUB_README=$(curl -sL --max-time 10 \

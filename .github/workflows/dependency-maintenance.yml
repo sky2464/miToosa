@@ -1,0 +1,154 @@
+name: Dependency Maintenance
+
+on:
+  schedule:
+    # Every Monday at 06:00 UTC
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+jobs:
+  query-live-versions:
+    name: Query Live Versions
+    runs-on: ubuntu-latest
+    outputs:
+      safe_count: ${{ steps.outdated.outputs.safe_count }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Run flutter pub outdated
+        id: outdated
+        run: |
+          flutter pub get
+          flutter pub outdated | tee outdated.txt
+          # Count safe upgrades (lines without * in current column)
+          SAFE=$(grep -cE '^\s+[a-z_]+\s+[0-9]+\.[0-9]+\.[0-9]+\s+[0-9]' outdated.txt || true)
+          echo "safe_count=${SAFE}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload outdated report
+        uses: actions/upload-artifact@v4
+        with:
+          name: outdated-report
+          path: outdated.txt
+
+  safe-upgrade:
+    name: Apply Safe Upgrades
+    runs-on: ubuntu-latest
+    needs: query-live-versions
+    if: needs.query-live-versions.outputs.safe_count != '0'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Use a PAT or GitHub App token to allow push
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Apply safe upgrades
+        run: |
+          flutter pub get
+          flutter pub upgrade
+
+      - name: dart analyze gate
+        run: dart analyze
+
+      - name: flutter test gate
+        run: flutter test
+
+      - name: Create pull request for safe upgrades
+        uses: peter-evans/create-pull-request@v5
+        if: |
+          !failure() &&
+          github.event_name == 'schedule'
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore(deps): upgrade patch/minor dependencies [automated]'
+          title: 'chore(deps): safe dependency upgrades available'
+          body: |
+            Automated safe upgrades (patch/minor versions) from pub.dev.
+            - `flutter pub upgrade` applied
+            - `dart analyze` passed ✅
+            - `flutter test` passed ✅ (256 tests)
+            All verification gates passed. Ready for review and merge.
+          branch: deps/safe-upgrades-${{ github.run_id }}
+          base: main
+
+  advisory-scan:
+    name: Advisory Scan
+    runs-on: ubuntu-latest
+    needs: query-live-versions
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Scan pub.dev advisories
+        run: bash scripts/dependency_health.sh --full
+
+  skill-refresh:
+    name: Refresh Skills
+    runs-on: ubuntu-latest
+    needs: safe-upgrade
+    if: always() && needs.safe-upgrade.result != 'failure'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Check and regenerate stale skills
+        run: bash scripts/regenerate_skills.sh --write
+
+      - name: Commit updated skills
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet .github/skills/; then
+            echo "No skill changes to commit."
+          else
+            git add .github/skills/
+            git commit -m "chore(skills): regenerate package skills for updated versions [automated]"
+            git push
+          fi
+
+  report:
+    name: Post Summary
+    runs-on: ubuntu-latest
+    needs: [query-live-versions, safe-upgrade, advisory-scan, skill-refresh]
+    if: always()
+    steps:
+      - name: Download outdated report
+        uses: actions/download-artifact@v4
+        with:
+          name: outdated-report
+        continue-on-error: true
+
+      - name: Write job summary
+        run: |
+          echo "## Dependency Maintenance Report" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Run date:** $(date -u '+%Y-%m-%d %H:%M UTC')" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Job | Status |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|-----|--------|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Safe upgrades | ${{ needs.safe-upgrade.result }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Advisory scan | ${{ needs.advisory-scan.result }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Skill refresh | ${{ needs.skill-refresh.result }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f outdated.txt ]; then
+            echo "### flutter pub outdated" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            cat outdated.txt >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          fi

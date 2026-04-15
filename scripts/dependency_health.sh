@@ -38,24 +38,11 @@ echo "$RAW_OUTPUT"
 echo ""
 
 # ── 2. Parse output into buckets ───────────────────────────────────────────────
-# Lines with an asterisk (*) have available upgrades outside the constraint range
-# Lines without * but with a version in Upgradable column are safe upgrades
+# Count lines that have version numbers. A * in the Current column indicates major bump blocked.
+# If Upgradable < Latest with a *, it's a MAJOR bump.
 
-SAFE_COUNT=0
-MAJOR_COUNT=0
-
-while IFS= read -r line; do
-  # Skip header lines and blank lines
-  [[ "$line" =~ ^Package|^direct|^dev|^transitive|^[[:space:]]*$ ]] && continue
-  [[ -z "$line" ]] && continue
-
-  # A line with * in the Current column means it is constrained
-  if echo "$line" | grep -qE '^\s+\S+\s+\*'; then
-    MAJOR_COUNT=$((MAJOR_COUNT + 1))
-  elif echo "$line" | grep -qE '^\s+\S+\s+[0-9]+\.[0-9]+\.[0-9]+\s+[0-9]+\.[0-9]+\.[0-9]+'; then
-    SAFE_COUNT=$((SAFE_COUNT + 1))
-  fi
-done <<< "$RAW_OUTPUT"
+SAFE_COUNT=$(echo "$RAW_OUTPUT" | grep -c '^\s*[a-z_].*[0-9]\.[0-9].*[0-9]\s\+[0-9]\.[0-9]' || true)
+MAJOR_COUNT=$(echo "$RAW_OUTPUT" | grep -c '^\s*[a-z_].*\*[0-9]' || true)
 
 echo "--- Summary ---"
 echo "Safe (minor/patch) upgrades available: $SAFE_COUNT"
@@ -95,10 +82,12 @@ if [ "$FULL" = true ]; then
     echo "WARNING: jq not found — skipping advisory scan. Install with: brew install jq" >&2
   else
     # Extract direct dependency names from pubspec.yaml
-    DEPS=$(grep -E '^\s{2}[a-z_]+:' pubspec.yaml \
-      | grep -v 'flutter:' \
-      | sed 's/://g' \
-      | tr -d ' ' \
+    # Read between "dependencies:" and "dev_dependencies:" for dependencies
+    # Read between "dev_dependencies:" and "flutter:" for dev dependencies
+    DEPS=$(sed -n '/^dependencies:/,/^dev_dependencies:/p' pubspec.yaml \
+      | grep -E '^\s{2}[a-z_]+:\s' \
+      | sed 's/:.*//' \
+      | sed 's/^[[:space:]]*//' \
       | sort -u)
 
     ADVISORY_FOUND=false
@@ -106,13 +95,26 @@ if [ "$FULL" = true ]; then
     while IFS= read -r pkg; do
       [[ -z "$pkg" ]] && continue
 
-      RESPONSE=$(curl -sL --max-time 10 "https://pub.dev/api/packages/${pkg}" 2>/dev/null || true)
+      # Fetch with HTTP code validation
+      RESPONSE=$(curl -sL --max-time 10 -w "\n%{http_code}" "https://pub.dev/api/packages/${pkg}" 2>&1)
+      HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+      BODY=$(echo "$RESPONSE" | sed '$d')
 
-      # Validate JSON
-      if ! echo "$RESPONSE" | jq empty 2>/dev/null; then
-        echo "  WARN: Could not fetch metadata for ${pkg}" >&2
+      # Check HTTP status (critical for detecting rate limits and network issues)
+      if [[ "$HTTP_CODE" != "200" ]]; then
+        echo "  ERROR: $pkg returned HTTP $HTTP_CODE (rate limited? network issue?)" >&2
+        ADVISORY_EXIT=1
         continue
       fi
+
+      # Validate JSON
+      if ! echo "$BODY" | jq empty 2>/dev/null; then
+        echo "  ERROR: Malformed JSON response for ${pkg}" >&2
+        ADVISORY_EXIT=1
+        continue
+      fi
+
+      RESPONSE="$BODY"
 
       COUNT=$(echo "$RESPONSE" | jq '(.advisories // []) | length')
 
