@@ -150,6 +150,53 @@ dart analyze
 
 ---
 
+## 🤖 GitHub Copilot workflow in VS Code
+
+This repo is set up to support a gstack-style workflow inside GitHub Copilot for VS Code without requiring a custom `gstack` host yet.
+
+### Open the right project root
+
+- Open `miToosa` directly, or open `CoachToosa.code-workspace` from the sibling `CoachToosa` folder.
+- The real Copilot customization files live in this repo’s `.github/` directory.
+- If you open only a nested subfolder, enable VS Code’s `chat.useCustomizationsInParentRepositories` setting so prompt and instruction files can still be discovered.
+
+### Included Copilot assets
+
+- `.github/copilot-instructions.md` — always-on repo guidance
+- `.github/prompts/` — reusable slash commands
+- `.github/skills/` — workflow skills
+- `.github/agents/` — specialized custom agents
+
+### Prompt-file slash commands
+
+These prompt files show up in chat when you type `/`:
+
+- `/spec` — write the spec before code
+- `/plan` — break the work into small, testable slices
+- `/build` — implement the next approved slice
+- `/test` — design or run the right tests
+- `/review` — run a five-axis review
+- `/code-simplify` — reduce complexity without changing behavior
+- `/ship` — run the final release checklist
+
+### Recommended validation order
+
+```bash
+flutter pub get
+dart run build_runner build --delete-conflicting-outputs
+dart format lib test
+dart analyze
+flutter test
+```
+
+Only run `build_runner` when the change affects generated-code inputs such as Riverpod annotations or other generated artifacts.
+
+### Current scope
+
+This is the repo-native Phase 1 workflow: GitHub Copilot in VS Code behaves like a lightweight gstack process for this codebase. A future phase can extract these assets into a reusable starter pack and add a real `copilot` host to a `gstack` fork for GitHub Copilot CLI.
+
+---
+
 ## 🛠 Tech Stack
 
 - **Framework**: [Flutter](https://flutter.dev)
