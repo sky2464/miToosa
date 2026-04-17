@@ -313,14 +313,9 @@ class _TrackCard extends ConsumerWidget {
     required this.progress,
   });
 
-  int _completedLevels() {
-    int count = 0;
-    for (int i = 0; i < track.targetLevelCount; i++) {
-      final key = '${track.id}_$i';
-      if (progress.levelStars.containsKey(key)) count++;
-    }
-    return count;
-  }
+  int _completedLevels() => List.generate(
+    track.targetLevelCount, (i) => '${track.id}_$i',
+  ).where(progress.levelStars.containsKey).length;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

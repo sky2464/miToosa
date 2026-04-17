@@ -35,11 +35,11 @@ void main() {
       expect(p.adaptiveVersion, 0);
     });
 
-    test('recordLevelResult appends star to history and sets version to 1', () {
+    test('recordLevelResult appends star to history and sets version to 2', () {
       final p = PlayerProgress.fresh(playerId: 'player-abc');
       p.recordLevelResult(3);
       expect(p.adaptiveHistory, [3]);
-      expect(p.adaptiveVersion, 1);
+      expect(p.adaptiveVersion, 2);
     });
 
     test('recordLevelResult keeps at most 20 entries', () {
@@ -52,7 +52,7 @@ void main() {
       expect(p.adaptiveHistory.last, 3);
     });
 
-    test('hash remains valid after recording level results', () {
+    test('hash is invalidated after recording level results', () {
       final p = PlayerProgress.fresh(playerId: 'player-xyz');
       p.totalXP = 50;
       p.levelStars = {'w1-0': 2};
@@ -61,20 +61,28 @@ void main() {
       p.integrityHash = p.calculateHash(secret);
       expect(p.isValid(secret), isTrue);
 
-      // Adaptive fields are not part of the hash — recording a result should
-      // not invalidate the signed progress record.
+      // Adaptive fields are now covered by the hash — recording a result
+      // changes adaptiveHistory + adaptiveVersion, invalidating the hash.
       p.recordLevelResult(2);
+      expect(p.isValid(secret), isFalse);
+
+      // Re-signing after mutation restores validity.
+      p.integrityHash = p.calculateHash(secret);
       expect(p.isValid(secret), isTrue);
     });
 
-    test('toggling difficultyMode does not invalidate the hash', () {
+    test('toggling difficultyMode invalidates the hash', () {
       final p = PlayerProgress.fresh(playerId: 'player-xyz');
       p.totalXP = 80;
       final secret = 'hmac-key';
       p.integrityHash = p.calculateHash(secret);
 
       p.difficultyMode = DifficultyMode.adaptive;
-      // difficultyMode is a preference field not covered by the HMAC.
+      // difficultyMode is now covered by the HMAC.
+      expect(p.isValid(secret), isFalse);
+
+      // Re-signing after mutation restores validity.
+      p.integrityHash = p.calculateHash(secret);
       expect(p.isValid(secret), isTrue);
     });
   });

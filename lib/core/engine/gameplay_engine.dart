@@ -43,7 +43,7 @@ class GameplayState {
   final int levelsInRun;
   final int levelsCompleted;
 
-  int get score => phase is PhaseCompleted ? (phase as PhaseCompleted).score : 0;
+  int get score => switch (phase) { PhaseCompleted(:final score) => score, _ => 0 };
 
   const GameplayState({
     required this.level,

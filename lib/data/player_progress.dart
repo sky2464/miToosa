@@ -52,13 +52,14 @@ class PlayerProgress {
     return PlayerProgress(playerId: playerId);
   }
 
-  /// Appends [stars] (1–3) to [adaptiveHistory], keeping the 20 most recent
-  /// entries, and marks the schema version as 1 (adaptive data present).
+  /// Appends [stars] (0–5) to [adaptiveHistory], keeping the 20 most recent
+  /// entries, and marks the schema version as 2 (0–5 scale adaptive data).
   void recordLevelResult(int stars) {
+    assert(stars >= 0 && stars <= 5);
     final updated = List<int>.from(adaptiveHistory)..add(stars);
     adaptiveHistory =
         updated.length > 20 ? updated.sublist(updated.length - 20) : updated;
-    adaptiveVersion = 1;
+    adaptiveVersion = 2;
   }
 
   void recordLogin() {
@@ -81,7 +82,9 @@ class PlayerProgress {
   String calculateHash(String secretKey) {
     final sortedStarsKeys = levelStars.keys.toList()..sort();
     final starsPayload = sortedStarsKeys.map((k) => "$k:${levelStars[k]}").join(",");
-    final payload = "$playerId|$totalXP|$coins|$streakCount|$bestStreak|$starsPayload";
+    final payload = "$playerId|$totalXP|$coins|$streakCount|$bestStreak|$starsPayload"
+        "|$hearts|$diamonds|${adaptiveHistory.join(',')}"
+        "|${difficultyMode.index}|${seenTutorialWorlds.join(',')}";
     
     final key = utf8.encode(secretKey);
     final bytes = utf8.encode(payload);
@@ -148,6 +151,11 @@ class PlayerProgress {
   /// Grants +1 heart (capped at 5) as a reward for sharing the app.
   /// Limited to once per calendar day (comparing year/month/day of [now]).
   /// Returns true when a heart was actually granted.
+  ///
+  /// Note: on iOS, `ShareResultStatus.success` only means the user selected
+  /// a share target in the share sheet — it does not guarantee the message
+  /// was actually delivered to the recipient. This is a known platform
+  /// limitation.
   bool shareAndRefuel(DateTime now) {
     if (hearts >= 5) return false;
     if (lastShareDate != null &&

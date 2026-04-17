@@ -148,7 +148,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     super.dispose();
   }
 
-  void _handleOptionTap(PuzzleOption option, GameplayLevel level) {
+  Future<void> _handleOptionTap(PuzzleOption option, GameplayLevel level) async {
     final state = ref.read(gameplayViewModelProvider(level));
     if (state.phase.isCompleted || _animatingTransition) return;
 
@@ -171,17 +171,27 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
             .completeLevel();
         if (bonus) {
           _showRunBonusBanner();
-          _awardRunBonusDiamond();
+          await _awardRunBonusDiamond();
         }
       }
       setState(() => _animatingTransition = true);
       Future.delayed(const Duration(milliseconds: 1200), () {
         if (!mounted) return;
+        // If this was the last level in the track, pop back instead of crashing.
+        if (widget.levelIndex + 1 >= widget.track.targetLevelCount) {
+          Navigator.pop(context);
+          return;
+        }
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
             pageBuilder: (c, a1, a2) =>
-                GameplayScreen(track: widget.track, levelIndex: widget.levelIndex + 1),
+                GameplayScreen(
+                  track: widget.track,
+                  levelIndex: widget.levelIndex + 1,
+                  isRunMode: widget.isRunMode,
+                  runTotalLevels: widget.runTotalLevels,
+                ),
             transitionsBuilder: (c, anim, a2, child) =>
                 FadeTransition(opacity: anim, child: child),
             transitionDuration: const Duration(milliseconds: 400),
@@ -670,7 +680,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     final theme = Theme.of(context);
     if (!eng.phase.isCompleted) return const SizedBox.shrink();
 
-    final stars = eng.level.stars(eng.incorrectAttempts);
+    final stars = eng.level.stars(eng.incorrectAttempts, hintUsed: eng.hintUsed);
 
     return Container(
       padding: const EdgeInsets.fromLTRB(
@@ -694,7 +704,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
         children: [
           // Stars
           Row(
-            children: List.generate(3, (i) {
+            children: List.generate(5, (i) {
               return Icon(
                 i < stars ? Icons.star_rounded : Icons.star_outline_rounded,
                 color: i < stars ? MiToosaTheme.warning : theme.colorScheme.primary.withValues(alpha: 0.2),
@@ -749,17 +759,9 @@ class _ShapePainter extends CustomPainter {
       ..strokeWidth = 2.5
       ..strokeJoin = StrokeJoin.round;
 
-    switch (item.fill) {
-      case ShapeFill.filled:
-        paint.style = PaintingStyle.fill;
-        break;
-      case ShapeFill.outlined:
-        paint.style = PaintingStyle.stroke;
-        break;
-      case ShapeFill.striped:
-        paint.style = PaintingStyle.fill;
-        break;
-    }
+    paint.style = item.fill == ShapeFill.outlined
+        ? PaintingStyle.stroke
+        : PaintingStyle.fill;
 
     final cx = size.width / 2;
     final cy = size.height / 2;
@@ -771,7 +773,6 @@ class _ShapePainter extends CustomPainter {
         if (item.fill == ShapeFill.striped) {
           _drawStripes(canvas, size, paint);
         }
-        break;
 
       case Shape.square:
         final rr = RRect.fromRectAndRadius(
@@ -779,7 +780,6 @@ class _ShapePainter extends CustomPainter {
           Radius.circular(r * 0.2),
         );
         canvas.drawRRect(rr, paint);
-        break;
 
       case Shape.triangle:
         final path = Path()
@@ -788,15 +788,12 @@ class _ShapePainter extends CustomPainter {
           ..lineTo(cx - r, cy + r * 0.8)
           ..close();
         canvas.drawPath(path, paint);
-        break;
 
       case Shape.star:
         canvas.drawPath(_starPath(cx, cy, r, 5), paint);
-        break;
 
       case Shape.hexagon:
         canvas.drawPath(_polygonPath(cx, cy, r, 6), paint);
-        break;
 
       case Shape.diamond:
         final path = Path()
@@ -806,7 +803,6 @@ class _ShapePainter extends CustomPainter {
           ..lineTo(cx - r * 0.7, cy)
           ..close();
         canvas.drawPath(path, paint);
-        break;
     }
   }
 

@@ -13,13 +13,13 @@ Widget _headerRow({required double width, required int hearts, required int diam
         width: width,
         child: Row(
           children: [
-            Text(
+            const Text(
               'mi',
-              style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
             ),
-            Text(
+            const Text(
               'Toosa',
-              style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
             ),
             const Spacer(),
             Flexible(

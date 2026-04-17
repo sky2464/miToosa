@@ -84,25 +84,20 @@ class HivePersistenceProvider implements IPersistenceProvider {
   }
 
   Future<Uint8List> _getOrCreateEncryptionKey() async {
-    final containsKey = await _secureStorage.containsKey(key: _encryptionKeyName);
-    if (!containsKey) {
-      final key = Hive.generateSecureKey();
-      await _secureStorage.write(
-        key: _encryptionKeyName,
-        value: base64UrlEncode(key),
-      );
-    }
-    final encodedKey = await _secureStorage.read(key: _encryptionKeyName);
-    return base64Url.decode(encodedKey!);
+    final encoded = await _secureStorage.read(key: _encryptionKeyName);
+    if (encoded != null) return base64Url.decode(encoded);
+    final key = Hive.generateSecureKey();
+    final value = base64UrlEncode(key);
+    await _secureStorage.write(key: _encryptionKeyName, value: value);
+    return base64Url.decode(value);
   }
 
   Future<String> _getOrCreateIntegrityKey() async {
-    final containsKey = await _secureStorage.containsKey(key: _integrityKeyName);
-    if (!containsKey) {
-      final key = const Uuid().v4();
-      await _secureStorage.write(key: _integrityKeyName, value: key);
-    }
-    return (await _secureStorage.read(key: _integrityKeyName))!;
+    final existing = await _secureStorage.read(key: _integrityKeyName);
+    if (existing != null) return existing;
+    final key = const Uuid().v4();
+    await _secureStorage.write(key: _integrityKeyName, value: key);
+    return key;
   }
 
   @override
@@ -153,11 +148,8 @@ class HivePersistenceProvider implements IPersistenceProvider {
   }
 
   @override
-  Future<void> deductHeart(String playerId) async {
-    final progress = await loadProgress(playerId);
-    progress.deductHeart();
-    await saveProgress(progress);
-  }
+  Future<void> deductHeart(String playerId) =>
+      _mutate(playerId, (p) => p.deductHeart());
 
   @override
   Future<bool> refuelHeartsWithDiamond(String playerId) async {
@@ -168,11 +160,8 @@ class HivePersistenceProvider implements IPersistenceProvider {
   }
 
   @override
-  Future<void> addDiamond(String playerId, [int count = 1]) async {
-    final progress = await loadProgress(playerId);
-    progress.addDiamond(count);
-    await saveProgress(progress);
-  }
+  Future<void> addDiamond(String playerId, [int count = 1]) =>
+      _mutate(playerId, (p) => p.addDiamond(count));
 
   @override
   Future<bool> checkAndRefuelHeart(String playerId, DateTime now) async {
@@ -183,18 +172,12 @@ class HivePersistenceProvider implements IPersistenceProvider {
   }
 
   @override
-  Future<void> refuelHeartLowerLevel(String playerId) async {
-    final progress = await loadProgress(playerId);
-    progress.refuelHeartLowerLevel();
-    await saveProgress(progress);
-  }
+  Future<void> refuelHeartLowerLevel(String playerId) =>
+      _mutate(playerId, (p) => p.refuelHeartLowerLevel());
 
   @override
-  Future<void> markTutorialSeen(String playerId, String worldId) async {
-    final progress = await loadProgress(playerId);
-    progress.markTutorialSeen(worldId);
-    await saveProgress(progress);
-  }
+  Future<void> markTutorialSeen(String playerId, String worldId) =>
+      _mutate(playerId, (p) => p.markTutorialSeen(worldId));
 
   @override
   Future<bool> shareAndRefuel(String playerId, DateTime now) async {
@@ -202,5 +185,11 @@ class HivePersistenceProvider implements IPersistenceProvider {
     final granted = progress.shareAndRefuel(now);
     if (granted) await saveProgress(progress);
     return granted;
+  }
+
+  Future<void> _mutate(String playerId, void Function(PlayerProgress) fn) async {
+    final progress = await loadProgress(playerId);
+    fn(progress);
+    await saveProgress(progress);
   }
 }

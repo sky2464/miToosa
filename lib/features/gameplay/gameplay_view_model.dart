@@ -89,7 +89,7 @@ class GameplayViewModel extends _$GameplayViewModel {
     final runComplete = newCompleted >= state.levelsInRun;
     state = state.copyWith(
       levelsCompleted: newCompleted,
-      isRunActive: runComplete ? false : true,
+      isRunActive: !runComplete,
     );
     return runComplete;
   }
