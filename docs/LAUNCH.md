@@ -10,7 +10,7 @@
 
 ### ✅ Code Quality
 
-- [x] All tests pass (256/256 tests passing)
+- [x] All tests pass (264/264 tests passing)
 - [x] Build succeeds with no errors (`flutter build ios/apk/web` verified)
 - [x] Lint and type checking pass (`dart analyze` with zero errors)
 - [x] Code reviewed and approved (multi-axis code review completed)
@@ -23,24 +23,24 @@
 - [x] Info.plist configured with AppTransportSecurity (allows HTTPS only)
 - [x] NSLocalNetworkUsageDescription added (no local network access required)
 - [x] Build signing configured (`--no-codesign` flag documented for dev builds)
-- [ ] **TODO:** Provisioning profile and team ID configured in Xcode
-- [ ] **TODO:** App Store ID assigned (currently placeholder `id0000000000`)
-- [ ] **TODO:** AdHoc signing certificate for TestFlight
+- [ ] **BLOCKED:** Provisioning profile and team ID configured in Xcode — requires Apple Developer account
+- [ ] **BLOCKED:** App Store ID assigned (currently placeholder `id0000000000`) — requires App Store Connect project
+- [ ] **BLOCKED:** AdHoc signing certificate for TestFlight — requires Apple Developer account
 
 #### Android
 - [x] build.gradle.kts configured with app signing template
 - [x] Gradle wrapper configured for reproducible builds
 - [x] targetSdkVersion aligned with Google Play requirements
-- [ ] **TODO:** Keystore file created and secured
-- [ ] **TODO:** signing.properties configured with keystore path/password
-- [ ] **TODO:** Google Play Console project created
+- [ ] **BLOCKED:** Keystore file created and secured — requires manual `keytool` generation with passwords
+- [ ] **BLOCKED:** signing.properties configured with keystore path/password — depends on keystore
+- [ ] **BLOCKED:** Google Play Console project created — requires Google Play Developer account
 
 #### Web
 - [x] Web build verified (`flutter build web --no-tree-shake-icons`)
 - [x] BUILD.md documents font subsetting workaround
 - [x] index.html configured with proper manifest
-- [ ] **TODO:** Deploy to staging server first
-- [ ] **TODO:** Production CDN configured
+- [ ] **BLOCKED:** Deploy to staging server first — hosting provider not selected
+- [ ] **BLOCKED:** Production CDN configured — depends on hosting provider
 
 ### ✅ Security
 
@@ -50,9 +50,9 @@
 - [x] Authentication integrated (auth_provider checks user state)
 - [x] Navigation state correctly isolated (each tab has independent context)
 - [x] HTTPS enforced (Info.plist NSAppTransportSecurity)
-- [ ] **TODO:** Privacy policy and terms of service ready
-- [ ] **TODO:** GDPR/data retention policy documented
-- [ ] **TODO:** Rate limiting on auth endpoints (if backend exists)
+- [x] Privacy policy drafted (`docs/PRIVACY-POLICY.md`) — needs legal review before publication
+- [x] GDPR/data retention policy documented (`docs/DATA-RETENTION.md`)
+- [x] Rate limiting on auth endpoints — N/A: no backend; auth is local UUID generation via platform keychain
 
 ### ✅ Performance
 
@@ -61,8 +61,8 @@
 - [x] Memory leaks checked (no circular references in Riverpod)
 - [x] UI responsive (SliverGrid, IndexedStack for smooth tab switching)
 - [x] Image assets optimized (emoji icons used instead of raster images)
-- [ ] **TODO:** Core Web Vitals measured in real browser (Lighthouse audit)
-- [ ] **TODO:** App size optimized (flutter build apk --release --analyze-size)
+- [ ] **BLOCKED:** Core Web Vitals measured in real browser (Lighthouse audit) — requires deployed web build
+- [ ] **TODO:** App size optimized (`flutter build apk --release --analyze-size`)
 
 ### ✅ Accessibility
 
@@ -70,17 +70,18 @@
 - [x] Touch targets sized appropriately (48dp minimum)
 - [x] Error messages descriptive (level bounds validation)
 - [x] Keyboard navigation supported (native Flutter MaterialApp behavior)
-- [ ] **TODO:** Screen reader tested with TalkBack (Android) and VoiceOver (iOS)
-- [ ] **TODO:** Axe Core accessibility audit passed
+- [ ] **BLOCKED:** Screen reader tested with TalkBack (Android) and VoiceOver (iOS) — requires physical devices
+- [ ] **BLOCKED:** Axe Core accessibility audit passed — requires deployed web build
 
 ### ✅ Monitoring
 
 - [x] Crash reporting ready for integration (Firebase Crashlytics recommended)
 - [x] Error handling covers lifecycle events (auth state, level loading)
 - [x] User exit points identified (onboarding completion, level failures)
-- [ ] **TODO:** Analytics setup (Mixpanel/Amplitude for engagement tracking)
-- [ ] **TODO:** Monitoring dashboard configured
-- [ ] **TODO:** Alert thresholds set (crash rate >5%, latency p95 >2s)
+- [x] Local session telemetry integrated (Hive-based, on-device only)
+- [ ] **BLOCKED:** Cloud analytics setup (Firebase Analytics recommended) — requires Firebase project
+- [ ] **BLOCKED:** Monitoring dashboard configured — requires Firebase project
+- [ ] **BLOCKED:** Alert thresholds set (crash rate >5%, latency p95 >2s) — requires monitoring infrastructure
 
 ### ✅ Documentation
 
@@ -88,9 +89,9 @@
 - [x] BUILD.md created with platform-specific build commands
 - [x] CONTRIBUTING.md available
 - [x] API design documented (State management via Riverpod)
-- [ ] **TODO:** Release notes prepared (v1.2.0 features)
-- [ ] **TODO:** Changelog updated
-- [ ] **TODO:** User onboarding/help documentation
+- [x] Release notes prepared (v1.2.0 features) — see `CHANGELOG.md`
+- [x] Changelog updated — `CHANGELOG.md` created at repo root
+- [x] User onboarding/help documentation — see `docs/USER-GUIDE.md`
 
 ---
 
@@ -358,7 +359,7 @@ Hold and **investigate** if:
 Introducing:
 • 🎮 Onboarding flow - learn the rules in 3 easy pages
 • 📊 Progress tracking - watch your IQ grow with stats
-• 🏆 Track selection - 8 unique puzzle categories
+• 🏆 Track selection - 23 unique puzzle categories
 • 🎨 Enhanced visuals - premium glassmorphism design
 
 Download now: [App Store] [Play Store] [Web]
@@ -391,14 +392,14 @@ Special thanks to beta testers who helped us ship with confidence.
 
 ### Known Limitations
 - Leaderboard is a placeholder (coming in v1.3)
-- Telemetry collection is now integrated locally as a privacy-safe Hive session telemetry foundation; future work may expand it into broader analytics.
+- Telemetry is local-only; cloud analytics deferred to v1.3
 - App Store share feature uses placeholder URL (will update after App Store approval)
 
 ### Technical
 - Version: 1.2.0+1
 - Flutter 3.5.0+
 - iOS 12.0+ | Android 5.0+ | Web (Chrome/Edge/Safari)
-- 256 unit/widget tests passing
+- 264 unit/widget tests passing
 ```
 
 ---
@@ -462,7 +463,7 @@ Special thanks to beta testers who helped us ship with confidence.
 1. Monitor performance over 30 days
 2. Collect user feedback from reviews
 3. Plan v1.2.1 (bug fixes)
-4. Plan v1.3 (telemetry, leaderboard real implementation, referral system)
+4. Plan v1.3 (leaderboard real implementation, referral system, cloud analytics)
 
 ---
 
