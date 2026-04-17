@@ -1,7 +1,10 @@
 # Spec: Autonomous Dependency & Skill Maintenance System
 
+**Status:** Archived
+
 **Date:** 2026-04-15  
-**Status:** Draft — awaiting human review before implementation
+
+**Implementation note:** This spec is archived after ship and retained as historical context for the dependency and skill maintenance system.
 
 ---
 

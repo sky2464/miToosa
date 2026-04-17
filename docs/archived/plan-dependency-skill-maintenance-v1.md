@@ -2,7 +2,9 @@
 
 **Spec:** [docs/spec-dependency-skill-maintenance-v1.md](spec-dependency-skill-maintenance-v1.md)  
 **Date:** 2026-04-15  
-**Status:** Complete — shipped 2026-04-15
+**Status:** Archived
+
+**Implementation note:** This plan is archived after ship and kept only as historical execution context.
 
 ---
 
