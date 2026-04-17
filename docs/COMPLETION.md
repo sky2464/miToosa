@@ -25,7 +25,7 @@
 - [x] **Final verify & smoke test**
 
 ### Deferred to v1.3
-- [ ] Local telemetry collection (roadmap item for future release)
+- [x] Local telemetry collection (roadmap item for future release) — implemented as a local-only Hive session telemetry foundation
 
 ## Final Verification Results
 

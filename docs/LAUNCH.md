@@ -391,7 +391,7 @@ Special thanks to beta testers who helped us ship with confidence.
 
 ### Known Limitations
 - Leaderboard is a placeholder (coming in v1.3)
-- Telemetry collection not yet integrated (v1.3)
+- Telemetry collection is now integrated locally as a privacy-safe Hive session telemetry foundation; future work may expand it into broader analytics.
 - App Store share feature uses placeholder URL (will update after App Store approval)
 
 ### Technical

@@ -1,5 +1,9 @@
 # Spec: Local Telemetry Collection v1
 
+**Status:** Archived
+
+**Implementation note:** This spec is archived after ship and retained as historical context for the local telemetry foundation.
+
 ## Objective
 Build a privacy-safe, on-device telemetry system for miToosa that records only app session start/end events in v1.
 
