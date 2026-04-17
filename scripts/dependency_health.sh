@@ -50,27 +50,26 @@ echo "Major-version bumps available (blocked by constraint): $MAJOR_COUNT"
 echo ""
 
 # ── 3. Apply safe upgrades if --auto ──────────────────────────────────────────
+# Note: SAFE_COUNT above is approximate (text-parsing heuristic for display only).
+# We always run `flutter pub upgrade` in --auto mode since it is idempotent:
+# if nothing needs upgrading it prints "No dependencies changed" and exits 0.
 if [ "$AUTO" = true ]; then
-  if [ "$SAFE_COUNT" -gt 0 ]; then
-    echo "=== Applying safe upgrades (flutter pub upgrade) ==="
-    flutter pub upgrade
+  echo "=== Applying safe upgrades (flutter pub upgrade) ==="
+  flutter pub upgrade
 
-    echo ""
-    echo "=== Running analysis gate ==="
-    dart analyze
-    echo "dart analyze: PASSED"
+  echo ""
+  echo "=== Running analysis gate ==="
+  dart analyze
+  echo "dart analyze: PASSED"
 
-    echo ""
-    echo "=== Running test gate ==="
-    flutter test
-    echo "flutter test: PASSED"
+  echo ""
+  echo "=== Running test gate ==="
+  flutter test
+  echo "flutter test: PASSED"
 
-    echo ""
-    echo "Safe upgrades applied and verified. Commit with:"
-    echo "  git add pubspec.lock && git commit -m 'chore(deps): upgrade patch/minor dependencies'"
-  else
-    echo "No safe upgrades to apply."
-  fi
+  echo ""
+  echo "Safe upgrades applied and verified. Commit with:"
+  echo "  git add pubspec.lock && git commit -m 'chore(deps): upgrade patch/minor dependencies'"
 fi
 
 # ── 4. Advisory scan if --full ────────────────────────────────────────────────

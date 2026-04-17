@@ -70,8 +70,10 @@ jobs:
           body: >-
             Automated safe upgrades (patch/minor versions) from pub.dev.
             `flutter pub upgrade` applied, `dart analyze` passed ✅,
-            `flutter test` passed ✅ (256 tests).
+            `flutter test` passed ✅.
             All verification gates passed. Ready for review and merge.
+
+            > Test count reflects latest run — update this description if it drifts.
           branch: deps/safe-upgrades-${{ github.run_id }}
           base: main
 
