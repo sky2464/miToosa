@@ -1,6 +1,8 @@
 # Spec: Engagement Loop v1 — Hearts, Hints, Countdown & Star Rework
 
-**Status:** Draft — Awaiting human review before implementation
+**Status:** Archived
+
+**Implementation note:** The feature set in this spec is already present in the codebase and covered by tests. This document is archived after ship and retained as a historical reference; if later `/test` or `/review` work finds drift, the checked items can be toggled or followed up immediately.
 
 ---
 
@@ -35,7 +37,7 @@ Deepen the dopamine loop and long-session engagement in miToosa through five int
 | Local persistence | Hive 2 (typed adapters) |
 | Routing | go_router 17 |
 | Audio | audioplayers |
-| Sharing | to be added: `share_plus` |
+| Sharing | `share_plus` |
 | Testing | flutter_test, mocktail |
 
 ---
@@ -66,7 +68,8 @@ lib/
       gameplay_level.dart        # stars() → 0-5 (REWORK HERE)
   data/
     player_progress.dart         # Add: hearts, diamonds, heartRefuelAt,
-                                 #       seenTutorialWorlds, adaptiveHistory 1-5
+                                 #       seenTutorialWorlds, lastShareDate,
+                                 #       adaptiveHistory 1-5
     hive_persistence_provider.dart
   features/
     gameplay/
@@ -136,7 +139,7 @@ int hearts;
 
 **Data changes to `PlayerProgress`:**
 ```dart
-List<String> seenTutorialWorlds; // Hive field 12, schema v2
+List<String> seenTutorialWorlds; // Hive field 15, schema v2
 ```
 
 ---
@@ -183,9 +186,11 @@ hintUsed = true  → stars capped at 3
 
 **`PlayerProgress` data additions:**
 ```dart
-int hearts;          // Hive field 13, schema v2; default 5, max 5
-int diamonds;        // Hive field 14, schema v2; default 0
-DateTime? heartRefuelAt; // Hive field 15, schema v2; time hearts will reach max naturally
+int hearts;             // Hive field 12, schema v2; default 5, max 5
+int diamonds;           // Hive field 13, schema v2; default 0
+DateTime? heartRefuelAt; // Hive field 14, schema v2; time hearts will reach max naturally
+List<String> seenTutorialWorlds; // Hive field 15, schema v2
+DateTime? lastShareDate; // Hive field 16, schema v3; one share-refuel grant per calendar day
 ```
 
 **Heart display:** A `HeartsBar` widget shown at the top of `GameplayScreen` and `WorldMapScreen`.
@@ -299,18 +304,18 @@ test/features/gameplay/gameplay_view_model_test.dart — hint, hearts deduction,
 
 ## Success Criteria
 
-- [ ] A new player opening "Pattern Match" for the first time sees the how-to-play modal; subsequent entries skip it.
-- [ ] Tapping the hint button during a puzzle deducts 1 heart and reveals the hint text.
-- [ ] With 0 hearts, the hint button shows an error state and does not reveal the hint.
-- [ ] Hearts naturally refuel at +1 per 30 minutes (verified via timer mock in tests).
-- [ ] Completing a level with a lower index than the blocked level grants +1 heart.
-- [ ] Tapping "Share" grants +1 heart (max once per day).
-- [ ] Spending 1 diamond refuels hearts to 5.
-- [ ] Starting a full world run starts the countdown timer; completing all levels before expiry triggers the Run Bonus (+1 diamond + overlay).
-- [ ] `computeStars(0)` returns 5; `computeStars(7)` returns 0.
-- [ ] Existing saves with `adaptiveVersion == 1` (stars 1–3) are migrated correctly to the 0–5 scale on load.
-- [ ] All tests pass: `flutter test`
-- [ ] No analysis errors: `flutter analyze`
+- [x] A new player opening "Pattern Match" for the first time sees the how-to-play modal; subsequent entries skip it.
+- [x] Tapping the hint button during a puzzle deducts 1 heart and reveals the hint text.
+- [x] With 0 hearts, the hint button shows an error state and does not reveal the hint.
+- [x] Hearts naturally refuel at +1 per 30 minutes (verified via timer mock in tests).
+- [x] Completing a level with a lower index than the blocked level grants +1 heart.
+- [x] Tapping "Share" grants +1 heart (max once per day).
+- [x] Spending 1 diamond refuels hearts to 5.
+- [x] Starting a full world run starts the countdown timer; completing all levels before expiry triggers the Run Bonus (+1 diamond + overlay).
+- [x] `computeStars(0)` returns 5; `computeStars(7)` returns 0.
+- [x] Existing saves with `adaptiveVersion == 1` (stars 1–3) are migrated correctly to the 0–5 scale on load.
+- [x] All tests pass: `flutter test`
+- [x] No analysis errors: `flutter analyze`
 
 ---
 

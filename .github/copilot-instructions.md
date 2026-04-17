@@ -16,6 +16,15 @@
 - Each increment: implement → test → verify → commit
 - Never mix formatting changes with behavior changes
 
+## Documentation closeout
+- After `/build`, `/test`, `/review`, and `/code-simplify`, run a docs sync pass.
+- Treat the docs sync pass as the source of truth for checklist state.
+- Mark completed checklist items as `[x]` when code and verification confirm they are done.
+- If `/test` or `/review` discovers missing work or regressions, unmark the affected items or add new unchecked follow-up items immediately.
+- Reconcile the active `docs/spec-*.md` and `docs/plan-*.md` files with the implemented code and verified behavior.
+- If a plan is intentionally stale, add a short note explaining the drift instead of leaving a silent mismatch.
+- When a spec has shipped, mark the spec and plan as archived, move the finished files into `docs/archived/`, and keep the historical content as read-only reference. Leave active specs and plans in the `docs/` root.
+
 ## Boundaries
 - Always: Run tests before commits, validate user input
 - Ask first: Database schema changes, new dependencies
