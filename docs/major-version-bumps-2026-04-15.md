@@ -1,13 +1,14 @@
 # Major Version Bumps Available
 
 **Date:** 2026-04-15  
-**Status:** Awaiting human review before applying
+**Updated:** 2026-04-16 — transitive-only status verified; share_plus migration doc created  
+**Status:** Analysis complete — see `docs/major-bump-share_plus.md` for detailed migration plan
 
 ---
 
 ## Summary
 
-Current miToosa has 2 major-version bumps blocked by caret constraints. Both are transitive dependencies (no direct call sites in `lib/`), so prioritization is lower than production-critical packages.
+Current miToosa has 2 major-version bumps blocked by caret constraints. `share_plus` is a direct dependency with a deprecated API call that requires migration. All others (`vector_math`, `meta`, `test`, `dart_style`) are **confirmed transitive-only** — verified by `grep -rn "vector_math\|dart_style\|meta\|package:test" lib/ test/` returning zero results.
 
 ---
 
@@ -15,61 +16,47 @@ Current miToosa has 2 major-version bumps blocked by caret constraints. Both are
 
 ### 1. share_plus: 10.1.4 → 13.0.0
 
-**Source:** https://pub.dev/packages/share_plus/versions/13.0.0
+**Source:** https://pub.dev/packages/share_plus/changelog (fetched live 2026-04-16)  
+**Full migration doc:** [docs/major-bump-share_plus.md](major-bump-share_plus.md)
 
 **Affected:** 
-- Direct dependency: `lib/features/menu/screens/menu_screen.dart` uses `share_plus` for "Share" functionality
+- Direct dependency: `lib/features/navigation/world_map_screen.dart:34` calls `Share.share()` (deprecated in v11.0.0)
 - Transitive: `share_plus_platform_interface` (5.0.2 → 7.0.0)
 
-**Breaking Changes Expected:** 
-Share Plus 13.0.0 includes major platform-specific improvements. Requires review of:
-- API changes in share dialog
-- Platform-specific implementations (iOS/Android)
-- Return type or signature changes
+**Breaking Changes Summary (from live changelog):**
+- **v11.0.0:** New `SharePlus` class + `share(ShareParams(...))` method replaces deprecated `Share.share()`. Migration required.
+- **v12.0.0:** Android requires AGP >= 8.12.1, Gradle >= 8.13, Kotlin 2.2.0.
+- **v13.0.0:** Requires Flutter >= 3.41.6, Dart >= 3.11.0, iOS >= 13.0, macOS >= 10.15.
 
 **Action:**
-1. Fetch full CHANGELOG from pub.dev
-2. Identify API breaking changes
-3. Update call sites in `lib/features/menu/screens/menu_screen.dart`
-4. Test on iOS and Android simulators
-5. Open PR with migration notes
+See [docs/major-bump-share_plus.md](major-bump-share_plus.md) for full checklist and code migration example.
 
-**Priority:** MEDIUM — affects share dialog UX
+**Priority:** MEDIUM — affects share dialog UX; one call site to update
 
 ---
 
 ### 2. vector_math: 2.2.0 → 2.3.0
 
-**Source:** https://pub.dev/packages/vector_math/versions/2.3.0
-
 **Affected:** 
-- Transitive dependency only (no direct imports in `lib/`)
+- **CONFIRMED transitive-only** — zero direct imports in `lib/` or `test/` (verified 2026-04-16)
 - Used indirectly by Flutter rendering engine
 
 **Breaking Changes Expected:** 
-Unlikely to affect game code directly, but may require engine recompilation.
+Unlikely to affect game code directly — no call sites to migrate.
 
 **Action:**
-1. Fetch CHANGELOG
-2. If only internal fixes: safe to upgrade
-3. If API changes: check if Flutter has adapted
+- Safe to apply with `flutter pub upgrade --major-versions vector_math` once Flutter engine supports it
 
-**Priority:** LOW — transitive only
+**Priority:** LOW — transitive only, zero migration effort
 
 ---
 
 ### 3. meta: 1.17.0 → 1.18.2
 
 **Affected:** 
-- Transitive dev dependency
+- **CONFIRMED transitive-only** — zero direct `package:meta` imports in `lib/` or `test/` (verified 2026-04-16)
 
-**Breaking Changes Expected:** 
-Unlikely — `meta` is a stable annotation library. Usually backwards-compatible.
-
-**Action:**
-- Safe to upgrade with `flutter pub upgrade --major-versions`
-
-**Priority:** LOW
+**Priority:** LOW — transitive, safe to upgrade with no migration effort
 
 ---
 
