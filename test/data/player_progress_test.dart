@@ -690,4 +690,123 @@ void main() {
       // Skip — tested via streak_engine_test
     });
   });
+
+  // ─── Schema v6: per-level XP, best time, best difficulty, daily XP ────────
+
+  group('PlayerProgress — schema v6 defaults', () {
+    test('fresh() defaults: dailyXP=0, dailyXPDate=null, empty maps', () {
+      final p = PlayerProgress.fresh(playerId: 'v6-player');
+      expect(p.dailyXP, 0);
+      expect(p.dailyXPDate, isNull);
+      expect(p.levelXP, isEmpty);
+      expect(p.levelBestTime, isEmpty);
+      expect(p.levelBestDifficulty, isEmpty);
+    });
+  });
+
+  group('PlayerProgress — recordLevelXP', () {
+    test('stores first XP for a level', () {
+      final p = PlayerProgress.fresh(playerId: 'p');
+      p.recordLevelXP('track1_0', 8);
+      expect(p.levelXP['track1_0'], 8);
+    });
+
+    test('keeps higher XP on improvement', () {
+      final p = PlayerProgress.fresh(playerId: 'p');
+      p.recordLevelXP('track1_0', 6);
+      p.recordLevelXP('track1_0', 9);
+      expect(p.levelXP['track1_0'], 9);
+    });
+
+    test('does not overwrite with lower XP', () {
+      final p = PlayerProgress.fresh(playerId: 'p');
+      p.recordLevelXP('track1_0', 9);
+      p.recordLevelXP('track1_0', 5);
+      expect(p.levelXP['track1_0'], 9);
+    });
+
+    test('tracks multiple levels independently', () {
+      final p = PlayerProgress.fresh(playerId: 'p');
+      p.recordLevelXP('track1_0', 8);
+      p.recordLevelXP('track1_1', 5);
+      expect(p.levelXP['track1_0'], 8);
+      expect(p.levelXP['track1_1'], 5);
+    });
+  });
+
+  group('PlayerProgress — recordLevelTime', () {
+    test('stores first time for a level', () {
+      final p = PlayerProgress.fresh(playerId: 'p');
+      p.recordLevelTime('track1_0', 42);
+      expect(p.levelBestTime['track1_0'], 42);
+    });
+
+    test('keeps lower (better) time on improvement', () {
+      final p = PlayerProgress.fresh(playerId: 'p');
+      p.recordLevelTime('track1_0', 50);
+      p.recordLevelTime('track1_0', 30);
+      expect(p.levelBestTime['track1_0'], 30);
+    });
+
+    test('does not overwrite with higher time', () {
+      final p = PlayerProgress.fresh(playerId: 'p');
+      p.recordLevelTime('track1_0', 30);
+      p.recordLevelTime('track1_0', 60);
+      expect(p.levelBestTime['track1_0'], 30);
+    });
+  });
+
+  group('PlayerProgress — recordLevelDifficulty', () {
+    test('stores first difficulty', () {
+      final p = PlayerProgress.fresh(playerId: 'p');
+      p.recordLevelDifficulty('track1_0', 'easy');
+      expect(p.levelBestDifficulty['track1_0'], 'easy');
+    });
+
+    test('upgrades to harder difficulty', () {
+      final p = PlayerProgress.fresh(playerId: 'p');
+      p.recordLevelDifficulty('track1_0', 'easy');
+      p.recordLevelDifficulty('track1_0', 'hard');
+      expect(p.levelBestDifficulty['track1_0'], 'hard');
+    });
+
+    test('does not downgrade to easier difficulty', () {
+      final p = PlayerProgress.fresh(playerId: 'p');
+      p.recordLevelDifficulty('track1_0', 'challenge');
+      p.recordLevelDifficulty('track1_0', 'easy');
+      expect(p.levelBestDifficulty['track1_0'], 'challenge');
+    });
+
+    test('challenge > hard > medium > easy ordering', () {
+      final p = PlayerProgress.fresh(playerId: 'p');
+      for (final tier in ['easy', 'medium', 'hard', 'challenge']) {
+        p.recordLevelDifficulty('track1_0', tier);
+      }
+      expect(p.levelBestDifficulty['track1_0'], 'challenge');
+    });
+  });
+
+  group('PlayerProgress — addDailyXP', () {
+    test('initialises dailyXP on first call', () {
+      final p = PlayerProgress.fresh(playerId: 'p');
+      p.addDailyXP(8, today: DateTime(2026, 4, 18));
+      expect(p.dailyXP, 8);
+      expect(p.dailyXPDate, DateTime(2026, 4, 18));
+    });
+
+    test('accumulates XP on the same day', () {
+      final p = PlayerProgress.fresh(playerId: 'p');
+      p.addDailyXP(8, today: DateTime(2026, 4, 18));
+      p.addDailyXP(6, today: DateTime(2026, 4, 18, 14, 0));
+      expect(p.dailyXP, 14);
+    });
+
+    test('resets on a new calendar day', () {
+      final p = PlayerProgress.fresh(playerId: 'p');
+      p.addDailyXP(8, today: DateTime(2026, 4, 17));
+      p.addDailyXP(6, today: DateTime(2026, 4, 18));
+      expect(p.dailyXP, 6);
+      expect(p.dailyXPDate, DateTime(2026, 4, 18));
+    });
+  });
 }

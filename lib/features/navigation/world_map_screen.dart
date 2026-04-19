@@ -151,7 +151,7 @@ class WorldMapScreen extends ConsumerWidget {
                               ),
                             ),
                             loading: () => const SizedBox.shrink(),
-                            error: (_, __) => const SizedBox.shrink(),
+                            error: (_, _) => const SizedBox.shrink(),
                           ),
                         ),
                       ],
@@ -161,7 +161,7 @@ class WorldMapScreen extends ConsumerWidget {
                     progressAsync.when(
                       data: (progress) => _StreakCard(progress: progress),
                       loading: () => const SizedBox(height: 80),
-                      error: (_, __) => const SizedBox.shrink(),
+                      error: (_, _) => const SizedBox.shrink(),
                     ),
                   ],
                 ),
@@ -235,7 +235,7 @@ class WorldMapScreen extends ConsumerWidget {
                     );
                   },
                   loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (_, __) => const Center(child: Text('Failed to load.')),
+                  error: (_, _) => const Center(child: Text('Failed to load.')),
                 ),
               ),
             ],

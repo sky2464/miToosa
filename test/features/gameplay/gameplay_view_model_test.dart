@@ -172,5 +172,86 @@ void main() {
     test('tickPuzzleTimer returns false when no tier is set', () {
       expect(notifier().tickPuzzleTimer(), false);
     });
+
+    test('resumePuzzleTimer clears the paused flag', () {
+      notifier().setDifficultyTier(DifficultyTier.easy);
+      notifier().pausePuzzleTimer();
+      expect(state().puzzleTimerPaused, true);
+
+      notifier().resumePuzzleTimer();
+      expect(state().puzzleTimerPaused, false);
+
+      // Timer should now decrement when ticked
+      notifier().tickPuzzleTimer();
+      expect(state().puzzleTimeRemaining, 29);
+    });
+  });
+
+  group('GameplayViewModel — start', () {
+    test('start transitions PhaseReady → PhasePlaying', () {
+      expect(state().phase.isReady, true);
+      notifier().start();
+      expect(state().phase.isPlaying, true);
+    });
+
+    test('start is a no-op when already playing', () {
+      notifier().start();
+      notifier().start();
+      expect(state().phase.isPlaying, true);
+    });
+  });
+
+  group('GameplayViewModel — selectOption', () {
+    setUp(() {
+      notifier().start();
+    });
+
+    test('correct answer sets PhaseCompleted with positive score', () {
+      final correctId = level.puzzle.correctOptionId;
+      notifier().selectOption(correctId);
+
+      expect(state().phase.isCompleted, true);
+      expect((state().phase as PhaseCompleted).score, greaterThan(0));
+      expect(state().selectedOptionId, correctId);
+      expect(state().feedback?.style, GameplayFeedbackStyle.success);
+    });
+
+    test('incorrect answer increments incorrectAttempts and sets warning feedback', () {
+      final wrongId = level.puzzle.options
+          .firstWhere((o) => o.id != level.puzzle.correctOptionId)
+          .id;
+      notifier().selectOption(wrongId);
+
+      expect(state().phase.isPlaying, true);
+      expect(state().incorrectAttempts, 1);
+      expect(state().feedback?.style, GameplayFeedbackStyle.warning);
+      expect(state().selectedOptionId, wrongId);
+    });
+
+    test('selectOption is a no-op when phase is not playing', () {
+      // Use a fresh container that hasn't called start()
+      final c2 = ProviderContainer();
+      final l2 = GameplayLevel.starterLevel();
+      final n2 = c2.read(gameplayViewModelProvider(l2).notifier);
+
+      n2.selectOption(l2.puzzle.correctOptionId);
+      expect(c2.read(gameplayViewModelProvider(l2)).phase.isReady, true);
+      c2.dispose();
+    });
+  });
+
+  group('GameplayViewModel — restart', () {
+    test('restart resets phase, attempts, selectedOption and feedback', () {
+      notifier().start();
+      notifier().selectOption(level.puzzle.correctOptionId);
+      expect(state().phase.isCompleted, true);
+
+      notifier().restart();
+
+      expect(state().phase.isReady, true);
+      expect(state().incorrectAttempts, 0);
+      expect(state().selectedOptionId, isNull);
+      expect(state().feedback, isNull);
+    });
   });
 }

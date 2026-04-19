@@ -37,7 +37,7 @@ class AchievementsScreen extends ConsumerWidget {
           return ListView.separated(
             padding: const EdgeInsets.all(MiToosaTheme.spacingMd),
             itemCount: AchievementEngine.catalog.length,
-            separatorBuilder: (_, __) =>
+            separatorBuilder: (_, _) =>
                 const SizedBox(height: MiToosaTheme.spacingSm),
             itemBuilder: (context, index) {
               final a = AchievementEngine.catalog[index];

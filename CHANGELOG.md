@@ -5,6 +5,29 @@ All notable changes to miToosa will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] — 2025-07-25
+
+### Added
+- **Difficulty tiers** — easy, medium, hard, challenge modes with puzzle timers and XP multipliers
+- **Session-based gameplay** — 5-puzzle sessions with cumulative XP tracking and session-complete overlay
+- **Game over overlay** — shows puzzles solved and XP earned when hearts run out mid-session
+- **XP progression gate** — tracks lock until player earns enough per-level XP (7 XP threshold)
+- **Difficulty selection sheet** — bottom sheet for choosing difficulty tier before starting a level
+- **Run timer overlay** — gradient progress bar with time-label during timed puzzle runs
+- **Per-level tracking** — levelXP, levelBestTime, levelBestDifficulty stored per level
+- **Daily XP tracking** — dailyXP counter resets each calendar day
+- **XP chip** — real-time XP badge in gameplay header during sessions
+
+### Changed
+- **Hive schema v6** — added dailyXP, dailyXPDate, levelXP, levelBestTime, levelBestDifficulty fields with backward-compatible migration
+- **Integrity hash** — HMAC payload now covers all v6 fields (dailyXP, dailyXPDate, levelXP, levelBestTime, levelBestDifficulty)
+- **Hash payload refactored** — list-based assembly for auditability
+- **gameplay_screen.dart simplified** — extracted GameOverOverlay, SessionCompleteOverlay, SessionStat, and ShapeRenderer into dedicated files (1298 → 960 lines)
+- **_saveProgress race fix** — save now awaited before navigation transition
+
+### Fixed
+- `recordLevelDifficulty` now asserts on unknown tier names in debug mode
+
 ## [1.3.0] — 2025-07-24
 
 ### Added

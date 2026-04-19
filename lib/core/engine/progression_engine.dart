@@ -32,6 +32,9 @@ const double kMultiplierMax = 1.50;
 /// Fractional change applied in a single adjustment step.
 const double kMultiplierStep = 0.10;
 
+/// Minimum XP a player must earn on level N to unlock level N+1.
+const int kProgressionGateXP = 7;
+
 /// Computes adaptive difficulty and progression values.
 ///
 /// All members are static — instantiation is intentionally prevented.

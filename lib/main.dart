@@ -39,7 +39,7 @@ class MiToosaApp extends ConsumerWidget {
             ? const LoginScreen()
             : const MainAppShell(),
         loading: () => const LoginScreen(),
-        error: (_, __) => const LoginScreen(),
+        error: (_, _) => const LoginScreen(),
       ),
     );
   }

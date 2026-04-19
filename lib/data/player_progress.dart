@@ -41,6 +41,12 @@ class PlayerProgress {
   int freeGamesRemaining; // games left today (resets daily to freeGamesLimit)
   DateTime? lastAllowanceReset; // last day the allowance was reset
   int shareBonusGames; // extra games earned from today's share (0 or 40)
+  // Schema version 6: per-level XP, best time, best difficulty, daily XP (Hive fields 27–31).
+  int dailyXP; // XP earned today (resets on new calendar day)
+  DateTime? dailyXPDate; // the calendar day dailyXP was last updated
+  Map<String, int> levelXP; // best XP earned per level (keyed by levelId)
+  Map<String, int> levelBestTime; // best completion time in seconds per level
+  Map<String, String> levelBestDifficulty; // best difficulty tier name per level
 
   PlayerProgress({
     required this.playerId,
@@ -70,6 +76,11 @@ class PlayerProgress {
     this.freeGamesRemaining = 25,
     this.lastAllowanceReset,
     this.shareBonusGames = 0,
+    this.dailyXP = 0,
+    this.dailyXPDate,
+    this.levelXP = const {},
+    this.levelBestTime = const {},
+    this.levelBestDifficulty = const {},
   });
 
   factory PlayerProgress.fresh({required String playerId}) {
@@ -151,17 +162,38 @@ class PlayerProgress {
     return keys.map((k) => '$k:${m[k]}').join(',');
   }
 
+  static String _sortedStringMapPayload(Map<String, String> m) {
+    final keys = m.keys.toList()..sort();
+    return keys.map((k) => '$k:${m[k]}').join(',');
+  }
+
   String calculateHash(String secretKey) {
-    final sortedStarsKeys = levelStars.keys.toList()..sort();
-    final starsPayload = sortedStarsKeys.map((k) => "$k:${levelStars[k]}").join(",");
-    final payload = "$playerId|$totalXP|$coins|$streakCount|$bestStreak|$starsPayload"
-        "|$hearts|$diamonds|${adaptiveHistory.join(',')}"
-        "|${difficultyMode.index}|${seenTutorialWorlds.join(',')}"
-        "|$streakFreezeCount|$dailyRewardDay|${streakMilestones.join(',')}"
-        "|${unlockedAchievements.join(',')}"
-        "|${_sortedMapPayload(achievementProgress)}"
-        "|${lastDailyRewardClaim?.toUtc().toIso8601String() ?? ''}"
-        "|${playHistory.map((d) => d.toUtc().toIso8601String()).join(',')}";
+    final parts = <String>[
+      playerId,
+      '$totalXP',
+      '$coins',
+      '$streakCount',
+      '$bestStreak',
+      _sortedMapPayload(levelStars),
+      '$hearts',
+      '$diamonds',
+      adaptiveHistory.join(','),
+      '${difficultyMode.index}',
+      seenTutorialWorlds.join(','),
+      '$streakFreezeCount',
+      '$dailyRewardDay',
+      streakMilestones.join(','),
+      unlockedAchievements.join(','),
+      _sortedMapPayload(achievementProgress),
+      lastDailyRewardClaim?.toUtc().toIso8601String() ?? '',
+      playHistory.map((d) => d.toUtc().toIso8601String()).join(','),
+      '$dailyXP',
+      dailyXPDate?.toUtc().toIso8601String() ?? '',
+      _sortedMapPayload(levelXP),
+      _sortedMapPayload(levelBestTime),
+      _sortedStringMapPayload(levelBestDifficulty),
+    ];
+    final payload = parts.join('|');
 
     final key = utf8.encode(secretKey);
     final bytes = utf8.encode(payload);
@@ -343,6 +375,54 @@ class PlayerProgress {
         : updated;
   }
 
+  // ─── Schema v6 helpers ───────────────────────────────────────────────────
+
+  /// Records [xp] earned for [levelId], keeping the best (highest) value.
+  void recordLevelXP(String levelId, int xp) {
+    final best = levelXP[levelId] ?? 0;
+    if (xp > best) {
+      levelXP = Map<String, int>.from(levelXP)..[levelId] = xp;
+    }
+  }
+
+  /// Records [seconds] completion time for [levelId], keeping the best (lowest) value.
+  void recordLevelTime(String levelId, int seconds) {
+    final best = levelBestTime[levelId];
+    if (best == null || seconds < best) {
+      levelBestTime = Map<String, int>.from(levelBestTime)..[levelId] = seconds;
+    }
+  }
+
+  /// Records [tierName] as the best difficulty achieved for [levelId].
+  /// "Best" is ordered: challenge > hard > medium > easy.
+  void recordLevelDifficulty(String levelId, String tierName) {
+    const order = ['easy', 'medium', 'hard', 'challenge'];
+    assert(order.contains(tierName), 'recordLevelDifficulty: unknown tier "$tierName"');
+    final current = levelBestDifficulty[levelId];
+    final currentRank = current != null ? order.indexOf(current) : -1;
+    final newRank = order.indexOf(tierName);
+    if (newRank > currentRank) {
+      levelBestDifficulty =
+          Map<String, String>.from(levelBestDifficulty)..[levelId] = tierName;
+    }
+  }
+
+  /// Adds [xp] to [dailyXP], resetting the counter if [today] is a new calendar day.
+  void addDailyXP(int xp, {DateTime? today}) {
+    final now = today ?? DateTime.now();
+    final todayDate = DateTime(now.year, now.month, now.day);
+    final storedDate = dailyXPDate;
+    if (storedDate == null ||
+        storedDate.year != todayDate.year ||
+        storedDate.month != todayDate.month ||
+        storedDate.day != todayDate.day) {
+      dailyXP = xp;
+    } else {
+      dailyXP = dailyXP + xp;
+    }
+    dailyXPDate = todayDate;
+  }
+
   // ─── Daily reward helpers ─────────────────────────────────────────────────
 
   /// Records claiming daily reward for [day] at [now].
@@ -415,13 +495,25 @@ class PlayerProgressAdapter extends TypeAdapter<PlayerProgress> {
       freeGamesRemaining: fields[24] as int? ?? 25,
       lastAllowanceReset: fields[25] as DateTime?,
       shareBonusGames: fields[26] as int? ?? 0,
+      // Schema v6: per-level XP, best time, best difficulty, daily XP.
+      dailyXP: fields[27] as int? ?? 0,
+      dailyXPDate: fields[28] as DateTime?,
+      levelXP: fields[29] != null
+          ? (fields[29] as Map).cast<String, int>()
+          : const {},
+      levelBestTime: fields[30] != null
+          ? (fields[30] as Map).cast<String, int>()
+          : const {},
+      levelBestDifficulty: fields[31] != null
+          ? (fields[31] as Map).cast<String, String>()
+          : const {},
     );
   }
 
   @override
   void write(BinaryWriter writer, PlayerProgress obj) {
     writer
-      ..writeByte(27) // 27 fields total (schema v5: onboarding + allowance)
+      ..writeByte(32) // 32 fields total (schema v6: daily XP, level XP, best time/difficulty)
       ..writeByte(0)
       ..write(obj.playerId)
       ..writeByte(1)
@@ -475,7 +567,17 @@ class PlayerProgressAdapter extends TypeAdapter<PlayerProgress> {
       ..writeByte(25)
       ..write(obj.lastAllowanceReset)
       ..writeByte(26)
-      ..write(obj.shareBonusGames);
+      ..write(obj.shareBonusGames)
+      ..writeByte(27)
+      ..write(obj.dailyXP)
+      ..writeByte(28)
+      ..write(obj.dailyXPDate)
+      ..writeByte(29)
+      ..write(obj.levelXP)
+      ..writeByte(30)
+      ..write(obj.levelBestTime)
+      ..writeByte(31)
+      ..write(obj.levelBestDifficulty);
   }
 }
 

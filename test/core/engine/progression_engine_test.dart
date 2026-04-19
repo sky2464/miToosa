@@ -264,4 +264,10 @@ void main() {
       expect(ProgressionEngine.isLowerLevel(0, 1), true);
     });
   });
+
+  group('kProgressionGateXP', () {
+    test('gate threshold is 7 XP', () {
+      expect(kProgressionGateXP, 7);
+    });
+  });
 }
