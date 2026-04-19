@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/engine/progression_engine.dart';
+import '../../core/haptics_service.dart';
+import '../../core/music_service.dart';
 import '../../data/player_progress.dart';
 import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
@@ -36,6 +38,10 @@ class SettingsScreen extends ConsumerWidget {
 }
 
 // ─── Settings Body ───────────────────────────────────────────
+
+/// Tracks sound effects toggle state (will be backed by a service in a future
+/// increment).
+bool _soundEffectsEnabled = true;
 
 class _SettingsBody extends ConsumerWidget {
   final PlayerProgress progress;
@@ -93,6 +99,74 @@ class _SettingsBody extends ConsumerWidget {
               await ref.read(persistenceProvider).saveProgress(progress);
               ref.invalidate(playerProgressProvider);
             },
+          ),
+        ),
+        const SizedBox(height: MiToosaTheme.spacingLg),
+
+        // ─── Audio & Feedback ───────────────────────────
+        Text(
+          'Audio & Feedback',
+          style: theme.textTheme.titleMedium?.copyWith(
+            color: theme.colorScheme.primary,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: MiToosaTheme.spacingSm),
+        Card(
+          child: Column(
+            children: [
+              SwitchListTile(
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: MiToosaTheme.spacingMd,
+                  vertical: MiToosaTheme.spacingSm,
+                ),
+                title: Text('Music', style: theme.textTheme.titleSmall),
+                subtitle: Text(
+                  'Background music during gameplay.',
+                  style: theme.textTheme.bodySmall,
+                ),
+                value: MusicService().enabled,
+                onChanged: (enabled) {
+                  MusicService().enabled = enabled;
+                  // Force rebuild to reflect new toggle state.
+                  (context as Element).markNeedsBuild();
+                },
+              ),
+              const Divider(height: 1),
+              SwitchListTile(
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: MiToosaTheme.spacingMd,
+                  vertical: MiToosaTheme.spacingSm,
+                ),
+                title: Text('Sound Effects', style: theme.textTheme.titleSmall),
+                subtitle: Text(
+                  'UI and gameplay sound effects.',
+                  style: theme.textTheme.bodySmall,
+                ),
+                value: _soundEffectsEnabled,
+                onChanged: (enabled) {
+                  _soundEffectsEnabled = enabled;
+                  (context as Element).markNeedsBuild();
+                },
+              ),
+              const Divider(height: 1),
+              SwitchListTile(
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: MiToosaTheme.spacingMd,
+                  vertical: MiToosaTheme.spacingSm,
+                ),
+                title: Text('Haptics', style: theme.textTheme.titleSmall),
+                subtitle: Text(
+                  'Vibration feedback on interactions.',
+                  style: theme.textTheme.bodySmall,
+                ),
+                value: HapticsService().enabled,
+                onChanged: (enabled) {
+                  HapticsService().enabled = enabled;
+                  (context as Element).markNeedsBuild();
+                },
+              ),
+            ],
           ),
         ),
       ],

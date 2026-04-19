@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../theme/design_system.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
-  const OnboardingScreen({super.key});
+  final VoidCallback onComplete;
+
+  const OnboardingScreen({super.key, required this.onComplete});
 
   @override
   ConsumerState<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -54,10 +56,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         'Complete levels to earn stars and XP. Improve your scores by solving puzzles faster and with fewer mistakes.',
                   ),
                   _OnboardingPage(
-                    icon: '❤️',
-                    title: 'Manage Your Hearts',
+                    icon: '🎁',
+                    title: '25 Free Games Daily',
                     description:
-                        'You have 5 hearts. Each wrong guess costs 1 heart. Refuel by completing levels, playing daily, or with diamonds.',
+                        'Play 25 games every day for free — no catch. Share with a friend to unlock 40 bonus games. Optional upgrades come later, only if you want them.',
                   ),
                 ],
               ),
@@ -66,7 +68,21 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             Padding(
               padding: const EdgeInsets.all(MiToosaTheme.spacingLg),
               child: Column(
-                children: [
+                children:[
+                  // Skip button
+                  if (_currentPage < 2)
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () => _completeOnboarding(ref),
+                        child: Text(
+                          'Skip',
+                          style: TextStyle(
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                          ),
+                        ),
+                      ),
+                    ),
                   // Page indicators (dots)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -133,9 +149,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   void _completeOnboarding(WidgetRef ref) {
-    // TODO: Persist onboarding completion state to PlayerProgress
-    // For now, just pop the screen
-    Navigator.of(context).pop();
+    widget.onComplete();
   }
 }
 

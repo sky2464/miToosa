@@ -14,4 +14,7 @@ abstract class IPersistenceProvider {
   Future<void> refuelHeartLowerLevel(String playerId);
   Future<void> markTutorialSeen(String playerId, String worldId);
   Future<bool> shareAndRefuel(String playerId, DateTime now);
+  Future<void> completeOnboarding(String playerId);
+  Future<bool> consumeFreeGame(String playerId, DateTime now);
+  Future<bool> grantShareBonus(String playerId, DateTime now);
 }

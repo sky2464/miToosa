@@ -42,6 +42,9 @@ class ContentProvider {
   factory ContentProvider() => _instance;
   ContentProvider._internal();
 
+  /// Number of puzzles per expanded session (tracks with >15 levels).
+  static const int puzzlesPerSession = 60;
+
   List<TrackDefinition> tracks = [];
   final PuzzleGenerator _generator = PuzzleGenerator();
 
@@ -52,11 +55,26 @@ class ContentProvider {
   }
 
   /// Procedural level builder with progressive difficulty.
+  ///
+  /// For tracks with ≤15 levels the original ramp applies.
+  /// For expanded tracks (50 levels) the ramp is gentler so early levels
+  /// stay accessible while later levels still challenge.
   GameplayLevel buildLevelForTrack(TrackDefinition track, int levelIndex) {
-    // Difficulty ramps up gradually — slower at start for better onboarding
-    final shapeCount = (3 + (levelIndex / 8).floor()).clamp(3, 10);
-    final colorCount = (2 + (levelIndex / 12).floor()).clamp(2, 8);
-    final choiceCount = (3 + (levelIndex / 15).floor()).clamp(3, 8);
+    final int shapeCount;
+    final int colorCount;
+    final int choiceCount;
+
+    if (track.targetLevelCount > 15) {
+      // Gentler ramp for 50-level tracks
+      shapeCount = (3 + (levelIndex / 12).floor()).clamp(3, 10);
+      colorCount = (2 + (levelIndex / 18).floor()).clamp(2, 8);
+      choiceCount = (3 + (levelIndex / 20).floor()).clamp(3, 8);
+    } else {
+      // Original ramp for shorter tracks
+      shapeCount = (3 + (levelIndex / 8).floor()).clamp(3, 10);
+      colorCount = (2 + (levelIndex / 12).floor()).clamp(2, 8);
+      choiceCount = (3 + (levelIndex / 15).floor()).clamp(3, 8);
+    }
 
     final difficulty = DifficultyParameters(
       shapeCount: shapeCount,

@@ -2,7 +2,8 @@
 
 **Date:** 2026-04-15  
 **Updated:** 2026-04-16 — transitive-only status verified; share_plus migration doc created  
-**Status:** Analysis complete — see `docs/major-bump-share_plus.md` for detailed migration plan
+**Status:** Archived  
+**Archived:** April 18, 2026
 
 ---
 

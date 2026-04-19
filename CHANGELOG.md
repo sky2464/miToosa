@@ -5,6 +5,29 @@ All notable changes to miToosa will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] — 2025-07-24
+
+### Added
+- **Streak engine** — daily login streak tracking with freeze support and milestone rewards (7, 14, 30, 60, 90, 120, 180, 365 days)
+- **Achievement system** — 9 achievements across 5 categories with progress tracking and coin rewards
+- **Daily rewards** — 7-day reward cycle (10–100 coins) with claim validation
+- **Streak calendar** — visual calendar showing play history, streak count, best streak, and freeze inventory
+- **Settings screen** — toggles for haptic feedback, background music, and sound effects
+- **Haptics integration** — tactile feedback on correct/wrong answers during gameplay
+- **Music lifecycle** — background music pause/resume with app lifecycle and proper cleanup
+- **Coin rewards** — earn coins on first-clear of levels via ProgressionEngine
+- **Level expansion** — 17 tracks expanded from 10 to 15 levels each
+- **Analytics events** — telemetry factories for level_complete, streak_update, achievement_unlocked, daily_reward_claimed
+- **Navigation integration** — achievements, daily rewards, and streak calendar accessible from progress screen; streak card tap navigates to calendar from world map
+
+### Changed
+- **Hive schema v4** — added streakFreezeCount, streakMilestones, achievementProgress, dailyRewardDay, lastDailyRewardClaim, playHistory fields with backward-compatible defaults
+- **Integrity hash** — HMAC payload now covers all v4 fields (unlockedAchievements, achievementProgress, lastDailyRewardClaim, playHistory)
+- **Streak logic** — `recordLogin()` now delegates to StreakEngine for consistent freeze handling
+
+### Fixed
+- Coin exploit where `isFirstClear` was always true due to save-before-load ordering
+
 ## [1.2.0] — 2026-04-17
 
 ### Added

@@ -5,6 +5,20 @@ import '../engine/progression_engine.dart';
 import 'puzzle.dart';
 import 'shape_item.dart';
 
+/// Per-puzzle countdown duration based on session difficulty.
+enum DifficultyTier {
+  easy(label: 'Easy', seconds: 30),
+  medium(label: 'Medium', seconds: 15),
+  hard(label: 'Hard', seconds: 7),
+  challenge(label: 'Challenge', seconds: 4);
+
+  const DifficultyTier({required this.label, required this.seconds});
+  final String label;
+  final int seconds;
+
+  Duration get duration => Duration(seconds: seconds);
+}
+
 class GameplayLevel extends Equatable {
   final String title;
   final Puzzle puzzle;

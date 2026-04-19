@@ -487,3 +487,34 @@ Special thanks to beta testers who helped us ship with confidence.
 - [ ] Marketing: Announcement drafted and approved
 
 **Final Sign-Off:** _______________  **Date:** _______________
+
+---
+
+## Deferred Items Summary
+
+The following items are blocked on external account setup or physical hardware and are deferred until those prerequisites are resolved. They are **not forgotten** — each is annotated inline with `**BLOCKED:**` in the relevant checklist section above.
+
+### Apple Developer Account (3 items)
+- Provisioning profile and team ID (iOS Platform Configuration)
+- App Store ID assignment (iOS Platform Configuration)
+- AdHoc signing certificate for TestFlight (iOS Platform Configuration)
+
+### Google Play Developer Account (3 items)
+- Keystore file creation (Android Platform Configuration)
+- signing.properties configuration (Android Platform Configuration)
+- Google Play Console project creation (Android Platform Configuration)
+
+### Hosting Provider Selection (2 items)
+- Deploy to staging server (Web Platform Configuration)
+- Production CDN configuration (Web Platform Configuration)
+
+### Physical Devices (2 items)
+- Screen reader testing with TalkBack/VoiceOver (Accessibility)
+- Axe Core accessibility audit (Accessibility)
+
+### Firebase Project (3 items)
+- Cloud analytics setup (Monitoring)
+- Monitoring dashboard configuration (Monitoring)
+- Alert thresholds setup (Monitoring)
+
+**Last reviewed:** April 18, 2026

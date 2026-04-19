@@ -1,10 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/engine/daily_reward_engine.dart';
+import '../../data/player_progress.dart';
 import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
+import '../achievements/achievements_screen.dart';
+import '../daily_rewards/daily_rewards_modal.dart';
+import '../streak/streak_calendar_screen.dart';
+import '../settings/settings_screen.dart';
 
 class ProgressScreen extends ConsumerWidget {
   const ProgressScreen({super.key});
+
+  void _showDailyRewards(BuildContext context, WidgetRef ref, PlayerProgress progress) {
+    final currentDay = progress.dailyRewardDay == 0
+        ? 1
+        : DailyRewardEngine.nextDay(progress.dailyRewardDay);
+    final canClaim = DailyRewardEngine.canClaim(
+      lastClaim: progress.lastDailyRewardClaim,
+      now: DateTime.now(),
+    );
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (modalContext) => DailyRewardsModal(
+        currentDay: currentDay,
+        onClaim: () async {
+          if (!canClaim) {
+            Navigator.of(modalContext).pop();
+            return;
+          }
+          final reward = DailyRewardEngine.fullCycleRewards()
+              .firstWhere((r) => r.day == currentDay);
+          final playerId = ref.read(playerProgressProvider).value?.playerId;
+          if (playerId == null) return;
+          final persistence = ref.read(persistenceProvider);
+          final p = await persistence.loadProgress(playerId);
+          p.addCoins(reward.coins);
+          p.claimDailyReward(currentDay, DateTime.now());
+          await persistence.saveProgress(p);
+          ref.invalidate(playerProgressProvider);
+          if (modalContext.mounted) {
+            Navigator.of(modalContext).pop();
+          }
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -16,6 +58,15 @@ class ProgressScreen extends ConsumerWidget {
         title: const Text('Your Progress'),
         backgroundColor: theme.colorScheme.surface,
         elevation: 0,
+        actions: [
+          IconButton(
+            key: const ValueKey('settings_button'),
+            icon: const Icon(Icons.settings),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const SettingsScreen()),
+            ),
+          ),
+        ],
       ),
       body: progressAsync.when(
         data: (progress) {
@@ -109,6 +160,41 @@ class ProgressScreen extends ConsumerWidget {
                   colors: [MiToosaTheme.success, MiToosaTheme.success.withValues(alpha: 0.7)],
                 ),
               ),
+              const SizedBox(height: MiToosaTheme.spacingLg),
+              // ─── Feature shortcuts ───────────────────────
+              _FeatureButton(
+                key: const ValueKey('achievements_button'),
+                icon: Icons.emoji_events,
+                label: 'Achievements',
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const AchievementsScreen()),
+                ),
+              ),
+              const SizedBox(height: MiToosaTheme.spacingSm),
+              _FeatureButton(
+                key: const ValueKey('daily_rewards_button'),
+                icon: Icons.card_giftcard,
+                label: 'Daily Rewards',
+                onTap: () => _showDailyRewards(context, ref, progress),
+              ),
+              const SizedBox(height: MiToosaTheme.spacingSm),
+              _FeatureButton(
+                key: const ValueKey('streak_calendar_button'),
+                icon: Icons.local_fire_department,
+                label: 'Streak Calendar',
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => StreakCalendarScreen(
+                      streakCount: progress.streakCount,
+                      bestStreak: progress.bestStreak,
+                      playHistory: progress.playHistory,
+                      streakFreezeCount: progress.streakFreezeCount,
+                      nextMilestone: progress.nextMilestone,
+                      nextMilestoneReward: progress.nextMilestoneReward,
+                    ),
+                  ),
+                ),
+              ),
             ],
           );
         },
@@ -168,6 +254,37 @@ class _StatCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _FeatureButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const _FeatureButton({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return ListTile(
+      leading: Icon(icon, color: theme.colorScheme.primary),
+      title: Text(label, style: theme.textTheme.titleSmall),
+      trailing: Icon(Icons.chevron_right,
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(MiToosaTheme.radiusMd),
+        side: BorderSide(
+          color: theme.colorScheme.outline.withValues(alpha: 0.2),
+        ),
+      ),
+      onTap: onTap,
     );
   }
 }

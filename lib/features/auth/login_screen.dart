@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../navigation/world_map_screen.dart';
+import '../onboarding/onboarding_screen.dart';
 import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
 import 'auth_provider.dart';
@@ -56,7 +57,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     var navigated = false;
 
     try {
-      await Future.delayed(const Duration(milliseconds: 1200));
+      await Future.delayed(const Duration(milliseconds: 500));
 
       final playerId = ref.playerId;
       if (playerId == null) {
@@ -71,15 +72,45 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       if (!mounted) return;
 
       navigated = true;
-      Navigator.pushReplacement(
-        context,
-        PageRouteBuilder(
-          pageBuilder: (c, a1, a2) => const WorldMapScreen(),
-          transitionsBuilder: (c, anim, a2, child) =>
-              FadeTransition(opacity: anim, child: child),
-          transitionDuration: const Duration(milliseconds: 600),
-        ),
-      );
+
+      final needsOnboarding = !progress.onboardingComplete;
+
+      if (needsOnboarding) {
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (c, a1, a2) => OnboardingScreen(
+              onComplete: () async {
+                await persistence.completeOnboarding(playerId);
+                if (c.mounted) {
+                  Navigator.pushReplacement(
+                    c,
+                    PageRouteBuilder(
+                      pageBuilder: (c2, a3, a4) => const WorldMapScreen(),
+                      transitionsBuilder: (c2, anim, a4, child) =>
+                          FadeTransition(opacity: anim, child: child),
+                      transitionDuration: const Duration(milliseconds: 600),
+                    ),
+                  );
+                }
+              },
+            ),
+            transitionsBuilder: (c, anim, a2, child) =>
+                FadeTransition(opacity: anim, child: child),
+            transitionDuration: const Duration(milliseconds: 600),
+          ),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (c, a1, a2) => const WorldMapScreen(),
+            transitionsBuilder: (c, anim, a2, child) =>
+                FadeTransition(opacity: anim, child: child),
+            transitionDuration: const Duration(milliseconds: 600),
+          ),
+        );
+      }
     } finally {
       if (mounted && !navigated) {
         setState(() => _isLoading = false);

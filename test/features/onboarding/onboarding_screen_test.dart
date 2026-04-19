@@ -5,13 +5,17 @@ import 'package:mitoosa/theme/design_system.dart';
 
 void main() {
   group('OnboardingScreen', () {
-    testWidgets('renders all 3 pages', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: const OnboardingScreen(),
+    bool completed = false;
+
+    setUp(() => completed = false);
+
+    Widget buildSubject() => MaterialApp(
+          home: OnboardingScreen(onComplete: () => completed = true),
           theme: MiToosaTheme.darkTheme,
-        ),
-      );
+        );
+
+    testWidgets('renders all 3 pages', (WidgetTester tester) async {
+      await tester.pumpWidget(buildSubject());
       await tester.pumpAndSettle();
 
       // Check first page
@@ -26,16 +30,11 @@ void main() {
       // Navigate to third page
       await tester.tap(find.text('Next'));
       await tester.pumpAndSettle();
-      expect(find.text('Manage Your Hearts'), findsOneWidget);
+      expect(find.text('25 Free Games Daily'), findsOneWidget);
     });
 
     testWidgets('shows back button on pages 2+', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: const OnboardingScreen(),
-          theme: MiToosaTheme.darkTheme,
-        ),
-      );
+      await tester.pumpWidget(buildSubject());
       await tester.pumpAndSettle();
 
       // First page shouldn't have back
@@ -50,12 +49,7 @@ void main() {
     });
 
     testWidgets('shows Get Started button on last page', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: const OnboardingScreen(),
-          theme: MiToosaTheme.darkTheme,
-        ),
-      );
+      await tester.pumpWidget(buildSubject());
       await tester.pumpAndSettle();
 
       // Navigate to third (last) page
@@ -67,13 +61,36 @@ void main() {
       expect(find.text('Get Started'), findsOneWidget);
     });
 
+    testWidgets('Get Started calls onComplete', (WidgetTester tester) async {
+      await tester.pumpWidget(buildSubject());
+      await tester.pumpAndSettle();
+
+      // Navigate to last page
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Get Started'));
+      await tester.pumpAndSettle();
+
+      expect(completed, isTrue);
+    });
+
+    testWidgets('Skip button calls onComplete', (WidgetTester tester) async {
+      await tester.pumpWidget(buildSubject());
+      await tester.pumpAndSettle();
+
+      // Skip button is on the first page
+      expect(find.text('Skip'), findsOneWidget);
+      await tester.tap(find.text('Skip'));
+      await tester.pumpAndSettle();
+
+      expect(completed, isTrue);
+    });
+
     testWidgets('page indicators animate', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: const OnboardingScreen(),
-          theme: MiToosaTheme.darkTheme,
-        ),
-      );
+      await tester.pumpWidget(buildSubject());
       await tester.pumpAndSettle();
 
       // Check initial page has 3 indicator dots

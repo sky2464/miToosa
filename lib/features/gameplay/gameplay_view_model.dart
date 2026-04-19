@@ -93,4 +93,53 @@ class GameplayViewModel extends _$GameplayViewModel {
     );
     return runComplete;
   }
+
+  /// Sets the difficulty tier and initialises the per-puzzle countdown.
+  void setDifficultyTier(DifficultyTier tier) {
+    state = state.copyWith(
+      difficultyTier: tier,
+      puzzleTimeRemaining: tier.seconds,
+      puzzleTimerPaused: false,
+    );
+  }
+
+  /// Decrements the puzzle countdown by 1 second.
+  /// Returns true when time expires (treat as wrong answer).
+  bool tickPuzzleTimer() {
+    if (state.puzzleTimerPaused || state.difficultyTier == null) return false;
+    final remaining = state.puzzleTimeRemaining - 1;
+    if (remaining <= 0) {
+      state = state.copyWith(
+        puzzleTimeRemaining: 0,
+        incorrectAttempts: state.incorrectAttempts + 1,
+        feedback: const GameplayFeedback(
+          style: GameplayFeedbackStyle.error,
+          message: 'Time\'s up!',
+        ),
+      );
+      return true;
+    }
+    state = state.copyWith(puzzleTimeRemaining: remaining);
+    return false;
+  }
+
+  /// Pauses the puzzle countdown (e.g. during feedback animation).
+  void pausePuzzleTimer() {
+    state = state.copyWith(puzzleTimerPaused: true);
+  }
+
+  /// Resumes the puzzle countdown.
+  void resumePuzzleTimer() {
+    state = state.copyWith(puzzleTimerPaused: false);
+  }
+
+  /// Resets the puzzle timer to the full tier duration for the next puzzle.
+  void resetPuzzleTimer() {
+    final tier = state.difficultyTier;
+    if (tier == null) return;
+    state = state.copyWith(
+      puzzleTimeRemaining: tier.seconds,
+      puzzleTimerPaused: false,
+    );
+  }
 }

@@ -40,17 +40,41 @@ void main() {
     });
   });
 
-  group('ProgressionEngine — computeXP', () {
-    test('score 100 → 10 XP', () {
-      expect(ProgressionEngine.computeXP(100), 10);
+  group('ProgressionEngine — computeXP (stars-based, max 10)', () {
+    test('5 stars → 10 XP', () {
+      expect(ProgressionEngine.computeXP(5), 10);
     });
 
-    test('score 0 → 0 XP', () {
-      expect(ProgressionEngine.computeXP(0), 0);
+    test('4 stars → 8 XP', () {
+      expect(ProgressionEngine.computeXP(4), 8);
     });
 
-    test('score 105 → 11 XP (ceiling)', () {
-      expect(ProgressionEngine.computeXP(105), 11);
+    test('3 stars → 6 XP', () {
+      expect(ProgressionEngine.computeXP(3), 6);
+    });
+
+    test('2 stars → 4 XP', () {
+      expect(ProgressionEngine.computeXP(2), 4);
+    });
+
+    test('1 star → 2 XP', () {
+      expect(ProgressionEngine.computeXP(1), 2);
+    });
+
+    test('0 stars → 1 XP (floor)', () {
+      expect(ProgressionEngine.computeXP(0), 1);
+    });
+
+    test('hint penalty: 5 stars with hint → 9 XP', () {
+      expect(ProgressionEngine.computeXP(5, hintUsed: true), 9);
+    });
+
+    test('hint penalty: 1 star with hint → 1 XP (floor at 1)', () {
+      expect(ProgressionEngine.computeXP(1, hintUsed: true), 1);
+    });
+
+    test('hint penalty: 0 stars with hint → 1 XP (floor at 1)', () {
+      expect(ProgressionEngine.computeXP(0, hintUsed: true), 1);
     });
   });
 

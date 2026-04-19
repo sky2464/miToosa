@@ -119,4 +119,58 @@ void main() {
       expect(state().levelsCompleted, 0);
     });
   });
+
+  group('GameplayViewModel — puzzle timer', () {
+    test('setDifficultyTier initialises timer with tier seconds', () {
+      notifier().setDifficultyTier(DifficultyTier.medium);
+      expect(state().difficultyTier, DifficultyTier.medium);
+      expect(state().puzzleTimeRemaining, 15);
+      expect(state().puzzleTimerPaused, false);
+    });
+
+    test('tickPuzzleTimer decrements by 1 second', () {
+      notifier().setDifficultyTier(DifficultyTier.easy);
+      expect(state().puzzleTimeRemaining, 30);
+
+      final expired = notifier().tickPuzzleTimer();
+      expect(expired, false);
+      expect(state().puzzleTimeRemaining, 29);
+    });
+
+    test('tickPuzzleTimer returns true and increments incorrectAttempts on expiry', () {
+      notifier().setDifficultyTier(DifficultyTier.challenge);
+      // Tick down from 4 to 0
+      for (var i = 0; i < 3; i++) {
+        expect(notifier().tickPuzzleTimer(), false);
+      }
+      // 4th tick expires
+      final expired = notifier().tickPuzzleTimer();
+      expect(expired, true);
+      expect(state().puzzleTimeRemaining, 0);
+      expect(state().incorrectAttempts, 1);
+      expect(state().feedback?.style, GameplayFeedbackStyle.error);
+    });
+
+    test('tickPuzzleTimer does nothing when paused', () {
+      notifier().setDifficultyTier(DifficultyTier.hard);
+      notifier().pausePuzzleTimer();
+      final expired = notifier().tickPuzzleTimer();
+      expect(expired, false);
+      expect(state().puzzleTimeRemaining, 7);
+    });
+
+    test('resetPuzzleTimer restores full duration', () {
+      notifier().setDifficultyTier(DifficultyTier.medium);
+      notifier().tickPuzzleTimer();
+      notifier().tickPuzzleTimer();
+      expect(state().puzzleTimeRemaining, 13);
+
+      notifier().resetPuzzleTimer();
+      expect(state().puzzleTimeRemaining, 15);
+    });
+
+    test('tickPuzzleTimer returns false when no tier is set', () {
+      expect(notifier().tickPuzzleTimer(), false);
+    });
+  });
 }

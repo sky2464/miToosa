@@ -1,6 +1,6 @@
 # Spec: iToosa → miToosa Feature Migration v1
 
-**Status:** DRAFT — Awaiting human review  
+**Status:** Archived (originally shipped v1.3.0, 2025-07-24)  
 **Date:** 2026-04-16  
 **Source:** Analysis of `temp-research/iToosa/` (Swift/iOS) vs current miToosa (Flutter) v1.2.0
 

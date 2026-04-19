@@ -1,3 +1,6 @@
+<!-- HUMAN-ACTION-REQUIRED: Replace contact info placeholders before publication -->
+<!-- HUMAN-ACTION-REQUIRED: Economy language (hearts, share-to-refuel) will change when free-games allowance lands — see docs/PRODUCT-WEDGE.md -->
+
 # User Guide — miToosa
 
 **Version:** 1.2.0

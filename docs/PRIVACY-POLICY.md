@@ -1,3 +1,5 @@
+<!-- HUMAN-ACTION-REQUIRED: Replace contact info placeholders before publication -->
+
 # Privacy Policy — miToosa
 
 **Last Updated:** April 17, 2026

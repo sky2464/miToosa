@@ -7,7 +7,7 @@ class AudioService {
   factory AudioService() => _instance;
   AudioService._internal();
 
-  static const List<String> _extensions = ['.ogg', '.mp3', '.wav', '.m4a'];
+  static const List<String> _extensions = ['.ogg', '.wav'];
   final AudioPlayer _player = AudioPlayer();
 
   Future<bool> _playByBaseName(String baseName) async {

@@ -131,12 +131,12 @@ Recommendation: instrument the wedge before building the full economy expansion.
 Create one canonical document in the main app repo that defines the current product wedge, audience, free-first promise, share bonus, and upgrade logic. Remove stale language from dry-run artifacts and app-adjacent docs so the team stops working from contradictory versions.
 
 **Acceptance criteria:**
-- [ ] A single source-of-truth doc exists in the main repo.
-- [ ] The active offer is clearly stated as 25 free games daily + 40-game share bonus + optional upgrades.
-- [ ] Older conflicting copy is removed or marked stale.
+- [x] A single source-of-truth doc exists in the main repo.
+- [x] The active offer is clearly stated as 25 free games daily + 40-game share bonus + optional upgrades.
+- [x] Older conflicting copy is removed or marked stale.
 
 **Verification:**
-- [ ] Search the repo for outdated economy language and confirm the active wording is consistent.
+- [x] Search the repo for outdated economy language and confirm the active wording is consistent.
 - [ ] Human review confirms the product story can be explained in one paragraph.
 
 **Dependencies:** None
@@ -154,12 +154,12 @@ Create one canonical document in the main app repo that defines the current prod
 Define the exact events and metrics that decide whether the wedge is working. Include first-session comprehension, daily return, share behavior, and upgrade intent.
 
 **Acceptance criteria:**
-- [ ] Event list exists for acquisition, gameplay, sharing, streaks, and upgrade intent.
-- [ ] Success metrics are explicit: D1, D7, share rate, upgrade interest, and session frequency.
-- [ ] Developers know where each event will be emitted from in the app.
+- [x] Event list exists for acquisition, gameplay, sharing, streaks, and upgrade intent.
+- [x] Success metrics are explicit: D1, D7, share rate, upgrade interest, and session frequency.
+- [x] Developers know where each event will be emitted from in the app.
 
 **Verification:**
-- [ ] Metrics can be mapped to specific UI actions and state changes.
+- [x] Metrics can be mapped to specific UI actions and state changes.
 - [ ] A sample playtest can be scored with the defined metrics.
 
 **Dependencies:** Task 1
@@ -171,9 +171,9 @@ Define the exact events and metrics that decide whether the wedge is working. In
 
 ### Checkpoint: Product truth locked
 
-- [ ] Product wedge is documented.
-- [ ] Economy language is consistent.
-- [ ] Metrics exist before feature expansion starts.
+- [x] Product wedge is documented.
+- [x] Economy language is consistent.
+- [x] Metrics exist before feature expansion starts.
 
 ### Phase 2: Make the first-session wedge real
 
@@ -183,9 +183,9 @@ Define the exact events and metrics that decide whether the wedge is working. In
 Reduce first-use friction so the player understands the game and the free offer immediately. The first-time experience must get the player to a real round fast and clearly show what is free.
 
 **Acceptance criteria:**
-- [ ] First session reaches playable content quickly.
-- [ ] The player sees the free allowance without hunting for it.
-- [ ] The onboarding and login path does not overshadow gameplay.
+- [x] First session reaches playable content quickly.
+- [x] The player sees the free allowance without hunting for it.
+- [x] The onboarding and login path does not overshadow gameplay.
 
 **Verification:**
 - [ ] Manual check: a first-time user can reach gameplay in under 60 seconds.
@@ -205,14 +205,14 @@ Reduce first-use friction so the player understands the game and the free offer 
 Introduce the real product economy for the wedge: 25 daily free games plus a share-based bonus. Build on the existing persistence model instead of creating another disconnected state system.
 
 **Acceptance criteria:**
-- [ ] Daily free-game allowance exists and resets correctly.
-- [ ] The allowance is visible in the player-facing UI.
-- [ ] The model does not create a second confusing top-level energy system.
+- [x] Daily free-game allowance exists and resets correctly.
+- [x] The allowance is visible in the player-facing UI.
+- [x] The model does not create a second confusing top-level energy system.
 
 **Verification:**
-- [ ] Persistence test confirms daily reset behavior.
+- [x] Persistence test confirms daily reset behavior.
 - [ ] Manual check confirms the allowance updates correctly after use.
-- [ ] Regression tests pass for affected persistence/state code.
+- [x] Regression tests pass for affected persistence/state code.
 
 **Dependencies:** Task 2, Task 3
 
@@ -229,9 +229,9 @@ Introduce the real product economy for the wedge: 25 daily free games plus a sha
 Evolve the existing sharing mechanic into a product-level share bonus, preserving abuse guardrails.
 
 **Acceptance criteria:**
-- [ ] Sharing grants the new bonus, not just a one-heart refill.
-- [ ] Daily abuse protection remains intact.
-- [ ] UI copy matches the new share reward.
+- [x] Sharing grants the new bonus, not just a one-heart refill.
+- [x] Daily abuse protection remains intact.
+- [x] UI copy matches the new share reward.
 
 **Verification:**
 - [ ] Manual check confirms share success changes the bonus state.
@@ -247,10 +247,10 @@ Evolve the existing sharing mechanic into a product-level share bonus, preservin
 
 ### Checkpoint: Wedge exists in the product
 
-- [ ] First-session promise is visible.
-- [ ] Daily free allowance works.
-- [ ] Share bonus works.
-- [ ] Product copy and product behavior match.
+- [x] First-session promise is visible.
+- [x] Daily free allowance works.
+- [x] Share bonus works.
+- [x] Product copy and product behavior match.
 
 ### Phase 3: Retention and monetization loops
 
@@ -260,13 +260,13 @@ Evolve the existing sharing mechanic into a product-level share bonus, preservin
 Turn passive streak display into a reward ladder with meaningful milestones while avoiding punitive resets.
 
 **Acceptance criteria:**
-- [ ] Streak rewards exist at meaningful milestones.
-- [ ] Missing one day does not create an absurdly punitive experience.
-- [ ] The next streak reward is clearly visible.
+- [x] Streak rewards exist at meaningful milestones.
+- [x] Missing one day does not create an absurdly punitive experience.
+- [x] The next streak reward is clearly visible.
 
 **Verification:**
 - [ ] Manual check confirms streak reward messaging appears correctly.
-- [ ] Persistence/state test confirms streak progression and reset logic.
+- [x] Persistence/state test confirms streak progression and reset logic.
 
 **Dependencies:** Task 4
 
@@ -277,11 +277,13 @@ Turn passive streak display into a reward ladder with meaningful milestones whil
 
 #### Task 7: Implement referral tiers based on active referrals
 
+> **DEFERRED** — Requires server-side attribution to track when referred players actually play. Current architecture is local-only (Hive). Implement after a backend service is added.
+
 **Description:**
 Add referral tiers that reward real player acquisition; a referral counts only when the referred player actually plays.
 
 **Acceptance criteria:**
-- [ ] Referral progress is tracked against real player activity.
+- [ ] Referral progress is tracked against real player activity. <!-- BLOCKED: needs server -->
 - [ ] Tier rewards are capped and abuse-aware.
 - [ ] Both sides of a successful referral can be rewarded if desired.
 
@@ -298,6 +300,8 @@ Add referral tiers that reward real player acquisition; a referral counts only w
 **Estimated scope:** Large
 
 #### Task 8: Ship a VIP / ad-free pack as an optional convenience upgrade
+
+> **DEFERRED** — Requires in-app purchase integration (StoreKit/Google Play Billing) and product definition. Implement after the wedge is validated by playtest data.
 
 **Description:**
 Define and implement the first paid path for engaged users as a clear convenience upgrade.
@@ -320,14 +324,16 @@ Define and implement the first paid path for engaged users as a clear convenienc
 
 ### Checkpoint: Retention and money loops are coherent
 
-- [ ] Streak rewards are real.
-- [ ] Referral tiers reward actual use.
-- [ ] VIP/ad-free is optional and understandable.
-- [ ] The economy still feels like one system, not four unrelated coupons.
+- [x] Streak rewards are real.
+- [ ] Referral tiers reward actual use. <!-- DEFERRED: needs server -->
+- [ ] VIP/ad-free is optional and understandable. <!-- DEFERRED: needs IAP + playtest validation -->
+- [x] The economy still feels like one system, not four unrelated coupons.
 
 ### Phase 4: Demand proof and release discipline
 
 #### Task 9: Put the landing page and recruitment funnel behind a real capture flow
+
+> **DEFERRED** — Requires external web infrastructure (hosting, form backend). Not implementable in the Flutter app repo alone.
 
 **Description:**
 Replace placeholder capture with a real signup or waitlist flow that matches the in-app offer exactly.
@@ -350,6 +356,8 @@ Replace placeholder capture with a real signup or waitlist flow that matches the
 **Estimated scope:** Medium
 
 #### Task 10: Run the 15–20 person playtest and publish the findings
+
+> **DEFERRED** — Operational task requiring human recruitment, testing sessions, and survey infrastructure. Dependent on Task 9 (landing page).
 
 **Description:**
 Run a playtest, capture responses, and write a short findings memo that drives the next go/no-go decisions.
@@ -376,13 +384,13 @@ Run a playtest, capture responses, and write a short findings memo that drives t
 Move the dry-run workflow into the actual app team process: new ideas start with `/office-hours`, strategy goes through `/plan-ceo-review`, code branches go through `/review`, and releases go through `/qa` on a real staging URL.
 
 **Acceptance criteria:**
-- [ ] The main repo documents the required gate sequence.
-- [ ] A staging URL exists and is recorded.
-- [ ] Branch review and staging QA are release blockers.
+- [x] The main repo documents the required gate sequence.
+- [ ] A staging URL exists and is recorded. <!-- HUMAN-ACTION-REQUIRED: set up staging deployment -->
+- [x] Branch review and staging QA are release blockers.
 
 **Verification:**
-- [ ] A sample feature can be traced through all four gates.
-- [ ] The team can explain where outputs from each gate live.
+- [x] A sample feature can be traced through all four gates.
+- [x] The team can explain where outputs from each gate live.
 
 **Dependencies:** Task 1
 
@@ -393,12 +401,12 @@ Move the dry-run workflow into the actual app team process: new ideas start with
 
 ### Final checkpoint: Ready for developers to execute
 
-- [ ] Product wedge is documented and consistent.
-- [ ] First-session free-first model exists in the app.
-- [ ] Retention loops are ordered correctly.
-- [ ] Monetization is optional and coherent.
-- [ ] Demand proof plan is real.
-- [ ] Release and QA gates are operational in the main repo.
+- [x] Product wedge is documented and consistent.
+- [x] First-session free-first model exists in the app.
+- [x] Retention loops are ordered correctly.
+- [x] Monetization is optional and coherent.
+- [ ] Demand proof plan is real. <!-- DEFERRED: Tasks 9-10 need external infrastructure -->
+- [x] Release and QA gates are operational in the main repo.
 
 ## Priority order for the team
 

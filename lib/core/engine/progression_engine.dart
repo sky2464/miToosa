@@ -82,8 +82,31 @@ class ProgressionEngine {
     return completedIndex < targetIndex;
   }
 
-  /// Returns XP earned for [score] (⌈score / 10⌉).
-  static int computeXP(int score) => (score / 10).ceil();
+  /// Returns XP earned based on star rating (max 10 XP per level).
+  ///
+  /// * 5★ → 10 XP, 4★ → 8 XP, 3★ → 6 XP, 2★ → 4 XP, 1★ → 2 XP, 0★ → 1 XP.
+  /// When [hintUsed] is true, 1 XP is deducted (floor at 1).
+  static int computeXP(int stars, {bool hintUsed = false}) {
+    final base = switch (stars) {
+      5 => 10,
+      4 => 8,
+      3 => 6,
+      2 => 4,
+      1 => 2,
+      _ => 1,
+    };
+    if (hintUsed) return (base - 1).clamp(1, 10);
+    return base;
+  }
+
+  /// Returns coin reward for a completed level.
+  ///
+  /// Formula: base 10 + ([stars] × 5) + first-clear bonus 20.
+  static int computeCoinReward({required int stars, required bool isFirstClear}) {
+    int reward = 10 + (stars * 5);
+    if (isFirstClear) reward += 20;
+    return reward;
+  }
 
   /// Derives a [MasteryTier] from the player's full performance [history].
   ///

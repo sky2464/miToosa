@@ -2,7 +2,7 @@
 
 **Date:** 2026-04-16  
 **Source:** https://pub.dev/packages/share_plus/changelog (fetched live, not from memory)  
-**Status:** Awaiting human review — do NOT apply automatically
+**Status:** Archived — migrated to ^12.0.2 (v13 blocked by flutter_secure_storage win32 conflict)
 
 ---
 

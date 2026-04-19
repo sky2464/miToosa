@@ -42,14 +42,15 @@ class MiToosaColors extends ThemeExtension<MiToosaColors> {
 }
 
 class MiToosaTheme {
-  static const Color primary = Color(0xFF7B2CBF);
-  static const Color primaryDark = Color(0xFF9D4EDD);
-  static const Color secondary = Color(0xFF00F5D4);
-  static const Color accent = Color(0xFFFF007F);
+  // ── Softer palette inspired by iToosa ──
+  static const Color primary = Color(0xFF597AFA);      // Soft blue
+  static const Color primaryDark = Color(0xFF7B95FF);   // Lighter blue for dark mode
+  static const Color secondary = Color(0xFF9470DC);     // Soft purple
+  static const Color accent = Color(0xFFFF6B9D);        // Soft pink
   
-  static const Color error = Color(0xFFFF4D4D);
-  static const Color success = Color(0xFF00FF87);
-  static const Color warning = Color(0xFFFFBE0B);
+  static const Color error = Color(0xFFFF6B6B);
+  static const Color success = Color(0xFF51CF66);
+  static const Color warning = Color(0xFFFFD43B);
 
   static const double spacingXs = 4;
   static const double spacingSm = 8;
@@ -58,11 +59,32 @@ class MiToosaTheme {
   static const double spacingXl = 32;
   static const double spacingXxl = 48;
 
-  static const double radiusSm = 12;
-  static const double radiusMd = 20;
-  static const double radiusLg = 28;
-  static const double radiusXl = 36;
+  static const double radiusSm = 14;
+  static const double radiusMd = 22;
+  static const double radiusLg = 30;
+  static const double radiusXl = 40;
   static const double radiusFull = 999;
+
+  // ── Shadow presets ──
+  static List<BoxShadow> get shadowSubtle => [
+    BoxShadow(color: primary.withValues(alpha: 0.06), blurRadius: 8, offset: const Offset(0, 2)),
+  ];
+  static List<BoxShadow> get shadowCard => [
+    BoxShadow(color: primary.withValues(alpha: 0.08), blurRadius: 16, offset: const Offset(0, 4)),
+    BoxShadow(color: primary.withValues(alpha: 0.04), blurRadius: 4, offset: const Offset(0, 1)),
+  ];
+  static List<BoxShadow> get shadowElevated => [
+    BoxShadow(color: primary.withValues(alpha: 0.12), blurRadius: 24, offset: const Offset(0, 8)),
+    BoxShadow(color: primary.withValues(alpha: 0.06), blurRadius: 8, offset: const Offset(0, 2)),
+  ];
+
+  // ── Spring animation curves ──
+  static const Curve springBouncy = Curves.elasticOut;
+  static const Curve springSnappy = Curves.easeOutBack;
+  static const Curve springSmooth = Curves.easeOutCubic;
+  static const Duration animFast = Duration(milliseconds: 200);
+  static const Duration animNormal = Duration(milliseconds: 350);
+  static const Duration animSlow = Duration(milliseconds: 600);
 
   // Fallback font families to cover missing glyphs (emoji, symbols, CJK, etc.)
   // Place font assets in `assets/fonts/` and register them in `pubspec.yaml`.
@@ -73,34 +95,34 @@ class MiToosaTheme {
   ];
 
   static const _lightColors = MiToosaColors(
-    ghostBorder: Color(0x4D4C4353),
-    primaryLight: Color(0xFFDEB7FF),
-    secondaryFixed: Color(0xFF26FEDC),
-    secondaryDim: Color(0xFF00DFC1),
+    ghostBorder: Color(0x334C4353),
+    primaryLight: Color(0xFFB8C9FF),
+    secondaryFixed: Color(0xFFB89EF0),
+    secondaryDim: Color(0xFF7B5CBF),
   );
 
   static const _darkColors = MiToosaColors(
-    ghostBorder: Color(0x804C4353),
-    primaryLight: Color(0xFF9D4EDD),
-    secondaryFixed: Color(0xFF00DFC1),
-    secondaryDim: Color(0xFF00B4A0),
+    ghostBorder: Color(0x664C4353),
+    primaryLight: Color(0xFF7B95FF),
+    secondaryFixed: Color(0xFF9470DC),
+    secondaryDim: Color(0xFF6B4FC0),
   );
 
     static TextTheme _buildTextTheme(Color titleColor, Color bodyColor) {
       const fallbackStyle = TextStyle(fontFamilyFallback: _fontFamilyFallback);
 
     return TextTheme(
-      displayLarge: GoogleFonts.spaceGrotesk(textStyle: fallbackStyle, color: titleColor, fontWeight: FontWeight.w900, fontSize: 36, letterSpacing: -1.0),
-      displayMedium: GoogleFonts.spaceGrotesk(textStyle: fallbackStyle, color: titleColor, fontWeight: FontWeight.w800, fontSize: 28, letterSpacing: -0.5),
-      headlineLarge: GoogleFonts.spaceGrotesk(textStyle: fallbackStyle, color: titleColor, fontWeight: FontWeight.w700, fontSize: 24),
-      headlineMedium: GoogleFonts.spaceGrotesk(textStyle: fallbackStyle, color: titleColor, fontWeight: FontWeight.bold, fontSize: 20),
-      titleLarge: GoogleFonts.spaceGrotesk(textStyle: fallbackStyle, color: titleColor, fontWeight: FontWeight.w600, fontSize: 18),
-      bodyLarge: GoogleFonts.manrope(textStyle: fallbackStyle, color: bodyColor, fontSize: 17, fontWeight: FontWeight.w500),
-      bodyMedium: GoogleFonts.manrope(textStyle: fallbackStyle, color: bodyColor.withValues(alpha: 0.75), fontSize: 15),
-      bodySmall: GoogleFonts.manrope(textStyle: fallbackStyle, color: bodyColor.withValues(alpha: 0.6), fontSize: 13),
-      labelLarge: GoogleFonts.plusJakartaSans(textStyle: fallbackStyle, fontWeight: FontWeight.bold, fontSize: 16),
-      labelMedium: GoogleFonts.plusJakartaSans(textStyle: fallbackStyle, fontWeight: FontWeight.w600, fontSize: 14),
-      labelSmall: GoogleFonts.plusJakartaSans(textStyle: fallbackStyle, fontWeight: FontWeight.w600, fontSize: 12),
+      displayLarge: GoogleFonts.nunito(textStyle: fallbackStyle, color: titleColor, fontWeight: FontWeight.w900, fontSize: 36, letterSpacing: -0.5),
+      displayMedium: GoogleFonts.nunito(textStyle: fallbackStyle, color: titleColor, fontWeight: FontWeight.w800, fontSize: 28),
+      headlineLarge: GoogleFonts.nunito(textStyle: fallbackStyle, color: titleColor, fontWeight: FontWeight.w700, fontSize: 24),
+      headlineMedium: GoogleFonts.nunito(textStyle: fallbackStyle, color: titleColor, fontWeight: FontWeight.bold, fontSize: 20),
+      titleLarge: GoogleFonts.nunito(textStyle: fallbackStyle, color: titleColor, fontWeight: FontWeight.w600, fontSize: 18),
+      bodyLarge: GoogleFonts.quicksand(textStyle: fallbackStyle, color: bodyColor, fontSize: 17, fontWeight: FontWeight.w500),
+      bodyMedium: GoogleFonts.quicksand(textStyle: fallbackStyle, color: bodyColor.withValues(alpha: 0.75), fontSize: 15),
+      bodySmall: GoogleFonts.quicksand(textStyle: fallbackStyle, color: bodyColor.withValues(alpha: 0.6), fontSize: 13),
+      labelLarge: GoogleFonts.nunito(textStyle: fallbackStyle, fontWeight: FontWeight.bold, fontSize: 16),
+      labelMedium: GoogleFonts.nunito(textStyle: fallbackStyle, fontWeight: FontWeight.w600, fontSize: 14),
+      labelSmall: GoogleFonts.nunito(textStyle: fallbackStyle, fontWeight: FontWeight.w600, fontSize: 12),
     );
   }
 
@@ -114,7 +136,7 @@ class MiToosaTheme {
         foregroundColor: fgColor,
         padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radiusFull)),
-        textStyle: GoogleFonts.spaceGrotesk(textStyle: fallbackStyle, fontWeight: FontWeight.bold, fontSize: 18),
+        textStyle: GoogleFonts.nunito(textStyle: fallbackStyle, fontWeight: FontWeight.bold, fontSize: 18),
       ),
     );
   }
@@ -123,7 +145,7 @@ class MiToosaTheme {
       const fallbackStyle = TextStyle(fontFamilyFallback: _fontFamilyFallback);
 
     return ThemeData.light().copyWith(
-      scaffoldBackgroundColor: const Color(0xFFF6F2FF),
+      scaffoldBackgroundColor: const Color(0xFFF8F9FF),
       primaryColor: primary,
       colorScheme: const ColorScheme.light(
         primary: primary,
@@ -132,16 +154,16 @@ class MiToosaTheme {
         surface: Color(0xFFFFFFFF),
         error: error,
       ),
-      textTheme: _buildTextTheme(const Color(0xFF1A1128), const Color(0xFF444444)),
+      textTheme: _buildTextTheme(const Color(0xFF1A1D2E), const Color(0xFF4A4D5E)),
       appBarTheme: AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: primary),
-        titleTextStyle: GoogleFonts.spaceGrotesk(
+        titleTextStyle: GoogleFonts.nunito(
           textStyle: fallbackStyle,
-          color: const Color(0xFF1A1128),
+          color: const Color(0xFF1A1D2E),
           fontWeight: FontWeight.w800,
           fontSize: 20,
         ),
@@ -151,7 +173,7 @@ class MiToosaTheme {
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radiusLg),
-          side: BorderSide(color: primary.withValues(alpha: 0.08), width: 1.5),
+          side: BorderSide(color: primary.withValues(alpha: 0.10), width: 1.5),
         ),
       ),
       elevatedButtonTheme: _buildButtonTheme(primary, Colors.white),
@@ -160,19 +182,19 @@ class MiToosaTheme {
   }
 
   static ThemeData get darkTheme {
-    const onSurface = Color(0xFFEADFF1);
-    const onSurfaceVariant = Color(0xFFCFC2D5);
+    const onSurface = Color(0xFFE8E6F0);
+    const onSurfaceVariant = Color(0xFFBDB8C7);
 
     const fallbackStyle = TextStyle(fontFamilyFallback: _fontFamilyFallback);
 
     return ThemeData.dark().copyWith(
-      scaffoldBackgroundColor: const Color(0xFF16111D),
+      scaffoldBackgroundColor: const Color(0xFF141420),
       primaryColor: primaryDark,
       colorScheme: const ColorScheme.dark(
         primary: primaryDark,
         secondary: secondary,
         tertiary: accent,
-        surface: Color(0xFF2E2735),
+        surface: Color(0xFF1E1E2E),
         error: error,
         onSurface: onSurface,
         onSurfaceVariant: onSurfaceVariant,
@@ -184,7 +206,7 @@ class MiToosaTheme {
         scrolledUnderElevation: 0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: primaryDark),
-        titleTextStyle: GoogleFonts.spaceGrotesk(
+        titleTextStyle: GoogleFonts.nunito(
           textStyle: fallbackStyle,
           color: onSurface,
           fontWeight: FontWeight.w800,
@@ -192,11 +214,11 @@ class MiToosaTheme {
         ),
       ),
       cardTheme: CardThemeData(
-        color: const Color(0xFF2E2735),
+        color: const Color(0xFF1E1E2E),
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radiusLg),
-          side: const BorderSide(color: Color(0x804C4353), width: 1.5),
+          side: const BorderSide(color: Color(0x664C4353), width: 1.5),
         ),
       ),
       elevatedButtonTheme: _buildButtonTheme(primary, onSurface),

@@ -1,7 +1,10 @@
 # v1.2.0 Completion Summary
 
 **Date:** April 15, 2026  
-**Status:** ✅ COMPLETE - READY FOR PRODUCTION
+**Status:** Archived  
+**Archived:** April 18, 2026
+
+> **Note:** Pre-launch items (iOS signing, Android keystore, Firebase) are tracked in [LAUNCH.md](../LAUNCH.md).
 
 ## All Planned Todos Completed
 

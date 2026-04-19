@@ -9,6 +9,7 @@ import '../theme/design_system.dart';
 class HeartsBar extends StatelessWidget {
   final int hearts;
   final int diamonds;
+  final int freeGamesRemaining;
   final VoidCallback? onRefuelWithDiamond;
   /// Called when player taps the share-for-heart button.
   /// The caller is responsible for invoking share_plus and
@@ -19,6 +20,7 @@ class HeartsBar extends StatelessWidget {
     super.key,
     required this.hearts,
     required this.diamonds,
+    this.freeGamesRemaining = 25,
     this.onRefuelWithDiamond,
     this.onShareForHeart,
   });
@@ -29,9 +31,37 @@ class HeartsBar extends StatelessWidget {
     final canRefuel = hearts < 5 && diamonds >= 1;
     final canShare = hearts < 5;
 
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      alignment: Alignment.centerLeft,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+        // ── Free games badge ────────────────────────────────
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.secondary.withValues(alpha: 0.10),
+            borderRadius: BorderRadius.circular(MiToosaTheme.radiusFull),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('🎮', style: TextStyle(fontSize: 13)),
+              const SizedBox(width: 3),
+              Text(
+                '$freeGamesRemaining',
+                style: theme.textTheme.labelSmall?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: freeGamesRemaining > 0
+                      ? theme.colorScheme.secondary
+                      : MiToosaTheme.error,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(width: 8),
         // ── Hearts ──────────────────────────────────────────
         ...List.generate(5, (i) {
           final filled = i < hearts;
@@ -123,7 +153,7 @@ class HeartsBar extends StatelessWidget {
                       color: theme.colorScheme.secondary),
                   const SizedBox(width: 3),
                   Text(
-                    '♥',
+                    '+40',
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: theme.colorScheme.secondary,
                       fontWeight: FontWeight.w700,
@@ -135,6 +165,7 @@ class HeartsBar extends StatelessWidget {
           ),
         ],
       ],
+    ),
     );
   }
 }

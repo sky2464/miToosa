@@ -5,6 +5,7 @@ import '../../core/content_provider.dart';
 import '../../data/player_progress.dart';
 import '../../data/player_progress_provider.dart';
 import '../../features/auth/auth_provider.dart';
+import '../../features/streak/streak_calendar_screen.dart';
 import '../../widgets/hearts_bar.dart';
 import 'track_detail_screen.dart';
 import '../../theme/design_system.dart';
@@ -28,22 +29,29 @@ class WorldMapScreen extends ConsumerWidget {
     ref.invalidate(playerProgressProvider);
   }
 
-  Future<void> _shareForHeart(WidgetRef ref, BuildContext context) async {
+  Future<void> _shareForBonus(WidgetRef ref, BuildContext context) async {
     final playerId = ref.playerId;
     if (playerId == null) return;
-    final result = await Share.share(
-      'Play miToosa with me! $_appShareUrl',
-      subject: 'Check out miToosa',
+    final result = await SharePlus.instance.share(
+      ShareParams(
+        text: 'Play miToosa with me! $_appShareUrl',
+        title: 'Check out miToosa',
+      ),
     );
     if (result.status != ShareResultStatus.success) return;
+    final now = DateTime.now();
+    // Grant the share bonus (40 extra games)
     final granted = await ref
         .read(persistenceProvider)
-        .shareAndRefuel(playerId, DateTime.now());
+        .grantShareBonus(playerId, now);
+    // Also keep the legacy heart refuel for backwards compat
+    await ref.read(persistenceProvider).shareAndRefuel(playerId, now);
     ref.invalidate(playerProgressProvider);
-    if (!granted && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Already shared today – come back tomorrow for another ❤')),
-      );
+    if (context.mounted) {
+      final msg = granted
+          ? '+40 bonus games unlocked! 🎉'
+          : 'Already shared today – come back tomorrow for more bonus games!';
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
     }
   }
 
@@ -104,10 +112,11 @@ class WorldMapScreen extends ConsumerWidget {
                                   HeartsBar(
                                     hearts: progress.hearts,
                                     diamonds: progress.diamonds,
+                                    freeGamesRemaining: progress.totalGamesAvailable,
                                     onRefuelWithDiamond: () =>
                                         _refuelWithDiamond(ref, context),
                                     onShareForHeart: () =>
-                                        _shareForHeart(ref, context),
+                                        _shareForBonus(ref, context),
                                   ),
                                   const SizedBox(width: 10),
                                   Container(
@@ -247,7 +256,20 @@ class _StreakCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
+    return GestureDetector(
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => StreakCalendarScreen(
+            streakCount: progress.streakCount,
+            bestStreak: progress.bestStreak,
+            playHistory: progress.playHistory,
+            streakFreezeCount: progress.streakFreezeCount,
+            nextMilestone: progress.nextMilestone,
+            nextMilestoneReward: progress.nextMilestoneReward,
+          ),
+        ),
+      ),
+      child: Container(
       width: double.infinity,
       padding: const EdgeInsets.all(MiToosaTheme.spacingMd),
       decoration: BoxDecoration(
@@ -297,6 +319,7 @@ class _StreakCard extends StatelessWidget {
             color: theme.colorScheme.primary.withValues(alpha: 0.4),
           ),
         ],
+      ),
       ),
     );
   }

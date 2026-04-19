@@ -42,6 +42,10 @@ class GameplayState {
   final Duration runTimeRemaining;
   final int levelsInRun;
   final int levelsCompleted;
+  // Per-puzzle countdown timer (WS6).
+  final DifficultyTier? difficultyTier;
+  final int puzzleTimeRemaining;
+  final bool puzzleTimerPaused;
 
   int get score => switch (phase) { PhaseCompleted(:final score) => score, _ => 0 };
 
@@ -56,6 +60,9 @@ class GameplayState {
     this.runTimeRemaining = Duration.zero,
     this.levelsInRun = 0,
     this.levelsCompleted = 0,
+    this.difficultyTier,
+    this.puzzleTimeRemaining = 0,
+    this.puzzleTimerPaused = false,
   });
 
   GameplayState copyWith({
@@ -70,6 +77,9 @@ class GameplayState {
     Duration? runTimeRemaining,
     int? levelsInRun,
     int? levelsCompleted,
+    DifficultyTier? difficultyTier,
+    int? puzzleTimeRemaining,
+    bool? puzzleTimerPaused,
   }) {
     return GameplayState(
       level: level ?? this.level,
@@ -82,6 +92,9 @@ class GameplayState {
       runTimeRemaining: runTimeRemaining ?? this.runTimeRemaining,
       levelsInRun: levelsInRun ?? this.levelsInRun,
       levelsCompleted: levelsCompleted ?? this.levelsCompleted,
+      difficultyTier: difficultyTier ?? this.difficultyTier,
+      puzzleTimeRemaining: puzzleTimeRemaining ?? this.puzzleTimeRemaining,
+      puzzleTimerPaused: puzzleTimerPaused ?? this.puzzleTimerPaused,
     );
   }
 }

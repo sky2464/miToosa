@@ -3,6 +3,7 @@ import 'package:crypto/crypto.dart';
 import 'package:hive/hive.dart';
 
 import '../core/engine/progression_engine.dart';
+import '../core/engine/streak_engine.dart';
 
 class PlayerProgress {
   String playerId;
@@ -27,6 +28,19 @@ class PlayerProgress {
   List<String> seenTutorialWorlds; // world IDs where tutorial was dismissed
   // Schema version 3: share refuel (Hive field 16).
   DateTime? lastShareDate; // last calendar day on which a share-refuel was granted
+  // Schema version 4: engagement fields (Hive fields 17–22).
+  int streakFreezeCount; // streak freeze items owned
+  List<int> streakMilestones; // milestone thresholds already achieved
+  Map<String, int> achievementProgress; // partial progress per achievement id
+  int dailyRewardDay; // current day in 7-day reward cycle (0 = not started)
+  DateTime? lastDailyRewardClaim; // last calendar day a daily reward was claimed
+  List<DateTime> playHistory; // dates played (capped at 365) for streak calendar
+  // Schema version 5: onboarding tracking (Hive field 23).
+  bool onboardingComplete; // whether the user has seen the onboarding flow
+  // Schema version 5: free-games allowance (Hive fields 24–26).
+  int freeGamesRemaining; // games left today (resets daily to freeGamesLimit)
+  DateTime? lastAllowanceReset; // last day the allowance was reset
+  int shareBonusGames; // extra games earned from today's share (0 or 40)
 
   PlayerProgress({
     required this.playerId,
@@ -46,6 +60,16 @@ class PlayerProgress {
     this.heartRefuelAt,
     this.seenTutorialWorlds = const [],
     this.lastShareDate,
+    this.streakFreezeCount = 0,
+    this.streakMilestones = const [],
+    this.achievementProgress = const {},
+    this.dailyRewardDay = 0,
+    this.lastDailyRewardClaim,
+    this.playHistory = const [],
+    this.onboardingComplete = false,
+    this.freeGamesRemaining = 25,
+    this.lastAllowanceReset,
+    this.shareBonusGames = 0,
   });
 
   factory PlayerProgress.fresh({required String playerId}) {
@@ -62,21 +86,69 @@ class PlayerProgress {
     adaptiveVersion = 2;
   }
 
-  void recordLogin() {
-    final now = DateTime.now();
+  /// Records a login, updating the streak and granting any new milestone
+  /// rewards (coins and streak freezes). Returns the list of newly achieved
+  /// milestone thresholds so the UI can show a reward toast.
+  List<int> recordLogin({DateTime? now}) {
+    now ??= DateTime.now();
     if (lastLoginDate == null) {
       streakCount = 1;
       bestStreak = 1;
     } else {
-      final difference = now.difference(lastLoginDate!).inDays;
-      if (difference == 1) {
-        streakCount += 1;
-        if (streakCount > bestStreak) bestStreak = streakCount;
-      } else if (difference > 1) {
-        streakCount = 1; // Reset streak
+      final result = StreakEngine.checkStreak(
+        lastLoginDate: lastLoginDate,
+        now: now,
+        streakFreezeCount: streakFreezeCount,
+      );
+      switch (result) {
+        case StreakResult.continued:
+          streakCount += 1;
+          if (streakCount > bestStreak) bestStreak = streakCount;
+        case StreakResult.frozen:
+          // Streak preserved — consume one freeze
+          useStreakFreeze();
+          streakCount += 1;
+          if (streakCount > bestStreak) bestStreak = streakCount;
+        case StreakResult.broken:
+          streakCount = 1;
       }
     }
     lastLoginDate = now;
+
+    // ── Check and grant milestones ────────────────────────────────────
+    final newMilestones = StreakEngine.checkMilestones(
+      currentStreak: streakCount,
+      alreadyAchieved: streakMilestones,
+    );
+    for (final m in newMilestones) {
+      coins += StreakEngine.computeMilestoneReward(m);
+      streakMilestones = List<int>.from(streakMilestones)..add(m);
+    }
+    // Every 7 days earns a free freeze
+    if (StreakEngine.earnsFreezeForStreak(streakCount)) {
+      streakFreezeCount += 1;
+    }
+    return newMilestones;
+  }
+
+  /// The next streak milestone not yet reached, or null if all are achieved.
+  int? get nextMilestone {
+    final achieved = Set<int>.from(streakMilestones);
+    for (final m in StreakEngine.milestones) {
+      if (!achieved.contains(m)) return m;
+    }
+    return null;
+  }
+
+  /// Coin reward for [nextMilestone], or 0.
+  int get nextMilestoneReward {
+    final nm = nextMilestone;
+    return nm != null ? StreakEngine.computeMilestoneReward(nm) : 0;
+  }
+
+  static String _sortedMapPayload(Map<String, int> m) {
+    final keys = m.keys.toList()..sort();
+    return keys.map((k) => '$k:${m[k]}').join(',');
   }
 
   String calculateHash(String secretKey) {
@@ -84,8 +156,13 @@ class PlayerProgress {
     final starsPayload = sortedStarsKeys.map((k) => "$k:${levelStars[k]}").join(",");
     final payload = "$playerId|$totalXP|$coins|$streakCount|$bestStreak|$starsPayload"
         "|$hearts|$diamonds|${adaptiveHistory.join(',')}"
-        "|${difficultyMode.index}|${seenTutorialWorlds.join(',')}";
-    
+        "|${difficultyMode.index}|${seenTutorialWorlds.join(',')}"
+        "|$streakFreezeCount|$dailyRewardDay|${streakMilestones.join(',')}"
+        "|${unlockedAchievements.join(',')}"
+        "|${_sortedMapPayload(achievementProgress)}"
+        "|${lastDailyRewardClaim?.toUtc().toIso8601String() ?? ''}"
+        "|${playHistory.map((d) => d.toUtc().toIso8601String()).join(',')}";
+
     final key = utf8.encode(secretKey);
     final bytes = utf8.encode(payload);
     final hmacSha256 = Hmac(sha256, key);
@@ -148,6 +225,55 @@ class PlayerProgress {
     }
   }
 
+  /// Marks the onboarding flow as complete.
+  void completeOnboarding() {
+    onboardingComplete = true;
+  }
+
+  // ─── Free-games allowance helpers ────────────────────────────────────────
+
+  static const int dailyFreeGamesLimit = 25;
+  static const int shareBonusAmount = 40;
+
+  /// Ensures the daily allowance has been reset if a new calendar day has
+  /// started. Call this at game start to keep the counter accurate.
+  void checkAllowanceReset(DateTime now) {
+    if (lastAllowanceReset == null ||
+        lastAllowanceReset!.year != now.year ||
+        lastAllowanceReset!.month != now.month ||
+        lastAllowanceReset!.day != now.day) {
+      freeGamesRemaining = dailyFreeGamesLimit;
+      shareBonusGames = 0;
+      lastAllowanceReset = now;
+    }
+  }
+
+  /// Returns the total games available (base + share bonus).
+  int get totalGamesAvailable => freeGamesRemaining + shareBonusGames;
+
+  /// Consumes one game from the allowance.
+  /// Returns false if no games remain.
+  bool consumeFreeGame() {
+    if (freeGamesRemaining > 0) {
+      freeGamesRemaining--;
+      return true;
+    }
+    if (shareBonusGames > 0) {
+      shareBonusGames--;
+      return true;
+    }
+    return false;
+  }
+
+  /// Grants the share bonus (40 games) for today.
+  /// Returns false if already granted today.
+  bool grantShareBonus(DateTime now) {
+    checkAllowanceReset(now);
+    if (shareBonusGames > 0) return false;
+    shareBonusGames = shareBonusAmount;
+    return true;
+  }
+
   /// Grants +1 heart (capped at 5) as a reward for sharing the app.
   /// Limited to once per calendar day (comparing year/month/day of [now]).
   /// Returns true when a heart was actually granted.
@@ -167,6 +293,63 @@ class PlayerProgress {
     hearts++;
     lastShareDate = now;
     return true;
+  }
+
+  // ─── Coin mutation helpers ────────────────────────────────────────────────
+
+  /// Adds [amount] coins to the balance. [amount] must be non-negative.
+  void addCoins(int amount) {
+    assert(amount >= 0, 'addCoins: amount must be non-negative');
+    coins += amount;
+  }
+
+  /// Spends [amount] coins from the balance.
+  /// Returns false (no-op) when insufficient balance.
+  /// [amount] must be positive.
+  bool spendCoins(int amount) {
+    assert(amount > 0, 'spendCoins: amount must be positive');
+    if (coins < amount) return false;
+    coins -= amount;
+    return true;
+  }
+
+  // ─── Streak freeze helpers ────────────────────────────────────────────────
+
+  /// Adds 1 streak freeze item to inventory.
+  void addStreakFreeze() {
+    streakFreezeCount++;
+  }
+
+  /// Consumes 1 streak freeze. Returns false (no-op) when none available.
+  bool useStreakFreeze() {
+    if (streakFreezeCount <= 0) return false;
+    streakFreezeCount--;
+    return true;
+  }
+
+  // ─── Play history helpers ─────────────────────────────────────────────────
+
+  /// Records [date] in play history (one entry per calendar day, max 365).
+  void recordPlayDate(DateTime date) {
+    final dateOnly = DateTime(date.year, date.month, date.day);
+    final isDuplicate = playHistory.any((d) =>
+        d.year == dateOnly.year &&
+        d.month == dateOnly.month &&
+        d.day == dateOnly.day);
+    if (isDuplicate) return;
+    final updated = List<DateTime>.from(playHistory)..add(dateOnly);
+    playHistory = updated.length > 365
+        ? updated.sublist(updated.length - 365)
+        : updated;
+  }
+
+  // ─── Daily reward helpers ─────────────────────────────────────────────────
+
+  /// Records claiming daily reward for [day] at [now].
+  void claimDailyReward(int day, DateTime now) {
+    assert(day >= 1 && day <= 7, 'claimDailyReward: day must be 1–7');
+    dailyRewardDay = day;
+    lastDailyRewardClaim = now;
   }
 }
 
@@ -215,13 +398,30 @@ class PlayerProgressAdapter extends TypeAdapter<PlayerProgress> {
           ? (fields[15] as List).cast<String>()
           : const [],
       lastShareDate: fields[16] as DateTime?,
+      // Schema v4 engagement fields; absent in legacy saves → defaults.
+      streakFreezeCount: fields[17] as int? ?? 0,
+      streakMilestones: fields[18] != null
+          ? (fields[18] as List).cast<int>()
+          : const [],
+      achievementProgress: fields[19] != null
+          ? (fields[19] as Map).cast<String, int>()
+          : const {},
+      dailyRewardDay: fields[20] as int? ?? 0,
+      lastDailyRewardClaim: fields[21] as DateTime?,
+      playHistory: fields[22] != null
+          ? (fields[22] as List).cast<DateTime>()
+          : const [],
+      onboardingComplete: fields[23] as bool? ?? false,
+      freeGamesRemaining: fields[24] as int? ?? 25,
+      lastAllowanceReset: fields[25] as DateTime?,
+      shareBonusGames: fields[26] as int? ?? 0,
     );
   }
 
   @override
   void write(BinaryWriter writer, PlayerProgress obj) {
     writer
-      ..writeByte(17) // 17 fields total (9 original + 3 adaptive + 4 engagement-loop + 1 share)
+      ..writeByte(27) // 27 fields total (schema v5: onboarding + allowance)
       ..writeByte(0)
       ..write(obj.playerId)
       ..writeByte(1)
@@ -255,6 +455,47 @@ class PlayerProgressAdapter extends TypeAdapter<PlayerProgress> {
       ..writeByte(15)
       ..write(obj.seenTutorialWorlds)
       ..writeByte(16)
-      ..write(obj.lastShareDate);
+      ..write(obj.lastShareDate)
+      ..writeByte(17)
+      ..write(obj.streakFreezeCount)
+      ..writeByte(18)
+      ..write(obj.streakMilestones)
+      ..writeByte(19)
+      ..write(obj.achievementProgress)
+      ..writeByte(20)
+      ..write(obj.dailyRewardDay)
+      ..writeByte(21)
+      ..write(obj.lastDailyRewardClaim)
+      ..writeByte(22)
+      ..write(obj.playHistory)
+      ..writeByte(23)
+      ..write(obj.onboardingComplete)
+      ..writeByte(24)
+      ..write(obj.freeGamesRemaining)
+      ..writeByte(25)
+      ..write(obj.lastAllowanceReset)
+      ..writeByte(26)
+      ..write(obj.shareBonusGames);
+  }
+}
+
+/// Tiered currency progression: Silver → Gold → Diamond.
+///
+/// Tiers are purely cosmetic status indicators based on lifetime coin earnings.
+enum CurrencyTier {
+  silver('Silver', 0),
+  gold('Gold', 1000),
+  diamond('Diamond', 5000);
+
+  const CurrencyTier(this.displayName, this.minCoins);
+
+  final String displayName;
+  final int minCoins;
+
+  /// Returns the highest tier that [totalCoins] qualifies for.
+  static CurrencyTier tierForCoins(int totalCoins) {
+    if (totalCoins >= CurrencyTier.diamond.minCoins) return CurrencyTier.diamond;
+    if (totalCoins >= CurrencyTier.gold.minCoins) return CurrencyTier.gold;
+    return CurrencyTier.silver;
   }
 }

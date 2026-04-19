@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/models/gameplay_level.dart';
 import '../../core/engine/gameplay_engine.dart';
@@ -10,8 +9,11 @@ import '../../core/models/puzzle.dart';
 import '../../core/models/shape_item.dart';
 import '../../core/content_provider.dart';
 import '../../core/audio_service.dart';
+import '../../core/haptics_service.dart';
+import '../../core/music_service.dart';
 import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
+import '../../widgets/countdown_timer_widget.dart';
 import '../../widgets/hint_button.dart';
 import '../../widgets/how_to_play_modal.dart';
 import '../../widgets/run_timer_overlay.dart';
@@ -45,6 +47,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
   late AnimationController _feedbackController;
   late Animation<double> _feedbackScale;
   Timer? _runTimer;
+  Timer? _puzzleTimer;
   Duration _runTotalTime = Duration.zero;
   late final AppLifecycleListener _lifecycleListener;
 
@@ -67,8 +70,8 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     );
 
     _lifecycleListener = AppLifecycleListener(
-      onPause: _pauseTimer,
-      onResume: _resumeTimer,
+      onPause: _onAppPause,
+      onResume: _onAppResume,
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -98,11 +101,48 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     });
   }
 
-  void _pauseTimer() => _runTimer?.cancel();
+  void _pauseTimer() {
+    _runTimer?.cancel();
+    ref.read(gameplayViewModelProvider(level).notifier).pausePuzzleTimer();
+    _puzzleTimer?.cancel();
+  }
 
   void _resumeTimer() {
     final state = ref.read(gameplayViewModelProvider(level));
     if (state.isRunActive) _startRunTimer();
+    if (state.difficultyTier != null) {
+      ref.read(gameplayViewModelProvider(level).notifier).resumePuzzleTimer();
+      _startPuzzleTimer();
+    }
+  }
+
+  void _startPuzzleTimer() {
+    _puzzleTimer?.cancel();
+    _puzzleTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (!mounted) return;
+      final notifier = ref.read(gameplayViewModelProvider(level).notifier);
+      final expired = notifier.tickPuzzleTimer();
+      if (expired) {
+        _puzzleTimer?.cancel();
+        HapticsService().heavyImpact();
+        AudioService().playErrorBuzzer();
+        _feedbackController.forward(from: 0);
+      }
+    });
+  }
+
+  void _stopPuzzleTimer() {
+    _puzzleTimer?.cancel();
+  }
+
+  void _onAppPause() {
+    _pauseTimer();
+    MusicService().pause();
+  }
+
+  void _onAppResume() {
+    _resumeTimer();
+    MusicService().resume();
   }
 
   void _showTimeUpBanner() {
@@ -142,9 +182,11 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
   @override
   void dispose() {
     _runTimer?.cancel();
+    _puzzleTimer?.cancel();
     _lifecycleListener.dispose();
     _entryController.dispose();
     _feedbackController.dispose();
+    MusicService().stop();
     super.dispose();
   }
 
@@ -153,10 +195,11 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     if (state.phase.isCompleted || _animatingTransition) return;
 
     final isCorrect = option.id == level.puzzle.correctOptionId;
-    HapticFeedback.mediumImpact();
     if (isCorrect) {
+      HapticsService().mediumImpact();
       AudioService().playSuccessPop();
     } else {
+      HapticsService().heavyImpact();
       AudioService().playErrorBuzzer();
     }
 
@@ -164,6 +207,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     _feedbackController.forward(from: 0);
 
     if (isCorrect && mounted) {
+      _stopPuzzleTimer();
       _saveProgress();
       if (widget.isRunMode) {
         final bonus = ref
@@ -252,12 +296,25 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     final levelId = '${widget.track.id}_${widget.levelIndex}';
     final state = ref.read(gameplayViewModelProvider(level));
     final stars = level.stars(state.incorrectAttempts, hintUsed: state.hintUsed);
+
+    // Load progress BEFORE updating level star to detect first-clear
+    final progress = await persistence.loadProgress(playerId);
+    final previousStars = progress.levelStars[levelId] ?? 0;
+    final isFirstClear = previousStars == 0 && stars > 0;
+
     await persistence.updateLevelStar(playerId, levelId, stars);
 
-    // Update XP
-    final progress = await persistence.loadProgress(playerId);
-    final gainedXP = state.score.toInt();
+    // Update XP using stars-based formula (max 10 XP per level)
+    final gainedXP = ProgressionEngine.computeXP(stars, hintUsed: state.hintUsed);
     progress.totalXP = progress.totalXP + gainedXP;
+
+    // Award coins based on stars and first-clear status
+    final coinReward = ProgressionEngine.computeCoinReward(
+      stars: stars,
+      isFirstClear: isFirstClear,
+    );
+    progress.addCoins(coinReward);
+
     await persistence.saveProgress(progress);
 
     // Reward: completing a lower level grants a heart refuel
@@ -400,6 +457,16 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
                 ),
               ),
               const SizedBox(width: 4),
+              // Puzzle countdown timer (visible when difficulty tier is set)
+              if (eng.difficultyTier != null)
+                Padding(
+                  padding: const EdgeInsets.only(right: 4),
+                  child: CountdownTimerWidget(
+                    remainingSeconds: eng.puzzleTimeRemaining,
+                    totalSeconds: eng.difficultyTier!.seconds,
+                    size: 38,
+                  ),
+                ),
               // Score badge
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -476,13 +543,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
             color: theme.colorScheme.primary.withValues(alpha: 0.1),
             width: 2,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: theme.colorScheme.primary.withValues(alpha: 0.06),
-              blurRadius: 24,
-              offset: const Offset(0, 8),
-            ),
-          ],
+          boxShadow: MiToosaTheme.shadowElevated,
         ),
         child: Wrap(
           alignment: WrapAlignment.center,
@@ -661,7 +722,9 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
                 color: borderColor.withValues(alpha: 0.25),
                 blurRadius: 16,
                 offset: const Offset(0, 4),
-              ),
+              )
+            else
+              ...MiToosaTheme.shadowCard,
           ],
         ),
         child: Wrap(
@@ -692,13 +755,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
         borderRadius: const BorderRadius.vertical(
           top: Radius.circular(MiToosaTheme.radiusXl),
         ),
-        boxShadow: [
-          BoxShadow(
-            color: theme.colorScheme.primary.withValues(alpha: 0.08),
-            blurRadius: 20,
-            offset: const Offset(0, -4),
-          ),
-        ],
+        boxShadow: MiToosaTheme.shadowSubtle,
       ),
       child: Row(
         children: [
@@ -713,9 +770,9 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
             }),
           ),
           const Spacer(),
-          // Score
+          // XP (stars-based, max 10)
           Text(
-            '+${eng.score} XP',
+            '+${ProgressionEngine.computeXP(stars, hintUsed: eng.hintUsed)} XP',
             style: theme.textTheme.headlineMedium?.copyWith(
               color: theme.colorScheme.secondary,
               fontWeight: FontWeight.w900,

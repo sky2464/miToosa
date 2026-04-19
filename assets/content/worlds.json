@@ -5,7 +5,7 @@
     "subtitle": "Match identical patterns",
     "rule": "matchIdentical",
     "icon": "🧩",
-    "levelCount": 10
+    "levelCount": 50
   },
   {
     "id": "track_2",
@@ -13,7 +13,7 @@
     "subtitle": "Count and calculate",
     "rule": "countShapes",
     "icon": "🔢",
-    "levelCount": 10
+    "levelCount": 50
   },
   {
     "id": "track_3",
@@ -21,7 +21,7 @@
     "subtitle": "Find what doesn't belong",
     "rule": "oddOneOut",
     "icon": "👁️",
-    "levelCount": 10
+    "levelCount": 50
   },
   {
     "id": "track_4",
@@ -29,7 +29,7 @@
     "subtitle": "Master color patterns",
     "rule": "colorPattern",
     "icon": "🎨",
-    "levelCount": 10
+    "levelCount": 50
   },
   {
     "id": "track_5",
@@ -37,7 +37,7 @@
     "subtitle": "Fill in the blanks",
     "rule": "findMissing",
     "icon": "🧠",
-    "levelCount": 10
+    "levelCount": 50
   },
   {
     "id": "track_6",
@@ -45,7 +45,7 @@
     "subtitle": "Continue the pattern",
     "rule": "sequenceNext",
     "icon": "🔄",
-    "levelCount": 10
+    "levelCount": 50
   },
   {
     "id": "track_7",
@@ -53,7 +53,7 @@
     "subtitle": "Think in 0s and 1s",
     "rule": "binaryDecode",
     "icon": "💻",
-    "levelCount": 10
+    "levelCount": 15
   },
   {
     "id": "track_8",
@@ -61,7 +61,7 @@
     "subtitle": "AND, OR, XOR puzzles",
     "rule": "logicGate",
     "icon": "⚡",
-    "levelCount": 10
+    "levelCount": 15
   },
   {
     "id": "track_9",
@@ -69,7 +69,7 @@
     "subtitle": "Crack the code",
     "rule": "cipherBreak",
     "icon": "🔐",
-    "levelCount": 10
+    "levelCount": 15
   },
   {
     "id": "track_10",
@@ -125,7 +125,7 @@
     "subtitle": "Calculate shape areas",
     "rule": "geometryArea",
     "icon": "📏",
-    "levelCount": 10
+    "levelCount": 15
   },
   {
     "id": "track_17",
@@ -133,7 +133,7 @@
     "subtitle": "Missing triangle angles",
     "rule": "geometryAngles",
     "icon": "📊",
-    "levelCount": 10
+    "levelCount": 15
   },
   {
     "id": "track_18",
@@ -141,7 +141,7 @@
     "subtitle": "Lines of symmetry",
     "rule": "geometrySymmetry",
     "icon": "🦋",
-    "levelCount": 10
+    "levelCount": 15
   },
   {
     "id": "track_19",
@@ -149,7 +149,7 @@
     "subtitle": "Which is heavier?",
     "rule": "physicsGravity",
     "icon": "⬇️",
-    "levelCount": 10
+    "levelCount": 15
   },
   {
     "id": "track_20",
@@ -157,7 +157,7 @@
     "subtitle": "Collision direction",
     "rule": "physicsMomentum",
     "icon": "💥",
-    "levelCount": 10
+    "levelCount": 15
   },
   {
     "id": "track_21",
@@ -165,7 +165,7 @@
     "subtitle": "Lever equilibrium",
     "rule": "physicsBalance",
     "icon": "⚖️",
-    "levelCount": 10
+    "levelCount": 15
   },
   {
     "id": "track_22",
@@ -173,7 +173,7 @@
     "subtitle": "Fill the magic grid",
     "rule": "numberGrid",
     "icon": "🔲",
-    "levelCount": 10
+    "levelCount": 15
   },
   {
     "id": "track_23",
@@ -181,6 +181,6 @@
     "subtitle": "Make both sides equal",
     "rule": "balanceEquation",
     "icon": "🧮",
-    "levelCount": 10
+    "levelCount": 15
   }
 ]

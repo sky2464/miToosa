@@ -187,6 +187,27 @@ class HivePersistenceProvider implements IPersistenceProvider {
     return granted;
   }
 
+  @override
+  Future<void> completeOnboarding(String playerId) =>
+      _mutate(playerId, (p) => p.completeOnboarding());
+
+  @override
+  Future<bool> consumeFreeGame(String playerId, DateTime now) async {
+    final progress = await loadProgress(playerId);
+    progress.checkAllowanceReset(now);
+    final consumed = progress.consumeFreeGame();
+    if (consumed) await saveProgress(progress);
+    return consumed;
+  }
+
+  @override
+  Future<bool> grantShareBonus(String playerId, DateTime now) async {
+    final progress = await loadProgress(playerId);
+    final granted = progress.grantShareBonus(now);
+    if (granted) await saveProgress(progress);
+    return granted;
+  }
+
   Future<void> _mutate(String playerId, void Function(PlayerProgress) fn) async {
     final progress = await loadProgress(playerId);
     fn(progress);
