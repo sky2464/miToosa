@@ -59,9 +59,9 @@ class MiToosaTheme {
   static const double spacingXl = 32;
   static const double spacingXxl = 48;
 
-  static const double radiusSm = 14;
-  static const double radiusMd = 22;
-  static const double radiusLg = 30;
+  static const double radiusSm = 16;
+  static const double radiusMd = 24;
+  static const double radiusLg = 32;
   static const double radiusXl = 40;
   static const double radiusFull = 999;
 
@@ -145,7 +145,7 @@ class MiToosaTheme {
       const fallbackStyle = TextStyle(fontFamilyFallback: _fontFamilyFallback);
 
     return ThemeData.light().copyWith(
-      scaffoldBackgroundColor: const Color(0xFFF8F9FF),
+      scaffoldBackgroundColor: const Color(0xFFF0F4FF), // Updated for Aetheric Pulse theme
       primaryColor: primary,
       colorScheme: const ColorScheme.light(
         primary: primary,
