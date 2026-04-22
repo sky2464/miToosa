@@ -535,7 +535,7 @@ class AethericPulseDark {
     BoxShadow(color: Color(0x40000000), blurRadius: 32, offset: Offset(0, 8)),
   ];
   static const List<BoxShadow> cardInner = [
-    BoxShadow(color: Color(0x05FFFFFF), blurRadius: 20),
+    BoxShadow(color: Color(0x18FFFFFF), blurRadius: 20),
   ];
   static const List<BoxShadow> blueGlow = [
     BoxShadow(color: Color(0x663B82F6), blurRadius: 24),

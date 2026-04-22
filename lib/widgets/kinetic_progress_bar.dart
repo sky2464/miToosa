@@ -22,37 +22,32 @@ class KineticProgressBar extends StatelessWidget {
     final clampedValue = value.clamp(0.0, 1.0);
     final fillGradient = gradient ?? AethericPulseDark.gradPrimary;
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final totalWidth = constraints.maxWidth;
-        final fillWidth = totalWidth * clampedValue;
-
-        return Container(
-          height: height,
-          decoration: BoxDecoration(
-            color: AethericPulseDark.glassFill,
-            borderRadius: BorderRadius.circular(AethericPulseDark.radiusPill),
-          ),
-          child: Stack(
-            children: [
-              if (fillWidth > 0)
-                Container(
-                  width: fillWidth,
-                  decoration: BoxDecoration(
-                    gradient: fillGradient,
-                    borderRadius: BorderRadius.circular(AethericPulseDark.radiusPill),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0x4022D3EE),
-                        blurRadius: 8,
-                      ),
-                    ],
-                  ),
+    return Container(
+      height: height,
+      decoration: BoxDecoration(
+        color: AethericPulseDark.glassFill,
+        borderRadius: BorderRadius.circular(AethericPulseDark.radiusPill),
+      ),
+      child: Stack(
+        children: [
+          if (clampedValue > 0)
+            FractionallySizedBox(
+              widthFactor: clampedValue,
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: fillGradient,
+                  borderRadius: BorderRadius.circular(AethericPulseDark.radiusPill),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x4022D3EE),
+                      blurRadius: 8,
+                    ),
+                  ],
                 ),
-            ],
-          ),
-        );
-      },
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

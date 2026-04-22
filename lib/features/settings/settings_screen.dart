@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/engine/progression_engine.dart';
+import '../../core/audio_service.dart';
 import '../../core/haptics_service.dart';
 import '../../core/music_service.dart';
 import '../../data/player_progress.dart';
@@ -31,8 +32,6 @@ class SettingsScreen extends ConsumerWidget {
   }
 }
 
-bool _soundEffectsEnabled = true;
-
 class _SettingsBody extends ConsumerStatefulWidget {
   final PlayerProgress progress;
   const _SettingsBody({required this.progress});
@@ -42,6 +41,14 @@ class _SettingsBody extends ConsumerStatefulWidget {
 }
 
 class _SettingsBodyState extends ConsumerState<_SettingsBody> {
+  late bool _soundEffectsEnabled;
+
+  @override
+  void initState() {
+    super.initState();
+    _soundEffectsEnabled = AudioService().enabled;
+  }
+
   @override
   Widget build(BuildContext context) {
     final tier = ProgressionEngine.computeMasteryTier(
@@ -157,7 +164,10 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                 title: 'Sound FX',
                 right: _KineticToggle(
                   value: _soundEffectsEnabled,
-                  onChanged: (v) => setState(() => _soundEffectsEnabled = v),
+                  onChanged: (v) {
+                    AudioService().enabled = v;
+                    setState(() => _soundEffectsEnabled = v);
+                  },
                 ),
               ),
               const Divider(height: 1, color: AethericPulseDark.glassBorder),

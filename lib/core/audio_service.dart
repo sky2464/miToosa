@@ -10,7 +10,10 @@ class AudioService {
   static const List<String> _extensions = ['.ogg', '.wav'];
   final AudioPlayer _player = AudioPlayer();
 
+  bool enabled = true;
+
   Future<bool> _playByBaseName(String baseName) async {
+    if (!enabled) return false;
     for (final ext in _extensions) {
       final candidate = 'assets/audio/$baseName$ext';
       try {
