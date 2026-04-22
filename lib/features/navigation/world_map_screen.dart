@@ -1,448 +1,410 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:share_plus/share_plus.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 import '../../core/content_provider.dart';
 import '../../data/player_progress.dart';
 import '../../data/player_progress_provider.dart';
-import '../../features/auth/auth_provider.dart';
-import '../../features/streak/streak_calendar_screen.dart';
-import '../../widgets/hearts_bar.dart';
-import 'track_detail_screen.dart';
 import '../../theme/design_system.dart';
+import '../../widgets/glass_card.dart';
+import '../../widgets/kinetic_text.dart';
+import '../../widgets/progress_ring.dart';
+import 'track_detail_screen.dart';
+
+// ─── Tracks screen — Kinetic Obsidian "Daily Training" dashboard ──────────────
 
 class WorldMapScreen extends ConsumerWidget {
   const WorldMapScreen({super.key});
 
-  static const _appShareUrl =
-      'https://apps.apple.com/app/mitoosa/id0000000000'; // replace with real ID
-
-  Future<void> _refuelWithDiamond(WidgetRef ref, BuildContext context) async {
-    final playerId = ref.playerId;
-    if (playerId == null) return;
-    final ok =
-        await ref.read(persistenceProvider).refuelHeartsWithDiamond(playerId);
-    if (!ok && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Not enough 💎 diamonds')),
-      );
-    }
-    ref.invalidate(playerProgressProvider);
-  }
-
-  Future<void> _shareForBonus(WidgetRef ref, BuildContext context) async {
-    final playerId = ref.playerId;
-    if (playerId == null) return;
-    final result = await SharePlus.instance.share(
-      ShareParams(
-        text: 'Play miToosa with me! $_appShareUrl',
-        title: 'Check out miToosa',
-      ),
-    );
-    if (result.status != ShareResultStatus.success) return;
-    final now = DateTime.now();
-    // Grant the share bonus (40 extra games)
-    final granted = await ref
-        .read(persistenceProvider)
-        .grantShareBonus(playerId, now);
-    // Also keep the legacy heart refuel for backwards compat
-    await ref.read(persistenceProvider).shareAndRefuel(playerId, now);
-    ref.invalidate(playerProgressProvider);
-    if (context.mounted) {
-      final msg = granted
-          ? '+40 bonus games unlocked! 🎉'
-          : 'Already shared today – come back tomorrow for more bonus games!';
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
-    }
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tracks = ContentProvider().tracks;
     final progressAsync = ref.watch(playerProgressProvider);
-    final theme = Theme.of(context);
+    final tracks = ContentProvider().tracks;
 
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              theme.colorScheme.primary.withValues(alpha: 0.06),
-              theme.scaffoldBackgroundColor,
-              theme.scaffoldBackgroundColor,
-            ],
-          ),
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              // ─── Header ───────────────────────────────────
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  MiToosaTheme.spacingLg, MiToosaTheme.spacingMd,
-                  MiToosaTheme.spacingLg, 0,
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          'mi',
-                          style: theme.textTheme.displayLarge?.copyWith(
-                            color: theme.colorScheme.primary.withValues(alpha: 0.4),
-                          ),
-                        ),
-                        Text(
-                          'Toosa',
-                          style: theme.textTheme.displayLarge?.copyWith(
-                            color: theme.colorScheme.primary,
-                          ),
-                        ),
-                        const Spacer(),
-                        // XP Badge + HeartsBar
-                        Flexible(
-                          child: progressAsync.when(
-                            data: (progress) => SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              reverse: true,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  HeartsBar(
-                                    hearts: progress.hearts,
-                                    diamonds: progress.diamonds,
-                                    freeGamesRemaining: progress.totalGamesAvailable,
-                                    onRefuelWithDiamond: () =>
-                                        _refuelWithDiamond(ref, context),
-                                    onShareForHeart: () =>
-                                        _shareForBonus(ref, context),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 14, vertical: 8),
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: [
-                                          theme.colorScheme.primary,
-                                          theme.colorScheme.primary
-                                              .withValues(alpha: 0.7),
-                                        ],
-                                      ),
-                                      borderRadius: BorderRadius.circular(
-                                          MiToosaTheme.radiusMd),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        const Icon(Icons.bolt,
-                                            size: 18, color: Colors.white),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          '${progress.totalXP} XP',
-                                          style: theme.textTheme.labelLarge
-                                              ?.copyWith(color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            loading: () => const SizedBox.shrink(),
-                            error: (_, _) => const SizedBox.shrink(),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: MiToosaTheme.spacingMd),
-                    // Streak Card
-                    progressAsync.when(
-                      data: (progress) => _StreakCard(progress: progress),
-                      loading: () => const SizedBox(height: 80),
-                      error: (_, _) => const SizedBox.shrink(),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: MiToosaTheme.spacingMd),
-              // ─── Track Grid (grouped by category) ─────────────
-              Expanded(
-                child: progressAsync.when(
-                  data: (progress) {
-                    // Group tracks by category
-                    final Map<String, List<TrackDefinition>> grouped = {};
-                    for (final track in tracks) {
-                      grouped.putIfAbsent(track.category, () => []).add(track);
-                    }
-                    final categories = grouped.keys.toList()..sort();
-
-                    return ListView.builder(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: MiToosaTheme.spacingMd,
-                        vertical: MiToosaTheme.spacingMd,
-                      ),
-                      itemCount: categories.length,
-                      itemBuilder: (context, catIndex) {
-                        final category = categories[catIndex];
-                        final categoryTracks = grouped[category]!;
-
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Category header
-                            Padding(
-                              padding: EdgeInsets.only(
-                                bottom: MiToosaTheme.spacingSm,
-                                top: catIndex == 0 ? 0 : MiToosaTheme.spacingLg,
-                              ),
-                              child: Text(
-                                category,
-                                style: Theme.of(context)
-                                    .textTheme.titleMedium
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.w900,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary,
-                                    ),
-                              ),
-                            ),
-                            // 2-column grid of tracks
-                            GridView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: MiToosaTheme.spacingMd,
-                                crossAxisSpacing: MiToosaTheme.spacingMd,
-                                childAspectRatio: 0.85,
-                              ),
-                              itemCount: categoryTracks.length,
-                              itemBuilder: (context, trackIndex) {
-                                final track = categoryTracks[trackIndex];
-                                return _TrackCard(
-                                  track: track,
-                                  progress: progress,
-                                );
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (_, _) => const Center(child: Text('Failed to load.')),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+    return progressAsync.when(
+      loading: () => const Center(
+          child: CircularProgressIndicator(color: KineticObsidian.electricCyan)),
+      error: (e, _) => Center(
+          child: Text('Error loading progress',
+              style: Theme.of(context).textTheme.bodyMedium)),
+      data: (progress) => _TracksBody(progress: progress, tracks: tracks),
     );
   }
 }
 
-// ─── Streak Card ─────────────────────────────────────────────
-
-class _StreakCard extends StatelessWidget {
+class _TracksBody extends StatelessWidget {
   final PlayerProgress progress;
+  final List<TrackDefinition> tracks;
 
-  const _StreakCard({required this.progress});
+  const _TracksBody({required this.progress, required this.tracks});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return GestureDetector(
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => StreakCalendarScreen(
-            streakCount: progress.streakCount,
-            bestStreak: progress.bestStreak,
-            playHistory: progress.playHistory,
-            streakFreezeCount: progress.streakFreezeCount,
-            nextMilestone: progress.nextMilestone,
-            nextMilestoneReward: progress.nextMilestoneReward,
-          ),
-        ),
+    final screenTracks = tracks.take(6).toList();
+    final gamesPlayed = 25 - progress.freeGamesRemaining;
+    final dailyGoalPct =
+        (gamesPlayed / 25 * 100).clamp(0, 100).toDouble();
+
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(
+        KineticObsidian.spaceGutter,
+        KineticObsidian.spaceMd,
+        KineticObsidian.spaceGutter,
+        KineticObsidian.spaceLg + 80,
       ),
-      child: Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(MiToosaTheme.spacingMd),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            theme.colorScheme.secondary.withValues(alpha: 0.15),
-            theme.colorScheme.primary.withValues(alpha: 0.08),
-          ],
+      children: [
+        _DailyTrainingHero(
+          dailyGoalPct: dailyGoalPct,
+          onStart: screenTracks.isNotEmpty
+              ? () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          TrackDetailScreen(track: screenTracks.first),
+                    ),
+                  )
+              : null,
         ),
-        borderRadius: BorderRadius.circular(MiToosaTheme.radiusLg),
-        border: Border.all(
-          color: theme.colorScheme.secondary.withValues(alpha: 0.3),
-          width: 1.5,
-        ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.secondary.withValues(alpha: 0.2),
-              shape: BoxShape.circle,
-            ),
-            child: const Text('🔥', style: TextStyle(fontSize: 24)),
-          ),
-          const SizedBox(width: MiToosaTheme.spacingMd),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '${progress.streakCount} Day Streak',
-                  style: theme.textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.w900,
-                    color: theme.colorScheme.primary,
+        const SizedBox(height: 16),
+        ...screenTracks.map((t) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: _TrackCard(
+                track: t,
+                onPlay: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => TrackDetailScreen(track: t),
                   ),
                 ),
-                Text(
-                  'Best: ${progress.bestStreak} days · Keep it going!',
-                  style: theme.textTheme.bodySmall,
+              ),
+            )),
+        _StatsCard(progress: progress),
+      ],
+    );
+  }
+}
+
+// ─── Daily Training Hero ───────────────────────────────────────────────────────
+
+class _DailyTrainingHero extends StatelessWidget {
+  final double dailyGoalPct;
+  final VoidCallback? onStart;
+
+  const _DailyTrainingHero({required this.dailyGoalPct, this.onStart});
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassCard(
+      borderRadius: KineticObsidian.radiusXl,
+      padding: const EdgeInsets.all(KineticObsidian.spaceMd),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          // Proton glow bloom top-right
+          Positioned(
+            top: -60, right: -60,
+            child: Container(
+              width: 220,
+              height: 220,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    KineticObsidian.electricCyan.withValues(alpha: 0.25),
+                    Colors.transparent,
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-          Icon(
-            Icons.chevron_right_rounded,
-            color: theme.colorScheme.primary.withValues(alpha: 0.4),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Daily\nTraining',
+                style: GoogleFonts.orbitron(
+                  fontSize: 40,
+                  fontWeight: FontWeight.w600,
+                  height: 1.05,
+                  letterSpacing: 2.0,
+                  color: KineticObsidian.primarySoft,
+                ),
+              ),
+              const SizedBox(height: 14),
+              Text(
+                'Complete your tasks to maintain your streak and earn bonus credits.',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 20),
+              _KineticButton(
+                label: 'Start Sequence',
+                onTap: onStart,
+              ),
+              const SizedBox(height: 28),
+              Center(
+                child: ProgressRing(
+                  percent: dailyGoalPct,
+                  size: 170,
+                  strokeWidth: 8,
+                  centerChild: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        '${dailyGoalPct.toStringAsFixed(0)}%',
+                        style: GoogleFonts.orbitron(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 1.12,
+                          color: KineticObsidian.primarySoft,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        'GOAL',
+                        style: GoogleFonts.exo2(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w400,
+                          letterSpacing: 0.8,
+                          color: KineticObsidian.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
-      ),
       ),
     );
   }
 }
 
-// ─── Track Card ──────────────────────────────────────────────
+// ─── Track card ────────────────────────────────────────────────────────────────
 
-class _TrackCard extends ConsumerWidget {
+class _TrackCard extends StatelessWidget {
   final TrackDefinition track;
-  final PlayerProgress progress;
+  final VoidCallback onPlay;
 
-  const _TrackCard({
-    required this.track,
-    required this.progress,
-  });
-
-  int _completedLevels() => List.generate(
-    track.targetLevelCount, (i) => '${track.id}_$i',
-  ).where(progress.levelStars.containsKey).length;
+  const _TrackCard({required this.track, required this.onPlay});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-    final completed = _completedLevels();
-    final total = track.targetLevelCount;
-    final progressVal = total > 0 ? completed / total : 0.0;
+  Widget build(BuildContext context) {
+    final name = track.name;
+    final subtitle = track.subtitle;
+    final emoji = track.icon;
+    final levelCount = track.targetLevelCount;
 
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => TrackDetailScreen(track: track),
-          ),
-        );
-      },
-      child: Card(
-        elevation: 2,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(MiToosaTheme.radiusMd),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                theme.colorScheme.surface,
-                theme.colorScheme.surface.withValues(alpha: 0.8),
+    return GlassCard(
+      borderRadius: KineticObsidian.radiusXl,
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Icon tile
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: KineticObsidian.surfaceContainerHigh,
+              borderRadius: BorderRadius.circular(KineticObsidian.radiusLg),
+              border: Border.all(color: KineticObsidian.outlineVariant, width: 1),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x80000000),
+                  blurRadius: 10,
+                  offset: Offset(0, 2),
+                ),
               ],
             ),
+            child: Center(
+              child: Text(emoji, style: const TextStyle(fontSize: 26)),
+            ),
           ),
-          child: Stack(
+          const SizedBox(height: 14),
+          Text(name, style: Theme.of(context).textTheme.headlineMedium),
+          const SizedBox(height: 6),
+          Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
+          const SizedBox(height: 16),
+          Row(
             children: [
-              // Background accent
-              Positioned(
-                top: -20,
-                right: -20,
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: theme.colorScheme.primary.withValues(alpha: 0.05),
-                  ),
-                ),
-              ),
-              // Content
-              Padding(
-                padding: const EdgeInsets.all(MiToosaTheme.spacingMd),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Icon
-                    Text(
-                      track.icon,
-                      style: const TextStyle(fontSize: 36),
-                    ),
-                    const SizedBox(height: MiToosaTheme.spacingSm),
-                    // Track name
-                    Text(
-                      track.name,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w900,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const Spacer(),
-                    // Mini progress bar
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(2),
-                      child: LinearProgressIndicator(
-                        value: progressVal,
-                        minHeight: 3,
-                        backgroundColor: theme.colorScheme.primary
-                            .withValues(alpha: 0.1),
-                        valueColor: AlwaysStoppedAnimation(
-                          theme.colorScheme.primary,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: MiToosaTheme.spacingSm),
-                    // Completion text
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '$completed / $total',
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        Text(
-                          '${(progressVal * 100).toStringAsFixed(0)}%',
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.primary,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+              Container(
+                height: 1,
+                color: const Color(0x0DFFFFFF),
               ),
             ],
+          ),
+          const Divider(height: 1, color: Color(0x0DFFFFFF)),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'LEVEL $levelCount',
+                style: GoogleFonts.exo2(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.72,
+                  color: KineticObsidian.electricCyan,
+                ),
+              ),
+              _PlayButton(onTap: onPlay),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ─── Stats card ────────────────────────────────────────────────────────────────
+
+class _StatsCard extends StatelessWidget {
+  final PlayerProgress progress;
+
+  const _StatsCard({required this.progress});
+
+  @override
+  Widget build(BuildContext context) {
+    final history = progress.adaptiveHistory;
+    final accuracy = history.isNotEmpty
+        ? ((history.where((r) => r >= 4).length / history.length) * 100)
+            .clamp(0, 100)
+            .toDouble()
+        : 92.0;
+
+    return GlassCard(
+      borderRadius: KineticObsidian.radiusXl,
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.monitor_heart_outlined,
+                  size: 22, color: KineticObsidian.electricCyan),
+              const SizedBox(width: 8),
+              Text('Stats', style: Theme.of(context).textTheme.headlineMedium),
+            ],
+          ),
+          const SizedBox(height: 18),
+          _LabeledBar(
+            label: 'Accuracy',
+            value: '${accuracy.toStringAsFixed(0)}%',
+            percent: accuracy,
+            valueColor: KineticObsidian.electricCyan,
+          ),
+          const SizedBox(height: 16),
+          _LabeledBar(
+            label: 'Reaction Time',
+            value: '0.8s',
+            percent: 75,
+            valueColor: KineticObsidian.secondaryFixedDim,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LabeledBar extends StatelessWidget {
+  final String label;
+  final String value;
+  final double percent;
+  final Color valueColor;
+
+  const _LabeledBar({
+    required this.label,
+    required this.value,
+    required this.percent,
+    required this.valueColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              label,
+              style: GoogleFonts.exo2(
+                fontSize: 12, fontWeight: FontWeight.w400,
+                letterSpacing: 0.48,
+                color: KineticObsidian.onSurfaceVariant,
+              ),
+            ),
+            Text(
+              value,
+              style: GoogleFonts.exo2(
+                fontSize: 12, fontWeight: FontWeight.w400,
+                letterSpacing: 0.48,
+                color: valueColor,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 6),
+        KineticProgressBar(percent: percent, height: 3),
+      ],
+    );
+  }
+}
+
+// ─── Shared buttons ────────────────────────────────────────────────────────────
+
+class _KineticButton extends StatelessWidget {
+  final String label;
+  final VoidCallback? onTap;
+
+  const _KineticButton({required this.label, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        decoration: BoxDecoration(
+          gradient: KineticObsidian.kineticGradient,
+          borderRadius: BorderRadius.circular(KineticObsidian.radiusFull),
+          boxShadow: KineticObsidian.shadowNeonSoft,
+        ),
+        child: Text(
+          label,
+          style: GoogleFonts.exo2(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.84,
+            color: const Color(0xFF00363A),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PlayButton extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const _PlayButton({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+        decoration: BoxDecoration(
+          color: const Color(0x0DFFFFFF),
+          border: Border.all(color: const Color(0x1AFFFFFF), width: 1),
+          borderRadius: BorderRadius.circular(KineticObsidian.radius),
+        ),
+        child: Text(
+          'Play',
+          style: GoogleFonts.exo2(
+            fontSize: 12, fontWeight: FontWeight.w500,
+            letterSpacing: 0.48,
+            color: KineticObsidian.onSurface,
           ),
         ),
       ),

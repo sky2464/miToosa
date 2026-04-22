@@ -38,6 +38,9 @@ flutter:
     - assets/content/worlds.json
     - assets/content/levels.json
     - assets/audio/
+    - assets/images/avatars/
+    - assets/images/badges/
+    - assets/images/icons/
   # Fallback fonts (download into assets/fonts/ and register here).
   fonts:
     - family: 'Noto Sans'
