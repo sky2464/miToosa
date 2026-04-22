@@ -333,11 +333,23 @@ class _LevelNode extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fill = unlocked
-        ? AethericPulseLight.gradient
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final lockedFill = isDark
+        ? const LinearGradient(colors: [Color(0xFF2A2D34), Color(0xFF1D2026)])
         : const LinearGradient(
-            colors: [Color(0xFF2A2D34), Color(0xFF1D2026)],
+            colors: [
+              AethericPulseLight.lightSurfaceContainer,
+              AethericPulseLight.lightSurfaceContainerHigh,
+            ],
           );
+    final fill = unlocked ? AethericPulseLight.gradient : lockedFill;
+    final borderColor = unlocked
+        ? (isDark
+            ? Colors.white.withValues(alpha: 0.7)
+            : Colors.white.withValues(alpha: 0.9))
+        : (isDark ? Colors.white10 : Colors.black12);
+    final labelColor =
+        unlocked ? Colors.white : (isDark ? Colors.white38 : Colors.black38);
     final sem = stars > 0
         ? 'Level $label completed with $stars stars'
         : unlocked
@@ -350,10 +362,7 @@ class _LevelNode extends StatelessWidget {
         gradient: fill,
         shape: BoxShape.circle,
         boxShadow: unlocked ? AethericPulseLight.shadowSoftBlue : null,
-        border: Border.all(
-          color: unlocked ? Colors.white.withValues(alpha: 0.7) : Colors.white10,
-          width: 2,
-        ),
+        border: Border.all(color: borderColor, width: 2),
       ),
       alignment: Alignment.center,
       child: Column(
@@ -361,12 +370,12 @@ class _LevelNode extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: KineticObsidian.fontDisplay,
               fontFamilyFallback: KineticObsidian.fontFallback,
               fontSize: 22,
               fontWeight: FontWeight.w700,
-              color: Colors.white,
+              color: labelColor,
               letterSpacing: 1.2,
             ),
           ),
@@ -432,7 +441,7 @@ class _OrientationToggle extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           child: Icon(
             isVertical ? Icons.view_week_rounded : Icons.view_stream_rounded,
-            color: KineticObsidian.electricCyan,
+            color: Theme.of(context).colorScheme.primary,
             size: 24,
           ),
         ),

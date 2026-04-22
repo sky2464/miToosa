@@ -65,6 +65,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
   Timer? _runTimer;
   Timer? _puzzleTimer;
   Duration _runTotalTime = Duration.zero;
+  DateTime _levelStartTime = DateTime.now();
   late final AppLifecycleListener _lifecycleListener;
 
   bool get _inSession => widget.sessionStartLevelIndex >= 0;
@@ -105,6 +106,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _levelStartTime = DateTime.now();
       ref.read(gameplayViewModelProvider(level).notifier).start();
       _entryController.forward();
       if (widget.initialDifficulty != null) {
@@ -388,6 +390,8 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
 
     // v6: record per-level bests
     progress.recordLevelXP(levelId, gainedXP);
+    progress.recordLevelTime(
+        levelId, DateTime.now().difference(_levelStartTime).inSeconds);
     if (widget.initialDifficulty != null) {
       progress.recordLevelDifficulty(levelId, widget.initialDifficulty!.name);
     }
@@ -837,28 +841,36 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
           borderColor = theme.colorScheme.primary;
         }
 
+        final hint = isCompleted
+            ? (isCorrect ? 'Correct answer' : 'Incorrect answer')
+            : null;
         return Padding(
           padding: const EdgeInsets.only(bottom: MiToosaTheme.spacingSm),
-          child: GestureDetector(
-            onTap: () => _handleOptionTap(option, level),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(
-                horizontal: MiToosaTheme.spacingLg,
-                vertical: MiToosaTheme.spacingMd,
-              ),
-              decoration: BoxDecoration(
-                color: bgColor,
-                borderRadius: BorderRadius.circular(MiToosaTheme.radiusMd),
-                border: Border.all(color: borderColor, width: 2.5),
-              ),
-              child: Center(
-                child: Text(
-                  option.label ?? '',
-                  style: theme.textTheme.headlineMedium?.copyWith(
-                    color: theme.colorScheme.primary,
-                    fontWeight: FontWeight.w800,
+          child: Semantics(
+            button: true,
+            label: option.label ?? '',
+            hint: hint,
+            child: GestureDetector(
+              onTap: () => _handleOptionTap(option, level),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: MiToosaTheme.spacingLg,
+                  vertical: MiToosaTheme.spacingMd,
+                ),
+                decoration: BoxDecoration(
+                  color: bgColor,
+                  borderRadius: BorderRadius.circular(MiToosaTheme.radiusMd),
+                  border: Border.all(color: borderColor, width: 2.5),
+                ),
+                child: Center(
+                  child: Text(
+                    option.label ?? '',
+                    style: theme.textTheme.headlineMedium?.copyWith(
+                      color: theme.colorScheme.primary,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ),
               ),
@@ -896,8 +908,15 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     }
 
     final cardWidth = (screenWidth - MiToosaTheme.spacingLg * 2 - MiToosaTheme.spacingMd) / 2;
+    final cardHint = isCompleted
+        ? (isCorrect ? 'Correct answer' : 'Incorrect answer')
+        : null;
 
-    return GestureDetector(
+    return Semantics(
+      button: true,
+      label: 'Option ${index + 1}',
+      hint: cardHint,
+      child: GestureDetector(
       onTap: () => _handleOptionTap(option, level),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
@@ -933,6 +952,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
               .toList(),
         ),
       ),
+    ),
     );
   }
 

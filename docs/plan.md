@@ -63,3 +63,99 @@ Introduce a sleek iOS 2026 look by layering an **Aetheric Pulse** palette (soft 
 1. **Dark-only today → `ThemeMode.system` plus override**: the app now supports Light, Dark, and System. Next step is to audit screens that hard-code dark colors (the `KineticBackground` particle layer, for instance) so they render correctly in Light.
 2. **Web secure storage**: `flutter_secure_storage` degrades to plaintext `localStorage` on web. Not a regression from this plan, but worth surfacing before any marketing push that emphasizes security.
 3. **Share flow**: `share_plus` stays pinned at `^12.0.2` due to the Windows `flutter_secure_storage` incompatibility. Any redesigned share UI should not force an upgrade.
+
+---
+
+## Pending / Next Steps
+
+Audit of the post-redesign codebase (2026-04-22). All items below are concrete gaps found by reading the code — not speculative.
+
+**Completed 2026-04-22**: P1 (KineticBackground, KineticText, ProgressRing light-mode), P2 (gameplay option Semantics), P3 (recordLevelTime wired), P4 (leaderboard live XP), P5 (flutter_animate removed — unused), P8 (WorldMapPathScreen locked-node colors adapted). Remaining: P6 (Dynamic Type audit), P7 (WorldMapPathScreen test).
+
+### P1 — Light-mode rendering (critical for `ThemeMode.system`) ✅ DONE
+
+`KineticBackground` (`lib/widgets/kinetic_background.dart`) hard-codes `AethericPulseDark.surface` (`#0a0d17`) and `AethericPulseDark.heroGlow` for the radial glow. Every screen that wraps its body in `KineticBackground` will show a **dark background in light mode**, making text unreadable.
+
+Affected screens (all use `KineticBackground`):
+- `lib/features/auth/login_screen.dart`
+- `lib/features/main_app/main_app_shell.dart`
+- `lib/features/main_app/progress_screen.dart`
+- `lib/features/main_app/leaderboard_screen.dart`
+- `lib/features/navigation/world_map_screen.dart`
+- `lib/features/settings/settings_screen.dart`
+
+**Fix**: Make `KineticBackground.build()` read `Theme.of(context).brightness` and swap to `AethericPulseLight` surface/glow tokens when `Brightness.light`.
+
+Also audit:
+- `lib/widgets/kinetic_text.dart` — uses `KineticObsidian.kineticGradient` and `surfaceContainerHigh` hard-coded.
+- `lib/widgets/progress_ring.dart` — uses `KineticObsidian.surfaceContainerHigh` for track color.
+- `lib/features/navigation/world_map_path_screen.dart` lines 339–369 — `Color(0xFF2A2D34)` dark node backgrounds and `Colors.white.withValues(alpha: 0.7)` for text; both invisible in light mode.
+
+### P2 — Gameplay option cards missing `Semantics` (a11y gap) ✅ DONE
+
+`_buildListOption()` (line ~842) and `_buildOptionCard()` (line ~900) in `lib/features/gameplay/gameplay_screen.dart` both use bare `GestureDetector` with no `Semantics` wrapper. VoiceOver/TalkBack users cannot identify or activate answer choices.
+
+**Fix**: Wrap each `GestureDetector` with:
+```dart
+Semantics(
+  button: true,
+  label: option.label ?? '',
+  hint: isCompleted ? (isCorrect ? 'Correct answer' : 'Incorrect answer') : null,
+  child: GestureDetector(...)
+)
+```
+
+Also check `lib/features/navigation/track_detail_screen.dart` lines 280 and 448 — `GestureDetector` and `InkWell` without `Semantics`.
+
+### P3 — `recordLevelTime` is defined but never called ✅ DONE
+
+`PlayerProgress.recordLevelTime(String levelId, int seconds)` exists at `lib/data/player_progress.dart:393` and has passing tests in `test/data/player_progress_test.dart:737`. However `_saveProgress()` in `lib/features/gameplay/gameplay_screen.dart` (line ~370) never calls it. Per-level time data is silently dropped.
+
+**Fix**: Track elapsed seconds in `GameplayViewModel` (the timer already ticks), then call `progress.recordLevelTime(levelId, elapsedSeconds)` inside `_saveProgress()` before `persistence.saveProgress(progress)`.
+
+### P4 — Leaderboard uses static fake data; player XP not wired ✅ DONE (live XP)
+
+`lib/features/main_app/leaderboard_screen.dart` hard-codes `_rows` with static names and scores (line ~22). `Pilot_042` is hardcoded at rank 4 / 12480 XP. The screen doesn't read `PlayerProgress.totalXP` at all.
+
+**Fix (near-term)**: Replace the "you" row score with live `ref.watch(playerProgressProvider)` totalXP. Add a `ConsumerWidget` wrapper.
+
+**Fix (long-term)**: Real leaderboard requires a backend. Document this scope decision. If staying local-only, label the screen "Demo" or "Coming Soon" to avoid misleading players.
+
+### P5 — `flutter_animate` added to `pubspec.yaml` but never imported ✅ DONE (removed)
+
+`flutter_animate: ^4.5.0` is in `pubspec.yaml` but zero files under `lib/` import it. Either:
+- Use it (dopamine toast shimmer, login hero entrance, world-map node unlock animation are good candidates), or
+- Remove it from `pubspec.yaml` to keep dependency surface minimal.
+
+### P6 — Dynamic Type (text scaling) not implemented
+
+No `MediaQuery.textScaler` calls exist anywhere in `lib/`. All font sizes are hard-coded constants in `design_system.dart` and `TextStyle(fontSize: ...)` calls in screens. iOS Accessibility Large Text will overflow containers on the gameplay screen and login card.
+
+**Fix**: Audit the most-used `TextStyle` calls across gameplay, login, settings, and nav. Use `MediaQuery.textScalerOf(context).scale(size)` for body/label sizes, or switch to `Theme.of(context).textTheme.*` styles which already inherit scaling via `ThemeData`.
+
+### P7 — `WorldMapPathScreen` has no integration test
+
+`test/features/navigation/` only contains `track_detail_gate_test.dart` and `world_map_header_overflow_test.dart`. The new `WorldMapPathScreen` (orientation toggle, zoom-to-current animation, node semantics) has no widget test at all.
+
+**Fix**: Add `test/features/navigation/world_map_path_screen_test.dart` covering:
+- Renders in portrait and landscape (pump with constrained size).
+- Current level node is visible after zoom animation settles.
+- Each unlocked node has a Semantics label.
+- Tapping a node triggers expected callback.
+
+### P8 — World map path screen uses `KineticObsidian` tokens inconsistently ✅ DONE (node colors)
+
+`lib/features/navigation/world_map_path_screen.dart` is a new Aetheric Pulse screen but references `KineticObsidian.electricCyan` (line 23, 435), `KineticObsidian.durCelebrate` (line 58), `KineticObsidian.easeOut`/`easeSnappy` (lines 85, 391), `KineticObsidian.fontDisplay`/`fontFallback` (lines 365–366), and `KineticObsidian.radiusPillow` (line 431).
+
+These work today (dark-only) but will produce brand-inconsistent colors once the light theme is active. They should reference the appropriate `AethericPulse*` tokens or `MiToosaTheme` aliases.
+
+### Execution order for next session
+
+1. **P1** (light mode) — highest user-visible risk; do `KineticBackground` first, then `kinetic_text.dart`, `progress_ring.dart`, `world_map_path_screen.dart` dark node colors.
+2. **P2** (gameplay Semantics) — safety-critical for VoiceOver; small contained change.
+3. **P3** (recordLevelTime) — one-line call; easy win.
+4. **P5** (flutter_animate) — decide use-or-remove before it accumulates more pub.dev surface.
+5. **P4** (leaderboard live data) — wire player XP first; backend is a separate product decision.
+6. **P8** (path screen token cleanup) — follow-on after P1 light-mode sweep.
+7. **P6** (Dynamic Type) — larger audit; schedule as its own sprint.
+8. **P7** (path screen test) — add alongside or after P8 cleanup.

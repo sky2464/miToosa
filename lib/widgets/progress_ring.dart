@@ -21,6 +21,17 @@ class ProgressRing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final trackColor = isDark
+        ? KineticObsidian.surfaceContainerHigh
+        : AethericPulseLight.lightSurfaceContainerHigh;
+    final arcColors = isDark
+        ? const [KineticObsidian.protonPurple, KineticObsidian.electricCyan]
+        : const [AethericPulseLight.softBlue, AethericPulseLight.pinkPastel];
+    final glowColor = isDark
+        ? KineticObsidian.electricCyan
+        : AethericPulseLight.softBlue;
+
     return SizedBox(
       width: size,
       height: size,
@@ -32,10 +43,12 @@ class ProgressRing extends StatelessWidget {
             painter: _RingPainter(
               percent: percent.clamp(0, 100) / 100,
               strokeWidth: strokeWidth,
-              trackColor: KineticObsidian.surfaceContainerHigh,
+              trackColor: trackColor,
+              arcColors: arcColors,
+              glowColor: glowColor,
             ),
           ),
-          if (centerChild != null) centerChild!,
+          ?centerChild,
         ],
       ),
     );
@@ -46,21 +59,24 @@ class _RingPainter extends CustomPainter {
   final double percent;
   final double strokeWidth;
   final Color trackColor;
+  final List<Color> arcColors;
+  final Color glowColor;
 
   const _RingPainter({
     required this.percent,
     required this.strokeWidth,
     required this.trackColor,
+    required this.arcColors,
+    required this.glowColor,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = (size.width - strokeWidth) / 2;
-    const startAngle = -pi / 2; // start at top
+    const startAngle = -pi / 2;
     final sweepAngle = 2 * pi * percent;
 
-    // Track (background ring)
     final trackPaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth
@@ -71,27 +87,25 @@ class _RingPainter extends CustomPainter {
 
     if (percent <= 0) return;
 
-    // Gradient arc
     final rect = Rect.fromCircle(center: center, radius: radius);
     final gradientPaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round
-      ..shader = const SweepGradient(
+      ..shader = SweepGradient(
         startAngle: 0,
         endAngle: 2 * pi,
-        colors: [KineticObsidian.protonPurple, KineticObsidian.electricCyan],
+        colors: arcColors,
         tileMode: TileMode.clamp,
       ).createShader(rect);
 
     canvas.drawArc(rect, startAngle, sweepAngle, false, gradientPaint);
 
-    // Neon tip glow
     final tipAngle = startAngle + sweepAngle;
     final tipX = center.dx + radius * cos(tipAngle);
     final tipY = center.dy + radius * sin(tipAngle);
     final glowPaint = Paint()
-      ..color = KineticObsidian.electricCyan.withValues(alpha: 0.8)
+      ..color = glowColor.withValues(alpha: 0.8)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6);
 
     canvas.drawCircle(Offset(tipX, tipY), strokeWidth / 2, glowPaint);
@@ -99,5 +113,7 @@ class _RingPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_RingPainter old) =>
-      old.percent != percent || old.strokeWidth != strokeWidth;
+      old.percent != percent ||
+      old.strokeWidth != strokeWidth ||
+      old.trackColor != trackColor;
 }

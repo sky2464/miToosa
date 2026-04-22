@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
 import '../../widgets/glass_card.dart';
 import '../../widgets/kinetic_background.dart';
@@ -7,30 +9,49 @@ import '../../widgets/kinetic_text.dart';
 
 // ─── Leaderboard screen — Aetheric Pulse ─────────────────────────────────────
 
-class LeaderboardScreen extends StatefulWidget {
+class LeaderboardScreen extends ConsumerStatefulWidget {
   const LeaderboardScreen({super.key});
 
   @override
-  State<LeaderboardScreen> createState() => _LeaderboardScreenState();
+  ConsumerState<LeaderboardScreen> createState() => _LeaderboardScreenState();
 }
 
-class _LeaderboardScreenState extends State<LeaderboardScreen> {
+class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   int _filterIndex = 0;
 
   static const _filters = ['Global', 'Friends', 'Local'];
 
-  static const _rows = [
+  static const _demoRows = [
     _RankData(rank: 1, name: 'Mira K.', score: 24820, avatarIndex: 1),
     _RankData(rank: 2, name: 'Diego R.', score: 22110, avatarIndex: 2),
     _RankData(rank: 3, name: 'Aiko T.', score: 19500, avatarIndex: 3),
-    _RankData(rank: 4, name: 'Pilot_042', score: 12480, avatarIndex: 4, isYou: true),
     _RankData(rank: 5, name: 'Priya S.', score: 11230, avatarIndex: 5),
     _RankData(rank: 6, name: 'Jordan L.', score: 10870, avatarIndex: 6),
     _RankData(rank: 7, name: 'Sam O.', score: 9420, avatarIndex: 7),
   ];
 
+  List<_RankData> _buildRows(int playerXP) {
+    final youRow = _RankData(
+      rank: 4,
+      name: 'Pilot_042',
+      score: playerXP,
+      avatarIndex: 4,
+      isYou: true,
+    );
+    return [
+      ..._demoRows.where((r) => r.rank < 4),
+      youRow,
+      ..._demoRows.where((r) => r.rank >= 4),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
+    final playerXP = ref.watch(playerProgressProvider).maybeWhen(
+          data: (p) => p.totalXP,
+          orElse: () => 0,
+        );
+    final rows = _buildRows(playerXP);
     return KineticBackground(
       child: ListView(
         padding: const EdgeInsets.fromLTRB(
@@ -97,14 +118,14 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
           ),
           const SizedBox(height: 16),
           // Rank list — each row in its own GlassCard; top-3 get blueGlow
-          for (var i = 0; i < _rows.length; i++) ...[
+          for (var i = 0; i < rows.length; i++) ...[
             GlassCard(
-              neonGlow: _rows[i].rank <= 3,
+              neonGlow: rows[i].rank <= 3,
               borderRadius: AethericPulseDark.radiusWell,
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-              child: _RankRow(data: _rows[i]),
+              child: _RankRow(data: rows[i]),
             ),
-            if (i < _rows.length - 1) const SizedBox(height: 8),
+            if (i < rows.length - 1) const SizedBox(height: 8),
           ],
         ],
       ),

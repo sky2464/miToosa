@@ -122,14 +122,14 @@ class _FeedbackToastState extends State<FeedbackToast>
                   const SizedBox(width: 10),
                   Text(
                     widget.headline,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: AethericPulseDark.fontBody,
                       fontFamilyFallback: AethericPulseDark.fontFallback,
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.4,
                       color: Colors.white,
-                      shadows: const [
+                      shadows: [
                         Shadow(blurRadius: 8, color: Color(0x66000000)),
                       ],
                     ),

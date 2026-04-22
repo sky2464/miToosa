@@ -17,9 +17,12 @@ class KineticText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final gradient = isDark
+        ? KineticObsidian.kineticGradient
+        : AethericPulseLight.gradient;
     return ShaderMask(
-      shaderCallback: (bounds) =>
-          KineticObsidian.kineticGradient.createShader(bounds),
+      shaderCallback: (bounds) => gradient.createShader(bounds),
       blendMode: BlendMode.srcIn,
       child: Text(
         text,
@@ -48,10 +51,20 @@ class KineticProgressBar extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final fillWidth = constraints.maxWidth * (percent.clamp(0, 100) / 100);
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        final trackColor = isDark
+            ? KineticObsidian.surfaceContainerHigh
+            : AethericPulseLight.lightSurfaceContainerHigh;
+        final barGradient = isDark
+            ? KineticObsidian.kineticGradient
+            : AethericPulseLight.gradient;
+        final glowColor = isDark
+            ? const Color(0x8000F0FF)
+            : const Color(0x60597AFA);
         return Container(
           height: height,
           decoration: BoxDecoration(
-            color: KineticObsidian.surfaceContainerHigh,
+            color: trackColor,
             borderRadius: BorderRadius.circular(KineticObsidian.radiusFull),
           ),
           child: Align(
@@ -60,16 +73,11 @@ class KineticProgressBar extends StatelessWidget {
               width: fillWidth,
               height: height,
               decoration: BoxDecoration(
-                gradient: KineticObsidian.kineticGradient,
+                gradient: barGradient,
                 borderRadius:
                     BorderRadius.circular(KineticObsidian.radiusFull),
                 boxShadow: glow
-                    ? const [
-                        BoxShadow(
-                          color: Color(0x8000F0FF),
-                          blurRadius: 10,
-                        )
-                      ]
+                    ? [BoxShadow(color: glowColor, blurRadius: 10)]
                     : null,
               ),
             ),
