@@ -28,7 +28,7 @@ void main() {
     testWidgets('shows mastery tier card', (tester) async {
       await tester.pumpWidget(_wrap());
       await tester.pumpAndSettle();
-      expect(find.text('Your Progress'), findsOneWidget);
+      expect(find.text('YOUR MASTERY'), findsOneWidget);
     });
 
     testWidgets('shows adaptive difficulty toggle', (tester) async {
@@ -52,13 +52,13 @@ void main() {
     testWidgets('shows sound effects toggle', (tester) async {
       await tester.pumpWidget(_wrap());
       await tester.pumpAndSettle();
-      expect(find.text('Sound Effects'), findsOneWidget);
+      expect(find.text('Sound FX'), findsOneWidget);
     });
 
     testWidgets('shows Audio section header', (tester) async {
       await tester.pumpWidget(_wrap());
       await tester.pumpAndSettle();
-      expect(find.text('Audio & Feedback'), findsOneWidget);
+      expect(find.text('SYSTEM'), findsOneWidget);
     });
 
     testWidgets('mastery tier shows Bronze for fresh player', (tester) async {

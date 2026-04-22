@@ -337,11 +337,15 @@ class _KineticToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Switch(
-      value: value,
-      onChanged: onChanged,
-      activeTrackColor: AethericPulseDark.brandBlue,
-      activeThumbColor: Colors.white,
+    // Material ancestor required by Switch when screen has no Scaffold.
+    return Material(
+      type: MaterialType.transparency,
+      child: Switch(
+        value: value,
+        onChanged: onChanged,
+        activeTrackColor: AethericPulseDark.brandBlue,
+        activeThumbColor: Colors.white,
+      ),
     );
   }
 }
