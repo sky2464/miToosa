@@ -173,13 +173,12 @@ class _RankRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final medalGradient = data.rank == 1
-        ? AethericPulseDark.gradPrimary
-        : data.rank == 2
-            ? const LinearGradient(colors: [Color(0xFFD1BCFF), Color(0xFFE9DDFF)])
-            : data.rank == 3
-                ? const LinearGradient(colors: [Color(0xFFFFB1C3), Color(0xFFFFCCD6)])
-                : null;
+    final medalGradient = switch (data.rank) {
+      1 => AethericPulseDark.gradPrimary,
+      2 => const LinearGradient(colors: [Color(0xFFD1BCFF), Color(0xFFE9DDFF)]),
+      3 => const LinearGradient(colors: [Color(0xFFFFB1C3), Color(0xFFFFCCD6)]),
+      _ => null,
+    };
 
     return Container(
       padding: EdgeInsets.symmetric(

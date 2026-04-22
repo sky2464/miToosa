@@ -143,7 +143,6 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                 title: 'Go VIP',
                 subtitle: 'Ad-free + 10 bonus sessions / day',
                 right: _PurpleChip(label: 'Upgrade'),
-                isLast: true,
               ),
             ],
           ),
@@ -223,7 +222,6 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                     ref.invalidate(playerProgressProvider);
                   },
                 ),
-                isLast: true,
               ),
             ],
           ),
@@ -241,7 +239,6 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
             subtitle: 'Clear all credits and stats',
             right: Icon(Icons.chevron_right,
                 size: 22, color: AethericPulseDark.onSurfaceMuted),
-            isLast: true,
           ),
         ),
         const SizedBox(height: AethericPulseDark.spaceMd),
@@ -266,7 +263,7 @@ class _SectionLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 4, bottom: 0),
+      padding: const EdgeInsets.only(left: 4),
       child: Text(
         label.toUpperCase(),
         style: AethericPulseDark.label(color: AethericPulseDark.onSurfaceMuted),
@@ -282,14 +279,12 @@ class _SettingRow extends StatelessWidget {
   final String title;
   final String? subtitle;
   final Widget right;
-  final bool isLast;
 
   const _SettingRow({
     required this.icon,
     required this.title,
     this.subtitle,
     required this.right,
-    this.isLast = false,
   });
 
   @override

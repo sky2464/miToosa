@@ -193,10 +193,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                         alignment: WrapAlignment.center,
                         spacing: 8,
                         children: [
-                          {'icon': Icons.psychology_rounded, 'label': 'Memory'},
-                          {'icon': Icons.flash_on_rounded, 'label': 'Logic'},
-                          {'icon': Icons.brush_rounded, 'label': 'Patterns'},
-                        ].map((item) {
+                          (Icons.psychology_rounded, 'Memory'),
+                          (Icons.flash_on_rounded, 'Logic'),
+                          (Icons.brush_rounded, 'Patterns'),
+                        ].map(((IconData icon, String label) pill) {
                           return Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                             decoration: BoxDecoration(
@@ -207,12 +207,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(item['icon'] as IconData, size: 16, color: AethericPulseDark.onSurfaceSecondary),
+                                Icon(pill.$1, size: 16, color: AethericPulseDark.onSurfaceSecondary),
                                 const SizedBox(width: 8),
-                                Text(
-                                  item['label'] as String,
-                                  style: AethericPulseDark.label(),
-                                ),
+                                Text(pill.$2, style: AethericPulseDark.label()),
                               ],
                             ),
                           );
