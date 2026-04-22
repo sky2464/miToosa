@@ -286,7 +286,7 @@ class _PathLinePainter extends CustomPainter {
     if (totalCount == 0) return;
     final rect = Rect.fromLTWH(0, 0, size.width, size.height);
     final paint = Paint()
-      ..shader = AethericPulse.gradient.createShader(rect)
+      ..shader = AethericPulseLight.gradient.createShader(rect)
       ..strokeWidth = 6
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
@@ -334,7 +334,7 @@ class _LevelNode extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fill = unlocked
-        ? AethericPulse.gradient
+        ? AethericPulseLight.gradient
         : const LinearGradient(
             colors: [Color(0xFF2A2D34), Color(0xFF1D2026)],
           );
@@ -349,7 +349,7 @@ class _LevelNode extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: fill,
         shape: BoxShape.circle,
-        boxShadow: unlocked ? AethericPulse.shadowSoftBlue : null,
+        boxShadow: unlocked ? AethericPulseLight.shadowSoftBlue : null,
         border: Border.all(
           color: unlocked ? Colors.white.withValues(alpha: 0.7) : Colors.white10,
           width: 2,

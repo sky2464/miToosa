@@ -36,7 +36,7 @@ class MiToosaApp extends ConsumerWidget {
 
     return MaterialApp(
       title: 'miToosa',
-      theme: AethericPulse.lightTheme,
+      theme: AethericPulseLight.lightTheme,
       darkTheme: KineticObsidian.theme,
       themeMode: themeMode,
       debugShowCheckedModeBanner: false,
