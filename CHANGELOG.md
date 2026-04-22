@@ -5,7 +5,31 @@ All notable changes to miToosa will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.4.0] — 2025-07-25
+## [Unreleased]
+
+## [1.5.0] — 2026-04-22
+
+### Added
+- **Aetheric Pulse Dark design system** — new `AethericPulseDark` token class: Inter font, blue `#3b82f6` + purple `#a855f7` palette, `#0a0d17` surface, 24px glass blur/radius
+- **KineticChip** — pill chip widget for stat labels (XP, streak, energy); purple 20% fill with 1px border
+- **KineticProgressBar** — 4px gradient progress bar with cyan glow; safe in unbounded contexts via `FractionallySizedBox`
+- **GlassCard neonGlow mode** — optional `blueGlow` shadow path for top-3 leaderboard rows and avatar rings
+- **AudioService.enabled** — runtime toggle gates all SFX playback; wired to Settings Sound FX toggle
+
+### Changed
+- **All screens redesigned** — LoginScreen, WorldMapScreen, ProgressScreen, LeaderboardScreen, SettingsScreen, MainAppShell updated to Aetheric Pulse Dark tokens
+- **KineticBackground** — surface updated to `#0a0d17`, single top-center blue radial glow replaces multi-gradient
+- **GlassCard** — 24px blur and radius, uniform 1px border, `cardOuter + cardInner` shadow pair
+- **MainAppShell nav bar** — 2px top-edge `gradPrimary` active indicator replaces bottom dot
+- **`AethericPulse` renamed** to `AethericPulseLight`; `MiToosaTheme.darkTheme` now returns `AethericPulseDark.themeData`
+- **`cardInner` shadow** alpha bumped `0x05` → `0x18` (2% → 9.4%, now perceptible)
+- **CTA button** in LoginScreen dims to 40% opacity when auth not yet ready
+
+### Fixed
+- Settings Sound FX toggle previously repainted `Switch` only; now calls `AudioService().enabled = v`
+- `_soundEffectsEnabled` moved from file-level global to `_SettingsBodyState` instance field
+- `Switch` in SettingsScreen wrapped in `Material(transparency)` to fix "No Material ancestor" error
+
 
 ### Added
 - **Difficulty tiers** — easy, medium, hard, challenge modes with puzzle timers and XP multipliers
