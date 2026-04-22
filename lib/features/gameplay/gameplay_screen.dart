@@ -16,6 +16,7 @@ import '../../core/music_service.dart';
 import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
 import '../../widgets/countdown_timer_widget.dart';
+import '../../widgets/feedback_toast.dart';
 import '../../widgets/hint_button.dart';
 import '../../widgets/how_to_play_modal.dart';
 import '../../widgets/run_timer_overlay.dart';
@@ -415,6 +416,27 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
 
   @override
   Widget build(BuildContext context) {
+    // Fire dopamine toast exactly once when phase transitions to Completed.
+    ref.listen(gameplayViewModelProvider(level), (prev, next) {
+      final wasCompleted = prev?.phase.isCompleted ?? false;
+      if (!wasCompleted && next.phase.isCompleted) {
+        final stars = level.stars(next.incorrectAttempts, hintUsed: next.hintUsed);
+        final earnedXP =
+            ProgressionEngine.computeXP(stars, hintUsed: next.hintUsed);
+        final headline = stars >= 4
+            ? 'IQ +1!'
+            : stars >= 2
+                ? 'Nice!'
+                : 'Got it';
+        FeedbackToast.show(
+          context,
+          headline: headline,
+          amount: '+$earnedXP XP',
+          icon: Icons.auto_awesome_rounded,
+        );
+      }
+    });
+
     final state = ref.watch(gameplayViewModelProvider(level));
     final theme = Theme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;

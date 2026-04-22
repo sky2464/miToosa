@@ -231,29 +231,39 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Opacity(
-                          opacity: canStart ? 1.0 : 0.4,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              gradient: AethericPulseDark.gradPrimary,
-                              borderRadius: BorderRadius.circular(AethericPulseDark.radiusPill),
-                              boxShadow: AethericPulseDark.blueGlow,
+                        Semantics(
+                          button: true,
+                          enabled: canStart,
+                          label: 'Get started. Begin training.',
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              minHeight: KineticObsidian.minTapTarget,
                             ),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                shadowColor: Colors.transparent,
-                                shape: const StadiumBorder(),
-                                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                              ),
-                              onPressed: canStart ? _performLogin : null,
-                              child: const Text(
-                                'Get Started',
-                                style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
+                            child: Opacity(
+                              opacity: canStart ? 1.0 : 0.4,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: AethericPulseDark.gradPrimary,
+                                  borderRadius: BorderRadius.circular(AethericPulseDark.radiusPill),
+                                  boxShadow: AethericPulseDark.blueGlow,
+                                ),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    shadowColor: Colors.transparent,
+                                    shape: const StadiumBorder(),
+                                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                                  ),
+                                  onPressed: canStart ? _performLogin : null,
+                                  child: const Text(
+                                    'Get Started',
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),

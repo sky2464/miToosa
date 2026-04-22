@@ -94,9 +94,14 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'PILOT_042',
-                      style: AethericPulseDark.bodyMd(color: AethericPulseDark.onSurface),
+                    Semantics(
+                      label: 'Anonymous pilot ID PILOT_042. Your progress is stored only on this device.',
+                      child: ExcludeSemantics(
+                        child: Text(
+                          'PILOT_042',
+                          style: AethericPulseDark.bodyMd(color: AethericPulseDark.onSurface),
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 2),
                     Text(
@@ -216,6 +221,22 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                     widget.progress.difficultyMode = enabled
                         ? DifficultyMode.adaptive
                         : DifficultyMode.standard;
+                    await ref
+                        .read(persistenceProvider)
+                        .saveProgress(widget.progress);
+                    ref.invalidate(playerProgressProvider);
+                  },
+                ),
+              ),
+              const Divider(height: 1, color: AethericPulseDark.glassBorder),
+              _SettingRow(
+                icon: Icons.contrast_rounded,
+                title: 'Appearance',
+                subtitle: 'System follows iOS; pick Light or Dark to override',
+                right: _ThemeModeSelector(
+                  value: widget.progress.themeModeOverride,
+                  onChanged: (v) async {
+                    widget.progress.themeModeOverride = v;
                     await ref
                         .read(persistenceProvider)
                         .saveProgress(widget.progress);
@@ -376,6 +397,71 @@ class _PurpleChip extends StatelessWidget {
         label.toUpperCase(),
         style: AethericPulseDark.label(color: AethericPulseDark.onSurface),
       ),
+    );
+  }
+}
+
+// ─── Theme mode selector ─────────────────────────────────────────────────────
+
+class _ThemeModeSelector extends StatelessWidget {
+  final int? value; // null/0 = system, 1 = light, 2 = dark
+  final ValueChanged<int?> onChanged;
+
+  const _ThemeModeSelector({required this.value, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    final current = value ?? 0;
+    Widget chip(int v, IconData icon, String label) {
+      final selected = current == v;
+      return Semantics(
+        button: true,
+        selected: selected,
+        label: '$label appearance',
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            minWidth: KineticObsidian.minTapTarget,
+            minHeight: KineticObsidian.minTapTarget,
+          ),
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => onChanged(v == 0 ? null : v),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: selected
+                    ? AethericPulseDark.brandBlue.withValues(alpha: 0.18)
+                    : Colors.transparent,
+                border: Border.all(
+                  color: selected
+                      ? AethericPulseDark.brandBlue.withValues(alpha: 0.45)
+                      : AethericPulseDark.glassBorder,
+                  width: 1,
+                ),
+                borderRadius:
+                    BorderRadius.circular(AethericPulseDark.radiusChip),
+              ),
+              child: Icon(icon,
+                  size: 16,
+                  color: selected
+                      ? AethericPulseDark.brandBlue
+                      : AethericPulseDark.onSurfaceMuted),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        chip(0, Icons.phone_iphone_rounded, 'System'),
+        const SizedBox(width: 6),
+        chip(1, Icons.light_mode_rounded, 'Light'),
+        const SizedBox(width: 6),
+        chip(2, Icons.dark_mode_rounded, 'Dark'),
+      ],
     );
   }
 }

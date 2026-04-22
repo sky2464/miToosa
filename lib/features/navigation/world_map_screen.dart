@@ -342,18 +342,31 @@ class _KineticButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        decoration: BoxDecoration(
-          gradient: AethericPulseDark.gradPrimary,
-          borderRadius: BorderRadius.circular(AethericPulseDark.radiusPill),
-          boxShadow: AethericPulseDark.blueGlow,
+    return Semantics(
+      button: true,
+      enabled: onTap != null,
+      label: label,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          minWidth: KineticObsidian.minTapTarget,
+          minHeight: KineticObsidian.minTapTarget,
         ),
-        child: Text(
-          label,
-          style: AethericPulseDark.label(color: AethericPulseDark.onSurface),
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              gradient: AethericPulseDark.gradPrimary,
+              borderRadius: BorderRadius.circular(AethericPulseDark.radiusPill),
+              boxShadow: AethericPulseDark.blueGlow,
+            ),
+            child: Text(
+              label,
+              style: AethericPulseDark.label(color: AethericPulseDark.onSurface),
+            ),
+          ),
         ),
       ),
     );
@@ -367,18 +380,30 @@ class _PlayButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-        decoration: BoxDecoration(
-          color: const Color(0x0DFFFFFF),
-          border: Border.all(color: const Color(0x1AFFFFFF), width: 1),
-          borderRadius: BorderRadius.circular(AethericPulseDark.radiusChip),
+    return Semantics(
+      button: true,
+      label: 'Play',
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          minWidth: KineticObsidian.minTapTarget,
+          minHeight: KineticObsidian.minTapTarget,
         ),
-        child: Text(
-          'Play',
-          style: AethericPulseDark.label(color: AethericPulseDark.onSurface),
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: const Color(0x0DFFFFFF),
+              border: Border.all(color: const Color(0x1AFFFFFF), width: 1),
+              borderRadius: BorderRadius.circular(AethericPulseDark.radiusChip),
+            ),
+            child: Text(
+              'Play',
+              style: AethericPulseDark.label(color: AethericPulseDark.onSurface),
+            ),
+          ),
         ),
       ),
     );

@@ -92,8 +92,8 @@ class _PathViewState extends State<_PathView> with TickerProviderStateMixin {
     final dx = viewportSize.width / 2 - nodeCenter.dx * targetScale;
     final dy = viewportSize.height / 2 - nodeCenter.dy * targetScale;
     return Matrix4.identity()
-      ..translate(dx, dy)
-      ..scale(targetScale);
+      ..translateByDouble(dx, dy, 0, 1)
+      ..scaleByDouble(targetScale, targetScale, 1, 1);
   }
 
   @override

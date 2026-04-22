@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../navigation/world_map_screen.dart';
+import '../navigation/world_map_path_screen.dart';
 import 'progress_screen.dart';
 import 'leaderboard_screen.dart';
 import '../../features/settings/settings_screen.dart';
@@ -25,6 +26,7 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
 
   static const _pages = [
     WorldMapScreen(),
+    WorldMapPathScreen(),
     ProgressScreen(),
     LeaderboardScreen(),
     SettingsScreen(),
@@ -58,8 +60,11 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AethericPulseDark.surface,
+      backgroundColor: isDark
+          ? AethericPulseDark.surface
+          : AethericPulseLight.lightSurface,
       extendBody: true,
       extendBodyBehindAppBar: true,
       body: KineticBackground(
@@ -75,7 +80,7 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
           ],
         ),
       ),
-      bottomNavigationBar: _GlassBottomNav(
+      bottomNavigationBar: _FloatingGlassNav(
         selectedIndex: _selectedIndex,
         onTap: (i) => setState(() => _selectedIndex = i),
       ),
@@ -91,39 +96,48 @@ class _TopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final top = MediaQuery.of(context).padding.top;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final surfaceTint = isDark ? const Color(0xA80B0E14) : const Color(0xCCFBFAFF);
+    final borderTint = isDark ? const Color(0x14FFFFFF) : const Color(0x1A1A1B2B);
     return ClipRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
           height: 56 + top,
           padding: EdgeInsets.only(top: top, left: 16, right: 16),
-          decoration: const BoxDecoration(
-            color: Color(0xA80B0E14),
-            border: Border(
-              bottom: BorderSide(color: Color(0x14FFFFFF), width: 1),
-            ),
+          decoration: BoxDecoration(
+            color: surfaceTint,
+            border: Border(bottom: BorderSide(color: borderTint, width: 1)),
           ),
           child: Row(
             children: [
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AethericPulseDark.brandBlue,
-                    width: 1,
-                  ),
-                  image: const DecorationImage(
-                    image: AssetImage('assets/images/avatars/avatar_4.png'),
-                    fit: BoxFit.cover,
+              Semantics(
+                label: 'Your avatar',
+                image: true,
+                child: Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: isDark
+                          ? AethericPulseDark.brandBlue
+                          : AethericPulseLight.softBlueDeep,
+                      width: 1,
+                    ),
+                    image: const DecorationImage(
+                      image: AssetImage('assets/images/avatars/avatar_4.png'),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
               const SizedBox(width: 10),
               ShaderMask(
-                shaderCallback: (bounds) =>
-                    AethericPulseDark.gradPrimary.createShader(bounds),
+                shaderCallback: (bounds) => (isDark
+                        ? AethericPulseDark.gradPrimary
+                        : AethericPulseLight.gradient)
+                    .createShader(bounds),
                 blendMode: BlendMode.srcIn,
                 child: const Text(
                   'MITOOSA',
@@ -153,49 +167,62 @@ class _CreditPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-      decoration: BoxDecoration(
-        color: AethericPulseDark.glassFill,
-        borderRadius: BorderRadius.circular(AethericPulseDark.radiusPill),
-        border: Border.all(color: AethericPulseDark.glassBorder, width: 1),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.stars_rounded,
-              size: 16, color: AethericPulseDark.brandBlue),
-          const SizedBox(width: 6),
-          Text(
-            '$value CR',
-            style: const TextStyle(
-              fontFamily: AethericPulseDark.fontBody,
-              fontFamilyFallback: AethericPulseDark.fontFallback,
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              letterSpacing: 0.84,
-              color: AethericPulseDark.brandBlue,
-            ),
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final accent =
+        isDark ? AethericPulseDark.brandBlue : AethericPulseLight.softBlueDeep;
+    return Semantics(
+      label: '$value credits',
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        decoration: BoxDecoration(
+          color: isDark
+              ? AethericPulseDark.glassFill
+              : AethericPulseLight.lightSurfaceContainer,
+          borderRadius: BorderRadius.circular(AethericPulseDark.radiusPill),
+          border: Border.all(
+            color: isDark
+                ? AethericPulseDark.glassBorder
+                : AethericPulseLight.lightOutlineVariant,
+            width: 1,
           ),
-        ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.stars_rounded, size: 16, color: accent),
+            const SizedBox(width: 6),
+            Text(
+              '$value CR',
+              style: TextStyle(
+                fontFamily: AethericPulseDark.fontBody,
+                fontFamilyFallback: AethericPulseDark.fontFallback,
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                letterSpacing: 0.84,
+                color: accent,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-// ─── Glass bottom navigation ──────────────────────────────────────────────────
+// ─── Floating glass bottom navigation ─────────────────────────────────────────
 
-class _GlassBottomNav extends StatelessWidget {
+class _FloatingGlassNav extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int> onTap;
 
-  const _GlassBottomNav({
+  const _FloatingGlassNav({
     required this.selectedIndex,
     required this.onTap,
   });
 
   static const _items = [
-    (icon: Icons.route_outlined, activeIcon: Icons.route, label: 'Tracks'),
+    (icon: Icons.dashboard_outlined, activeIcon: Icons.dashboard, label: 'Tracks'),
+    (icon: Icons.route_outlined, activeIcon: Icons.route, label: 'Path'),
     (icon: Icons.insights_outlined, activeIcon: Icons.insights, label: 'Progress'),
     (icon: Icons.leaderboard_outlined, activeIcon: Icons.leaderboard, label: 'Leaders'),
     (icon: Icons.settings_outlined, activeIcon: Icons.settings_rounded, label: 'Settings'),
@@ -203,34 +230,47 @@ class _GlassBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bottom = MediaQuery.of(context).padding.bottom;
-    return ClipRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
-        child: Container(
-          padding: EdgeInsets.only(
-            top: 10, left: 8, right: 8,
-            bottom: bottom > 0 ? bottom : 20,
-          ),
-          decoration: const BoxDecoration(
-            color: AethericPulseDark.surface,
-            border: Border(
-              top: BorderSide(color: Color(0x14FFFFFF), width: 1),
+    final bottomInset = MediaQuery.of(context).padding.bottom;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final navFill = isDark ? const Color(0xCC0A0D17) : const Color(0xCCFBFAFF);
+    final navBorder =
+        isDark ? const Color(0x26FFFFFF) : const Color(0x2A1A1B2B);
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        16,
+        0,
+        16,
+        bottomInset > 0 ? bottomInset + 6 : 18,
+      ),
+      child: ClipRRect(
+        borderRadius:
+            BorderRadius.circular(AethericPulseDark.radiusHeroCard),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+            decoration: BoxDecoration(
+              color: navFill,
+              border: Border.all(color: navBorder, width: 1),
+              borderRadius:
+                  BorderRadius.circular(AethericPulseDark.radiusHeroCard),
+              boxShadow: isDark
+                  ? AethericPulseDark.cardOuter
+                  : AethericPulseLight.shadowSoftBlue,
             ),
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              for (var i = 0; i < _items.length; i++)
-                _NavItem(
-                  icon: _items[i].icon,
-                  activeIcon: _items[i].activeIcon,
-                  label: _items[i].label,
-                  isActive: selectedIndex == i,
-                  onTap: () => onTap(i),
-                ),
-            ],
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                for (var i = 0; i < _items.length; i++)
+                  _NavItem(
+                    icon: _items[i].icon,
+                    activeIcon: _items[i].activeIcon,
+                    label: _items[i].label,
+                    isActive: selectedIndex == i,
+                    onTap: () => onTap(i),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
@@ -255,52 +295,72 @@ class _NavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isActive
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final activeColor = isDark
         ? AethericPulseDark.brandBlue
-        : AethericPulseDark.onSurfaceMuted;
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: AethericPulseDark.durHover,
-        curve: Curves.easeOutCubic,
-        padding: EdgeInsets.symmetric(
-          horizontal: isActive ? 14 : 10,
-          vertical: 6,
+        : AethericPulseLight.softBlueDeep;
+    final inactiveColor = isDark
+        ? AethericPulseDark.onSurfaceMuted
+        : AethericPulseLight.lightOnSurfaceVariant;
+    final activeFill = isDark
+        ? AethericPulseDark.brandBlue.withValues(alpha: 0.10)
+        : AethericPulseLight.softBlue.withValues(alpha: 0.10);
+    final activeBorder = isDark
+        ? AethericPulseDark.brandBlue.withValues(alpha: 0.35)
+        : AethericPulseLight.softBlue.withValues(alpha: 0.35);
+    return Semantics(
+      button: true,
+      selected: isActive,
+      label: '$label tab',
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          minWidth: KineticObsidian.minTapTarget,
+          minHeight: KineticObsidian.minTapTarget,
         ),
-        color: Colors.transparent,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (isActive)
-              Container(
-                height: 2,
-                width: 32,
-                decoration: const BoxDecoration(
-                  gradient: AethericPulseDark.gradPrimary,
-                  boxShadow: AethericPulseDark.blueGlow,
-                ),
-              )
-            else
-              const SizedBox(height: 2),
-            const SizedBox(height: 6),
-            Icon(
-              isActive ? activeIcon : icon,
-              size: 20,
-              color: color,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: onTap,
+          child: AnimatedContainer(
+            duration: AethericPulseDark.durHover,
+            curve: Curves.easeOutCubic,
+            padding: EdgeInsets.symmetric(
+              horizontal: isActive ? 14 : 10,
+              vertical: 8,
             ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontFamily: AethericPulseDark.fontBody,
-                fontFamilyFallback: AethericPulseDark.fontFallback,
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1.0,
-                color: color,
+            decoration: BoxDecoration(
+              color: isActive ? activeFill : Colors.transparent,
+              border: Border.all(
+                color: isActive ? activeBorder : Colors.transparent,
+                width: 1,
               ),
+              borderRadius:
+                  BorderRadius.circular(KineticObsidian.radiusPillow),
+              boxShadow:
+                  isActive ? (isDark ? AethericPulseDark.blueGlow : null) : null,
             ),
-          ],
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  isActive ? activeIcon : icon,
+                  size: 22,
+                  color: isActive ? activeColor : inactiveColor,
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontFamily: AethericPulseDark.fontBody,
+                    fontFamilyFallback: AethericPulseDark.fontFallback,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.0,
+                    color: isActive ? activeColor : inactiveColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
