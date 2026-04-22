@@ -1,27 +1,29 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:mitoosa/theme/design_system.dart';
 
-/// A sleek, glassmorphic container for the Aetheric Pulse theme.
+import '../theme/design_system.dart';
+
+/// Kinetic Obsidian glass card.
+/// 50% surface-container fill, 16 px backdrop blur, top/left lit edge.
 class GlassCard extends StatelessWidget {
   final Widget child;
   final double borderRadius;
   final EdgeInsetsGeometry padding;
-  final BoxBorder? border;
+  final List<BoxShadow>? boxShadow;
+  final bool neonGlow;
 
   const GlassCard({
     super.key,
     required this.child,
-    this.borderRadius = MiToosaTheme.radiusLg,
-    this.padding = const EdgeInsets.all(MiToosaTheme.spacingMd),
-    this.border,
+    this.borderRadius = KineticObsidian.radiusLg,
+    this.padding = const EdgeInsets.all(KineticObsidian.spaceMd),
+    this.boxShadow,
+    this.neonGlow = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius),
       child: BackdropFilter(
@@ -29,17 +31,16 @@ class GlassCard extends StatelessWidget {
         child: Container(
           padding: padding,
           decoration: BoxDecoration(
-            color: isDark 
-                ? Colors.white.withValues(alpha: 0.05) 
-                : Colors.white.withValues(alpha: 0.6),
+            color: KineticObsidian.glassFill,
             borderRadius: BorderRadius.circular(borderRadius),
-            border: border ??
-                Border.all(
-                  color: isDark 
-                      ? Colors.white.withValues(alpha: 0.1) 
-                      : Colors.white.withValues(alpha: 0.3),
-                  width: 1.5,
-                ),
+            border: const Border(
+              top: BorderSide(color: KineticObsidian.glassBorderBright, width: 1),
+              left: BorderSide(color: KineticObsidian.glassBorderBright, width: 1),
+              right: BorderSide(color: KineticObsidian.glassBorderDim, width: 1),
+              bottom: BorderSide(color: KineticObsidian.glassBorderDim, width: 1),
+            ),
+            boxShadow: boxShadow ??
+                (neonGlow ? KineticObsidian.shadowNeonSoft : null),
           ),
           child: child,
         ),
