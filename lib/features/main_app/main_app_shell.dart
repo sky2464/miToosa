@@ -59,7 +59,7 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: KineticObsidian.surface,
+      backgroundColor: AethericPulseDark.surface,
       extendBody: true,
       extendBodyBehindAppBar: true,
       body: KineticBackground(
@@ -111,7 +111,7 @@ class _TopBar extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: KineticObsidian.electricCyan,
+                    color: AethericPulseDark.brandBlue,
                     width: 1,
                   ),
                   image: const DecorationImage(
@@ -123,11 +123,13 @@ class _TopBar extends StatelessWidget {
               const SizedBox(width: 10),
               ShaderMask(
                 shaderCallback: (bounds) =>
-                    KineticObsidian.kineticGradient.createShader(bounds),
+                    AethericPulseDark.gradPrimary.createShader(bounds),
                 blendMode: BlendMode.srcIn,
-                child: Text(
+                child: const Text(
                   'MITOOSA',
-                  style: TextStyle(fontFamily: KineticObsidian.fontDisplay, fontFamilyFallback: KineticObsidian.fontFallback, 
+                  style: TextStyle(
+                    fontFamily: AethericPulseDark.fontBody,
+                    fontFamilyFallback: AethericPulseDark.fontFallback,
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 0.9,
@@ -136,7 +138,7 @@ class _TopBar extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              _CreditPill(value: '1,250'),
+              const _CreditPill(value: '1,250'),
             ],
           ),
         ),
@@ -154,23 +156,25 @@ class _CreditPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
-        color: KineticObsidian.surfaceContainer,
-        borderRadius: BorderRadius.circular(KineticObsidian.radiusFull),
-        border: Border.all(color: KineticObsidian.outlineVariant, width: 1),
+        color: AethericPulseDark.glassFill,
+        borderRadius: BorderRadius.circular(AethericPulseDark.radiusPill),
+        border: Border.all(color: AethericPulseDark.glassBorder, width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           const Icon(Icons.stars_rounded,
-              size: 16, color: KineticObsidian.electricCyan),
+              size: 16, color: AethericPulseDark.brandBlue),
           const SizedBox(width: 6),
           Text(
             '$value CR',
-            style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
+            style: const TextStyle(
+              fontFamily: AethericPulseDark.fontBody,
+              fontFamilyFallback: AethericPulseDark.fontFallback,
               fontSize: 12,
               fontWeight: FontWeight.w500,
               letterSpacing: 0.84,
-              color: KineticObsidian.electricCyan,
+              color: AethericPulseDark.brandBlue,
             ),
           ),
         ],
@@ -209,7 +213,7 @@ class _GlassBottomNav extends StatelessWidget {
             bottom: bottom > 0 ? bottom : 20,
           ),
           decoration: const BoxDecoration(
-            color: Color(0xB30B0E14),
+            color: AethericPulseDark.surface,
             border: Border(
               top: BorderSide(color: Color(0x14FFFFFF), width: 1),
             ),
@@ -251,48 +255,49 @@ class _NavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final color = isActive
+        ? AethericPulseDark.brandBlue
+        : AethericPulseDark.onSurfaceMuted;
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: KineticObsidian.durMed,
-        curve: KineticObsidian.easeOut,
+        duration: AethericPulseDark.durHover,
+        curve: Curves.easeOutCubic,
         padding: EdgeInsets.symmetric(
           horizontal: isActive ? 14 : 10,
           vertical: 6,
         ),
-        decoration: BoxDecoration(
-          color: isActive
-              ? KineticObsidian.electricCyan.withValues(alpha: 0.10)
-              : Colors.transparent,
-          border: Border.all(
-            color: isActive
-                ? KineticObsidian.electricCyan.withValues(alpha: 0.30)
-                : Colors.transparent,
-            width: 1,
-          ),
-          borderRadius: BorderRadius.circular(KineticObsidian.radiusLg),
-          boxShadow: isActive ? KineticObsidian.shadowNeonSoft : null,
-        ),
+        color: Colors.transparent,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            if (isActive)
+              Container(
+                height: 2,
+                width: 32,
+                decoration: const BoxDecoration(
+                  gradient: AethericPulseDark.gradPrimary,
+                  boxShadow: AethericPulseDark.blueGlow,
+                ),
+              )
+            else
+              const SizedBox(height: 2),
+            const SizedBox(height: 6),
             Icon(
               isActive ? activeIcon : icon,
               size: 20,
-              color: isActive
-                  ? KineticObsidian.electricCyan
-                  : KineticObsidian.outline,
+              color: color,
             ),
             const SizedBox(height: 4),
             Text(
               label,
-              style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
+              style: TextStyle(
+                fontFamily: AethericPulseDark.fontBody,
+                fontFamilyFallback: AethericPulseDark.fontFallback,
                 fontSize: 10,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1.0,
-                color: isActive
-                    ? KineticObsidian.electricCyan
-                    : KineticObsidian.outline,
+                color: color,
               ),
             ),
           ],

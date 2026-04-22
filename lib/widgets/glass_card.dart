@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 import '../theme/design_system.dart';
 
-/// Kinetic Obsidian glass card.
-/// 50% surface-container fill, 16 px backdrop blur, top/left lit edge.
+/// Aetheric Pulse glass card.
+/// rgba(255,255,255,0.08) fill, 24px backdrop blur, uniform 1px border,
+/// outer drop shadow + inner white glow. Default radius 24px.
 class GlassCard extends StatelessWidget {
   final Widget child;
   final double borderRadius;
@@ -16,31 +17,29 @@ class GlassCard extends StatelessWidget {
   const GlassCard({
     super.key,
     required this.child,
-    this.borderRadius = KineticObsidian.radiusLg,
-    this.padding = const EdgeInsets.all(KineticObsidian.spaceMd),
+    this.borderRadius = AethericPulseDark.radiusCard,
+    this.padding = const EdgeInsets.all(AethericPulseDark.spaceLg),
     this.boxShadow,
     this.neonGlow = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final shadows = boxShadow ??
+        (neonGlow
+            ? AethericPulseDark.blueGlow
+            : [...AethericPulseDark.cardOuter, ...AethericPulseDark.cardInner]);
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+        filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
         child: Container(
           padding: padding,
           decoration: BoxDecoration(
-            color: KineticObsidian.glassFill,
+            color: AethericPulseDark.glassFill,
             borderRadius: BorderRadius.circular(borderRadius),
-            border: const Border(
-              top: BorderSide(color: KineticObsidian.glassBorderBright, width: 1),
-              left: BorderSide(color: KineticObsidian.glassBorderBright, width: 1),
-              right: BorderSide(color: KineticObsidian.glassBorderDim, width: 1),
-              bottom: BorderSide(color: KineticObsidian.glassBorderDim, width: 1),
-            ),
-            boxShadow: boxShadow ??
-                (neonGlow ? KineticObsidian.shadowNeonSoft : null),
+            border: Border.all(color: AethericPulseDark.glassBorder, width: 1),
+            boxShadow: shadows,
           ),
           child: child,
         ),

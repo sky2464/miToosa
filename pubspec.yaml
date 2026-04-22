@@ -76,3 +76,6 @@ flutter:
         - asset: assets/fonts/Exo2-Variable.ttf
         - asset: assets/fonts/Exo2-Italic-Variable.ttf
           style: italic
+    - family: 'Inter'
+      fonts:
+        - asset: assets/fonts/Inter[slnt,wght].ttf

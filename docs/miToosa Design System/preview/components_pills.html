@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  html,body{margin:0;padding:0;background:var(--bg-app);color:var(--fg-1);}
+  .wrap{padding:22px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .pill{display:inline-flex;align-items:center;gap:8px;background:var(--bg-card);border:1px solid var(--border-card);backdrop-filter:blur(12px);border-radius:999px;padding:8px 14px;font:var(--t-label);color:var(--fg-1);}
+  .pill .num{font-weight:800;font-size:14px;}
+  .pill .lbl{font-weight:500;color:var(--fg-3);font-size:12px;}
+  .ico{width:18px;height:18px;border-radius:5px;display:grid;place-items:center;font-size:11px;color:#fff;}
+  .meta{font:var(--t-body-sm);color:var(--fg-3);font-family:var(--font-mono);width:100%;margin-top:4px;}
+</style></head>
+<body class="ds-bg">
+<div class="wrap">
+  <div class="pill"><span class="ico" style="background:var(--grad-cool);">◆</span><span class="num">250</span></div>
+  <div class="pill"><span class="ico" style="background:var(--grad-warm);">⚡</span><span class="num">10/10</span> <span class="lbl">Energy</span></div>
+  <div class="pill" style="box-shadow:var(--shadow-glow-orange);"><span class="ico" style="background:linear-gradient(135deg,#fb923c,#ef4444);">🔥</span><span class="num">7</span> <span class="lbl">Day Streak</span></div>
+  <div class="meta">Stat pills: glass · pill radius · gradient glyph + tabular num + muted label</div>
+</div>
+</body></html>

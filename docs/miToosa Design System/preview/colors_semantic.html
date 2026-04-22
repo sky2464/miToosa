@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  html,body{margin:0;padding:0;background:var(--bg-app);color:var(--fg-1);}
+  .wrap{padding:18px 22px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .row{display:flex;align-items:center;gap:10px;}
+  .dot{width:18px;height:18px;border-radius:6px;flex-shrink:0;}
+  .name{font:var(--t-label);text-transform:uppercase;letter-spacing:.06em;color:var(--fg-1);}
+  .meta{font:var(--t-body-sm);color:var(--fg-3);font-family:var(--font-mono);}
+</style></head>
+<body class="ds-bg">
+<div class="wrap">
+  <div><div class="row"><div class="dot" style="background:#22c55e"></div><div class="name">success</div></div><div class="meta">#22c55e</div></div>
+  <div><div class="row"><div class="dot" style="background:#facc15"></div><div class="name">warning</div></div><div class="meta">#facc15</div></div>
+  <div><div class="row"><div class="dot" style="background:#ef4444"></div><div class="name">danger</div></div><div class="meta">#ef4444</div></div>
+  <div><div class="row"><div class="dot" style="background:#3b82f6"></div><div class="name">info</div></div><div class="meta">#3b82f6</div></div>
+</div>
+</body></html>

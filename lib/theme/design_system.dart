@@ -305,7 +305,7 @@ extension KineticObsidianSemantics on KineticObsidian {
 // ── Alias so old code using MiToosaTheme compiles unchanged ──────────────────
 class MiToosaTheme extends KineticObsidian {
   // Theme aliases for tests / legacy callers.
-  static ThemeData get darkTheme => KineticObsidian.theme;
+  static ThemeData get darkTheme => AethericPulseDark.themeData;
   static ThemeData get lightTheme => AethericPulseLight.lightTheme;
 
   // Semantic colors

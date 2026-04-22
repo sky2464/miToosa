@@ -5,9 +5,12 @@ import '../../data/player_progress.dart';
 import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
 import '../../widgets/glass_card.dart';
-import '../../widgets/kinetic_text.dart';
+import '../../widgets/kinetic_background.dart';
+import '../../widgets/kinetic_chip.dart';
+import '../../widgets/kinetic_progress_bar.dart';
+import '../../widgets/kinetic_text.dart' hide KineticProgressBar;
 
-// ─── Progress screen — Kinetic Obsidian ───────────────────────────────────────
+// ─── Progress screen — Aetheric Pulse ────────────────────────────────────────
 
 class ProgressScreen extends ConsumerWidget {
   const ProgressScreen({super.key});
@@ -15,12 +18,14 @@ class ProgressScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final progressAsync = ref.watch(playerProgressProvider);
-    return progressAsync.when(
-      loading: () => const Center(
-          child: CircularProgressIndicator(color: KineticObsidian.electricCyan)),
-      error: (e, _) => Center(
-          child: Text('Error', style: Theme.of(context).textTheme.bodyMedium)),
-      data: (progress) => _ProgressBody(progress: progress),
+    return KineticBackground(
+      child: progressAsync.when(
+        loading: () => const Center(
+            child: CircularProgressIndicator(color: AethericPulseDark.brandBlue)),
+        error: (e, _) => Center(
+            child: Text('Error', style: Theme.of(context).textTheme.bodyMedium)),
+        data: (progress) => _ProgressBody(progress: progress),
+      ),
     );
   }
 }
@@ -35,63 +40,51 @@ class _ProgressBody extends StatelessWidget {
     final levelXp = xp % 1000;
     final levelPct = levelXp / 10.0;
     final level = (xp ~/ 1000) + 1;
+    final totalStars = progress.levelStars.values.fold(0, (a, b) => a + b);
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(
-        KineticObsidian.spaceGutter,
-        KineticObsidian.spaceMd,
-        KineticObsidian.spaceGutter,
-        KineticObsidian.spaceLg + 80,
+        AethericPulseDark.spaceLg,
+        AethericPulseDark.spaceLg,
+        AethericPulseDark.spaceLg,
+        AethericPulseDark.spaceXl + 80,
       ),
       children: [
         // XP Hero
         _XpHero(xp: xp, levelPct: levelPct, level: level),
         const SizedBox(height: 16),
-        // 2×2 stat grid
-        Row(
+        // Stats chips row
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
           children: [
-            Expanded(
-                child: _StatTile(
-              icon: Icons.local_fire_department,
-              value: '${progress.streakCount}',
-              label: 'Day Streak',
-              iconColor: const Color(0xFFFFB4AB),
-            )),
-            const SizedBox(width: 12),
-            Expanded(
-                child: _StatTile(
-              icon: Icons.military_tech,
-              value: '${progress.levelStars.values.fold(0, (a, b) => a + b)}',
-              label: 'Stars',
-              iconColor: KineticObsidian.electricCyan,
-            )),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-                child: _StatTile(
-              icon: Icons.diamond_outlined,
-              value: '${progress.diamonds}',
-              label: 'Credits',
-              iconColor: KineticObsidian.primaryFixed,
-            )),
-            const SizedBox(width: 12),
-            Expanded(
-                child: _StatTile(
-              icon: Icons.bolt,
-              value: '${progress.hearts}',
-              label: 'Energy',
-              iconColor: KineticObsidian.secondaryFixedDim,
-            )),
+            KineticChip(
+              label: '${progress.streakCount} day streak',
+              leading: const Icon(Icons.local_fire_department, size: 12,
+                  color: Color(0xFFFFB4AB)),
+            ),
+            KineticChip(
+              label: '$xp XP',
+              color: AethericPulseDark.brandBlue,
+            ),
+            KineticChip(
+              label: '$totalStars stars',
+              leading: const Icon(Icons.military_tech, size: 12,
+                  color: AethericPulseDark.accentCyan),
+            ),
+            KineticChip(
+              label: '${progress.hearts} energy',
+              leading: const Icon(Icons.bolt, size: 12,
+                  color: AethericPulseDark.brandPurple),
+              color: AethericPulseDark.brandPurple,
+            ),
           ],
         ),
         const SizedBox(height: 16),
         // Cognitive skills
         _SkillsCard(progress: progress),
         const SizedBox(height: 16),
-        // Achievements
+        // Achievements / badges
         _AchievementsCard(progress: progress),
       ],
     );
@@ -110,8 +103,8 @@ class _XpHero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GlassCard(
-      borderRadius: KineticObsidian.radiusXl,
-      padding: const EdgeInsets.all(KineticObsidian.spaceMd),
+      borderRadius: AethericPulseDark.radiusCard,
+      padding: const EdgeInsets.all(AethericPulseDark.spaceLg),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -125,7 +118,7 @@ class _XpHero extends StatelessWidget {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    KineticObsidian.protonPurple.withValues(alpha: 0.25),
+                    AethericPulseDark.brandPurple.withValues(alpha: 0.25),
                     Colors.transparent,
                   ],
                 ),
@@ -137,23 +130,12 @@ class _XpHero extends StatelessWidget {
             children: [
               Text(
                 'TOTAL XP',
-                style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                  letterSpacing: 0.48,
-                  color: KineticObsidian.onSurfaceVariant,
-                ),
+                style: AethericPulseDark.label(color: AethericPulseDark.onSurfaceMuted),
               ),
               const SizedBox(height: 6),
               KineticText(
                 _formatXp(xp),
-                style: TextStyle(fontFamily: KineticObsidian.fontDisplay, fontFamilyFallback: KineticObsidian.fontFallback, 
-                  fontSize: 44,
-                  fontWeight: FontWeight.w600,
-                  height: 1.0,
-                  letterSpacing: 2.2,
-                  color: Colors.white,
-                ),
+                style: AethericPulseDark.display(),
               ),
               const SizedBox(height: 16),
               Row(
@@ -161,26 +143,16 @@ class _XpHero extends StatelessWidget {
                 children: [
                   Text(
                     'Level $level · Next',
-                    style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      letterSpacing: 0.48,
-                      color: KineticObsidian.onSurfaceVariant,
-                    ),
+                    style: AethericPulseDark.headlineMd(),
                   ),
                   Text(
                     '${levelPct.toStringAsFixed(0)}%',
-                    style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      letterSpacing: 0.48,
-                      color: KineticObsidian.electricCyan,
-                    ),
+                    style: AethericPulseDark.label(color: AethericPulseDark.brandBlue),
                   ),
                 ],
               ),
               const SizedBox(height: 6),
-              KineticProgressBar(percent: levelPct, height: 4),
+              KineticProgressBar(value: levelPct / 100.0, height: 4),
             ],
           ),
         ],
@@ -193,69 +165,6 @@ class _XpHero extends StatelessWidget {
       return '${(xp / 1000).toStringAsFixed(1).replaceAll('.0', '')},${(xp % 1000).toString().padLeft(3, '0')}';
     }
     return '$xp';
-  }
-}
-
-// ─── Stat tile ────────────────────────────────────────────────────────────────
-
-class _StatTile extends StatelessWidget {
-  final IconData icon;
-  final String value;
-  final String label;
-  final Color iconColor;
-
-  const _StatTile({
-    required this.icon,
-    required this.value,
-    required this.label,
-    required this.iconColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GlassCard(
-      borderRadius: KineticObsidian.radiusXl,
-      padding: const EdgeInsets.all(18),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: KineticObsidian.surfaceContainerHigh,
-              borderRadius: BorderRadius.circular(KineticObsidian.radiusLg),
-              border: Border.all(color: KineticObsidian.outlineVariant, width: 1),
-              boxShadow: const [
-                BoxShadow(color: Color(0x80000000), blurRadius: 8),
-              ],
-            ),
-            child: Center(child: Icon(icon, size: 22, color: iconColor)),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            value,
-            style: TextStyle(fontFamily: KineticObsidian.fontDisplay, fontFamilyFallback: KineticObsidian.fontFallback, 
-              fontSize: 22,
-              fontWeight: FontWeight.w500,
-              height: 1.0,
-              letterSpacing: 0.88,
-              color: KineticObsidian.onSurface,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            label.toUpperCase(),
-            style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-              fontSize: 10,
-              fontWeight: FontWeight.w400,
-              letterSpacing: 0.8,
-              color: KineticObsidian.onSurfaceVariant,
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }
 
@@ -274,15 +183,15 @@ class _SkillsCard extends StatelessWidget {
     final speedPct = _pctFromHistory(history, 3);
 
     return GlassCard(
-      borderRadius: KineticObsidian.radiusXl,
-      padding: const EdgeInsets.all(20),
+      borderRadius: AethericPulseDark.radiusCard,
+      padding: const EdgeInsets.all(AethericPulseDark.spaceLg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               const Icon(Icons.psychology_outlined,
-                  size: 22, color: KineticObsidian.electricCyan),
+                  size: 22, color: AethericPulseDark.accentCyan),
               const SizedBox(width: 8),
               Text('Cognitive Skills',
                   style: Theme.of(context).textTheme.headlineMedium),
@@ -330,24 +239,16 @@ class _SkillBar extends StatelessWidget {
           children: [
             Text(
               name.toUpperCase(),
-              style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-                fontSize: 11, fontWeight: FontWeight.w400,
-                letterSpacing: 0.66,
-                color: KineticObsidian.onSurfaceVariant,
-              ),
+              style: AethericPulseDark.label(color: AethericPulseDark.onSurfaceMuted),
             ),
             Text(
               value,
-              style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-                fontSize: 11, fontWeight: FontWeight.w400,
-                letterSpacing: 0.44,
-                color: KineticObsidian.electricCyan,
-              ),
+              style: AethericPulseDark.label(color: AethericPulseDark.brandBlue),
             ),
           ],
         ),
         const SizedBox(height: 6),
-        KineticProgressBar(percent: pct, height: 3),
+        KineticProgressBar(value: pct / 100.0, height: 3),
       ],
     );
   }
@@ -382,11 +283,29 @@ class _AchievementsCard extends StatelessWidget {
         sub: 'Earn 25 stars',
         id: 'focus_master',
       ),
+      (
+        img: 'assets/images/badges/memory_marvel.png',
+        title: 'Memory Marvel',
+        sub: 'Perfect score on a memory level',
+        id: 'memory_marvel',
+      ),
+      (
+        img: 'assets/images/badges/logic_legend.png',
+        title: 'Logic Legend',
+        sub: 'Complete all logic challenges',
+        id: 'logic_legend',
+      ),
+      (
+        img: 'assets/images/badges/ultimate_brain.png',
+        title: 'Ultimate Brain',
+        sub: 'Reach the top of every track',
+        id: 'ultimate_brain',
+      ),
     ];
 
     return GlassCard(
-      borderRadius: KineticObsidian.radiusXl,
-      padding: const EdgeInsets.all(20),
+      borderRadius: AethericPulseDark.radiusCard,
+      padding: const EdgeInsets.all(AethericPulseDark.spaceLg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -401,7 +320,7 @@ class _AchievementsCard extends StatelessWidget {
               unlocked: unlocked.contains(badges[i].id),
             ),
             if (i < badges.length - 1)
-              const Divider(height: 1, color: Color(0x0DFFFFFF)),
+              const Divider(height: 1, color: AethericPulseDark.glassBorder),
           ],
         ],
       ),
@@ -431,12 +350,7 @@ class _AchievementRow extends StatelessWidget {
           ColorFiltered(
             colorFilter: unlocked
                 ? const ColorFilter.mode(Colors.transparent, BlendMode.saturation)
-                : const ColorFilter.matrix([
-                    0.2126, 0.7152, 0.0722, 0, 0,
-                    0.2126, 0.7152, 0.0722, 0, 0,
-                    0.2126, 0.7152, 0.0722, 0, 0,
-                    0,      0,      0,      0.35, 0,
-                  ]),
+                : const ColorFilter.mode(Colors.grey, BlendMode.saturation),
             child: Image.asset(img, width: 48, height: 48, fit: BoxFit.contain),
           ),
           const SizedBox(width: 14),
@@ -446,14 +360,12 @@ class _AchievementRow extends StatelessWidget {
               children: [
                 Text(
                   title.toUpperCase(),
-                  style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-                    fontSize: 13, fontWeight: FontWeight.w500,
-                    letterSpacing: 0.78,
-                    color: KineticObsidian.onSurface,
-                  ),
+                  style: AethericPulseDark.label(color: AethericPulseDark.onSurface),
                 ),
                 const SizedBox(height: 2),
-                Text(sub, style: Theme.of(context).textTheme.bodySmall),
+                Text(sub,
+                    style: AethericPulseDark.label(
+                        color: AethericPulseDark.onSurfaceMuted)),
               ],
             ),
           ),
@@ -461,21 +373,20 @@ class _AchievementRow extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
-                color: const Color(0x1F00F0FF),
-                border: Border.all(color: const Color(0x4D00F0FF), width: 1),
-                borderRadius: BorderRadius.circular(KineticObsidian.radiusFull),
+                color: AethericPulseDark.brandBlue.withValues(alpha: 0.12),
+                border: Border.all(
+                    color: AethericPulseDark.brandBlue.withValues(alpha: 0.30),
+                    width: 1),
+                borderRadius: BorderRadius.circular(AethericPulseDark.radiusPill),
               ),
               child: Text(
                 'UNLOCKED',
-                style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-                  fontSize: 10, fontWeight: FontWeight.w500,
-                  letterSpacing: 0.8,
-                  color: KineticObsidian.electricCyan,
-                ),
+                style: AethericPulseDark.label(color: AethericPulseDark.brandBlue),
               ),
             )
           else
-            Icon(Icons.lock_outline, size: 18, color: KineticObsidian.outline),
+            const Icon(Icons.lock_outline, size: 18,
+                color: AethericPulseDark.onSurfaceMuted),
         ],
       ),
     );

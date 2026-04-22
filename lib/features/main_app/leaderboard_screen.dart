@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../theme/design_system.dart';
 import '../../widgets/glass_card.dart';
+import '../../widgets/kinetic_background.dart';
 import '../../widgets/kinetic_text.dart';
 
-// ─── Leaderboard screen — Kinetic Obsidian ────────────────────────────────────
+// ─── Leaderboard screen — Aetheric Pulse ─────────────────────────────────────
 
 class LeaderboardScreen extends StatefulWidget {
   const LeaderboardScreen({super.key});
@@ -30,91 +31,83 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(
-        KineticObsidian.spaceGutter,
-        KineticObsidian.spaceMd,
-        KineticObsidian.spaceGutter,
-        KineticObsidian.spaceLg + 80,
-      ),
-      children: [
-        // Header
-        GlassCard(
-          borderRadius: KineticObsidian.radiusXl,
-          padding: const EdgeInsets.all(20),
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Positioned.fill(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(KineticObsidian.radiusXl),
-                    gradient: RadialGradient(
-                      center: Alignment.topRight,
-                      radius: 1.0,
-                      colors: [
-                        KineticObsidian.protonPurple.withValues(alpha: 0.15),
-                        Colors.transparent,
-                      ],
+    return KineticBackground(
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(
+          AethericPulseDark.spaceLg,
+          AethericPulseDark.spaceMd,
+          AethericPulseDark.spaceLg,
+          AethericPulseDark.spaceXl + 80,
+        ),
+        children: [
+          // Header
+          GlassCard(
+            borderRadius: AethericPulseDark.radiusCard,
+            padding: const EdgeInsets.all(20),
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(AethericPulseDark.radiusCard),
+                      gradient: RadialGradient(
+                        center: Alignment.topRight,
+                        radius: 1.0,
+                        colors: [
+                          AethericPulseDark.brandPurple.withValues(alpha: 0.15),
+                          Colors.transparent,
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'WEEKLY · GLOBAL',
-                    style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-                      fontSize: 11, fontWeight: FontWeight.w400,
-                      letterSpacing: 0.88,
-                      color: KineticObsidian.electricCyan,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'WEEKLY · GLOBAL',
+                      style: AethericPulseDark.label(
+                        color: AethericPulseDark.brandBlue,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  KineticText(
-                    'Leaderboard',
-                    style: TextStyle(fontFamily: KineticObsidian.fontDisplay, fontFamilyFallback: KineticObsidian.fontFallback, 
-                      fontSize: 28, fontWeight: FontWeight.w500,
-                      letterSpacing: 1.12,
-                      color: Colors.white,
+                    const SizedBox(height: 4),
+                    KineticText(
+                      'Leaderboard',
+                      style: AethericPulseDark.headlineLg(),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-        const SizedBox(height: 16),
-        // Filter tabs
-        Row(
-          children: [
-            for (var i = 0; i < _filters.length; i++) ...[
-              Expanded(child: _FilterTab(
-                label: _filters[i],
-                isActive: _filterIndex == i,
-                onTap: () => setState(() => _filterIndex = i),
-              )),
-              if (i < _filters.length - 1) const SizedBox(width: 8),
-            ],
-          ],
-        ),
-        const SizedBox(height: 16),
-        // Rank list
-        GlassCard(
-          borderRadius: KineticObsidian.radiusXl,
-          padding: const EdgeInsets.all(14),
-          child: Column(
+          const SizedBox(height: 16),
+          // Filter tabs
+          Row(
             children: [
-              for (var i = 0; i < _rows.length; i++) ...[
-                _RankRow(data: _rows[i]),
-                if (i < _rows.length - 1)
-                  const Divider(height: 1, color: Color(0x0AFFFFFF)),
+              for (var i = 0; i < _filters.length; i++) ...[
+                Expanded(child: _FilterTab(
+                  label: _filters[i],
+                  isActive: _filterIndex == i,
+                  onTap: () => setState(() => _filterIndex = i),
+                )),
+                if (i < _filters.length - 1) const SizedBox(width: 8),
               ],
             ],
           ),
-        ),
-      ],
+          const SizedBox(height: 16),
+          // Rank list — each row in its own GlassCard; top-3 get blueGlow
+          for (var i = 0; i < _rows.length; i++) ...[
+            GlassCard(
+              neonGlow: _rows[i].rank <= 3,
+              borderRadius: AethericPulseDark.radiusWell,
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+              child: _RankRow(data: _rows[i]),
+            ),
+            if (i < _rows.length - 1) const SizedBox(height: 8),
+          ],
+        ],
+      ),
     );
   }
 }
@@ -135,23 +128,19 @@ class _FilterTab extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
-          gradient: isActive ? KineticObsidian.kineticGradient : null,
-          color: isActive ? null : const Color(0x801D2026),
+          gradient: isActive ? AethericPulseDark.gradPrimary : null,
+          color: isActive ? null : AethericPulseDark.glassFill,
           border: isActive
               ? null
-              : Border.all(color: KineticObsidian.outlineVariant, width: 1),
-          borderRadius: BorderRadius.circular(KineticObsidian.radiusLg),
-          boxShadow: isActive ? KineticObsidian.shadowNeonSoft : null,
+              : Border.all(color: AethericPulseDark.glassBorder, width: 1),
+          borderRadius: BorderRadius.circular(AethericPulseDark.radiusChip),
+          boxShadow: isActive ? AethericPulseDark.blueGlow : null,
         ),
         child: Center(
           child: Text(
             label.toUpperCase(),
-            style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-              fontSize: 11, fontWeight: FontWeight.w600,
-              letterSpacing: 0.88,
-              color: isActive
-                  ? const Color(0xFF00363A)
-                  : KineticObsidian.onSurfaceVariant,
+            style: AethericPulseDark.label(
+              color: isActive ? AethericPulseDark.onSurface : AethericPulseDark.onSurfaceMuted,
             ),
           ),
         ),
@@ -185,7 +174,7 @@ class _RankRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final medalGradient = data.rank == 1
-        ? const LinearGradient(colors: [Color(0xFF00F0FF), Color(0xFF7DF4FF)])
+        ? AethericPulseDark.gradPrimary
         : data.rank == 2
             ? const LinearGradient(colors: [Color(0xFFD1BCFF), Color(0xFFE9DDFF)])
             : data.rank == 3
@@ -199,16 +188,16 @@ class _RankRow extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: data.isYou
-            ? KineticObsidian.electricCyan.withValues(alpha: 0.08)
+            ? AethericPulseDark.brandBlue.withValues(alpha: 0.08)
             : Colors.transparent,
         border: Border.all(
           color: data.isYou
-              ? KineticObsidian.electricCyan.withValues(alpha: 0.30)
+              ? AethericPulseDark.brandBlue.withValues(alpha: 0.30)
               : Colors.transparent,
           width: 1,
         ),
-        borderRadius: BorderRadius.circular(KineticObsidian.radiusLg),
-        boxShadow: data.isYou ? KineticObsidian.shadowNeonSoft : null,
+        borderRadius: BorderRadius.circular(AethericPulseDark.radiusWell),
+        boxShadow: data.isYou ? AethericPulseDark.blueGlow : null,
       ),
       child: Row(
         children: [
@@ -219,19 +208,20 @@ class _RankRow extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: medalGradient,
-              color: medalGradient == null
-                  ? KineticObsidian.surfaceContainerHigh
-                  : null,
+              color: medalGradient == null ? AethericPulseDark.glassFill : null,
             ),
             child: Center(
               child: Text(
                 '${data.rank}',
-                style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-                  fontSize: 13, fontWeight: FontWeight.w700,
-                  letterSpacing: 0.78,
+                style: TextStyle(
+                  fontFamily: AethericPulseDark.fontBody,
+                  fontFamilyFallback: AethericPulseDark.fontFallback,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0,
                   color: medalGradient != null
-                      ? const Color(0xFF00363A)
-                      : KineticObsidian.onSurfaceVariant,
+                      ? AethericPulseDark.surface
+                      : AethericPulseDark.onSurfaceMuted,
                 ),
               ),
             ),
@@ -245,8 +235,8 @@ class _RankRow extends StatelessWidget {
               shape: BoxShape.circle,
               border: Border.all(
                 color: data.isYou
-                    ? KineticObsidian.electricCyan
-                    : KineticObsidian.outlineVariant,
+                    ? AethericPulseDark.brandBlue
+                    : AethericPulseDark.glassBorder,
                 width: 1,
               ),
               image: DecorationImage(
@@ -266,20 +256,16 @@ class _RankRow extends StatelessWidget {
                   children: [
                     Text(
                       data.name,
-                      style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-                        fontSize: 13, fontWeight: FontWeight.w500,
-                        letterSpacing: 0.52,
-                        color: KineticObsidian.onSurface,
+                      style: AethericPulseDark.bodyMd(
+                        color: AethericPulseDark.onSurface,
                       ),
                     ),
                     if (data.isYou) ...[
                       const SizedBox(width: 6),
                       Text(
                         '· YOU',
-                        style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-                          fontSize: 12, fontWeight: FontWeight.w500,
-                          letterSpacing: 0.48,
-                          color: KineticObsidian.electricCyan,
+                        style: AethericPulseDark.label(
+                          color: AethericPulseDark.brandBlue,
                         ),
                       ),
                     ],
@@ -288,10 +274,8 @@ class _RankRow extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   '${_formatScore(data.score)} XP',
-                  style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-                    fontSize: 11, fontWeight: FontWeight.w300,
-                    letterSpacing: 0.44,
-                    color: KineticObsidian.onSurfaceVariant,
+                  style: AethericPulseDark.label(
+                    color: AethericPulseDark.brandBlue,
                   ),
                 ),
               ],
@@ -302,8 +286,8 @@ class _RankRow extends StatelessWidget {
             Icons.military_tech,
             size: 20,
             color: data.rank <= 3
-                ? KineticObsidian.electricCyan
-                : KineticObsidian.outline,
+                ? AethericPulseDark.brandBlue
+                : AethericPulseDark.onSurfaceMuted,
           ),
         ],
       ),

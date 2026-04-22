@@ -6,11 +6,13 @@ import '../../data/player_progress.dart';
 import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
 import '../../widgets/glass_card.dart';
-import '../../widgets/kinetic_text.dart';
+import '../../widgets/kinetic_background.dart';
+import '../../widgets/kinetic_chip.dart';
+import '../../widgets/kinetic_progress_bar.dart';
 import '../../widgets/progress_ring.dart';
 import 'track_detail_screen.dart';
 
-// ─── Tracks screen — Kinetic Obsidian "Daily Training" dashboard ──────────────
+// ─── Tracks screen — Aetheric Pulse "Daily Training" dashboard ────────────────
 
 class WorldMapScreen extends ConsumerWidget {
   const WorldMapScreen({super.key});
@@ -20,13 +22,15 @@ class WorldMapScreen extends ConsumerWidget {
     final progressAsync = ref.watch(playerProgressProvider);
     final tracks = ContentProvider().tracks;
 
-    return progressAsync.when(
-      loading: () => const Center(
-          child: CircularProgressIndicator(color: KineticObsidian.electricCyan)),
-      error: (e, _) => Center(
-          child: Text('Error loading progress',
-              style: Theme.of(context).textTheme.bodyMedium)),
-      data: (progress) => _TracksBody(progress: progress, tracks: tracks),
+    return KineticBackground(
+      child: progressAsync.when(
+        loading: () => const Center(
+            child: CircularProgressIndicator(color: AethericPulseDark.brandBlue)),
+        error: (e, _) => Center(
+            child: Text('Error loading progress',
+                style: Theme.of(context).textTheme.bodyMedium)),
+        data: (progress) => _TracksBody(progress: progress, tracks: tracks),
+      ),
     );
   }
 }
@@ -46,10 +50,10 @@ class _TracksBody extends StatelessWidget {
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(
-        KineticObsidian.spaceGutter,
-        KineticObsidian.spaceMd,
-        KineticObsidian.spaceGutter,
-        KineticObsidian.spaceLg + 80,
+        AethericPulseDark.spaceLg,
+        AethericPulseDark.spaceMd,
+        AethericPulseDark.spaceLg,
+        AethericPulseDark.spaceXl + 80,
       ),
       children: [
         _DailyTrainingHero(
@@ -92,12 +96,12 @@ class _DailyTrainingHero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GlassCard(
-      borderRadius: KineticObsidian.radiusXl,
-      padding: const EdgeInsets.all(KineticObsidian.spaceMd),
+      borderRadius: AethericPulseDark.radiusCard,
+      padding: const EdgeInsets.all(AethericPulseDark.spaceLg),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          // Proton glow bloom top-right
+          // Brand-blue glow bloom top-right
           Positioned(
             top: -60, right: -60,
             child: Container(
@@ -107,7 +111,7 @@ class _DailyTrainingHero extends StatelessWidget {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    KineticObsidian.electricCyan.withValues(alpha: 0.25),
+                    AethericPulseDark.brandBlue.withValues(alpha: 0.25),
                     Colors.transparent,
                   ],
                 ),
@@ -119,18 +123,12 @@ class _DailyTrainingHero extends StatelessWidget {
             children: [
               Text(
                 'Daily\nTraining',
-                style: TextStyle(fontFamily: KineticObsidian.fontDisplay, fontFamilyFallback: KineticObsidian.fontFallback, 
-                  fontSize: 40,
-                  fontWeight: FontWeight.w600,
-                  height: 1.05,
-                  letterSpacing: 2.0,
-                  color: KineticObsidian.primarySoft,
-                ),
+                style: AethericPulseDark.display(),
               ),
               const SizedBox(height: 14),
               Text(
                 'Complete your tasks to maintain your streak and earn bonus credits.',
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: AethericPulseDark.bodyMd(),
               ),
               const SizedBox(height: 20),
               _KineticButton(
@@ -148,22 +146,12 @@ class _DailyTrainingHero extends StatelessWidget {
                     children: [
                       Text(
                         '${dailyGoalPct.toStringAsFixed(0)}%',
-                        style: TextStyle(fontFamily: KineticObsidian.fontDisplay, fontFamilyFallback: KineticObsidian.fontFallback, 
-                          fontSize: 28,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 1.12,
-                          color: KineticObsidian.primarySoft,
-                        ),
+                        style: AethericPulseDark.headlineLg(),
                       ),
                       const SizedBox(height: 2),
                       Text(
                         'GOAL',
-                        style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-                          fontSize: 10,
-                          fontWeight: FontWeight.w400,
-                          letterSpacing: 0.8,
-                          color: KineticObsidian.onSurfaceVariant,
-                        ),
+                        style: AethericPulseDark.label(),
                       ),
                     ],
                   ),
@@ -189,61 +177,64 @@ class _TrackCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final name = track.name;
     final subtitle = track.subtitle;
-    final emoji = track.icon;
     final levelCount = track.targetLevelCount;
 
     return GlassCard(
-      borderRadius: KineticObsidian.radiusXl,
+      borderRadius: AethericPulseDark.radiusCard,
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Icon tile
+          // PNG icon in nested well
           Container(
-            width: 48,
-            height: 48,
+            width: 56,
+            height: 56,
             decoration: BoxDecoration(
-              color: KineticObsidian.surfaceContainerHigh,
-              borderRadius: BorderRadius.circular(KineticObsidian.radiusLg),
-              border: Border.all(color: KineticObsidian.outlineVariant, width: 1),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color(0x80000000),
-                  blurRadius: 10,
-                  offset: Offset(0, 2),
-                ),
-              ],
+              color: AethericPulseDark.brandBlue.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(16),
             ),
             child: Center(
-              child: Text(emoji, style: const TextStyle(fontSize: 26)),
+              child: Image.asset(
+                'assets/images/icons/${track.id}.png',
+                width: 32,
+                height: 32,
+                errorBuilder: (context, error, _) => const Icon(
+                  Icons.grid_view_rounded,
+                  size: 28,
+                  color: AethericPulseDark.brandBlue,
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 14),
-          Text(name, style: Theme.of(context).textTheme.headlineMedium),
-          const SizedBox(height: 6),
-          Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
-          const SizedBox(height: 16),
+          Text(name, style: AethericPulseDark.headlineMd()),
+          const SizedBox(height: 8),
+          // Stat pills
           Row(
             children: [
-              Container(
-                height: 1,
-                color: const Color(0x0DFFFFFF),
+              const KineticChip(
+                label: 'XP',
+                leading: Icon(Icons.star, size: 12, color: AethericPulseDark.brandBlue),
+                color: AethericPulseDark.brandBlue,
+              ),
+              const SizedBox(width: 8),
+              KineticChip(
+                label: '$levelCount levels',
+                color: AethericPulseDark.brandPurple,
               ),
             ],
           ),
-          const Divider(height: 1, color: Color(0x0DFFFFFF)),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
+          Text(subtitle, style: AethericPulseDark.bodyMd()),
+          const SizedBox(height: 14),
+          const KineticProgressBar(value: 0.0),
+          const Divider(height: 24, color: Color(0x0DFFFFFF)),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 'LEVEL $levelCount',
-                style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: 0.72,
-                  color: KineticObsidian.electricCyan,
-                ),
+                style: AethericPulseDark.label(color: AethericPulseDark.brandBlue),
               ),
               _PlayButton(onTap: onPlay),
             ],
@@ -271,7 +262,7 @@ class _StatsCard extends StatelessWidget {
         : 92.0;
 
     return GlassCard(
-      borderRadius: KineticObsidian.radiusXl,
+      borderRadius: AethericPulseDark.radiusCard,
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -279,9 +270,9 @@ class _StatsCard extends StatelessWidget {
           Row(
             children: [
               const Icon(Icons.monitor_heart_outlined,
-                  size: 22, color: KineticObsidian.electricCyan),
+                  size: 22, color: AethericPulseDark.brandBlue),
               const SizedBox(width: 8),
-              Text('Stats', style: Theme.of(context).textTheme.headlineMedium),
+              Text('Stats', style: AethericPulseDark.headlineMd()),
             ],
           ),
           const SizedBox(height: 18),
@@ -289,14 +280,14 @@ class _StatsCard extends StatelessWidget {
             label: 'Accuracy',
             value: '${accuracy.toStringAsFixed(0)}%',
             percent: accuracy,
-            valueColor: KineticObsidian.electricCyan,
+            valueColor: AethericPulseDark.brandBlue,
           ),
           const SizedBox(height: 16),
-          _LabeledBar(
+          const _LabeledBar(
             label: 'Reaction Time',
             value: '0.8s',
             percent: 75,
-            valueColor: KineticObsidian.secondaryFixedDim,
+            valueColor: AethericPulseDark.brandPurple,
           ),
         ],
       ),
@@ -326,24 +317,16 @@ class _LabeledBar extends StatelessWidget {
           children: [
             Text(
               label,
-              style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-                fontSize: 12, fontWeight: FontWeight.w400,
-                letterSpacing: 0.48,
-                color: KineticObsidian.onSurfaceVariant,
-              ),
+              style: AethericPulseDark.label(),
             ),
             Text(
               value,
-              style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-                fontSize: 12, fontWeight: FontWeight.w400,
-                letterSpacing: 0.48,
-                color: valueColor,
-              ),
+              style: AethericPulseDark.label(color: valueColor),
             ),
           ],
         ),
         const SizedBox(height: 6),
-        KineticProgressBar(percent: percent, height: 3),
+        KineticProgressBar(value: percent / 100, height: 3.0),
       ],
     );
   }
@@ -364,18 +347,13 @@ class _KineticButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         decoration: BoxDecoration(
-          gradient: KineticObsidian.kineticGradient,
-          borderRadius: BorderRadius.circular(KineticObsidian.radiusFull),
-          boxShadow: KineticObsidian.shadowNeonSoft,
+          gradient: AethericPulseDark.gradPrimary,
+          borderRadius: BorderRadius.circular(AethericPulseDark.radiusPill),
+          boxShadow: AethericPulseDark.blueGlow,
         ),
         child: Text(
           label,
-          style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0.84,
-            color: const Color(0xFF00363A),
-          ),
+          style: AethericPulseDark.label(color: AethericPulseDark.onSurface),
         ),
       ),
     );
@@ -396,15 +374,11 @@ class _PlayButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: const Color(0x0DFFFFFF),
           border: Border.all(color: const Color(0x1AFFFFFF), width: 1),
-          borderRadius: BorderRadius.circular(KineticObsidian.radius),
+          borderRadius: BorderRadius.circular(AethericPulseDark.radiusChip),
         ),
         child: Text(
           'Play',
-          style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-            fontSize: 12, fontWeight: FontWeight.w500,
-            letterSpacing: 0.48,
-            color: KineticObsidian.onSurface,
-          ),
+          style: AethericPulseDark.label(color: AethericPulseDark.onSurface),
         ),
       ),
     );
