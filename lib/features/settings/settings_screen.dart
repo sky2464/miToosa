@@ -8,8 +8,9 @@ import '../../data/player_progress.dart';
 import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
 import '../../widgets/glass_card.dart';
+import '../../widgets/kinetic_background.dart';
 
-// ─── Settings screen — Kinetic Obsidian ──────────────────────────────────────
+// ─── Settings screen — Aetheric Pulse ────────────────────────────────────────
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -17,13 +18,15 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final progressAsync = ref.watch(playerProgressProvider);
-    return progressAsync.when(
-      loading: () => const Center(
-          child: CircularProgressIndicator(color: KineticObsidian.electricCyan)),
-      error: (e, _) => Center(
-          child: Text('Could not load settings.',
-              style: Theme.of(context).textTheme.bodyMedium)),
-      data: (progress) => _SettingsBody(progress: progress),
+    return KineticBackground(
+      child: progressAsync.when(
+        loading: () => const Center(
+            child: CircularProgressIndicator(color: AethericPulseDark.brandBlue)),
+        error: (e, _) => Center(
+            child: Text('Could not load settings.',
+                style: Theme.of(context).textTheme.bodyMedium)),
+        data: (progress) => _SettingsBody(progress: progress),
+      ),
     );
   }
 }
@@ -47,26 +50,21 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(
-        KineticObsidian.spaceGutter,
-        KineticObsidian.spaceMd,
-        KineticObsidian.spaceGutter,
-        KineticObsidian.spaceLg + 80,
+        AethericPulseDark.spaceLg,
+        AethericPulseDark.spaceMd,
+        AethericPulseDark.spaceLg,
+        AethericPulseDark.spaceXl + 80,
       ),
       children: [
         Text(
           'Settings',
-          style: TextStyle(fontFamily: KineticObsidian.fontDisplay, fontFamilyFallback: KineticObsidian.fontFallback, 
-            fontSize: 28,
-            fontWeight: FontWeight.w500,
-            letterSpacing: 1.12,
-            color: KineticObsidian.primarySoft,
-          ),
+          style: AethericPulseDark.headlineLg(),
         ),
-        const SizedBox(height: KineticObsidian.spaceMd),
+        const SizedBox(height: AethericPulseDark.spaceMd),
 
         // Profile card
         GlassCard(
-          borderRadius: KineticObsidian.radiusXl,
+          borderRadius: AethericPulseDark.radiusCard,
           padding: const EdgeInsets.all(18),
           child: Row(
             children: [
@@ -76,8 +74,8 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                      color: KineticObsidian.electricCyan, width: 1),
-                  boxShadow: KineticObsidian.shadowNeonSoft,
+                      color: AethericPulseDark.brandBlue, width: 1),
+                  boxShadow: AethericPulseDark.blueGlow,
                   image: const DecorationImage(
                     image: AssetImage('assets/images/avatars/avatar_4.png'),
                     fit: BoxFit.cover,
@@ -91,35 +89,25 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                   children: [
                     Text(
                       'PILOT_042',
-                      style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 0.84,
-                        color: KineticObsidian.onSurface,
-                      ),
+                      style: AethericPulseDark.bodyMd(color: AethericPulseDark.onSurface),
                     ),
                     const SizedBox(height: 2),
                     Text(
                       'Level $level · ${widget.progress.diamonds} CR',
-                      style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-                        fontSize: 12,
-                        fontWeight: FontWeight.w300,
-                        letterSpacing: 0.48,
-                        color: KineticObsidian.onSurfaceVariant,
-                      ),
+                      style: AethericPulseDark.label(color: AethericPulseDark.onSurfaceMuted),
                     ),
                   ],
                 ),
               ),
               const Icon(Icons.chevron_right,
-                  size: 22, color: KineticObsidian.onSurfaceVariant),
+                  size: 22, color: AethericPulseDark.onSurfaceMuted),
             ],
           ),
         ),
         const SizedBox(height: 16),
 
         // Mastery badge
-        _SectionLabel('Your Mastery'),
+        const _SectionLabel('Your Mastery'),
         const SizedBox(height: 8),
         _MasteryCard(
             tier: tier,
@@ -127,22 +115,22 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
         const SizedBox(height: 16),
 
         // Account
-        _SectionLabel('Account'),
+        const _SectionLabel('Account'),
         const SizedBox(height: 8),
-        GlassCard(
-          borderRadius: KineticObsidian.radiusXl,
-          padding: const EdgeInsets.symmetric(
-              vertical: 2, horizontal: KineticObsidian.spaceMd),
+        const GlassCard(
+          borderRadius: AethericPulseDark.radiusCard,
+          padding: EdgeInsets.symmetric(
+              vertical: 2, horizontal: AethericPulseDark.spaceMd),
           child: Column(
             children: [
               _SettingRow(
                 icon: Icons.share_outlined,
                 title: 'Share miToosa',
                 subtitle: '+40 sessions per invite',
-                right: const Icon(Icons.chevron_right,
-                    size: 22, color: KineticObsidian.onSurfaceVariant),
+                right: Icon(Icons.chevron_right,
+                    size: 22, color: AethericPulseDark.onSurfaceMuted),
               ),
-              const Divider(height: 1, color: Color(0x0AFFFFFF)),
+              Divider(height: 1, color: AethericPulseDark.glassBorder),
               _SettingRow(
                 icon: Icons.workspace_premium_outlined,
                 title: 'Go VIP',
@@ -156,12 +144,12 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
         const SizedBox(height: 16),
 
         // System preferences
-        _SectionLabel('System'),
+        const _SectionLabel('System'),
         const SizedBox(height: 8),
         GlassCard(
-          borderRadius: KineticObsidian.radiusXl,
+          borderRadius: AethericPulseDark.radiusCard,
           padding: const EdgeInsets.symmetric(
-              vertical: 2, horizontal: KineticObsidian.spaceMd),
+              vertical: 2, horizontal: AethericPulseDark.spaceMd),
           child: Column(
             children: [
               _SettingRow(
@@ -172,7 +160,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                   onChanged: (v) => setState(() => _soundEffectsEnabled = v),
                 ),
               ),
-              const Divider(height: 1, color: Color(0x0AFFFFFF)),
+              const Divider(height: 1, color: AethericPulseDark.glassBorder),
               _SettingRow(
                 icon: Icons.music_note_outlined,
                 title: 'Music',
@@ -185,7 +173,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                   },
                 ),
               ),
-              const Divider(height: 1, color: Color(0x0AFFFFFF)),
+              const Divider(height: 1, color: AethericPulseDark.glassBorder),
               _SettingRow(
                 icon: Icons.notifications_outlined,
                 title: 'Daily reminder',
@@ -195,7 +183,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                   onChanged: (_) {},
                 ),
               ),
-              const Divider(height: 1, color: Color(0x0AFFFFFF)),
+              const Divider(height: 1, color: AethericPulseDark.glassBorder),
               _SettingRow(
                 icon: Icons.vibration_outlined,
                 title: 'Haptics',
@@ -207,7 +195,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                   },
                 ),
               ),
-              const Divider(height: 1, color: Color(0x0AFFFFFF)),
+              const Divider(height: 1, color: AethericPulseDark.glassBorder),
               _SettingRow(
                 icon: Icons.tune_outlined,
                 title: 'Adaptive Difficulty',
@@ -233,30 +221,25 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
         const SizedBox(height: 16),
 
         // Danger zone
-        GlassCard(
-          borderRadius: KineticObsidian.radiusXl,
-          padding: const EdgeInsets.symmetric(
-              vertical: 2, horizontal: KineticObsidian.spaceMd),
+        const GlassCard(
+          borderRadius: AethericPulseDark.radiusCard,
+          padding: EdgeInsets.symmetric(
+              vertical: 2, horizontal: AethericPulseDark.spaceMd),
           child: _SettingRow(
             icon: Icons.restart_alt_outlined,
             title: 'Reset progress',
             subtitle: 'Clear all credits and stats',
-            right: const Icon(Icons.chevron_right,
-                size: 22, color: KineticObsidian.onSurfaceVariant),
+            right: Icon(Icons.chevron_right,
+                size: 22, color: AethericPulseDark.onSurfaceMuted),
             isLast: true,
           ),
         ),
-        const SizedBox(height: KineticObsidian.spaceMd),
+        const SizedBox(height: AethericPulseDark.spaceMd),
 
         Center(
           child: Text(
             'MITOOSA · V1.4.0',
-            style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-              fontSize: 10,
-              fontWeight: FontWeight.w400,
-              letterSpacing: 0.8,
-              color: KineticObsidian.outline,
-            ),
+            style: AethericPulseDark.label(color: AethericPulseDark.onSurfaceMuted),
           ),
         ),
       ],
@@ -276,12 +259,7 @@ class _SectionLabel extends StatelessWidget {
       padding: const EdgeInsets.only(left: 4, bottom: 0),
       child: Text(
         label.toUpperCase(),
-        style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-          fontSize: 11,
-          fontWeight: FontWeight.w400,
-          letterSpacing: 0.88,
-          color: KineticObsidian.onSurfaceVariant,
-        ),
+        style: AethericPulseDark.label(color: AethericPulseDark.onSurfaceMuted),
       ),
     );
   }
@@ -314,14 +292,14 @@ class _SettingRow extends StatelessWidget {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: KineticObsidian.surfaceContainerHigh,
-              borderRadius: BorderRadius.circular(KineticObsidian.radiusLg),
+              color: AethericPulseDark.glassFill,
+              borderRadius: BorderRadius.circular(AethericPulseDark.radiusWell),
               border:
-                  Border.all(color: KineticObsidian.outlineVariant, width: 1),
+                  Border.all(color: AethericPulseDark.glassBorder, width: 1),
             ),
             child: Center(
                 child: Icon(icon,
-                    size: 20, color: KineticObsidian.electricCyan)),
+                    size: 20, color: AethericPulseDark.brandBlue)),
           ),
           const SizedBox(width: 14),
           Expanded(
@@ -330,23 +308,13 @@ class _SettingRow extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.28,
-                    color: KineticObsidian.onSurface,
-                  ),
+                  style: AethericPulseDark.bodyMd(color: AethericPulseDark.onSurface),
                 ),
                 if (subtitle != null) ...[
                   const SizedBox(height: 2),
                   Text(
                     subtitle!,
-                    style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-                      fontSize: 11,
-                      fontWeight: FontWeight.w300,
-                      letterSpacing: 0.44,
-                      color: KineticObsidian.onSurfaceVariant,
-                    ),
+                    style: AethericPulseDark.label(color: AethericPulseDark.onSurfaceMuted),
                   ),
                 ],
               ],
@@ -369,39 +337,11 @@ class _KineticToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => onChanged(!value),
-      child: AnimatedContainer(
-        duration: KineticObsidian.durMed,
-        width: 46,
-        height: 26,
-        padding: const EdgeInsets.all(3),
-        decoration: BoxDecoration(
-          gradient: value ? KineticObsidian.kineticGradient : null,
-          color: value ? null : KineticObsidian.surfaceContainerHigh,
-          borderRadius: BorderRadius.circular(KineticObsidian.radiusFull),
-          border: Border.all(
-            color: value
-                ? KineticObsidian.electricCyan.withValues(alpha: 0.5)
-                : KineticObsidian.outlineVariant,
-            width: 1,
-          ),
-          boxShadow: value ? KineticObsidian.shadowNeonSoft : null,
-        ),
-        child: AnimatedAlign(
-          duration: KineticObsidian.durMed,
-          curve: KineticObsidian.easeSnappy,
-          alignment: value ? Alignment.centerRight : Alignment.centerLeft,
-          child: Container(
-            width: 18,
-            height: 18,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: KineticObsidian.onSurface,
-            ),
-          ),
-        ),
-      ),
+    return Switch(
+      value: value,
+      onChanged: onChanged,
+      activeTrackColor: AethericPulseDark.brandBlue,
+      activeThumbColor: Colors.white,
     );
   }
 }
@@ -417,20 +357,15 @@ class _PurpleChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: KineticObsidian.protonPurple.withValues(alpha: 0.18),
+        color: AethericPulseDark.brandPurple.withValues(alpha: 0.18),
         border: Border.all(
-            color: KineticObsidian.protonPurple.withValues(alpha: 0.40),
+            color: AethericPulseDark.brandPurple.withValues(alpha: 0.40),
             width: 1),
-        borderRadius: BorderRadius.circular(KineticObsidian.radiusFull),
+        borderRadius: BorderRadius.circular(AethericPulseDark.radiusPill),
       ),
       child: Text(
         label.toUpperCase(),
-        style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
-          fontSize: 10,
-          fontWeight: FontWeight.w500,
-          letterSpacing: 0.8,
-          color: KineticObsidian.secondaryFixedDim,
-        ),
+        style: AethericPulseDark.label(color: AethericPulseDark.onSurface),
       ),
     );
   }
@@ -456,7 +391,7 @@ class _MasteryCard extends StatelessWidget {
     };
 
     return GlassCard(
-      borderRadius: KineticObsidian.radiusXl,
+      borderRadius: AethericPulseDark.radiusCard,
       padding: const EdgeInsets.all(18),
       child: Row(
         children: [
@@ -468,12 +403,7 @@ class _MasteryCard extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: TextStyle(fontFamily: KineticObsidian.fontDisplay, fontFamilyFallback: KineticObsidian.fontFallback, 
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0.64,
-                    color: color,
-                  ),
+                  style: AethericPulseDark.headlineMd(color: color),
                 ),
                 const SizedBox(height: 4),
                 Text(
