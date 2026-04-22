@@ -14,16 +14,16 @@ final gameplayViewModelProvider = GameplayViewModelFamily._();
 
 final class GameplayViewModelProvider
     extends $NotifierProvider<GameplayViewModel, GameplayState> {
-  GameplayViewModelProvider._(
-      {required GameplayViewModelFamily super.from,
-      required GameplayLevel super.argument})
-      : super(
-          retry: null,
-          name: r'gameplayViewModelProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+  GameplayViewModelProvider._({
+    required GameplayViewModelFamily super.from,
+    required GameplayLevel super.argument,
+  }) : super(
+         retry: null,
+         name: r'gameplayViewModelProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$gameplayViewModelHash();
@@ -58,24 +58,27 @@ final class GameplayViewModelProvider
   }
 }
 
-String _$gameplayViewModelHash() => r'743dc79ac32339d5887c09f59c4f4aa58b4a5bc5';
+String _$gameplayViewModelHash() => r'9a39054d443dcfc61352de650c933a96b7202ffa';
 
 final class GameplayViewModelFamily extends $Family
     with
-        $ClassFamilyOverride<GameplayViewModel, GameplayState, GameplayState,
-            GameplayState, GameplayLevel> {
+        $ClassFamilyOverride<
+          GameplayViewModel,
+          GameplayState,
+          GameplayState,
+          GameplayState,
+          GameplayLevel
+        > {
   GameplayViewModelFamily._()
-      : super(
-          retry: null,
-          name: r'gameplayViewModelProvider',
-          dependencies: null,
-          $allTransitiveDependencies: null,
-          isAutoDispose: true,
-        );
+    : super(
+        retry: null,
+        name: r'gameplayViewModelProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  GameplayViewModelProvider call(
-    GameplayLevel level,
-  ) =>
+  GameplayViewModelProvider call(GameplayLevel level) =>
       GameplayViewModelProvider._(argument: level, from: this);
 
   @override
@@ -86,22 +89,19 @@ abstract class _$GameplayViewModel extends $Notifier<GameplayState> {
   late final _$args = ref.$arg as GameplayLevel;
   GameplayLevel get level => _$args;
 
-  GameplayState build(
-    GameplayLevel level,
-  );
+  GameplayState build(GameplayLevel level);
   @$mustCallSuper
   @override
   void runBuild() {
     final ref = this.ref as $Ref<GameplayState, GameplayState>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<GameplayState, GameplayState>,
-        GameplayState,
-        Object?,
-        Object?>;
-    element.handleCreate(
-        ref,
-        () => build(
-              _$args,
-            ));
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<GameplayState, GameplayState>,
+              GameplayState,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, () => build(_$args));
   }
 }

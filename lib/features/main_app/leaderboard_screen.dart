@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../theme/design_system.dart';
 import '../../widgets/glass_card.dart';
@@ -66,7 +65,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                 children: [
                   Text(
                     'WEEKLY · GLOBAL',
-                    style: GoogleFonts.exo2(
+                    style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
                       fontSize: 11, fontWeight: FontWeight.w400,
                       letterSpacing: 0.88,
                       color: KineticObsidian.electricCyan,
@@ -75,7 +74,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                   const SizedBox(height: 4),
                   KineticText(
                     'Leaderboard',
-                    style: GoogleFonts.orbitron(
+                    style: TextStyle(fontFamily: KineticObsidian.fontDisplay, fontFamilyFallback: KineticObsidian.fontFallback, 
                       fontSize: 28, fontWeight: FontWeight.w500,
                       letterSpacing: 1.12,
                       color: Colors.white,
@@ -147,7 +146,7 @@ class _FilterTab extends StatelessWidget {
         child: Center(
           child: Text(
             label.toUpperCase(),
-            style: GoogleFonts.exo2(
+            style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
               fontSize: 11, fontWeight: FontWeight.w600,
               letterSpacing: 0.88,
               color: isActive
@@ -227,7 +226,7 @@ class _RankRow extends StatelessWidget {
             child: Center(
               child: Text(
                 '${data.rank}',
-                style: GoogleFonts.exo2(
+                style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
                   fontSize: 13, fontWeight: FontWeight.w700,
                   letterSpacing: 0.78,
                   color: medalGradient != null
@@ -267,7 +266,7 @@ class _RankRow extends StatelessWidget {
                   children: [
                     Text(
                       data.name,
-                      style: GoogleFonts.exo2(
+                      style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
                         fontSize: 13, fontWeight: FontWeight.w500,
                         letterSpacing: 0.52,
                         color: KineticObsidian.onSurface,
@@ -277,7 +276,7 @@ class _RankRow extends StatelessWidget {
                       const SizedBox(width: 6),
                       Text(
                         '· YOU',
-                        style: GoogleFonts.exo2(
+                        style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
                           fontSize: 12, fontWeight: FontWeight.w500,
                           letterSpacing: 0.48,
                           color: KineticObsidian.electricCyan,
@@ -289,7 +288,7 @@ class _RankRow extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   '${_formatScore(data.score)} XP',
-                  style: GoogleFonts.exo2(
+                  style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
                     fontSize: 11, fontWeight: FontWeight.w300,
                     letterSpacing: 0.44,
                     color: KineticObsidian.onSurfaceVariant,

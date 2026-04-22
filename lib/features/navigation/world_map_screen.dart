@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/content_provider.dart';
 import '../../data/player_progress.dart';
@@ -120,7 +119,7 @@ class _DailyTrainingHero extends StatelessWidget {
             children: [
               Text(
                 'Daily\nTraining',
-                style: GoogleFonts.orbitron(
+                style: TextStyle(fontFamily: KineticObsidian.fontDisplay, fontFamilyFallback: KineticObsidian.fontFallback, 
                   fontSize: 40,
                   fontWeight: FontWeight.w600,
                   height: 1.05,
@@ -149,7 +148,7 @@ class _DailyTrainingHero extends StatelessWidget {
                     children: [
                       Text(
                         '${dailyGoalPct.toStringAsFixed(0)}%',
-                        style: GoogleFonts.orbitron(
+                        style: TextStyle(fontFamily: KineticObsidian.fontDisplay, fontFamilyFallback: KineticObsidian.fontFallback, 
                           fontSize: 28,
                           fontWeight: FontWeight.w500,
                           letterSpacing: 1.12,
@@ -159,7 +158,7 @@ class _DailyTrainingHero extends StatelessWidget {
                       const SizedBox(height: 2),
                       Text(
                         'GOAL',
-                        style: GoogleFonts.exo2(
+                        style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
                           fontSize: 10,
                           fontWeight: FontWeight.w400,
                           letterSpacing: 0.8,
@@ -239,7 +238,7 @@ class _TrackCard extends StatelessWidget {
             children: [
               Text(
                 'LEVEL $levelCount',
-                style: GoogleFonts.exo2(
+                style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                   letterSpacing: 0.72,
@@ -327,7 +326,7 @@ class _LabeledBar extends StatelessWidget {
           children: [
             Text(
               label,
-              style: GoogleFonts.exo2(
+              style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
                 fontSize: 12, fontWeight: FontWeight.w400,
                 letterSpacing: 0.48,
                 color: KineticObsidian.onSurfaceVariant,
@@ -335,7 +334,7 @@ class _LabeledBar extends StatelessWidget {
             ),
             Text(
               value,
-              style: GoogleFonts.exo2(
+              style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
                 fontSize: 12, fontWeight: FontWeight.w400,
                 letterSpacing: 0.48,
                 color: valueColor,
@@ -371,7 +370,7 @@ class _KineticButton extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: GoogleFonts.exo2(
+          style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
             fontSize: 14,
             fontWeight: FontWeight.w700,
             letterSpacing: 0.84,
@@ -401,7 +400,7 @@ class _PlayButton extends StatelessWidget {
         ),
         child: Text(
           'Play',
-          style: GoogleFonts.exo2(
+          style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
             fontSize: 12, fontWeight: FontWeight.w500,
             letterSpacing: 0.48,
             color: KineticObsidian.onSurface,

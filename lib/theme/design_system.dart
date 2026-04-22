@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-/// Kinetic Obsidian — miToosa redesign theme.
+/// Kinetic Obsidian — miToosa dark theme (the default).
 /// Deep obsidian surfaces, Electric Cyan (#00F0FF) + Proton Purple (#7000FF),
 /// glassmorphism cards, Orbitron display + Exo 2 body typography.
+///
+/// Aetheric Pulse (soft blue + pink pastel) tokens live alongside the Kinetic
+/// Obsidian palette below — they power the light theme and targeted moments
+/// (login CTA, dopamine toast, path-map unlocked nodes) without replacing the
+/// primary dark-mode brand identity.
 class KineticObsidian {
   // ── Surfaces (base → elevated) ─────────────────────────────────────────
   static const Color surface = Color(0xFF10131A);
@@ -75,13 +79,19 @@ class KineticObsidian {
     BoxShadow(color: Color(0x66000000), blurRadius: 20, offset: Offset(0, 4)),
   ];
 
-  // ── Corner radii (Soft-Tech) ───────────────────────────────────────────
+  // ── Corner radii ───────────────────────────────────────────────────────
+  // Kinetic Obsidian's Soft-Tech scale (keep for existing screens that rely
+  // on compact corners). Aetheric Pulse adds the large "pillow" radii below.
   static const double radiusSm = 2.0;
   static const double radius = 4.0;
   static const double radiusMd = 6.0;
   static const double radiusLg = 8.0;
   static const double radiusXl = 12.0;
   static const double radiusFull = 9999.0;
+  // Aetheric Pulse — iOS 2026 pillow radii for hero surfaces.
+  static const double radiusPillow = 25.0;
+  static const double radiusPillowLg = 32.0;
+  static const double radiusHero = 40.0;
 
   // ── Spacing (8 px base) ───────────────────────────────────────────────
   static const double spaceXs = 4.0;
@@ -102,11 +112,15 @@ class KineticObsidian {
   static const double spacingXxl = spaceLg;
 
   // ── Motion ────────────────────────────────────────────────────────────
+  // ADHD-flow window: 150–400 ms. Keep short spring curves for perceived
+  // responsiveness; avoid >500 ms waits except on explicit celebratory beats.
   static const Duration durFast = Duration(milliseconds: 150);
   static const Duration durMed = Duration(milliseconds: 250);
   static const Duration durSlow = Duration(milliseconds: 400);
+  static const Duration durCelebrate = Duration(milliseconds: 500);
   static const Curve easeOut = Curves.easeOutCubic;
   static const Curve easeSnappy = Curves.easeInOut;
+  static const Curve springSoft = Curves.easeOutBack;
 
   // Old animation aliases
   static const Duration animFast = durFast;
@@ -116,75 +130,60 @@ class KineticObsidian {
   static const Curve springSnappy = Curves.easeOutBack;
   static const Curve springSmooth = Curves.easeOutCubic;
 
+  // ── Accessibility ──────────────────────────────────────────────────────
+  /// iOS HIG + WCAG minimum hit target (44×44 pt).
+  static const double minTapTarget = 44.0;
+
+  // ── Font families (bundled; no runtime CDN fetch) ──────────────────────
+  static const String fontDisplay = 'Orbitron';
+  static const String fontBody = 'Exo 2';
+
   // ── Fallback font families ─────────────────────────────────────────────
-  static const List<String> _fontFallback = [
+  static const List<String> fontFallback = [
     'Noto Sans',
     'Noto Sans Symbols',
     'Noto Color Emoji',
   ];
 
   // ── Typography ─────────────────────────────────────────────────────────
-  static TextTheme buildTextTheme() {
-    const base = TextStyle(fontFamilyFallback: _fontFallback);
+  static TextTheme buildTextTheme({Color? onSurfaceColor, Color? onSurfaceVariantColor, Color? primarySoftColor}) {
+    final onSurf = onSurfaceColor ?? onSurface;
+    final onSurfVar = onSurfaceVariantColor ?? onSurfaceVariant;
+    final primarySoft = primarySoftColor ?? KineticObsidian.primarySoft;
+    TextStyle display(double size, {double letter = 2.0, FontWeight weight = FontWeight.w600, double height = 1.1, Color? color}) {
+      return TextStyle(
+        fontFamily: fontDisplay,
+        fontFamilyFallback: fontFallback,
+        fontSize: size, fontWeight: weight, height: height,
+        letterSpacing: letter, color: color ?? primarySoft,
+      );
+    }
+    TextStyle body(double size, {double letter = 0.3, FontWeight weight = FontWeight.w300, double height = 1.5, Color? color}) {
+      return TextStyle(
+        fontFamily: fontBody,
+        fontFamilyFallback: fontFallback,
+        fontSize: size, fontWeight: weight, height: height,
+        letterSpacing: letter, color: color ?? onSurfVar,
+      );
+    }
+
     return TextTheme(
       // Orbitron — display & headlines
-      displayLarge: GoogleFonts.orbitron(
-        textStyle: base, fontSize: 48, fontWeight: FontWeight.w600,
-        height: 1.1, letterSpacing: 2.4, color: primarySoft,
-      ),
-      displayMedium: GoogleFonts.orbitron(
-        textStyle: base, fontSize: 40, fontWeight: FontWeight.w600,
-        height: 1.1, letterSpacing: 2.0, color: primarySoft,
-      ),
-      headlineLarge: GoogleFonts.orbitron(
-        textStyle: base, fontSize: 32, fontWeight: FontWeight.w500,
-        height: 1.2, letterSpacing: 1.28, color: onSurface,
-      ),
-      headlineMedium: GoogleFonts.orbitron(
-        textStyle: base, fontSize: 24, fontWeight: FontWeight.w500,
-        height: 1.3, letterSpacing: 0.72, color: onSurface,
-      ),
-      headlineSmall: GoogleFonts.orbitron(
-        textStyle: base, fontSize: 20, fontWeight: FontWeight.w500,
-        height: 1.3, letterSpacing: 0.6, color: onSurface,
-      ),
-      // Exo 2 — UI & body (light weights to combat halation)
-      titleLarge: GoogleFonts.exo2(
-        textStyle: base, fontSize: 18, fontWeight: FontWeight.w500,
-        height: 1.4, letterSpacing: 0.36, color: onSurface,
-      ),
-      titleMedium: GoogleFonts.exo2(
-        textStyle: base, fontSize: 16, fontWeight: FontWeight.w500,
-        height: 1.4, letterSpacing: 0.32, color: onSurface,
-      ),
-      titleSmall: GoogleFonts.exo2(
-        textStyle: base, fontSize: 14, fontWeight: FontWeight.w500,
-        height: 1.2, letterSpacing: 0.84, color: onSurface,
-      ),
-      bodyLarge: GoogleFonts.exo2(
-        textStyle: base, fontSize: 18, fontWeight: FontWeight.w300,
-        height: 1.6, letterSpacing: 0.36, color: onSurfaceVariant,
-      ),
-      bodyMedium: GoogleFonts.exo2(
-        textStyle: base, fontSize: 16, fontWeight: FontWeight.w300,
-        height: 1.5, letterSpacing: 0.32, color: onSurfaceVariant,
-      ),
-      bodySmall: GoogleFonts.exo2(
-        textStyle: base, fontSize: 13, fontWeight: FontWeight.w300,
-        height: 1.5, letterSpacing: 0.26, color: onSurfaceVariant,
-      ),
-      labelLarge: GoogleFonts.exo2(
-        textStyle: base, fontSize: 14, fontWeight: FontWeight.w500,
-        height: 1.2, letterSpacing: 0.84, color: onSurface,
-      ),
-      labelMedium: GoogleFonts.exo2(
-        textStyle: base, fontSize: 12, fontWeight: FontWeight.w400,
-        height: 1.2, letterSpacing: 0.48, color: onSurfaceVariant,
-      ),
-      labelSmall: GoogleFonts.exo2(
-        textStyle: base, fontSize: 10, fontWeight: FontWeight.w400,
-        height: 1.2, letterSpacing: 0.80, color: onSurfaceVariant,
-      ),
+      displayLarge: display(48, letter: 2.4),
+      displayMedium: display(40, letter: 2.0),
+      headlineLarge: display(32, letter: 1.28, weight: FontWeight.w500, height: 1.2, color: onSurf),
+      headlineMedium: display(24, letter: 0.72, weight: FontWeight.w500, height: 1.3, color: onSurf),
+      headlineSmall: display(20, letter: 0.6, weight: FontWeight.w500, height: 1.3, color: onSurf),
+      // Exo 2 — UI & body
+      titleLarge: body(18, letter: 0.36, weight: FontWeight.w500, height: 1.4, color: onSurf),
+      titleMedium: body(16, letter: 0.32, weight: FontWeight.w500, height: 1.4, color: onSurf),
+      titleSmall: body(14, letter: 0.84, weight: FontWeight.w500, height: 1.2, color: onSurf),
+      bodyLarge: body(18, letter: 0.36, height: 1.6),
+      bodyMedium: body(16, letter: 0.32),
+      bodySmall: body(13, letter: 0.26),
+      labelLarge: body(14, letter: 0.84, weight: FontWeight.w500, height: 1.2, color: onSurf),
+      labelMedium: body(12, letter: 0.48, weight: FontWeight.w400, height: 1.2),
+      labelSmall: body(10, letter: 0.80, weight: FontWeight.w400, height: 1.2),
     );
   }
 
@@ -212,12 +211,13 @@ class KineticObsidian {
         errorContainer: errorContainer,
       ),
       textTheme: textTheme,
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,
         scrolledUnderElevation: 0,
-        iconTheme: const IconThemeData(color: electricCyan),
-        titleTextStyle: GoogleFonts.orbitron(
+        iconTheme: IconThemeData(color: electricCyan),
+        titleTextStyle: TextStyle(
+          fontFamily: fontDisplay,
           fontSize: 18, fontWeight: FontWeight.w900,
           letterSpacing: 0.9, color: electricCyan,
         ),
@@ -238,7 +238,8 @@ class KineticObsidian {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radiusFull),
           ),
-          textStyle: GoogleFonts.exo2(
+          textStyle: const TextStyle(
+            fontFamily: fontBody,
             fontSize: 14, fontWeight: FontWeight.w700,
             letterSpacing: 0.84,
           ),
@@ -252,7 +253,8 @@ class KineticObsidian {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radiusFull),
           ),
-          textStyle: GoogleFonts.exo2(
+          textStyle: const TextStyle(
+            fontFamily: fontBody,
             fontSize: 14, fontWeight: FontWeight.w500,
             letterSpacing: 0.84,
           ),
@@ -282,7 +284,8 @@ class KineticObsidian {
           ),
         ),
         labelTextStyle: WidgetStateProperty.resolveWith(
-          (states) => GoogleFonts.exo2(
+          (states) => TextStyle(
+            fontFamily: fontBody,
             fontSize: 10, fontWeight: FontWeight.w700,
             letterSpacing: 1.0,
             color: states.contains(WidgetState.selected) ? electricCyan : outline,
@@ -301,6 +304,10 @@ extension KineticObsidianSemantics on KineticObsidian {
 
 // ── Alias so old code using MiToosaTheme compiles unchanged ──────────────────
 class MiToosaTheme extends KineticObsidian {
+  // Theme aliases for tests / legacy callers.
+  static ThemeData get darkTheme => KineticObsidian.theme;
+  static ThemeData get lightTheme => AethericPulse.lightTheme;
+
   // Semantic colors
   static const Color success = Color(0xFF4ADE80);
   static const Color warning = Color(0xFFFACC15);
@@ -324,4 +331,147 @@ class MiToosaTheme extends KineticObsidian {
   static const double spacingLg = KineticObsidian.spaceMd;
   static const double spacingXl = KineticObsidian.spaceMargin;
   static const double spacingXxl = KineticObsidian.spaceLg;
+}
+
+// ─── Aetheric Pulse — soft-blue + pink pastel tokens ─────────────────────────
+/// Targeted palette used on celebratory surfaces (login CTA, dopamine toast,
+/// path-map unlocked nodes) and as the light-theme base. Not a replacement
+/// for Kinetic Obsidian — the two coexist.
+class AethericPulse {
+  // Aetheric core — soft cognitive blue + pink pastel.
+  static const Color softBlue = Color(0xFF597AFA);
+  static const Color softBlueDeep = Color(0xFF3B5BDB);
+  static const Color pinkPastel = Color(0xFFFFB3D1);
+  static const Color pinkPastelDeep = Color(0xFFFF7AA8);
+  static const Color lavender = Color(0xFFE9E6FF);
+
+  // Light-theme surfaces (subtle lavender tint for warmth).
+  static const Color lightSurface = Color(0xFFFBFAFF);
+  static const Color lightSurfaceContainer = Color(0xFFF2F0FB);
+  static const Color lightSurfaceContainerHigh = Color(0xFFE6E3F5);
+  static const Color lightOnSurface = Color(0xFF1A1B2B);
+  static const Color lightOnSurfaceVariant = Color(0xFF4A4C5E);
+  static const Color lightOutline = Color(0xFF9A9BAE);
+  static const Color lightOutlineVariant = Color(0xFFCECFDD);
+
+  // Soft-blue → pink signature gradient (Aetheric Pulse hero moment).
+  static const LinearGradient gradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [softBlue, pinkPastel],
+  );
+
+  static const LinearGradient gradientReverse = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [pinkPastel, softBlue],
+  );
+
+  // Softer, semi-transparent variant for glows and backgrounds.
+  static const LinearGradient gradientSoft = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xCC597AFA), Color(0xCCFFB3D1)],
+  );
+
+  // Glows for light-mode surfaces (replaces cyan neon which halates on white).
+  static const List<BoxShadow> shadowSoftBlue = [
+    BoxShadow(color: Color(0x40597AFA), blurRadius: 24, offset: Offset(0, 6)),
+  ];
+  static const List<BoxShadow> shadowPinkPastel = [
+    BoxShadow(color: Color(0x33FF7AA8), blurRadius: 20, offset: Offset(0, 4)),
+  ];
+
+  // Glass recipe for light mode — higher-alpha fill against off-white surfaces.
+  static Color get glassFillLight => Colors.white.withValues(alpha: 0.60);
+  static const Color glassBorderBrightLight = Color(0x66FFFFFF);
+  static const Color glassBorderDimLight = Color(0x1A1A1B2B);
+
+  /// Light theme paired with Aetheric Pulse tokens.
+  static ThemeData get lightTheme {
+    const colorScheme = ColorScheme.light(
+      primary: softBlue,
+      onPrimary: Colors.white,
+      primaryContainer: Color(0xFFDDE4FF),
+      onPrimaryContainer: softBlueDeep,
+      secondary: pinkPastelDeep,
+      onSecondary: Colors.white,
+      secondaryContainer: Color(0xFFFFE0EC),
+      onSecondaryContainer: Color(0xFF6B2342),
+      surface: lightSurface,
+      onSurface: lightOnSurface,
+      onSurfaceVariant: lightOnSurfaceVariant,
+      outline: lightOutline,
+      outlineVariant: lightOutlineVariant,
+      error: Color(0xFFBA1A1A),
+      errorContainer: Color(0xFFFFDAD6),
+    );
+    final textTheme = KineticObsidian.buildTextTheme(
+      onSurfaceColor: lightOnSurface,
+      onSurfaceVariantColor: lightOnSurfaceVariant,
+      primarySoftColor: softBlueDeep,
+    );
+    return ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.light,
+      scaffoldBackgroundColor: lightSurface,
+      colorScheme: colorScheme,
+      textTheme: textTheme,
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        iconTheme: IconThemeData(color: softBlueDeep),
+        titleTextStyle: TextStyle(
+          fontFamily: KineticObsidian.fontDisplay,
+          fontSize: 18, fontWeight: FontWeight.w900,
+          letterSpacing: 0.9, color: softBlueDeep,
+        ),
+      ),
+      cardTheme: CardThemeData(
+        color: glassFillLight,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(KineticObsidian.radiusPillow),
+          side: const BorderSide(color: glassBorderDimLight, width: 1),
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          elevation: 0,
+          backgroundColor: softBlue,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(KineticObsidian.radiusPillowLg),
+          ),
+          textStyle: const TextStyle(
+            fontFamily: KineticObsidian.fontBody,
+            fontSize: 15, fontWeight: FontWeight.w700,
+            letterSpacing: 0.8,
+          ),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: softBlueDeep,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          side: const BorderSide(color: softBlue, width: 1),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(KineticObsidian.radiusPillowLg),
+          ),
+          textStyle: const TextStyle(
+            fontFamily: KineticObsidian.fontBody,
+            fontSize: 14, fontWeight: FontWeight.w500,
+            letterSpacing: 0.8,
+          ),
+        ),
+      ),
+      dividerTheme: const DividerThemeData(
+        color: Color(0x14000000),
+        thickness: 1,
+        space: 0,
+      ),
+    );
+  }
 }

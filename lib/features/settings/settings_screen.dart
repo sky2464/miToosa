@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/engine/progression_engine.dart';
 import '../../core/haptics_service.dart';
@@ -56,7 +55,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
       children: [
         Text(
           'Settings',
-          style: GoogleFonts.orbitron(
+          style: TextStyle(fontFamily: KineticObsidian.fontDisplay, fontFamilyFallback: KineticObsidian.fontFallback, 
             fontSize: 28,
             fontWeight: FontWeight.w500,
             letterSpacing: 1.12,
@@ -92,7 +91,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                   children: [
                     Text(
                       'PILOT_042',
-                      style: GoogleFonts.exo2(
+                      style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 0.84,
@@ -102,7 +101,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                     const SizedBox(height: 2),
                     Text(
                       'Level $level · ${widget.progress.diamonds} CR',
-                      style: GoogleFonts.exo2(
+                      style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
                         fontSize: 12,
                         fontWeight: FontWeight.w300,
                         letterSpacing: 0.48,
@@ -252,7 +251,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
         Center(
           child: Text(
             'MITOOSA · V1.4.0',
-            style: GoogleFonts.exo2(
+            style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
               fontSize: 10,
               fontWeight: FontWeight.w400,
               letterSpacing: 0.8,
@@ -277,7 +276,7 @@ class _SectionLabel extends StatelessWidget {
       padding: const EdgeInsets.only(left: 4, bottom: 0),
       child: Text(
         label.toUpperCase(),
-        style: GoogleFonts.exo2(
+        style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
           fontSize: 11,
           fontWeight: FontWeight.w400,
           letterSpacing: 0.88,
@@ -331,7 +330,7 @@ class _SettingRow extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: GoogleFonts.exo2(
+                  style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                     letterSpacing: 0.28,
@@ -342,7 +341,7 @@ class _SettingRow extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     subtitle!,
-                    style: GoogleFonts.exo2(
+                    style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
                       fontSize: 11,
                       fontWeight: FontWeight.w300,
                       letterSpacing: 0.44,
@@ -426,7 +425,7 @@ class _PurpleChip extends StatelessWidget {
       ),
       child: Text(
         label.toUpperCase(),
-        style: GoogleFonts.exo2(
+        style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
           fontSize: 10,
           fontWeight: FontWeight.w500,
           letterSpacing: 0.8,
@@ -469,7 +468,7 @@ class _MasteryCard extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: GoogleFonts.orbitron(
+                  style: TextStyle(fontFamily: KineticObsidian.fontDisplay, fontFamilyFallback: KineticObsidian.fontFallback, 
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 0.64,

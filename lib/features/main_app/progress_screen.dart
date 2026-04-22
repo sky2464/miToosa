@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../data/player_progress.dart';
 import '../../data/player_progress_provider.dart';
@@ -138,7 +137,7 @@ class _XpHero extends StatelessWidget {
             children: [
               Text(
                 'TOTAL XP',
-                style: GoogleFonts.exo2(
+                style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
                   letterSpacing: 0.48,
@@ -148,7 +147,7 @@ class _XpHero extends StatelessWidget {
               const SizedBox(height: 6),
               KineticText(
                 _formatXp(xp),
-                style: GoogleFonts.orbitron(
+                style: TextStyle(fontFamily: KineticObsidian.fontDisplay, fontFamilyFallback: KineticObsidian.fontFallback, 
                   fontSize: 44,
                   fontWeight: FontWeight.w600,
                   height: 1.0,
@@ -162,7 +161,7 @@ class _XpHero extends StatelessWidget {
                 children: [
                   Text(
                     'Level $level · Next',
-                    style: GoogleFonts.exo2(
+                    style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
                       letterSpacing: 0.48,
@@ -171,7 +170,7 @@ class _XpHero extends StatelessWidget {
                   ),
                   Text(
                     '${levelPct.toStringAsFixed(0)}%',
-                    style: GoogleFonts.exo2(
+                    style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
                       letterSpacing: 0.48,
@@ -236,7 +235,7 @@ class _StatTile extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             value,
-            style: GoogleFonts.orbitron(
+            style: TextStyle(fontFamily: KineticObsidian.fontDisplay, fontFamilyFallback: KineticObsidian.fontFallback, 
               fontSize: 22,
               fontWeight: FontWeight.w500,
               height: 1.0,
@@ -247,7 +246,7 @@ class _StatTile extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             label.toUpperCase(),
-            style: GoogleFonts.exo2(
+            style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
               fontSize: 10,
               fontWeight: FontWeight.w400,
               letterSpacing: 0.8,
@@ -331,7 +330,7 @@ class _SkillBar extends StatelessWidget {
           children: [
             Text(
               name.toUpperCase(),
-              style: GoogleFonts.exo2(
+              style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
                 fontSize: 11, fontWeight: FontWeight.w400,
                 letterSpacing: 0.66,
                 color: KineticObsidian.onSurfaceVariant,
@@ -339,7 +338,7 @@ class _SkillBar extends StatelessWidget {
             ),
             Text(
               value,
-              style: GoogleFonts.exo2(
+              style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
                 fontSize: 11, fontWeight: FontWeight.w400,
                 letterSpacing: 0.44,
                 color: KineticObsidian.electricCyan,
@@ -447,7 +446,7 @@ class _AchievementRow extends StatelessWidget {
               children: [
                 Text(
                   title.toUpperCase(),
-                  style: GoogleFonts.exo2(
+                  style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
                     fontSize: 13, fontWeight: FontWeight.w500,
                     letterSpacing: 0.78,
                     color: KineticObsidian.onSurface,
@@ -468,7 +467,7 @@ class _AchievementRow extends StatelessWidget {
               ),
               child: Text(
                 'UNLOCKED',
-                style: GoogleFonts.exo2(
+                style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
                   fontSize: 10, fontWeight: FontWeight.w500,
                   letterSpacing: 0.8,
                   color: KineticObsidian.electricCyan,

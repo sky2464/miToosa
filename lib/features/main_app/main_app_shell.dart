@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../navigation/world_map_screen.dart';
 import 'progress_screen.dart';
@@ -128,7 +127,7 @@ class _TopBar extends StatelessWidget {
                 blendMode: BlendMode.srcIn,
                 child: Text(
                   'MITOOSA',
-                  style: GoogleFonts.orbitron(
+                  style: TextStyle(fontFamily: KineticObsidian.fontDisplay, fontFamilyFallback: KineticObsidian.fontFallback, 
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 0.9,
@@ -167,7 +166,7 @@ class _CreditPill extends StatelessWidget {
           const SizedBox(width: 6),
           Text(
             '$value CR',
-            style: GoogleFonts.exo2(
+            style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
               fontSize: 12,
               fontWeight: FontWeight.w500,
               letterSpacing: 0.84,
@@ -287,7 +286,7 @@ class _NavItem extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               label,
-              style: GoogleFonts.exo2(
+              style: TextStyle(fontFamily: KineticObsidian.fontBody, fontFamilyFallback: KineticObsidian.fontFallback, 
                 fontSize: 10,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1.0,

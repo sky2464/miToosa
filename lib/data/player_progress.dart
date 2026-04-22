@@ -47,6 +47,9 @@ class PlayerProgress {
   Map<String, int> levelXP; // best XP earned per level (keyed by levelId)
   Map<String, int> levelBestTime; // best completion time in seconds per level
   Map<String, String> levelBestDifficulty; // best difficulty tier name per level
+  // Schema version 7: theme mode override (Hive field 32).
+  // null = follow system; 0 = ThemeMode.system; 1 = light; 2 = dark.
+  int? themeModeOverride;
 
   PlayerProgress({
     required this.playerId,
@@ -81,6 +84,7 @@ class PlayerProgress {
     this.levelXP = const {},
     this.levelBestTime = const {},
     this.levelBestDifficulty = const {},
+    this.themeModeOverride,
   });
 
   factory PlayerProgress.fresh({required String playerId}) {
@@ -507,13 +511,15 @@ class PlayerProgressAdapter extends TypeAdapter<PlayerProgress> {
       levelBestDifficulty: fields[31] != null
           ? (fields[31] as Map).cast<String, String>()
           : const {},
+      // Schema v7: theme mode override; null in legacy saves → follow system.
+      themeModeOverride: fields[32] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, PlayerProgress obj) {
     writer
-      ..writeByte(32) // 32 fields total (schema v6: daily XP, level XP, best time/difficulty)
+      ..writeByte(33) // 33 fields total (schema v7: themeModeOverride)
       ..writeByte(0)
       ..write(obj.playerId)
       ..writeByte(1)
@@ -577,7 +583,9 @@ class PlayerProgressAdapter extends TypeAdapter<PlayerProgress> {
       ..writeByte(30)
       ..write(obj.levelBestTime)
       ..writeByte(31)
-      ..write(obj.levelBestDifficulty);
+      ..write(obj.levelBestDifficulty)
+      ..writeByte(32)
+      ..write(obj.themeModeOverride);
   }
 }
 

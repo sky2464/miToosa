@@ -4,13 +4,14 @@ import 'theme/design_system.dart';
 import 'features/auth/login_screen.dart';
 import 'features/main_app/main_app_shell.dart';
 import 'features/auth/auth_provider.dart';
+import 'data/player_progress_provider.dart';
 
 import 'data/hive_persistence_provider.dart';
 import 'core/content_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   await ContentProvider().init();
   await HivePersistenceProvider().init();
 
@@ -27,12 +28,17 @@ class MiToosaApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authProvider);
+    final progressAsync = ref.watch(playerProgressProvider);
+    final themeMode = progressAsync.maybeWhen(
+      data: (p) => _themeModeFromOverride(p.themeModeOverride),
+      orElse: () => ThemeMode.system,
+    );
 
     return MaterialApp(
       title: 'miToosa',
-      theme: KineticObsidian.theme,
+      theme: AethericPulse.lightTheme,
       darkTheme: KineticObsidian.theme,
-      themeMode: ThemeMode.dark,
+      themeMode: themeMode,
       debugShowCheckedModeBanner: false,
       home: authState.when(
         data: (playerId) => playerId.isEmpty
@@ -42,5 +48,16 @@ class MiToosaApp extends ConsumerWidget {
         error: (_, _) => const LoginScreen(),
       ),
     );
+  }
+
+  static ThemeMode _themeModeFromOverride(int? override) {
+    switch (override) {
+      case 1:
+        return ThemeMode.light;
+      case 2:
+        return ThemeMode.dark;
+      default:
+        return ThemeMode.system;
+    }
   }
 }
