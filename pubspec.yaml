@@ -23,6 +23,10 @@ dependencies:
   riverpod_annotation: ^4.0.2
   crypto: ^3.0.6
   share_plus: ^12.0.2  # blocked from 13.0.0 by flutter_secure_storage win32 conflict
+  # Local network play (QR + WebSocket)
+  qr_flutter: ^4.1.0
+  web_socket_channel: ^2.4.0
+  network_info_plus: ^5.0.0
 
 dev_dependencies:
   flutter_test:
