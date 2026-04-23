@@ -11,6 +11,7 @@ import '../../widgets/kinetic_chip.dart';
 import '../../widgets/kinetic_progress_bar.dart';
 import '../../widgets/progress_ring.dart';
 import 'track_detail_screen.dart';
+import '../local_play/local_play_mode_screen.dart';
 
 // ─── Tracks screen — Aetheric Pulse "Daily Training" dashboard ────────────────
 
@@ -80,6 +81,12 @@ class _TracksBody extends StatelessWidget {
               ),
             )),
         _StatsCard(progress: progress),
+        const SizedBox(height: 12),
+        _LocalPlayCard(
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => const LocalPlayModeScreen()),
+          ),
+        ),
       ],
     );
   }
@@ -404,6 +411,61 @@ class _PlayButton extends StatelessWidget {
               style: AethericPulseDark.label(color: AethericPulseDark.onSurface),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Local Play Card ──────────────────────────────────────────────────────────
+
+class _LocalPlayCard extends StatelessWidget {
+  final VoidCallback onTap;
+  const _LocalPlayCard({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassCard(
+      borderRadius: AethericPulseDark.radiusCard,
+      padding: const EdgeInsets.all(AethericPulseDark.spaceMd),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AethericPulseDark.radiusCard),
+        child: Row(
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: AethericPulseDark.brandBlue.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Icon(
+                Icons.wifi_rounded,
+                size: 26,
+                color: AethericPulseDark.brandBlue,
+              ),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Play Locally', style: AethericPulseDark.headlineMd()),
+                  const SizedBox(height: 2),
+                  Text(
+                    'Challenge a friend on the same Wi-Fi',
+                    style: AethericPulseDark.bodyMd(),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 14,
+              color: AethericPulseDark.onSurfaceMuted,
+            ),
+          ],
         ),
       ),
     );
