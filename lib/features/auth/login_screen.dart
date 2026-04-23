@@ -126,8 +126,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       data: (value) => value.isNotEmpty,
       orElse: () => false,
     );
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: AethericPulseDark.surface,
+      backgroundColor: isDark ? AethericPulseDark.surface : AethericPulseLight.lightSurface,
       body: KineticBackground(
         child: SafeArea(
           child: Column(
@@ -168,24 +169,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                 child: GlassCard(
                   child: Column(
                     children: [
-                      const Text(
+                      Text(
                         'miToosa',
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 28,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFFFFFFFF),
-                        ),
+                        style: Theme.of(context).textTheme.headlineLarge,
                       ),
                       const SizedBox(height: AethericPulseDark.spaceSm),
-                      const Text(
+                      Text(
                         'Unlock Your Cognitive Potential',
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xFFE2E8F0),
-                        ),
+                        style: Theme.of(context).textTheme.bodyMedium,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: AethericPulseDark.spaceMd),
@@ -237,7 +228,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                           label: 'Get started. Begin training.',
                           child: ConstrainedBox(
                             constraints: const BoxConstraints(
-                              minHeight: KineticObsidian.minTapTarget,
+                              minHeight: AethericPulseDark.minTapTarget,
                             ),
                             child: Opacity(
                               opacity: canStart ? 1.0 : 0.4,
@@ -255,11 +246,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                     padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                                   ),
                                   onPressed: canStart ? _performLogin : null,
-                                  child: const Text(
+                                  child: Text(
                                     'Get Started',
-                                    style: TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontSize: 16,
+                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                       fontWeight: FontWeight.w600,
                                       color: Colors.white,
                                     ),

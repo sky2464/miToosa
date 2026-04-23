@@ -277,15 +277,25 @@ class _TrackDetailScreenState extends ConsumerState<TrackDetailScreen>
                         );
                       }
 
-                      return GestureDetector(
-                        onTap: isComplete || isCurrent
-                            ? () => _showDifficultySheet(
-                                  context,
-                                  track: track,
-                                  levelIndex: index,
-                                )
-                            : null,
-                        child: tile,
+                      final semanticLabel = isComplete
+                          ? 'Level ${index + 1}, completed with $stars stars'
+                          : isCurrent
+                              ? 'Level ${index + 1}, current level'
+                              : 'Level ${index + 1}, locked';
+                      return Semantics(
+                        button: isComplete || isCurrent,
+                        enabled: isComplete || isCurrent,
+                        label: semanticLabel,
+                        child: GestureDetector(
+                          onTap: isComplete || isCurrent
+                              ? () => _showDifficultySheet(
+                                    context,
+                                    track: track,
+                                    levelIndex: index,
+                                  )
+                              : null,
+                          child: tile,
+                        ),
                       );
                     },
                     childCount: track.targetLevelCount,
@@ -445,10 +455,13 @@ class _TierTile extends StatelessWidget {
     final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: MiToosaTheme.spacingSm),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(MiToosaTheme.radiusMd),
-        child: Container(
+      child: Semantics(
+        button: true,
+        label: '$label. $sub',
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(MiToosaTheme.radiusMd),
+          child: Container(
           padding: const EdgeInsets.symmetric(
             horizontal: MiToosaTheme.spacingLg,
             vertical: MiToosaTheme.spacingMd,
@@ -493,6 +506,7 @@ class _TierTile extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ),
+  );
   }
 }

@@ -139,12 +139,9 @@ class _TopBar extends StatelessWidget {
                         : AethericPulseLight.gradient)
                     .createShader(bounds),
                 blendMode: BlendMode.srcIn,
-                child: const Text(
+                child: Text(
                   'MITOOSA',
-                  style: TextStyle(
-                    fontFamily: AethericPulseDark.fontBody,
-                    fontFamilyFallback: AethericPulseDark.fontFallback,
-                    fontSize: 18,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w900,
                     letterSpacing: 0.9,
                     color: Colors.white,
@@ -193,10 +190,7 @@ class _CreditPill extends StatelessWidget {
             const SizedBox(width: 6),
             Text(
               '$value CR',
-              style: TextStyle(
-                fontFamily: AethericPulseDark.fontBody,
-                fontFamilyFallback: AethericPulseDark.fontFallback,
-                fontSize: 12,
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
                 fontWeight: FontWeight.w500,
                 letterSpacing: 0.84,
                 color: accent,
@@ -314,8 +308,8 @@ class _NavItem extends StatelessWidget {
       label: '$label tab',
       child: ConstrainedBox(
         constraints: const BoxConstraints(
-          minWidth: KineticObsidian.minTapTarget,
-          minHeight: KineticObsidian.minTapTarget,
+          minWidth: AethericPulseDark.minTapTarget,
+          minHeight: AethericPulseDark.minTapTarget,
         ),
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
@@ -334,7 +328,7 @@ class _NavItem extends StatelessWidget {
                 width: 1,
               ),
               borderRadius:
-                  BorderRadius.circular(KineticObsidian.radiusPillow),
+                  BorderRadius.circular(AethericPulseDark.radiusCard),
               boxShadow:
                   isActive ? (isDark ? AethericPulseDark.blueGlow : null) : null,
             ),
@@ -349,10 +343,7 @@ class _NavItem extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   label,
-                  style: TextStyle(
-                    fontFamily: AethericPulseDark.fontBody,
-                    fontFamilyFallback: AethericPulseDark.fontFallback,
-                    fontSize: 10,
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.0,
                     color: isActive ? activeColor : inactiveColor,

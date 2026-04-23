@@ -70,7 +70,7 @@ Introduce a sleek iOS 2026 look by layering an **Aetheric Pulse** palette (soft 
 
 Audit of the post-redesign codebase (2026-04-22). All items below are concrete gaps found by reading the code — not speculative.
 
-**Completed 2026-04-22**: P1 (KineticBackground, KineticText, ProgressRing light-mode), P2 (gameplay option Semantics), P3 (recordLevelTime wired), P4 (leaderboard live XP), P5 (flutter_animate removed — unused), P8 (WorldMapPathScreen locked-node colors adapted). Remaining: P6 (Dynamic Type audit), P7 (WorldMapPathScreen test).
+**Completed 2026-04-22**: P1 (KineticBackground, KineticText, ProgressRing light-mode), P2 (gameplay option Semantics), P3 (recordLevelTime wired), P4 (leaderboard live XP), P5 (flutter_animate removed — unused), P8 (WorldMapPathScreen locked-node colors adapted). **Completed 2026-04-24**: P7 (WorldMapPathScreen 6-test suite), P6 partial token-phase (A1–A4: KineticObsidian visual refs removed across world_map_path_screen, feedback_toast, progress_screen), P6 Dynamic Type migration (B2–B5: textTheme adopted for login title/subtitle/CTA, app bar title, credit pill, nav label, node label, toast headline/amount). All 507 tests pass.
 
 ### P1 — Light-mode rendering (critical for `ThemeMode.system`) ✅ DONE
 
@@ -127,21 +127,13 @@ Also check `lib/features/navigation/track_detail_screen.dart` lines 280 and 448 
 - Use it (dopamine toast shimmer, login hero entrance, world-map node unlock animation are good candidates), or
 - Remove it from `pubspec.yaml` to keep dependency surface minimal.
 
-### P6 — Dynamic Type (text scaling) not implemented
+### P6 — Dynamic Type (text scaling) ✅ DONE
 
-No `MediaQuery.textScaler` calls exist anywhere in `lib/`. All font sizes are hard-coded constants in `design_system.dart` and `TextStyle(fontSize: ...)` calls in screens. iOS Accessibility Large Text will overflow containers on the gameplay screen and login card.
+All major `TextStyle(fontSize: ...)` calls migrated to `Theme.of(context).textTheme.*` across login screen (title → `headlineLarge`, subtitle → `bodyMedium`, CTA → `bodyMedium`), main app shell (app bar → `titleLarge`, credit pill → `labelSmall`, nav label → `labelSmall`), world map path screen (node label → `headlineMedium`), and feedback toast (headline → `bodyMedium`, amount → `bodyLarge`). Remaining hard-coded sizes in `track_detail_screen.dart` (emoji displays at 64pt/28pt, micro tile labels at 8/9pt) are intentional design constants, not user text.
 
-**Fix**: Audit the most-used `TextStyle` calls across gameplay, login, settings, and nav. Use `MediaQuery.textScalerOf(context).scale(size)` for body/label sizes, or switch to `Theme.of(context).textTheme.*` styles which already inherit scaling via `ThemeData`.
+### P7 — `WorldMapPathScreen` has no integration test ✅ DONE
 
-### P7 — `WorldMapPathScreen` has no integration test
-
-`test/features/navigation/` only contains `track_detail_gate_test.dart` and `world_map_header_overflow_test.dart`. The new `WorldMapPathScreen` (orientation toggle, zoom-to-current animation, node semantics) has no widget test at all.
-
-**Fix**: Add `test/features/navigation/world_map_path_screen_test.dart` covering:
-- Renders in portrait and landscape (pump with constrained size).
-- Current level node is visible after zoom animation settles.
-- Each unlocked node has a Semantics label.
-- Tapping a node triggers expected callback.
+`test/features/navigation/world_map_path_screen_test.dart` added with 6 tests: portrait render, landscape render, locked/unlocked node Semantics, orientation toggle, zoom-to-current animation, and current-node highlight. All pass.
 
 ### P8 — World map path screen uses `KineticObsidian` tokens inconsistently ✅ DONE (node colors)
 

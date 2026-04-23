@@ -20,7 +20,7 @@ class WorldMapPathScreen extends ConsumerWidget {
     final tracks = ContentProvider().tracks;
     return progressAsync.when(
       loading: () => const Center(
-          child: CircularProgressIndicator(color: KineticObsidian.electricCyan)),
+          child: CircularProgressIndicator(color: AethericPulseDark.brandBlue)),
       error: (e, _) => Center(
           child: Text('Error loading path',
               style: Theme.of(context).textTheme.bodyMedium)),
@@ -55,7 +55,7 @@ class _PathViewState extends State<_PathView> with TickerProviderStateMixin {
     )..repeat(reverse: true);
     _zoomController = AnimationController(
       vsync: this,
-      duration: KineticObsidian.durCelebrate,
+      duration: AethericPulseDark.durCelebrate,
     )..addListener(() {
         if (_zoomAnim != null) _tCtrl.value = _zoomAnim!.value;
       });
@@ -82,7 +82,7 @@ class _PathViewState extends State<_PathView> with TickerProviderStateMixin {
 
   void _animateTo(Matrix4 target) {
     _zoomAnim = Matrix4Tween(begin: _tCtrl.value, end: target).animate(
-      CurvedAnimation(parent: _zoomController, curve: KineticObsidian.easeOut),
+      CurvedAnimation(parent: _zoomController, curve: AethericPulseDark.easeOut),
     );
     _zoomController.forward(from: 0);
   }
@@ -152,7 +152,7 @@ class _PathViewState extends State<_PathView> with TickerProviderStateMixin {
               height: contentHeight,
               child: Stack(
                 children: [
-                  // Connector line under everything (soft Aetheric gradient).
+                  // Connector line under everything (gradient adapts to brightness).
                   CustomPaint(
                     size: Size(contentWidth, contentHeight),
                     painter: _PathLinePainter(
@@ -161,6 +161,7 @@ class _PathViewState extends State<_PathView> with TickerProviderStateMixin {
                       totalCount: totalCount,
                       vertical: _orientationIsVertical,
                       nodeDiameter: nodeDiameter,
+                      brightness: Theme.of(context).brightness,
                     ),
                   ),
                   for (int t = 0; t < tracks.length; t++)
@@ -180,8 +181,8 @@ class _PathViewState extends State<_PathView> with TickerProviderStateMixin {
           ),
           // Orientation toggle (floating) — bottom-right.
           Positioned(
-            right: KineticObsidian.spaceMd,
-            bottom: KineticObsidian.spaceMd,
+          right: AethericPulseDark.spaceLg,
+          bottom: AethericPulseDark.spaceLg,
             child: _OrientationToggle(
               isVertical: _orientationIsVertical,
               onTap: () {
@@ -272,6 +273,7 @@ class _PathLinePainter extends CustomPainter {
   final int totalCount;
   final bool vertical;
   final double nodeDiameter;
+  final Brightness brightness;
 
   _PathLinePainter({
     required this.spacing,
@@ -279,14 +281,18 @@ class _PathLinePainter extends CustomPainter {
     required this.totalCount,
     required this.vertical,
     required this.nodeDiameter,
+    required this.brightness,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
     if (totalCount == 0) return;
     final rect = Rect.fromLTWH(0, 0, size.width, size.height);
+    final gradient = brightness == Brightness.dark
+        ? AethericPulseDark.gradPrimary
+        : AethericPulseLight.gradient;
     final paint = Paint()
-      ..shader = AethericPulseLight.gradient.createShader(rect)
+      ..shader = gradient.createShader(rect)
       ..strokeWidth = 6
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
@@ -309,7 +315,8 @@ class _PathLinePainter extends CustomPainter {
       old.spacing != spacing ||
       old.crossAxis != crossAxis ||
       old.totalCount != totalCount ||
-      old.vertical != vertical;
+      old.vertical != vertical ||
+      old.brightness != brightness;
 }
 
 class _LevelNode extends StatelessWidget {
@@ -335,21 +342,26 @@ class _LevelNode extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final lockedFill = isDark
-        ? const LinearGradient(colors: [Color(0xFF2A2D34), Color(0xFF1D2026)])
+        ? AethericPulseDark.gradLocked
         : const LinearGradient(
             colors: [
               AethericPulseLight.lightSurfaceContainer,
               AethericPulseLight.lightSurfaceContainerHigh,
             ],
           );
-    final fill = unlocked ? AethericPulseLight.gradient : lockedFill;
+    final fill = unlocked
+        ? (isDark ? AethericPulseDark.gradPrimary : AethericPulseLight.gradient)
+        : lockedFill;
     final borderColor = unlocked
         ? (isDark
-            ? Colors.white.withValues(alpha: 0.7)
+            ? AethericPulseDark.onSurface.withValues(alpha: 0.7)
             : Colors.white.withValues(alpha: 0.9))
-        : (isDark ? Colors.white10 : Colors.black12);
-    final labelColor =
-        unlocked ? Colors.white : (isDark ? Colors.white38 : Colors.black38);
+        : (isDark ? AethericPulseDark.glassBorder : AethericPulseLight.glassBorderDimLight);
+    final labelColor = unlocked
+        ? Colors.white
+        : (isDark
+            ? AethericPulseDark.onSurface.withValues(alpha: 0.38)
+            : AethericPulseLight.lightOnSurface.withValues(alpha: 0.38));
     final sem = stars > 0
         ? 'Level $label completed with $stars stars'
         : unlocked
@@ -361,7 +373,9 @@ class _LevelNode extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: fill,
         shape: BoxShape.circle,
-        boxShadow: unlocked ? AethericPulseLight.shadowSoftBlue : null,
+        boxShadow: unlocked
+            ? (isDark ? AethericPulseDark.blueGlow : AethericPulseLight.shadowSoftBlue)
+            : null,
         border: Border.all(color: borderColor, width: 2),
       ),
       alignment: Alignment.center,
@@ -370,10 +384,7 @@ class _LevelNode extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(
-              fontFamily: KineticObsidian.fontDisplay,
-              fontFamilyFallback: KineticObsidian.fontFallback,
-              fontSize: 22,
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.w700,
               color: labelColor,
               letterSpacing: 1.2,
@@ -397,7 +408,7 @@ class _LevelNode extends StatelessWidget {
         scale: Tween<double>(begin: 1.0, end: current ? 1.08 : 1.03).animate(
           CurvedAnimation(
             parent: pulseController,
-            curve: KineticObsidian.easeSnappy,
+            curve: AethericPulseDark.easeSnappy,
           ),
         ),
         child: node,
@@ -410,8 +421,8 @@ class _LevelNode extends StatelessWidget {
       label: sem,
       child: ConstrainedBox(
         constraints: const BoxConstraints(
-          minWidth: KineticObsidian.minTapTarget,
-          minHeight: KineticObsidian.minTapTarget,
+          minWidth: AethericPulseDark.minTapTarget,
+          minHeight: AethericPulseDark.minTapTarget,
         ),
         child: GestureDetector(
           onTap: onTap,
@@ -437,7 +448,7 @@ class _OrientationToggle extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: GlassCard(
-          borderRadius: KineticObsidian.radiusPillow,
+          borderRadius: AethericPulseDark.radiusCard,
           padding: const EdgeInsets.all(12),
           child: Icon(
             isVertical ? Icons.view_week_rounded : Icons.view_stream_rounded,

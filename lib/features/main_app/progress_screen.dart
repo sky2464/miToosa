@@ -61,7 +61,7 @@ class _ProgressBody extends StatelessWidget {
             KineticChip(
               label: '${progress.streakCount} day streak',
               leading: const Icon(Icons.local_fire_department, size: 12,
-                  color: Color(0xFFFFB4AB)),
+                  color: AethericPulseDark.accentOrange),
             ),
             KineticChip(
               label: '$xp XP',

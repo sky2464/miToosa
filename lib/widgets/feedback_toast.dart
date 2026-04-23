@@ -42,7 +42,7 @@ class FeedbackToast extends StatefulWidget {
       ),
     );
     Overlay.of(context, rootOverlay: true).insert(entry);
-    Timer(holdFor + KineticObsidian.durCelebrate * 2, () {
+    Timer(holdFor + AethericPulseDark.durCelebrate * 2, () {
       try {
         entry.remove();
       } catch (_) {}
@@ -69,10 +69,10 @@ class _FeedbackToastState extends State<FeedbackToast>
       reverseDuration: const Duration(milliseconds: 220),
     );
     _scale = Tween<double>(begin: 0.6, end: 1.0).animate(
-      CurvedAnimation(parent: _ctrl, curve: KineticObsidian.springSoft),
+      CurvedAnimation(parent: _ctrl, curve: AethericPulseDark.springSoft),
     );
     _opacity = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _ctrl, curve: KineticObsidian.easeOut),
+      CurvedAnimation(parent: _ctrl, curve: AethericPulseDark.easeOut),
     );
     _ctrl.forward();
     // Auto-reverse after a short hold so it doesn't linger.
@@ -90,9 +90,6 @@ class _FeedbackToastState extends State<FeedbackToast>
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final fill = isDark
-        ? AethericPulseDark.glassFill
-        : AethericPulseLight.glassFillLight;
     final border = isDark
         ? AethericPulseDark.glassBorder
         : AethericPulseLight.glassBorderDimLight;
@@ -109,7 +106,7 @@ class _FeedbackToastState extends State<FeedbackToast>
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               decoration: BoxDecoration(
-                gradient: AethericPulseLight.gradientSoft,
+                gradient: isDark ? AethericPulseDark.gradPrimary : AethericPulseLight.gradientSoft,
                 borderRadius:
                     BorderRadius.circular(AethericPulseDark.radiusHero),
                 border: Border.all(color: border, width: 1),
@@ -122,14 +119,11 @@ class _FeedbackToastState extends State<FeedbackToast>
                   const SizedBox(width: 10),
                   Text(
                     widget.headline,
-                    style: const TextStyle(
-                      fontFamily: AethericPulseDark.fontBody,
-                      fontFamilyFallback: AethericPulseDark.fontFallback,
-                      fontSize: 16,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0.4,
                       color: Colors.white,
-                      shadows: [
+                      shadows: const [
                         Shadow(blurRadius: 8, color: Color(0x66000000)),
                       ],
                     ),
@@ -137,17 +131,12 @@ class _FeedbackToastState extends State<FeedbackToast>
                   const SizedBox(width: 10),
                   Text(
                     widget.amount,
-                    style: const TextStyle(
-                      fontFamily: AethericPulseDark.fontBody,
-                      fontFamilyFallback: AethericPulseDark.fontFallback,
-                      fontSize: 18,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.w900,
                       color: Colors.white,
                     ),
                   ),
                   const SizedBox(width: 2),
-                  // Swallow the gradient fill with a soft backdrop for legibility.
-                  Opacity(opacity: 0, child: Container(color: fill, width: 0, height: 0)),
                 ],
               ),
             ),

@@ -420,8 +420,8 @@ class _ThemeModeSelector extends StatelessWidget {
         label: '$label appearance',
         child: ConstrainedBox(
           constraints: const BoxConstraints(
-            minWidth: KineticObsidian.minTapTarget,
-            minHeight: KineticObsidian.minTapTarget,
+            minWidth: AethericPulseDark.minTapTarget,
+            minHeight: AethericPulseDark.minTapTarget,
           ),
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,

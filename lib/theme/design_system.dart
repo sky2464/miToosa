@@ -117,10 +117,6 @@ class KineticObsidian {
   static const Duration durFast = Duration(milliseconds: 150);
   static const Duration durMed = Duration(milliseconds: 250);
   static const Duration durSlow = Duration(milliseconds: 400);
-  static const Duration durCelebrate = Duration(milliseconds: 500);
-  static const Curve easeOut = Curves.easeOutCubic;
-  static const Curve easeSnappy = Curves.easeInOut;
-  static const Curve springSoft = Curves.easeOutBack;
 
   // Old animation aliases
   static const Duration animFast = durFast;
@@ -129,10 +125,6 @@ class KineticObsidian {
   static const Curve springBouncy = Curves.elasticOut;
   static const Curve springSnappy = Curves.easeOutBack;
   static const Curve springSmooth = Curves.easeOutCubic;
-
-  // ── Accessibility ──────────────────────────────────────────────────────
-  /// iOS HIG + WCAG minimum hit target (44×44 pt).
-  static const double minTapTarget = 44.0;
 
   // ── Font families (bundled; no runtime CDN fetch) ──────────────────────
   static const String fontDisplay = 'Orbitron';
@@ -523,6 +515,11 @@ class AethericPulseDark {
     colors: [accentCyan, brandBlue],
   );
 
+  /// Locked/inactive node fill in dark mode.
+  static const LinearGradient gradLocked = LinearGradient(
+    colors: [Color(0xFF2A2D34), Color(0xFF1D2026)],
+  );
+
   /// Top-center blue radial glow. Used for app background atmosphere.
   static const RadialGradient heroGlow = RadialGradient(
     center: Alignment.topCenter,
@@ -565,6 +562,13 @@ class AethericPulseDark {
   static const Duration durPress = Duration(milliseconds: 120);
   static const Duration durNormal = Duration(milliseconds: 300);
   static const Duration durHero = Duration(milliseconds: 600);
+  static const Duration durCelebrate = Duration(milliseconds: 500);
+  static const Curve easeOut = Curves.easeOutCubic;
+  static const Curve easeSnappy = Curves.easeInOut;
+  static const Curve springSoft = Curves.easeOutBack;
+
+  // ── Accessibility ─────────────────────────────────────────────────────────
+  static const double minTapTarget = 44.0;
 
   // ── Font families ─────────────────────────────────────────────────────────
   static const String fontBody = 'Inter';

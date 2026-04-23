@@ -348,8 +348,8 @@ class _KineticButton extends StatelessWidget {
       label: label,
       child: ConstrainedBox(
         constraints: const BoxConstraints(
-          minWidth: KineticObsidian.minTapTarget,
-          minHeight: KineticObsidian.minTapTarget,
+          minWidth: AethericPulseDark.minTapTarget,
+          minHeight: AethericPulseDark.minTapTarget,
         ),
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
@@ -385,8 +385,8 @@ class _PlayButton extends StatelessWidget {
       label: 'Play',
       child: ConstrainedBox(
         constraints: const BoxConstraints(
-          minWidth: KineticObsidian.minTapTarget,
-          minHeight: KineticObsidian.minTapTarget,
+          minWidth: AethericPulseDark.minTapTarget,
+          minHeight: AethericPulseDark.minTapTarget,
         ),
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
