@@ -60,6 +60,24 @@ Every feature and release must pass through these gates in order. Skipping gates
 Staging URL: TBD
 ```
 
+## Web Build Command
+
+```bash
+flutter build web --no-tree-shake-icons --release
+```
+
+Deploy the `build/web/` output directory to your chosen host. The `--no-tree-shake-icons` flag is required to prevent Flutter from subsetting icon fonts incorrectly. The `--release` flag enables minification and production optimisations.
+
+For Firebase Hosting:
+```bash
+flutter build web --no-tree-shake-icons --release && firebase deploy --only hosting
+```
+
+For Vercel (via CLI):
+```bash
+flutter build web --no-tree-shake-icons --release && vercel build/web --prod
+```
+
 ## Release Blockers
 
 These conditions **must** be met before any release:
@@ -91,3 +109,19 @@ Example: "Add streak freeze purchase"
 5. **QA:** Tested on staging — purchase flow works, freeze count updates
 
 Only after all 5 gates: merge to `main` and tag for release.
+
+---
+
+## Gate Log
+
+Record each gate exercise here so the team can verify the sequence was followed.
+
+| Date | Feature / Branch | Gate | Outcome | Notes |
+|------|-----------------|------|---------|-------|
+| <!-- YYYY-MM-DD --> | <!-- feature name --> | <!-- 1–5 --> | <!-- Pass / Fail --> | <!-- link to output --> |
+
+### Sprint 1 Gate Log (2026-04-22 — TBD)
+
+| Date | Feature / Branch | Gate | Outcome | Notes |
+|------|-----------------|------|---------|-------|
+| TBD | Sprint 1 staging deploy | 5 — `/qa` | Pending | Awaiting staging URL |
