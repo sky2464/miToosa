@@ -281,13 +281,7 @@ class _LocalSessionNotifier extends Notifier<LocalSessionState> {
         _client = null;
       }
 
-      state = state.copyWith(
-        phase: LocalSessionPhase.idle,
-        sessionId: null,
-        players: {},
-        currentPlayerId: null,
-        qrUrl: null,
-      );
+      state = LocalSessionState(phase: LocalSessionPhase.idle);
     } catch (e) {
       print('Error ending session: $e');
     }
@@ -296,12 +290,7 @@ class _LocalSessionNotifier extends Notifier<LocalSessionState> {
   /// Reset error state.
   void resetError() {
     if (state.phase == LocalSessionPhase.error) {
-      state = state.copyWith(
-        phase: LocalSessionPhase.idle,
-        errorMessage: null,
-        sessionId: null,
-        players: {},
-      );
+      state = LocalSessionState(phase: LocalSessionPhase.idle);
     }
   }
 }
