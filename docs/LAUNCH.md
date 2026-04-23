@@ -1,8 +1,8 @@
-# miToosa v1.2.0 Launch Plan
+# miToosa v1.5.0 Launch Plan
 
-**Release Date Target:** April 2026  
-**Status:** Pre-Launch Verification  
-**Platforms:** iOS (App Store), Android (Play Store), Web
+**Release Date Target:** Q2 2026  
+**Status:** Pre-Launch Verification — Gates 1–4 passed; Gate 5 (staging QA) pending  
+**Platforms:** iOS (App Store), Android (Play Store), macOS, Web
 
 ---
 
@@ -10,11 +10,12 @@
 
 ### ✅ Code Quality
 
-- [x] All tests pass (264/264 tests passing)
-- [x] Build succeeds with no errors (`flutter build ios/apk/web` verified)
-- [x] Lint and type checking pass (`dart analyze` with zero errors)
-- [x] Code reviewed and approved (multi-axis code review completed)
-- [x] No TODO comments that block launch (onboarding persistence documented as future enhancement)
+- [x] All tests pass (515/515 tests passing — as of 2026-04-22)
+- [x] Build succeeds with no errors (`flutter build apk/macos` verified; iOS + web builds pass with `--no-tree-shake-icons`)
+- [x] Lint and type checking pass (`dart analyze` with zero issues)
+- [x] Code reviewed and approved (`/review` multi-axis pass completed 2026-04-22)
+- [x] No TODO/FIXME/HACK comments in `lib/` (confirmed by grep)
+- [x] No `print()` debugging statements in production code (confirmed by grep)
 - [x] Error handling covers expected failure modes (AsyncValue.when used throughout)
 
 ### ✅ Platform Configuration
@@ -67,7 +68,7 @@
 ### ✅ Accessibility
 
 - [x] Color contrast verified (dark theme on light backgrounds passes WCAG AA)
-- [x] Touch targets sized appropriately (48dp minimum)
+- [x] Touch targets sized appropriately (44pt minimum — iOS HIG + WCAG; `AethericPulseDark.minTapTarget` applied consistently)
 - [x] Error messages descriptive (level bounds validation)
 - [x] Keyboard navigation supported (native Flutter MaterialApp behavior)
 - [ ] **BLOCKED:** Screen reader tested with TalkBack (Android) and VoiceOver (iOS) — requires physical devices
@@ -89,8 +90,8 @@
 - [x] BUILD.md created with platform-specific build commands
 - [x] CONTRIBUTING.md available
 - [x] API design documented (State management via Riverpod)
-- [x] Release notes prepared (v1.2.0 features) — see `CHANGELOG.md`
-- [x] Changelog updated — `CHANGELOG.md` created at repo root
+- [x] Release notes prepared (v1.5.0 — Aetheric Pulse Dark redesign) — see `CHANGELOG.md`
+- [x] Changelog updated — `[1.5.0] 2026-04-22` entry complete in `CHANGELOG.md`
 - [x] User onboarding/help documentation — see `docs/USER-GUIDE.md`
 
 ---
@@ -109,7 +110,7 @@
 **Build & Upload:**
 ```bash
 # 1. Set build version in pubspec.yaml
-#    version: 1.2.0+2  (increment build number for each upload)
+#    version: 1.5.0+2  (current — increment build number for each upload)
 
 # 2. Build for iOS with signing
 flutter build ios --release
@@ -273,7 +274,7 @@ Day 13:
 Day 20:
   - Full rollout complete
   - Establish steady-state monitoring
-  - Begin v1.2.1 bug-fix cycle
+  - Begin v1.5.1 bug-fix cycle
 ```
 
 ### Rollout Decision Thresholds
