@@ -18,23 +18,57 @@ class QRHostScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sessionState = ref.watch(localSessionProvider);
+    final isActive = sessionState.phase == LocalSessionPhase.hosting ||
+        sessionState.phase == LocalSessionPhase.playing;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Host Multiplayer Session'),
-        centerTitle: true,
+    return PopScope(
+      canPop: !isActive,
+      onPopInvokedWithResult: (didPop, _) async {
+        if (didPop) return;
+        final shouldExit = await _confirmExit(context);
+        if (shouldExit && context.mounted) {
+          ref.read(localSessionProvider.notifier).endSession();
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Host Multiplayer Session'),
+          centerTitle: true,
+        ),
+        body: _buildBody(context, ref, sessionState),
+        floatingActionButton: sessionState.phase == LocalSessionPhase.hosting
+            ? FloatingActionButton(
+                onPressed: () {
+                  ref.read(localSessionProvider.notifier).endSession();
+                },
+                tooltip: 'End Session',
+                child: const Icon(Icons.close),
+              )
+            : null,
       ),
-      body: _buildBody(context, ref, sessionState),
-      floatingActionButton: sessionState.phase == LocalSessionPhase.hosting
-          ? FloatingActionButton(
-              onPressed: () {
-                ref.read(localSessionProvider.notifier).endSession();
-              },
-              tooltip: 'End Session',
-              child: const Icon(Icons.close),
-            )
-          : null,
     );
+  }
+
+  Future<bool> _confirmExit(BuildContext context) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Exit Game?'),
+        content: const Text('Leaving will end the session for all players.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Stay'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Exit'),
+          ),
+        ],
+      ),
+    );
+    return result ?? false;
   }
 
   Widget _buildBody(BuildContext context, WidgetRef ref, LocalSessionState state) {

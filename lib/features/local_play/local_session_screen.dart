@@ -17,21 +17,54 @@ class LocalSessionScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(localSessionProvider);
+    final isActive = state.phase == LocalSessionPhase.playing;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Local Play'),
+    return PopScope(
+      canPop: !isActive,
+      onPopInvokedWithResult: (didPop, _) async {
+        if (didPop) return;
+        final shouldExit = await _confirmExit(context);
+        if (shouldExit && context.mounted) {
+          ref.read(localSessionProvider.notifier).endSession();
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Local Play'),
+          actions: [
+            if (state.phase == LocalSessionPhase.playing)
+              IconButton(
+                onPressed: () => ref.read(localSessionProvider.notifier).endSession(),
+                icon: const Icon(Icons.close_rounded),
+                tooltip: 'End Session',
+              ),
+          ],
+        ),
+        body: _buildBody(context, ref, state),
+      ),
+    );
+  }
+
+  Future<bool> _confirmExit(BuildContext context) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Exit Game?'),
+        content: const Text('Leaving will end the session for all players.'),
         actions: [
-          if (state.phase == LocalSessionPhase.playing)
-            IconButton(
-              onPressed: () => ref.read(localSessionProvider.notifier).endSession(),
-              icon: const Icon(Icons.close_rounded),
-              tooltip: 'End Session',
-            ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Stay'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Exit'),
+          ),
         ],
       ),
-      body: _buildBody(context, ref, state),
     );
+    return result ?? false;
   }
 
   Widget _buildBody(BuildContext context, WidgetRef ref, LocalSessionState state) {
