@@ -61,6 +61,11 @@ void main() {
       expect(state.isActive, true);
     });
 
+    test('isActive returns true for joining phase', () {
+      final state = LocalSessionState(phase: LocalSessionPhase.joining);
+      expect(state.isActive, true);
+    });
+
     test('isActive returns false for idle phase', () {
       final state = LocalSessionState(phase: LocalSessionPhase.idle);
       expect(state.isActive, false);
@@ -301,6 +306,76 @@ void main() {
       expect(LocalSessionPhase.playing, isNotNull);
       expect(LocalSessionPhase.ended, isNotNull);
       expect(LocalSessionPhase.error, isNotNull);
+    });
+  });
+
+  group('LocalSessionNotifier - edge cases', () {
+    late ProviderContainer container;
+
+    setUp(() {
+      container = ProviderContainer();
+    });
+
+    tearDown(() {
+      container.dispose();
+    });
+
+    test('startGame is no-op when not active', () {
+      // State starts idle
+      container.read(localSessionProvider.notifier).startGame();
+      final state = container.read(localSessionProvider);
+      expect(state.phase, LocalSessionPhase.idle);
+    });
+
+    test('recordMove is no-op when not active', () {
+      // State starts idle - recordMove should not throw
+      container.read(localSessionProvider.notifier).recordMove(0, true, 3, 50);
+      final state = container.read(localSessionProvider);
+      expect(state.phase, LocalSessionPhase.idle);
+    });
+
+    test('recordMove is no-op when currentPlayerId is null', () async {
+      await container.read(localSessionProvider.notifier).startHosting('p1', 'Alice');
+      // Override to remove currentPlayerId
+      container.read(localSessionProvider.notifier).state =
+          container.read(localSessionProvider).copyWith(
+                phase: LocalSessionPhase.playing,
+              );
+      // State has no currentPlayerId set via copyWith (still has it from startHosting)
+      // Manually clear it
+      final s = container.read(localSessionProvider);
+      container.read(localSessionProvider.notifier).state =
+          LocalSessionState(phase: LocalSessionPhase.playing, players: s.players);
+
+      container.read(localSessionProvider.notifier).recordMove(0, true, 3, 50);
+      // Should not crash, player scores unchanged
+      final finalState = container.read(localSessionProvider);
+      expect(finalState.players['p1']?.xp, 0);
+    });
+
+    test('resetError is no-op when not in error state', () async {
+      await container.read(localSessionProvider.notifier).startHosting('p1', 'Alice');
+      container.read(localSessionProvider.notifier).resetError();
+      // Phase stays at hosting (no change)
+      final state = container.read(localSessionProvider);
+      expect(state.phase, LocalSessionPhase.hosting);
+    });
+
+    test('endSession after idle completes without error', () async {
+      // endSession on an already-idle provider should not throw
+      await container.read(localSessionProvider.notifier).endSession();
+      final state = container.read(localSessionProvider);
+      expect(state.phase, LocalSessionPhase.idle);
+    });
+
+    test('isActive returns false for ended phase', () {
+      final state = LocalSessionState(phase: LocalSessionPhase.ended);
+      expect(state.isActive, false);
+    });
+
+    test('isActive returns false for error phase', () {
+      final state = LocalSessionState(phase: LocalSessionPhase.error);
+      expect(state.isActive, false);
     });
   });
 }
