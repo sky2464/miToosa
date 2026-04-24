@@ -13,7 +13,7 @@ import '../local_session/local_session_provider.dart';
 /// - Start Game button (when ready)
 /// - Error state handling
 class QRHostScreen extends ConsumerWidget {
-  const QRHostScreen({Key? key}) : super(key: key);
+  const QRHostScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -189,9 +189,9 @@ class QRHostScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 16),
                     if (state.players.isEmpty)
-                      Column(
+                      const Column(
                         children: [
-                          const SizedBox(
+                          SizedBox(
                             height: 24,
                             child: SizedBox(
                               width: 24,
@@ -199,8 +199,8 @@ class QRHostScreen extends ConsumerWidget {
                               child: CircularProgressIndicator(strokeWidth: 2),
                             ),
                           ),
-                          const SizedBox(height: 12),
-                          const Text(
+                          SizedBox(height: 12),
+                          Text(
                             'Waiting for players to scan QR code...',
                             style: TextStyle(
                               fontSize: 14,
@@ -253,7 +253,7 @@ class QRHostScreen extends ConsumerWidget {
                                 ],
                               ),
                             );
-                          }).toList(),
+                          }),
                         ],
                       ),
                   ],

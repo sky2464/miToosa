@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/network/local_network_client.dart';
@@ -283,7 +284,7 @@ class _LocalSessionNotifier extends Notifier<LocalSessionState> {
 
       state = LocalSessionState(phase: LocalSessionPhase.idle);
     } catch (e) {
-      print('Error ending session: $e');
+      debugPrint('Error ending session: $e');
     }
   }
 

@@ -15,12 +15,9 @@ abstract class NetworkException implements Exception {
 /// Connection to WebSocket server failed.
 class ConnectionFailedException extends NetworkException {
   ConnectionFailedException({
-    required String message,
-    dynamic originalError,
-  }) : super(
-          message: message,
-          originalError: originalError,
-        );
+    required super.message,
+    super.originalError,
+  });
 }
 
 /// Session ID or connection info invalid or expired.
@@ -29,12 +26,9 @@ class InvalidSessionException extends NetworkException {
 
   InvalidSessionException({
     required this.sessionId,
-    required String message,
-    dynamic originalError,
-  }) : super(
-          message: message,
-          originalError: originalError,
-        );
+    required super.message,
+    super.originalError,
+  });
 }
 
 /// QR code could not be parsed or decoded.
@@ -42,13 +36,10 @@ class InvalidQRException extends NetworkException {
   final String? qrData;
 
   InvalidQRException({
-    required String message,
+    required super.message,
     this.qrData,
-    dynamic originalError,
-  }) : super(
-          message: message,
-          originalError: originalError,
-        );
+    super.originalError,
+  });
 }
 
 /// Session has expired (no activity for >5 minutes).
@@ -59,10 +50,9 @@ class SessionExpiredException extends NetworkException {
   SessionExpiredException({
     required this.sessionId,
     required this.expirationTime,
-    dynamic originalError,
+    super.originalError,
   }) : super(
           message: 'Session $sessionId expired at $expirationTime',
-          originalError: originalError,
         );
 }
 
@@ -71,13 +61,10 @@ class NetworkTimeoutException extends NetworkException {
   final Duration timeout;
 
   NetworkTimeoutException({
-    required String message,
+    required super.message,
     required this.timeout,
-    dynamic originalError,
-  }) : super(
-          message: message,
-          originalError: originalError,
-        );
+    super.originalError,
+  });
 }
 
 /// Server port could not be bound (already in use or permission denied).
@@ -86,12 +73,9 @@ class PortBindingException extends NetworkException {
 
   PortBindingException({
     required this.port,
-    required String message,
-    dynamic originalError,
-  }) : super(
-          message: message,
-          originalError: originalError,
-        );
+    required super.message,
+    super.originalError,
+  });
 }
 
 /// Max reconnection attempts exceeded.
@@ -102,10 +86,9 @@ class MaxReconnectAttemptsExceededException extends NetworkException {
   MaxReconnectAttemptsExceededException({
     required this.attempts,
     required this.maxBackoff,
-    dynamic originalError,
+    super.originalError,
   }) : super(
           message: 'Max reconnection attempts ($attempts) exceeded after backoff of $maxBackoff',
-          originalError: originalError,
         );
 }
 
@@ -115,10 +98,7 @@ class InvalidMessageFormatException extends NetworkException {
 
   InvalidMessageFormatException({
     required this.messageData,
-    required String message,
-    dynamic originalError,
-  }) : super(
-          message: message,
-          originalError: originalError,
-        );
+    required super.message,
+    super.originalError,
+  });
 }

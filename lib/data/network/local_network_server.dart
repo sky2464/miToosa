@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+
 import '../../data/network/network_exceptions.dart';
 import '../../data/network/network_models.dart';
 
@@ -54,7 +56,7 @@ class LocalNetworkServer {
         _handleNewConnection,
         onError: (error) {
           if (_isRunning) {
-            print('WebSocket server error: $error');
+            debugPrint('WebSocket server error: $error');
           }
         },
         cancelOnError: false,
@@ -85,7 +87,7 @@ class LocalNetworkServer {
         try {
           socket.add(encodedMessage);
         } catch (e) {
-          print('Failed to send message to client $clientId: $e');
+          debugPrint('Failed to send message to client $clientId: $e');
         }
       }
     }
@@ -108,7 +110,7 @@ class LocalNetworkServer {
     try {
       socket.add(encodedMessage);
     } catch (e) {
-      print('Failed to send message to client $clientId: $e');
+      debugPrint('Failed to send message to client $clientId: $e');
     }
   }
 
@@ -129,7 +131,7 @@ class LocalNetworkServer {
       try {
         await _connectedClients[clientId]?.close();
       } catch (e) {
-        print('Error closing client $clientId: $e');
+        debugPrint('Error closing client $clientId: $e');
       }
     }
 
@@ -140,7 +142,7 @@ class LocalNetworkServer {
     try {
       await _server?.close(force: true);
     } catch (e) {
-      print('Error closing server: $e');
+      debugPrint('Error closing server: $e');
     }
 
     _server = null;
@@ -150,14 +152,14 @@ class LocalNetworkServer {
   void _handleNewConnection(WebSocket socket) {
     final clientId = _generateClientId();
 
-    print('New WebSocket connection: $clientId');
+    debugPrint('New WebSocket connection: $clientId');
 
     _connectedClients[clientId] = socket;
 
     // Set up handshake timeout
     final timer = Timer(handshakeTimeout, () {
       if (!_validatedClients.contains(clientId)) {
-        print('Handshake timeout for client $clientId');
+        debugPrint('Handshake timeout for client $clientId');
         _disconnectClient(clientId);
       }
     });
@@ -168,7 +170,7 @@ class LocalNetworkServer {
         try {
           _handleMessage(clientId, message as String, timer);
         } catch (e) {
-          print('Error handling message from client $clientId: $e');
+          debugPrint('Error handling message from client $clientId: $e');
           _disconnectClient(clientId);
         }
       },
@@ -178,7 +180,7 @@ class LocalNetworkServer {
       },
       onError: (error) {
         timer.cancel();
-        print('WebSocket error for client $clientId: $error');
+        debugPrint('WebSocket error for client $clientId: $error');
         _disconnectClient(clientId);
       },
       cancelOnError: true,
@@ -215,10 +217,10 @@ class LocalNetworkServer {
       // Pass validated messages to the callback
       onMessageReceived(message, clientId);
     } on NetworkException catch (e) {
-      print('Network error from client $clientId: ${e.message}');
+      debugPrint('Network error from client $clientId: ${e.message}');
       _disconnectClient(clientId);
     } catch (e) {
-      print('Error processing message from client $clientId: $e');
+      debugPrint('Error processing message from client $clientId: $e');
       _disconnectClient(clientId);
     }
   }
@@ -231,14 +233,14 @@ class LocalNetworkServer {
   ) {
     // Validate session ID
     if (message.sessionId != sessionId) {
-      print('Invalid session ID from client $clientId');
+      debugPrint('Invalid session ID from client $clientId');
       _disconnectClient(clientId);
       return;
     }
 
     // Check max clients limit
     if (_validatedClients.length >= maxClients) {
-      print('Max clients reached, rejecting $clientId');
+      debugPrint('Max clients reached, rejecting $clientId');
       _disconnectClient(clientId);
       return;
     }
@@ -247,7 +249,7 @@ class LocalNetworkServer {
     _validatedClients.add(clientId);
     handshakeTimer.cancel();
 
-    print('Client $clientId validated with session $sessionId');
+    debugPrint('Client $clientId validated with session $sessionId');
 
     // Send acknowledgment
     final ack = JoinSessionAckMessage(
@@ -280,14 +282,14 @@ class LocalNetworkServer {
     try {
       _connectedClients[clientId]?.close();
     } catch (e) {
-      print('Error closing socket for $clientId: $e');
+      debugPrint('Error closing socket for $clientId: $e');
     }
 
     _connectedClients.remove(clientId);
     _validatedClients.remove(clientId);
 
     if (wasValidated) {
-      print('Client $clientId disconnected');
+      debugPrint('Client $clientId disconnected');
 
       // Notify callback
       onClientDisconnected?.call(clientId);

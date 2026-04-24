@@ -84,7 +84,7 @@ class LocalNetworkInfo {
 
   /// Returns the URL for a WebSocket server on the local network.
   /// 
-  /// Format: "ws://192.168.1.100:8765?session=<sessionId>&playerId=<playerId>"
+  /// Format: `ws://192.168.1.100:8765?session=<sessionId>&playerId=<playerId>`
   static Future<String> generateWebSocketURL({
     required int port,
     required String sessionId,

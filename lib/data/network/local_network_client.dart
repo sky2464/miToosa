@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -96,7 +97,7 @@ class LocalNetworkClient {
       final encodedMessage = jsonEncode(json);
       _channel!.sink.add(encodedMessage);
     } catch (e) {
-      print('Error sending message: $e');
+      debugPrint('Error sending message: $e');
       _handleError(e);
     }
   }
@@ -109,7 +110,7 @@ class LocalNetworkClient {
     _setState(LocalNetworkClientState.connecting);
 
     try {
-      print('Connecting to $wsUrl (attempt ${_reconnectAttempts + 1})');
+      debugPrint('Connecting to $wsUrl (attempt ${_reconnectAttempts + 1})');
 
       // Create WebSocket connection with timeout
       _channel = WebSocketChannel.connect(Uri.parse(wsUrl));
@@ -133,7 +134,7 @@ class LocalNetworkClient {
           try {
             _handleMessage(message as String, handshakeCompleted, timeoutHandle);
           } catch (e) {
-            print('Error handling message: $e');
+            debugPrint('Error handling message: $e');
             _handleError(e);
           }
         },
@@ -143,7 +144,7 @@ class LocalNetworkClient {
         },
         onError: (error) {
           timeoutHandle.cancel();
-          print('WebSocket error: $error');
+          debugPrint('WebSocket error: $error');
           _handleError(error);
         },
         cancelOnError: true,
@@ -156,7 +157,7 @@ class LocalNetworkClient {
         timestamp: DateTime.now().millisecondsSinceEpoch,
       );
 
-      print('Sending join_session handshake');
+      debugPrint('Sending join_session handshake');
       _channel!.sink.add(jsonEncode(joinMessage.toJson()));
 
       // Wait for handshake completion with timeout
@@ -176,7 +177,7 @@ class LocalNetworkClient {
       }
     } catch (e) {
       _isConnecting = false;
-      print('Connection error: $e');
+      debugPrint('Connection error: $e');
       _handleConnectionError(e);
     }
   }
@@ -207,7 +208,7 @@ class LocalNetworkClient {
             message: 'Session ID mismatch in acknowledgment',
           );
         }
-        print('Handshake successful, joined with ${message.connectedPlayers.length} players');
+        debugPrint('Handshake successful, joined with ${message.connectedPlayers.length} players');
         handshakeCompleted.complete(true);
         return;
       }
@@ -217,14 +218,14 @@ class LocalNetworkClient {
         onMessageReceived(message);
       }
     } on NetworkException catch (e) {
-      print('Network error: ${e.message}');
+      debugPrint('Network error: ${e.message}');
       if (!handshakeCompleted.isCompleted) {
         handshakeCompleted.completeError(e);
       } else {
         _handleError(e);
       }
     } catch (e) {
-      print('Error processing message: $e');
+      debugPrint('Error processing message: $e');
       if (!handshakeCompleted.isCompleted) {
         handshakeCompleted.completeError(e);
       } else {
@@ -245,14 +246,14 @@ class LocalNetworkClient {
     _subscription = null;
 
     if (_reconnectAttempts >= maxReconnectAttempts) {
-      print('Max reconnect attempts reached');
+      debugPrint('Max reconnect attempts reached');
       _setState(LocalNetworkClientState.error);
       _isConnecting = false;
       return;
     }
 
     _reconnectAttempts++;
-    print('Disconnected, will reconnect in ${_currentReconnectDelay.inSeconds}s '
+    debugPrint('Disconnected, will reconnect in ${_currentReconnectDelay.inSeconds}s '
         '(attempt $_reconnectAttempts/$maxReconnectAttempts)');
 
     _reconnectTimer?.cancel();
@@ -277,7 +278,7 @@ class LocalNetworkClient {
     }
 
     if (_reconnectAttempts >= maxReconnectAttempts) {
-      print('Max reconnect attempts reached');
+      debugPrint('Max reconnect attempts reached');
       _setState(LocalNetworkClientState.error);
       return;
     }
@@ -288,7 +289,7 @@ class LocalNetworkClient {
           .clamp(1, maxReconnectDelay.inSeconds),
     );
 
-    print('Connection error: $error, will retry in ${_currentReconnectDelay.inSeconds}s '
+    debugPrint('Connection error: $error, will retry in ${_currentReconnectDelay.inSeconds}s '
         '(attempt $_reconnectAttempts/$maxReconnectAttempts)');
 
     _setState(LocalNetworkClientState.error);
@@ -302,7 +303,7 @@ class LocalNetworkClient {
 
   /// Handle generic errors during message processing.
   void _handleError(Object error) {
-    print('Error: $error');
+    debugPrint('Error: $error');
     _handleDisconnection();
   }
 
@@ -314,7 +315,7 @@ class LocalNetworkClient {
     try {
       await _channel?.sink.close();
     } catch (e) {
-      print('Error closing connection: $e');
+      debugPrint('Error closing connection: $e');
     }
 
     _channel = null;
@@ -325,7 +326,7 @@ class LocalNetworkClient {
   void _setState(LocalNetworkClientState newState) {
     if (_state != newState) {
       _state = newState;
-      print('Connection state changed to: $newState');
+      debugPrint('Connection state changed to: $newState');
       onConnectionStateChanged?.call(_state);
     }
   }
@@ -348,7 +349,7 @@ class LocalNetworkClient {
 
       return (qrText, sessionId, playerId);
     } catch (e) {
-      print('Error parsing QR URL: $e');
+      debugPrint('Error parsing QR URL: $e');
       return null;
     }
   }

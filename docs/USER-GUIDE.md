@@ -1,5 +1,3 @@
-<!-- HUMAN-ACTION-REQUIRED: Replace contact info placeholders before publication -->
-<!-- HUMAN-ACTION-REQUIRED: Economy language (hearts, share-to-refuel) will change when free-games allowance lands — see docs/PRODUCT-WEDGE.md -->
 
 # User Guide — miToosa
 
@@ -137,5 +135,5 @@ miToosa stores all data locally on your device. No data is sent to any server. S
 ## Support
 
 For issues or feedback:
-- **GitHub:** [TODO: Add repository URL]
-- **Email:** [TODO: Add contact email]
+- **GitHub:** [https://github.com/sky2464/miToosa](https://github.com/sky2464/miToosa)
+- **Email:** sky2464@gmail.com

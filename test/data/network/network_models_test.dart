@@ -4,7 +4,6 @@ import 'package:mitoosa/data/network/network_models.dart';
 void main() {
   group('NetworkMessage Serialization', () {
     test('JoinSessionMessage serializes and deserializes correctly', () {
-      final now = DateTime.now().millisecondsSinceEpoch;
       const originalMessage = JoinSessionMessage(
         playerId: 'player-123',
         sessionId: 'session-abc',
@@ -153,7 +152,7 @@ void main() {
     });
 
     test('SyncStateMessage serializes and deserializes correctly', () {
-      final originalMessage = SyncStateMessage(
+      final originalMessage = const SyncStateMessage(
         sessionId: 'session-abc',
         currentLevelId: 'level-42',
         playerScores: {'player-1': 100, 'player-2': 80},

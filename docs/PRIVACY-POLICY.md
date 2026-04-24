@@ -1,4 +1,3 @@
-<!-- HUMAN-ACTION-REQUIRED: Replace contact info placeholders before publication -->
 
 # Privacy Policy — miToosa
 
@@ -80,5 +79,5 @@ We may update this Privacy Policy from time to time. Changes will be noted by up
 
 If you have questions about this Privacy Policy, contact us at:
 
-**Email:** [TODO: Add contact email]  
-**GitHub:** [TODO: Add repository URL]
+**Email:** sky2464@gmail.com  
+**GitHub:** [https://github.com/sky2464/miToosa](https://github.com/sky2464/miToosa)

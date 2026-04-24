@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mitoosa/data/network/local_network_client.dart';
 import 'package:mitoosa/data/network/network_models.dart';
@@ -213,7 +211,7 @@ void main() {
 
   group('Message handling', () {
     test('JoinSessionAckMessage can be created', () {
-      final message = JoinSessionAckMessage(
+      final message = const JoinSessionAckMessage(
         sessionId: 'sess-123',
         connectedPlayers: ['client-1', 'client-2'],
         timestamp: 1000,
@@ -224,7 +222,7 @@ void main() {
     });
 
     test('MoveSelectedMessage can be created', () {
-      final message = MoveSelectedMessage(
+      final message = const MoveSelectedMessage(
         sessionId: 'sess-123',
         playerId: 'player-456',
         levelId: 'level-1',
@@ -242,7 +240,7 @@ void main() {
     });
 
     test('GameStartMessage can be created', () {
-      final message = GameStartMessage(
+      final message = const GameStartMessage(
         sessionId: 'sess-123',
         levelId: 'level-1',
         durationSeconds: 60,

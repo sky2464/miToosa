@@ -1,11 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mitoosa/data/network/local_network_server.dart';
 import 'package:mitoosa/data/network/network_exceptions.dart';
 import 'package:mitoosa/data/network/network_models.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
-
 void main() {
   group('LocalNetworkServer', () {
     late LocalNetworkServer server;
@@ -61,31 +61,37 @@ void main() {
     });
 
     test('Client handshake validates session ID', () async {
-      NetworkMessage? receivedMessage;
-      String? connectedClientId;
-
       server = LocalNetworkServer(
         sessionId: testSessionId,
-        onMessageReceived: (message, clientId) {
-          receivedMessage = message;
-        },
+        onMessageReceived: (message, clientId) {},
         onClientConnected: (clientId) {
-          connectedClientId = clientId;
+          fail('Should not validate a client with wrong session ID');
         },
       );
 
-      final port = await server.start(testPort);
+      await server.start(testPort);
 
-      // Create a mock client that sends join_session with WRONG session ID
-      final wrongSessionMessage = JoinSessionMessage(
-        playerId: 'player-123',
-        sessionId: 'wrong-session-id',
-        timestamp: DateTime.now().millisecondsSinceEpoch,
+      // Connect with a wrong session ID
+      final socket = await WebSocket.connect('ws://127.0.0.1:$testPort');
+      final closedCompleter = Completer<void>();
+
+      socket.listen(
+        (_) {},
+        onDone: closedCompleter.complete,
+        cancelOnError: true,
       );
 
-      // Note: In real scenario, we'd connect via WebSocket
-      // For this test, we're verifying the server's session validation logic
-      expect(server.getConnectedClientIds().length, 0);
+      socket.add(jsonEncode(const JoinSessionMessage(
+        sessionId: 'wrong-session-id',
+        playerId: 'test-player',
+        timestamp: 0,
+      ).toJson()));
+
+      // Server must close the connection on bad session ID
+      await closedCompleter.future.timeout(const Duration(seconds: 5));
+
+      expect(socket.closeCode, isNotNull);
+      expect(server.getConnectedClientIds(), isEmpty);
 
       await server.stop();
     });
@@ -210,7 +216,7 @@ void main() {
 
   group('WebSocket message serialization', () {
     test('JoinSessionAckMessage serializes correctly', () {
-      final message = JoinSessionAckMessage(
+      final message = const JoinSessionAckMessage(
         sessionId: 'session-123',
         connectedPlayers: ['client-1', 'client-2'],
         timestamp: 1000,
@@ -225,7 +231,7 @@ void main() {
     });
 
     test('PlayerConnectedMessage serializes correctly', () {
-      final message = PlayerConnectedMessage(
+      final message = const PlayerConnectedMessage(
         sessionId: 'session-123',
         playerId: 'player-456',
         playerName: 'Alice',
