@@ -10,54 +10,145 @@
 
 ### Overview
 
-Before Sprint 1 closes, the team must select and configure:
-- **Web hosting** for staging/production deployment
-- **Analytics backend** for telemetry collection
-- **QA environment** for pre-launch testing
-- **Playtester recruitment** for validation
+Before Sprint 1 closes, the team must:
+- ✅ **Required**: Submit to App Stores (iOS/Android) — **FREE** via App Store Connect & Google Play Console
+- ✅ **Required**: Set up analytics (Firebase) — **FREE** up to 100K events/month
+- ✅ **Required**: Run QA & playtesting before launch
+- ⚠️ **Optional**: Backend hosting (Cloud Run) — Only if deploying web version or custom backend services
+
+**Key insight:** iOS and Android game distribution costs nothing to host (Apple & Google provide free CDN). You only pay one-time developer account fees (~$100/yr total). Cloud Run is optional.
 
 This manual provides decision frameworks, step-by-step setup guides, and verification checklists for each component.
 
 ---
 
-## 2. Web Hosting Decision Framework
+## 2. Distribution & Backend Infrastructure Decision
 
-### Recommended: Google Cloud Run
+### CRITICAL: iOS/Android Game Distribution is FREE
 
-**Why Cloud Run for miToosa:**
+**iOS Distribution (Apple App Store):**
+- ✅ **Hosting:** FREE — Apple hosts your app on their CDN
+- 💰 **Dev Account Fee:** One-time ~$99/year (not per-game, not hosting)
+- Submit via: [App Store Connect](https://appstoreconnect.apple.com/)
+
+**Android Distribution (Google Play Store):**
+- ✅ **Hosting:** FREE — Google hosts your app on their CDN
+- 💰 **Dev Account Fee:** One-time ~$25 (not per-app, not hosting)
+- Submit via: [Google Play Console](https://play.google.com/console/)
+
+**Result:** Your game is distributed globally with zero hosting costs. You pay ~$124 total for developer accounts, not for hosting.
+
+---
+
+### When You DO Need Backend Hosting (Optional)
+
+Backend hosting is **only required** if you need:
+
+1. **Web version** of miToosa (Flutter Web frontend)
+2. **Backend API** for server-side analytics collection (vs. local Hive storage)
+3. **Staging/QA environment** on the cloud (pre-release testing)
+4. **Real-time services** (leaderboards, multiplayer, live events)
+
+**For Sprint 1:** If using local Hive storage + Firebase (free tier), **you may not need backend hosting at all**.
+
+---
+
+### Backend Hosting Option: Google Cloud Run (If Needed)
+
+**Why Cloud Run for miToosa backend:**
 - ✅ **Cost-efficient**: Pay only when code runs. Free tier: 240K vCPU-seconds/month, 450K GiB-seconds/month
 - ✅ **Serverless**: No infrastructure management. Scale from 0 to millions automatically
 - ✅ **Flutter Web support**: Native support for Dart/Flutter backends
 - ✅ **Global distribution**: Deploy across 20+ regions in one command
 - ✅ **DevOps simplicity**: `gcloud run deploy` from CI/CD or CLI
 
-**Startup cost:** $0–$50/month for typical traffic (<100K monthly requests)
+**Cost (if needed):** $0–$50/month for typical backend traffic (<100K requests/month)
 
-### Alternatives Considered
+### Backend Hosting Alternatives
 
 | Platform | Pros | Cons | Best For |
 |----------|------|------|----------|
-| **Vercel** | Simple frontend deploys, AI Gateway, Preview URLs | Less flexible for custom game backends | Web frontends, static sites |
-| **Netlify** | Full-stack with Functions, Deploy Previews | Similar to Vercel, overkill for this stage | Jamstack sites |
-| **AWS GameLift** | Enterprise multiplayer infrastructure | Extremely complex, $$$, overkill now | Multiplayer games at scale (10K+ players) |
+| **Cloud Run** | Serverless, free tier, simple | GCP learning curve | Dart/Flutter backend |
+| **Vercel** | Excellent Flutter Web hosting | Less backend flexibility | Web frontend focus |
+| **Netlify** | Full-stack with Functions | Similar to Vercel | Jamstack sites |
+| **AWS GameLift** | Enterprise multiplayer | Extremely complex, expensive | Multiplayer at 10K+ scale |
 
-### Decision Criteria
+### Decision Matrix for miToosa Sprint 1
 
-Choose **Cloud Run** if:
-- ✅ Single-player puzzle game (no real-time multiplayer)
-- ✅ Concurrent users < 100K
-- ✅ Backend needs flexibility (game logic, telemetry APIs)
-- ✅ Cost-sensitive startup phase
+| Scenario | Hosting Needed? | Cost | Recommended |
+|----------|---|---|---|
+| **iOS + Android apps only** | ❌ No | ~$124/yr (dev fees) | ✅ **App Stores** |
+| **iOS + Android + Web version** | ✅ Yes | ~$124/yr + $0–50/mo | App Stores + Cloud Run |
+| **iOS + Android + Multiplayer** | ✅ Yes | ~$124/yr + variable | App Stores + Cloud Run + GameLift |
 
-Consider **Vercel** if:
-- You're primarily deploying a Flutter Web frontend with minimal backend
-- Team is heavily invested in Vercel ecosystem
+**miToosa is single-player → Use App Stores only (no backend hosting needed)**
 
 ---
 
-## 3. Web Host Setup: Google Cloud Run (Step-by-Step)
+## 3. App Store Submission: iOS & Android (REQUIRED for Sprint 1)
 
-### Prerequisites
+### Step 1: Register Developer Accounts
+
+**iOS - Apple Developer Program:**
+1. Go to [developer.apple.com](https://developer.apple.com)
+2. Sign up for Apple Developer Program (~$99/year)
+3. Complete identity verification
+4. Set up App Store Connect account
+
+**Android - Google Play Console:**
+1. Go to [play.google.com/console](https://play.google.com/console)
+2. Create a Google Play Developer account (~$25, one-time)
+3. Set up payment method
+4. Complete company verification
+
+### Step 2: Prepare App for Submission
+
+**iOS:**
+- Build release version: `flutter build ios --release`
+- Add app icons and screenshots (required)
+- Create privacy policy
+- Define app metadata (description, keywords, rating)
+
+**Android:**
+- Build release version: `flutter build appbundle --release`
+- Sign release build with keystore
+- Add app icons and screenshots (required)
+- Create privacy policy
+- Define app metadata
+
+### Step 3: Submit to App Stores
+
+**iOS Submission:**
+1. Open App Store Connect
+2. Create new app
+3. Upload build via Xcode or Transporter
+4. Fill metadata, screenshots, privacy policy
+5. Submit for review (~24–48 hours)
+
+**Android Submission:**
+1. Open Google Play Console
+2. Create new app
+3. Upload AAB (Android App Bundle)
+4. Fill metadata, screenshots, privacy policy
+5. Submit for review (~24–48 hours, sometimes instant)
+
+### Verification
+
+- [ ] App Store Connect account active
+- [ ] Google Play Console account active
+- [ ] iOS build signed and ready
+- [ ] Android AAB generated
+- [ ] Privacy policy created
+- [ ] Screenshots uploaded (required)
+- [ ] Both apps submitted for review
+
+---
+
+## 3b. Optional: Web Host Setup via Google Cloud Run (For Web Version / Backend Services)
+
+**⚠️ This section is OPTIONAL and only needed if you're deploying a web version or backend API.**
+
+### Prerequisites (If Adding Web Version)
 - GCP account (sign up at https://console.cloud.google.com/freetrial)
 - $300 free credits (expires after 90 days)
 - `gcloud` CLI installed (`brew install google-cloud-sdk` on macOS)
@@ -468,40 +559,56 @@ Reference: [docs/qa/wedge-qa-checklist.md](../qa/wedge-qa-checklist.md)
 
 ## 7. Sprint 1 Closeout Checklist
 
-### Required Before Launch
+### REQUIRED (Must Complete Before Launch)
 
-- [ ] **Web host deployed**
-  - [ ] Cloud Run service created
-  - [ ] Staging URL accessible: ___________________________
-  - [ ] Staging URL filled in [docs/RELEASE-GATES.md](../RELEASE-GATES.md#gate-5-qa-on-staging)
-  - [ ] Health check endpoint returns 200
-  - [ ] App loads on real iOS, Android, Web devices
+**App Store Submission (iOS & Android):**
+- [ ] Developer accounts created (~$99/yr iOS, ~$25 Android)
+- [ ] App icons designed (1024×1024px minimum)
+- [ ] Screenshots taken (≥2 per platform)
+- [ ] Privacy policy published
+- [ ] iOS build signed (release certificate + provisioning profile)
+- [ ] Android AAB generated (signed with keystore)
+- [ ] iOS app submitted to App Store Connect
+- [ ] Android app submitted to Google Play Console
+- [ ] Both apps approved (pending review 24–48 hours)
 
-- [ ] **Analytics configured**
-  - [ ] Firebase project created
-  - [ ] Firebase initialized in Flutter app
-  - [ ] `analyticsSinkProvider` implemented in Riverpod
-  - [ ] Manual gameplay triggers events in Firebase console
-  - [ ] Dashboards created for core KPIs
+**Analytics Configuration (Firebase):**
+- [ ] Firebase project created
+- [ ] Firebase initialized in Flutter app
+- [ ] `analyticsSinkProvider` implemented in Riverpod
+- [ ] Manual gameplay triggers events in Firebase console
+- [ ] Dashboards created for core KPIs (D1 retention, session completion)
 
-- [ ] **Manual QA completed**
-  - [ ] All flows from [docs/qa/wedge-qa-checklist.md](../qa/wedge-qa-checklist.md) passed
-  - [ ] Tested on iOS, Android, macOS, Web
-  - [ ] Performance validated (startup < 3s, 60fps gameplay)
-  - [ ] Security audit passed (no secrets in logs, encryption working)
+**Manual QA Completed:**
+- [ ] All flows from [docs/qa/wedge-qa-checklist.md](../qa/wedge-qa-checklist.md) passed
+- [ ] Tested on iOS, Android, macOS, Web
+- [ ] Performance validated (startup < 3s, 60fps gameplay)
+- [ ] Security audit passed (no secrets in logs, encryption working)
 
-- [ ] **Playtester feedback collected**
-  - [ ] ≥5 external playtesters recruited
-  - [ ] [docs/playtests/SURVEY-TEMPLATE.md](../playtests/SURVEY-TEMPLATE.md) distributed
-  - [ ] Feedback collected over 3–5 days
-  - [ ] Critical bugs logged and fixed
-  - [ ] Survey responses analyzed
+**Playtester Feedback Collected:**
+- [ ] ≥5 external playtesters recruited
+- [ ] [docs/playtests/SURVEY-TEMPLATE.md](../playtests/SURVEY-TEMPLATE.md) distributed
+- [ ] Feedback collected over 3–5 days
+- [ ] Critical bugs logged and fixed
+- [ ] Survey responses analyzed
 
-- [ ] **KPI validation**
-  - [ ] D1 retention ≥30%
-  - [ ] Session completion ≥60%
-  - [ ] Crash rate <2%
-  - [ ] No showstopper bugs in playtester feedback
+**KPI Validation:**
+- [ ] D1 retention ≥30% (from Firebase)
+- [ ] Session completion ≥60%
+- [ ] Crash rate <2% (from Crashlytics)
+- [ ] No showstopper bugs in playtester feedback
+
+---
+
+### OPTIONAL (Can Postpone to Sprint 2)
+
+**Web Version & Backend Hosting (Only if web deployment needed):**
+- [ ] Decide whether web version required for Sprint 1
+- [ ] If yes: Cloud Run service created
+- [ ] If yes: Staging URL accessible
+- [ ] If yes: Staging URL filled in [docs/RELEASE-GATES.md](../RELEASE-GATES.md#gate-5-qa-on-staging)
+- [ ] If yes: Health check endpoint returns 200
+- [ ] If yes: App loads on real Web browsers (Chrome, Safari)
 
 ---
 
