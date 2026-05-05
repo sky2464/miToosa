@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '💡 AgToosa: Remember to update Docs/Master-Plan.md and sync Linear before ending your session.'"
+            "command": "echo '\ud83d\udca1 AgToosa: Remember to update Docs/Master-Plan.md and sync Linear before ending your session.'"
           }
         ]
       }
@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if echo \"$CLAUDE_TOOL_INPUT\" | python3 -c 'import json,sys; d=json.load(sys.stdin); exit(0 if \"git commit\" in d.get(\"command\",\"\") else 1)' 2>/dev/null; then echo '🔒 AgToosa gate: ensure all tests pass before committing.'; fi"
+            "command": "if echo \"$CLAUDE_TOOL_INPUT\" | python3 -c 'import json,sys; d=json.load(sys.stdin); exit(0 if \"git commit\" in d.get(\"command\",\"\") else 1)' 2>/dev/null; then echo '\ud83d\udd12 AgToosa gate: ensure all tests pass before committing.'; fi"
           },
           {
             "type": "command",
