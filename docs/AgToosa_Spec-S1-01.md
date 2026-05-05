@@ -2,11 +2,21 @@
 
 **Story ID:** S1-01
 **Epic:** EP-01 — Launch Readiness & Validation
-**Status:** Draft
+**Status:** Approved
 **Date:** 2026-05-04
 **Author:** AgToosa
 
----
+## ✅ Spec Approved
+
+Approved: 2026-05-05 17:41
+
+## Build Scope
+
+Files in scope: `.github/workflows/web-build.yml`, `scripts/deploy-staging.sh`, `docs/STAGING-SETUP.md`, `docs/RELEASE-GATES.md`, `docs/Master-Plan.md`
+Directories in scope: `.github/workflows`, `scripts`, `docs`
+Out of scope: Firebase Console project creation, `firebase init`, adding `firebase.json`/`.firebaserc`, first real deploy URL entry
+
+
 
 ## Context
 

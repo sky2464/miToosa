@@ -47,7 +47,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 
 | ID | Title | Type | Estimate | Status | Tasks Done |
 |----|-------|------|----------|--------|------------|
-| S1-01 | Staging Deployment & QA Gate | Feature | L | Todo | 0/2 |
+| S1-01 | Staging Deployment & QA Gate | Feature | L | In Progress | 1/2 |
 | S1-02 | Analytics Backend Integration | Feature | M | Todo | 0/1 |
 | S1-03 | Manual Wedge QA Walkthrough | Chore | S | Todo | 0/1 |
 | S1-04 | Playtest Survey & Recruitment | Feature | M | Todo | 0/1 |
@@ -58,7 +58,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 
 | ID | Title | Estimate | Status |
 |----|-------|----------|--------|
-| T-01 | Select web host (Firebase/Vercel/Netlify); record URL in RELEASE-GATES.md | 2h | Todo |
+| T-01 | Select web host (Firebase/Vercel/Netlify); record URL in RELEASE-GATES.md | 2h | In Progress |
 | T-02 | Integrate analytics SDK; confirm session_start event in dashboard | 4h | Todo |
 | T-03 | Fresh install → onboarding → first game → share → streak walkthrough | 2h | Todo |
 | T-04 | Fill [STAGING_URL] in SURVEY-TEMPLATE.md; recruit 15–20 testers | 1h | Todo |
@@ -125,3 +125,5 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-04 | /agtoosa-build S1-05 — Build 🏗️ Started: TASKS.md archived, plan.md archived, firebase.md deleted, GEMINI.md updated with AgToosa wiring | AgToosa |
 | 2026-05-04 | /agtoosa-review S1-05 — Review ✅ Passed: 0 Critical, 3 Warnings fixed (GEMINI.md count label, CLAUDE.md duplicates, REFACTORING-SUMMARY token syntax accepted) | AgToosa |
 | 2026-05-04 | /agtoosa-ship S1-05 — Ship 🚀 Done: all gates green, S1-05 moved to Completed, changelog updated | AgToosa |
+| 2026-05-05 | /agtoosa-build S1-01 — Build 🏗️ Started: scope confirmed; CI deploy gate, staging script, setup doc, and release-gate prepopulation implemented | AgToosa |
+| 2026-05-05 | /agtoosa-build S1-01 — Task 🟢 4/4 complete: web workflow, deploy script, staging setup doc, and release-gate row updated; awaiting manual Firebase setup for deploy URL | AgToosa |

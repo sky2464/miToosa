@@ -54,7 +54,7 @@ Every feature and release must pass through these gates in order. Skipping gates
 ## Staging URL
 
 <!-- HUMAN-ACTION-REQUIRED: Record the staging URL here once it exists -->
-**Status:** Not yet configured. Set up a staging deployment (e.g., Firebase Hosting, Vercel, or TestFlight) and record the URL below.
+**Status:** Pending Firebase setup. Host selected: Firebase Hosting. URL will be recorded after manual Firebase Console + `firebase init hosting` steps.
 
 ```
 Staging URL: TBD
@@ -124,4 +124,5 @@ Record each gate exercise here so the team can verify the sequence was followed.
 
 | Date | Feature / Branch | Gate | Outcome | Notes |
 |------|-----------------|------|---------|-------|
+| 2026-05-05 | S1-01 staging deploy setup | 3 — Build | In Progress | CI deploy step + script + setup doc added; awaiting Firebase manual setup and URL |
 | TBD | Sprint 1 staging deploy | 5 — `/qa` | Pending | Awaiting staging URL |
