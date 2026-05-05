@@ -1,49 +1,65 @@
 # Tech Stack
 
-<!-- Fill in during /agtoosa-init. Used by /agtoosa-spec and /agtoosa-build for dependency verification. -->
+<!-- Last updated: 2026-05-04 — /agtoosa-init -->
 
 ## Language
-
-language: ""
-<!-- e.g., TypeScript, Python, Go, Ruby -->
+language: "Dart 3.x"
 
 ## Frameworks
-
-framework: ""
-<!-- e.g., Next.js, FastAPI, Gin, Rails -->
+framework: "Flutter (iOS, Android, macOS, Web)"
+state_management: "Riverpod (StateNotifier + FutureProvider)"
+key_packages:
+  - "flutter_riverpod — reactive state management"
+  - "hive / hive_flutter — local AES-encrypted key-value storage"
+  - "flutter_secure_storage — platform Keychain/Keystore for encryption key"
+  - "share_plus: ^12.0.2 — native share sheet (PINNED: ^12, NOT 13.0.0+, due to flutter_secure_storage compat)"
+  - "uuid — UUID v4 anonymous player ID"
+  - "crypto / pointycastle — HMAC-SHA256 integrity checks on Hive records"
 
 ## Database
-
-database: ""
-<!-- e.g., PostgreSQL, MongoDB, SQLite, DynamoDB -->
+database: "Hive (AES-256 encrypted, local-only). Schema version 6 (PlayerProgress). Integrity: HMAC-SHA256 per record. Fail-secure: corrupted records deleted."
+notes: "No remote database in v1. One-time migration from plaintext to encrypted boxes on app update. Analytics backend TBD after Sprint 1 playtest."
 
 ## Deployment
-
-deployment: ""
-<!-- e.g., Vercel, AWS Lambda, Docker + Kubernetes, GCP Cloud Run -->
+deployment: "iOS App Store · Google Play Store · Web (GCP Cloud Run optional) · macOS"
+build_notes: |
+  - Some flutter run invocations require --no-tree-shake-icons (see docs/BUILD.md)
+  - MANDATORY before first run: dart pub run build_runner build --delete-conflicting-outputs
+codebase_structure:
+  - "lib/core/engine/ — Pure Dart game engines (no Flutter/Hive imports)"
+  - "lib/features/ — Riverpod providers and view models"
+  - "lib/data/ — Hive persistence and models"
+  - "lib/widgets/ — Flutter UI components"
+  - "test/core/engine/ — Reference: gameplay_engine_test.dart (seeded RNG pattern)"
 
 ## Test Framework
-
-test_framework: ""
-<!-- e.g., Vitest, Jest, pytest, go test -->
+test_framework: "flutter test (Dart built-in test runner)"
+tdd: true
+test_patterns:
+  - "Seeded RNG for deterministic engine tests (GameplayEngine, ProgressionEngine, etc.)"
+  - "ProviderContainer for Riverpod provider isolation tests"
+  - "Real Hive boxes in temp directory for integration tests (no mocking)"
+  - "Reference test: test/core/engine/gameplay_engine_test.dart"
+current_test_count: "637 passing (as of v1.5.0, 2026-04-24)"
 
 ## Browser / Device Matrix
-
-<!-- Used by /agtoosa-review QA Lead for compatibility checks -->
-
 browser_matrix:
-- ""
-<!-- e.g., Chrome latest, Firefox latest, Safari 16+, Mobile Safari iOS 16+ -->
+  - "iOS Safari (latest)"
+  - "Android Chrome (latest)"
+  - "macOS Safari / Chrome (latest)"
+  - "Web: Chrome latest, Edge latest"
 
 ## Infrastructure-as-Code
-
-iac_tool: ""
-<!-- e.g., Terraform, Pulumi, CDK, CloudFormation -->
+iac_tool: "N/A — no cloud infrastructure in v1"
 
 ## CI/CD
-
-ci_platform: ""
-<!-- e.g., GitHub Actions, CircleCI, GitLab CI -->
+ci_platform: "GitHub Actions"
+workflows:
+  - ".github/workflows/dependency-maintenance.yml — weekly Mon 06:00 UTC pub.dev outdated scan + safe upgrades + advisory check"
+  - ".github/workflows/docs-archival-check.yml — triggered on docs/ changes; verifies completed specs are archived"
 
 ## Notes
-<!-- Add constraints, deprecated libraries to avoid, or vendor lock-in notes here. -->
+<!-- CRITICAL: share_plus is PINNED at ^12.0.2 — do NOT upgrade to 13.0.0+ without checking flutter_secure_storage compatibility -->
+<!-- Verification gates (run before every commit): dart analyze && flutter test -->
+<!-- Code gen (run after adding Riverpod providers or Hive models): dart pub run build_runner build --delete-conflicting-outputs -->
+<!-- Linter: dart analyze with analysis_options.yaml -->
