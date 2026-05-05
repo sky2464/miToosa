@@ -1,0 +1,49 @@
+# AGENTS.md — miToosa
+
+This codebase uses the **AgToosa** framework. Read `Docs/AgToosa_Agent.md` before beginning any task.
+
+## Project
+
+**miToosa** — cross-platform Flutter puzzle game (iOS, Android, macOS, Web). ADHD-optimized gameplay loop. Local-first, anonymous auth, encrypted Hive storage, Riverpod state management.
+
+## Source of Truth
+
+- `Docs/Master-Plan.md` — project state, Epics, active sprint, backlog
+- `Docs/Context/` — product.md, tech-stack.md, workflow.md, product-guidelines.md
+- `Docs/AgToosa_Changelog.md` — project changelog
+
+## Core Commands
+
+| Command | Purpose |
+|---------|---------|
+| `/agtoosa-spec` | Research, specify, and architect a feature |
+| `/agtoosa-build` | Implement with TDD (Red-Green-Refactor) |
+| `/agtoosa-qa` | QA planning, execution, defect triage |
+| `/agtoosa-review` | Security, architecture, and cross-platform review |
+| `/agtoosa-ship` | Pre-ship checklist, docs sync, retro |
+
+Sub-commands: append `research`, `plan`, `quick` (spec) · `scope`, `tdd`, `test` (build) · `plan`, `run`, `report`, `triage` (qa) · `security`, `arch`, `debug`, `cross` (review) · `check`, `docs`, `retro` (ship).
+
+## Key Rules
+
+- TDD is enforced — write failing tests before implementation (Red-Green-Refactor).
+- Run `dart analyze` and `flutter test` before every commit.
+- Run `dart pub run build_runner build --delete-conflicting-outputs` after modifying Riverpod providers.
+- Keep `Docs/Master-Plan.md` updated after every phase transition.
+- Do not modify `docs/PRODUCT-WEDGE.md` without explicit user approval — it is the canonical product economy reference.
+
+## Architecture
+
+Three layers — never mix concerns:
+1. `lib/core/engine/` — pure Dart game engines (no Flutter, no Hive)
+2. `lib/features/` — Riverpod StateNotifiers connecting engines to UI
+3. `lib/data/` — encrypted Hive persistence and telemetry
+
+## Verification Gates
+
+```bash
+dart analyze
+flutter test
+flutter pub get
+dart pub run build_runner build --delete-conflicting-outputs  # after provider changes
+```

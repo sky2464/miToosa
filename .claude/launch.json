@@ -1,0 +1,29 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Flutter Web (Chrome)",
+      "runtimeExecutable": "flutter",
+      "runtimeArgs": ["run", "-d", "chrome", "--web-port", "5555"],
+      "port": 5555
+    },
+    {
+      "name": "Flutter macOS",
+      "runtimeExecutable": "flutter",
+      "runtimeArgs": ["run", "-d", "macos"],
+      "port": 0
+    },
+    {
+      "name": "Flutter Android",
+      "runtimeExecutable": "flutter",
+      "runtimeArgs": ["run"],
+      "port": 0
+    },
+    {
+      "name": "Flutter iOS Simulator",
+      "runtimeExecutable": "flutter",
+      "runtimeArgs": ["run", "-d", "iPhone"],
+      "port": 0
+    }
+  ]
+}

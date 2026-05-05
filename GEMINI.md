@@ -1,61 +1,81 @@
-# GEMINI.md — miToosa Cognitive Puzzle Game
+# GEMINI.md — miToosa
 
-## 🧠 Project Overview
-**miToosa** is a Flutter-based cognitive excellence puzzle game designed for sharpening pattern recognition, memory, and IQ. It features a "2026-native" aesthetic (Aetheric Pulse design system) with short, high-impact gameplay loops.
+This codebase uses the **AgToosa** framework. Before beginning any task, read `Docs/AgToosa_Agent.md` for core rules, principles, and security requirements.
 
-The project follows a **Domain-Driven Design (DDD)** architecture with a strict separation between core logic, data persistence, and the UI layer.
+## Project Overview
 
-## 🛠 Tech Stack
-- **Framework:** [Flutter](https://flutter.dev) (>= 3.5.0)
-- **State Management:** [Riverpod](https://riverpod.dev) + [Riverpod Generator](https://pub.dev/packages/riverpod_generator)
-- **Persistence:** [Hive](https://pub.dev/packages/hive) + [flutter_secure_storage](https://pub.dev/packages/flutter_secure_storage)
-- **Navigation:** [Go Router](https://pub.dev/packages/go_router)
-- **Audio:** [Audioplayers](https://pub.dev/packages/audioplayers)
-- **Code Generation:** [build_runner](https://pub.dev/packages/build_runner)
+**miToosa** is a cross-platform Flutter cognitive puzzle game (iOS, Android, macOS, Web). It features an ADHD-optimized gameplay loop with pattern recognition, memory, and math puzzles across 8 tracks × 23 levels, built on a free-first model (25 free games/day + share bonus + streak ladder).
 
-## 🏗 Core Architecture
-miToosa is organized into three primary layers:
+## AgToosa Commands
 
-1.  **Domain Layer (`lib/core/`):** Pure Dart logic. Platform-agnostic. Contains the game engine, puzzle generation, and models. **MUST NOT** depend on Flutter, Riverpod, or Hive.
-2.  **Data Layer (`lib/data/`):** Handles persistence and repositories. Uses Hive for local storage and `flutter_secure_storage` for encryption keys.
-3.  **UI Layer (`lib/features/`):** Flutter widgets and Riverpod ViewModels (StateNotifiers).
+Use these 5 commands for every development cycle:
 
-### Key Components
-- **`GameplayEngine` (`lib/core/engine/gameplay_engine.dart`):** Manages puzzle states (Ready → Playing → Completed). Uses a functional/static approach for state transitions.
-- **`ContentProvider` (`lib/core/content_provider.dart`):** Loads track definitions from JSON and procedurally builds levels using `PuzzleGenerator`.
-- **`GameplayViewModel` (`lib/features/gameplay/gameplay_view_model.dart`):** A Riverpod family provider that manages the UI state for a specific gameplay level.
+| Command | Workflow File | Purpose |
+|---------|--------------|---------|
+| `/agtoosa-spec` | `Docs/AgToosa_Spec.md` | Research, specify, and architect |
+| `/agtoosa-build` | `Docs/AgToosa_Build.md` | Implement with TDD (Red-Green-Refactor) |
+| `/agtoosa-qa` | `Docs/AgToosa_QA.md` | QA planning, execution, defect triage |
+| `/agtoosa-review` | `Docs/AgToosa_Review.md` | Security, architecture, and cross-platform review |
+| `/agtoosa-ship` | `Docs/AgToosa_Ship.md` | Pre-ship checklist, docs sync, retro |
 
-## 🚀 Building and Running
+Sub-commands: `research` · `plan` · `quick` (spec) · `scope` · `tdd` · `test` (build) · `security` · `arch` · `debug` · `cross` (review) · `check` · `docs` · `retro` (ship).
 
-### Prerequisites
-- Flutter SDK (>= 3.5.0)
-- JDK 21
-- Xcode (for iOS/macOS)
+## Key References
 
-### Commands
-- **Install dependencies:** `flutter pub get`
-- **Code generation (MANDATORY):** `dart pub run build_runner build --delete-conflicting-outputs`
-- **Run the app:** `flutter run`
-- **Run tests:** `flutter test`
-- **Static analysis:** `dart analyze`
+- `Docs/Master-Plan.md` — source of truth for project state, Epics, sprint, backlog
+- `Docs/Context/` — product.md, tech-stack.md, workflow.md, product-guidelines.md
+- `Docs/AgToosa_Changelog.md` — project changelog
+- `docs/PRODUCT-WEDGE.md` — canonical product economy (do not modify without user approval)
 
-## 📏 Development Conventions
-- **Pure Dart in Core:** Keep `lib/core/` free of any Flutter or external framework dependencies.
-- **Immutability:** Use immutable state classes (e.g., `GameplayState`) and update them using `copyWith`.
-- **Functional Style Engine:** The `GameplayEngine` provides static methods that return a new state based on an existing one.
-- **Dependency Inversion:** Use abstract interfaces for persistence (`IPersistenceProvider`) to allow for easy mocking in tests.
-- **Linting:** Adheres to the rules in `analysis_options.yaml` (based on `flutter_lints`).
+## Tech Stack
 
-## 📁 Key Files and Directories
-- `lib/core/engine/`: Core game logic and puzzle generation.
-- `lib/core/models/`: Domain models (Puzzles, Levels).
-- `lib/data/`: Hive adapters and persistence implementations.
-- `lib/features/`: Feature-based UI modules (gameplay, auth, navigation).
-- `lib/theme/`: Design system tokens and styles (Aetheric Pulse).
-- `assets/content/`: JSON definitions for worlds and levels.
-- `.claude/`: Detailed architectural documentation and design guides.
+- **Language:** Dart 3.11+
+- **Framework:** Flutter (iOS, Android, macOS, Web)
+- **State Management:** Riverpod (StateNotifier + FutureProvider) with code generation
+- **Persistence:** Hive (AES-256 encrypted, local-only) + flutter_secure_storage
+- **Navigation:** go_router
+- **Audio:** audioplayers
+- **Code Generation:** build_runner + riverpod_generator
 
-## ⚠️ Important Notes
-- **Code Generation:** Many files (providers, Hive adapters) depend on `build_runner`. Always run the build command after modifying model or provider files.
-- **Out-of-Sync Docs:** Some files in `.claude/` (e.g., `ARCHITECTURE.md`) may mention `Freezed` for `PlayerProgress` or class-based methods for `GameplayEngine`, while the current implementation uses standard classes and static methods. Refer to the actual code in `lib/` as the source of truth.
-- **Assets:** Ensure Noto Sans fonts and audio files are present in the `assets/` directory for the UI to render correctly.
+## Architecture
+
+Three layers — never mix concerns:
+
+1. `lib/core/engine/` — Pure Dart game engines. No Flutter or Hive imports. Static methods, immutable state.
+2. `lib/features/` — Riverpod StateNotifiers connecting engines to UI.
+3. `lib/data/` — Encrypted Hive persistence, telemetry, and models.
+
+## Building and Running
+
+```bash
+flutter pub get                                               # Install dependencies
+dart pub run build_runner build --delete-conflicting-outputs  # MANDATORY before first run
+flutter run                                                   # Android (default)
+flutter run -d iPhone                                         # iOS simulator
+flutter run -d chrome                                         # Web
+flutter run -d macos                                          # macOS desktop
+dart analyze                                                  # Lint & static analysis
+flutter test                                                  # Run all tests
+```
+
+## Development Rules
+
+- TDD enforced — write failing tests before implementation (Red-Green-Refactor).
+- Run `dart analyze && flutter test` before every commit.
+- No code file may exceed 500 lines.
+- New dependencies require explicit approval before adding to pubspec.yaml.
+- `share_plus` is pinned at `^12.0.2` — do NOT upgrade to 13.0.0+ without checking flutter_secure_storage compatibility.
+
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `lib/core/engine/gameplay_engine.dart` | Main game state machine |
+| `lib/core/engine/progression_engine.dart` | Adaptive difficulty |
+| `lib/core/engine/streak_engine.dart` | Streak continuity |
+| `lib/core/engine/achievement_engine.dart` | Achievement catalog |
+| `lib/data/hive_persistence_provider.dart` | Encrypted storage |
+| `lib/data/models/player_progress.dart` | Central player state (schema v6) |
+| `lib/features/gameplay/gameplay_view_model.dart` | Round state management |
+| `test/core/engine/gameplay_engine_test.dart` | Reference test (seeded RNG pattern) |
+| `docs/PRODUCT-WEDGE.md` | Product economy (canonical) |

@@ -7,7 +7,15 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), version
 
 ## [Unreleased]
 
-_(nothing yet)_
+### Changed
+- Archived `TASKS.md` (root) and `docs/plan.md` — both superseded by `docs/Master-Plan.md` as project source of truth
+- Updated `GEMINI.md` with full AgToosa command table, corrected file paths, and consistent style (no emoji headers) — now consistent with `CLAUDE.md` and `AGENTS.md`
+- Removed 2 stale duplicate "AgToosa — Claude Code Instructions" blocks from `CLAUDE.md` (both referenced Linear; canonical block referencing `Master-Plan.md` retained)
+
+### Removed
+- `docs/firebase.md` — empty file (0 bytes), no content
+
+_Spec: `docs/archived/spec-cleanup-001.md` · Review: `docs/archived/review-cleanup-001.md` · Story: S1-05_
 
 ---
 

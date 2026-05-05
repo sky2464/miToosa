@@ -110,6 +110,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | C-06 | Upgrade streak system into reward ladder (Task 6) | 2026-04-22 | 8 milestone thresholds |
 | C-07 | Aetheric Pulse visual redesign — all P1–P8 items | 2026-04-24 | docs/archived/spec-aetheric-pulse-redesign.md |
 | C-08 | iToosa → miToosa feature migration | 2026-04-24 | docs/archived/spec-itoosa-feature-migration-v1.md |
+| S1-05 | Repo & Docs Cleanup (cleanup_001) | 2026-05-04 | docs/archived/spec-cleanup-001.md · review-cleanup-001.md |
 
 ## Update Log
 
@@ -119,3 +120,8 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 |------|-------|----|
 | 2026-05-04 | /agtoosa-init — initialization complete; context files populated, Epics seeded, TDD enabled | AgToosa |
 | 2026-05-04 | /agtoosa-init re-run — confirmed all context files already populated; removed Linear references; assigned EP/S1/T/BL IDs; populated Completed This Cycle from TASKS.md | AgToosa |
+| 2026-05-04 | /agtoosa-init re-run — AI configs validated (CLAUDE.md ✅, copilot-instructions.md ✅); AGENTS.md created; context files confirmed current; TDD enforced | AgToosa |
+| 2026-05-04 | /agtoosa-spec cleanup_001 — S1-05 specced; scope: archive TASKS.md + plan.md, delete firebase.md, update GEMINI.md, keep dependency maintenance docs | AgToosa |
+| 2026-05-04 | /agtoosa-build S1-05 — Build 🏗️ Started: TASKS.md archived, plan.md archived, firebase.md deleted, GEMINI.md updated with AgToosa wiring | AgToosa |
+| 2026-05-04 | /agtoosa-review S1-05 — Review ✅ Passed: 0 Critical, 3 Warnings fixed (GEMINI.md count label, CLAUDE.md duplicates, REFACTORING-SUMMARY token syntax accepted) | AgToosa |
+| 2026-05-04 | /agtoosa-ship S1-05 — Ship 🚀 Done: all gates green, S1-05 moved to Completed, changelog updated | AgToosa |
