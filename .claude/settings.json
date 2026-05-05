@@ -8,6 +8,14 @@
             "command": "echo '\ud83d\udca1 AgToosa: Remember to update Docs/Master-Plan.md and sync Linear before ending your session.'"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '\ud83d\udca1 AgToosa: Remember to update Docs/Master-Plan.md before ending your session.'"
+          }
+        ]
       }
     ],
     "PreToolUse": [

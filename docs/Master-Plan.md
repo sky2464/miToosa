@@ -1,12 +1,12 @@
 # Master-Plan
 
-> **Source of truth:** Linear project — always update Linear first, then mirror here.
-> **Last mirrored:** 2026-05-04 12:00 (by /agtoosa-init)
+> **Source of truth:** This file (no Linear integration — update here directly).
+> **Last mirrored:** 2026-05-04 (by /agtoosa-init)
 
 ## Project Charter
 
 - Product: miToosa — cross-platform cognitive puzzle game (iOS, Android, macOS, Web)
-- Linear project URL: <!-- Add your Linear project URL here -->
+- Linear project URL: N/A — Master-Plan.md is the PM source of truth
 - GitHub repo: https://github.com/sky2464/miToosa
 - Current milestone: v1.5.0 — Pre-Launch (Sprint 1: Launch Readiness & Validation)
 - Active cycle: Sprint 1 (2026-04-22 → 2026-05-06)
@@ -14,17 +14,15 @@
 
 ## Epics
 
-> Created at `/agtoosa-init`. One row per product area. Link Linear Epic IDs once created.
+> One row per product area. IDs are local (EP-XX) — no Linear required.
 
 | ID | Title | Priority | Stories | Status |
 |----|-------|----------|---------|--------|
-| [TBD] | Epic: Launch Readiness & Validation | P0 | 4 open | Backlog |
-| [TBD] | Epic: Platform Release Infrastructure | P1 | 3 open | Backlog |
-| [TBD] | Epic: Retention & Monetization Expansion | P2 | 4 open | Backlog |
-| [TBD] | Epic: User Experience Polish | P3 | 3 open | Backlog |
-| [TBD] | Epic: Technical Debt & Infrastructure | P4 | 3 open | Backlog |
-
-> **Action required:** Create these as Epic issues in Linear and replace [TBD] with actual IDs.
+| EP-01 | Launch Readiness & Validation | P0 | 4 open | In Progress |
+| EP-02 | Platform Release Infrastructure | P1 | 3 open | Backlog |
+| EP-03 | Retention & Monetization Expansion | P2 | 4 open | Backlog |
+| EP-04 | User Experience Polish | P3 | 3 open | Backlog |
+| EP-05 | Technical Debt & Infrastructure | P4 | 3 open | Backlog |
 
 ## Epic Charters
 
@@ -49,12 +47,10 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 
 | ID | Title | Type | Estimate | Status | Tasks Done |
 |----|-------|------|----------|--------|------------|
-| [TBD] | Feature: Staging Deployment & QA Gate | Feature | L | Backlog | 0/? |
-| [TBD] | Feature: Analytics Backend Integration | Feature | M | Backlog | 0/? |
-| [TBD] | Chore: Manual Wedge QA Walkthrough | Chore | S | Backlog | 0/? |
-| [TBD] | Feature: Playtest Survey & Recruitment | Feature | M | Backlog | 0/? |
-
-*(Link Linear issue IDs once created via `/agtoosa-spec`.)*
+| S1-01 | Staging Deployment & QA Gate | Feature | L | Todo | 0/2 |
+| S1-02 | Analytics Backend Integration | Feature | M | Todo | 0/1 |
+| S1-03 | Manual Wedge QA Walkthrough | Chore | S | Todo | 0/1 |
+| S1-04 | Playtest Survey & Recruitment | Feature | M | Todo | 0/1 |
 
 ## Active Tasks
 
@@ -62,8 +58,11 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 
 | ID | Title | Estimate | Status |
 |----|-------|----------|--------|
-
-*(Empty until `/agtoosa-build scope` breaks down the active story.)*
+| T-01 | Select web host (Firebase/Vercel/Netlify); record URL in RELEASE-GATES.md | 2h | Todo |
+| T-02 | Integrate analytics SDK; confirm session_start event in dashboard | 4h | Todo |
+| T-03 | Fresh install → onboarding → first game → share → streak walkthrough | 2h | Todo |
+| T-04 | Fill [STAGING_URL] in SURVEY-TEMPLATE.md; recruit 15–20 testers | 1h | Todo |
+| T-05 | Run /agtoosa-qa on staging; update Gate Log row in RELEASE-GATES.md | 3h | Todo |
 
 ## Backlog
 
@@ -71,17 +70,17 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 
 | ID | Title | Type | Estimate | Epic | Priority |
 |----|-------|------|----------|------|----------|
-| [TBD] | Chore: iOS Provisioning & Signing Setup | Chore | M | Platform Release | P1 |
-| [TBD] | Chore: Android Keystore & Signing Setup | Chore | M | Platform Release | P1 |
-| [TBD] | Feature: Firebase Project Setup | Feature | M | Platform Release | P1 |
-| [TBD] | Feature: Backend Leaderboard (Real-Time) | Feature | L | Retention | P2 |
-| [TBD] | Feature: Referral Tiers | Feature | L | Retention | P2 |
-| [TBD] | Feature: VIP / Ad-Free IAP | Feature | L | Retention | P2 |
-| [TBD] | Enhancement: First-Session Onboarding Optimisation | Improvement | M | UX Polish | P3 |
-| [TBD] | Enhancement: Economy Messaging Clarity | Improvement | S | UX Polish | P3 |
-| [TBD] | Enhancement: Accessibility Audit (Physical Devices) | Chore | S | UX Polish | P3 |
-| [TBD] | Chore: Test Coverage Expansion (integration tests) | Chore | M | Tech Debt | P4 |
-| [TBD] | Enhancement: Web Platform Crypto Hardening | Improvement | S | Tech Debt | P4 |
+| BL-01 | iOS Provisioning & Signing Setup | Chore | M | EP-02 | P1 |
+| BL-02 | Android Keystore & Signing Setup | Chore | M | EP-02 | P1 |
+| BL-03 | Firebase Project Setup | Feature | M | EP-02 | P1 |
+| BL-04 | Backend Leaderboard (Real-Time) | Feature | L | EP-03 | P2 |
+| BL-05 | Referral Tiers | Feature | L | EP-03 | P2 |
+| BL-06 | VIP / Ad-Free IAP | Feature | L | EP-03 | P2 |
+| BL-07 | First-Session Onboarding Optimisation | Improvement | M | EP-04 | P3 |
+| BL-08 | Economy Messaging Clarity | Improvement | S | EP-04 | P3 |
+| BL-09 | Accessibility Audit (Physical Devices) | Chore | S | EP-04 | P3 |
+| BL-10 | Test Coverage Expansion (integration tests) | Chore | M | EP-05 | P4 |
+| BL-11 | Web Platform Crypto Hardening | Improvement | S | EP-05 | P4 |
 
 ## Blocked
 
@@ -89,19 +88,28 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 
 | ID | Title | Blocked by | Since |
 |----|-------|-----------|-------|
-| [TBD] | Feature: Backend Leaderboard | Playtest — needs D1 ≥40% signal | 2026-04-22 |
-| [TBD] | Feature: Referral Tiers | Playtest — wedge must be proven first | 2026-04-22 |
-| [TBD] | Feature: VIP / Ad-Free IAP | Playtest — retention must be proven | 2026-04-22 |
-| [TBD] | Feature: Playtest Survey | Staging deployment (must exist first) | 2026-04-22 |
+| B-01 | Staging URL | T-01: Hosting decision pending | 2026-04-22 |
+| B-02 | Playtest responses ≥5 | T-04: Survey distribution pending | 2026-04-22 |
+| B-03 | TestFlight beta | Apple Developer account provisioning (human action) | 2026-04-22 |
+| B-04 | Play Store internal track | Android keystore creation (human action) | 2026-04-22 |
+| BL-04 | Backend Leaderboard | Playtest — needs D1 ≥40% signal | 2026-04-22 |
+| BL-05 | Referral Tiers | Playtest — wedge must be proven first | 2026-04-22 |
+| BL-06 | VIP / Ad-Free IAP | Playtest — retention must be proven | 2026-04-22 |
 
 ## Completed This Cycle
 
 > Stories shipped this sprint. Updated by `/agtoosa-ship`.
 
-| ID | Title | Shipped | Archived Spec |
-|----|-------|---------|---------------|
-
-*(Empty — updated by `/agtoosa-ship` as stories close.)*
+| ID | Title | Shipped | Notes |
+|----|-------|---------|-------|
+| C-01 | Normalize product/monetization source of truth (Task 1) | 2026-04-18 | docs/PRODUCT-WEDGE.md |
+| C-02 | Define KPI dashboard and event taxonomy (Task 2) | 2026-04-18 | docs/analytics-events-v1.3.md |
+| C-03 | Simplify first-session entry (Task 3) | 2026-04-22 | Login screen refactor |
+| C-04 | Implement free-games allowance model (Task 4) | 2026-04-22 | 25 games/day economy |
+| C-05 | Replace share-for-heart with share bonus (Task 5) | 2026-04-22 | +40 games/share |
+| C-06 | Upgrade streak system into reward ladder (Task 6) | 2026-04-22 | 8 milestone thresholds |
+| C-07 | Aetheric Pulse visual redesign — all P1–P8 items | 2026-04-24 | docs/archived/spec-aetheric-pulse-redesign.md |
+| C-08 | iToosa → miToosa feature migration | 2026-04-24 | docs/archived/spec-itoosa-feature-migration-v1.md |
 
 ## Update Log
 
@@ -110,3 +118,4 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | Date | Event | By |
 |------|-------|----|
 | 2026-05-04 | /agtoosa-init — initialization complete; context files populated, Epics seeded, TDD enabled | AgToosa |
+| 2026-05-04 | /agtoosa-init re-run — confirmed all context files already populated; removed Linear references; assigned EP/S1/T/BL IDs; populated Completed This Cycle from TASKS.md | AgToosa |
