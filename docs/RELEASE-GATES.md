@@ -70,7 +70,7 @@ Deploy the `build/web/` output directory to your chosen host. The `--no-tree-sha
 
 For Firebase Hosting:
 ```bash
-flutter build web --no-tree-shake-icons --release && firebase deploy --only hosting
+flutter build web --no-tree-shake-icons --release && firebase deploy --only hosting:mitoosa-staging
 ```
 
 For Vercel (via CLI):

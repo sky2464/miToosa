@@ -47,7 +47,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 
 | ID | Title | Type | Estimate | Status | Tasks Done |
 |----|-------|------|----------|--------|------------|
-| S1-01 | Staging Deployment & QA Gate | Feature | L | In Progress | 1/2 |
+| S1-01 | Staging Deployment & QA Gate | Feature | L | In Progress | 2/2 |
 | S1-02 | Analytics Backend Integration | Feature | M | Todo | 0/1 |
 | S1-03 | Manual Wedge QA Walkthrough | Chore | S | Todo | 0/1 |
 | S1-04 | Playtest Survey & Recruitment | Feature | M | Todo | 0/1 |
@@ -127,3 +127,5 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-04 | /agtoosa-ship S1-05 — Ship 🚀 Done: all gates green, S1-05 moved to Completed, changelog updated | AgToosa |
 | 2026-05-05 | /agtoosa-build S1-01 — Build 🏗️ Started: scope confirmed; CI deploy gate, staging script, setup doc, and release-gate prepopulation implemented | AgToosa |
 | 2026-05-05 | /agtoosa-build S1-01 — Task 🟢 4/4 complete: web workflow, deploy script, staging setup doc, and release-gate row updated; awaiting manual Firebase setup for deploy URL | AgToosa |
+| 2026-05-05 | /agtoosa-build S1-01 — Test ✅ Passed: `dart analyze` clean; `flutter test` 637 passing; requested SAST/DAST tools (semgrep, gitleaks, checkov, tfsec, codeql) not installed locally | AgToosa |
+| 2026-05-05 | /agtoosa-review S1-01 — Review 🔍 In Progress: aligned `docs/RELEASE-GATES.md` Firebase command to `hosting:mitoosa-staging`; remaining blocker is manual Firebase setup + staging URL | AgToosa |
