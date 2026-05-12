@@ -12,7 +12,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), version
 - `docs/ANALYTICS-SETUP.md` manual Firebase/FlutterFire setup runbook
 - `docs/AgToosa_TestPlan-S1-02.md` AC-mapped test plan with `@smoke` tags
 
-_Spec: `docs/AgToosa_Spec-S1-02.md` · Story: S1-02_
+_Spec: `docs/archived/spec-s1-02.md` · Story: S1-02_
 
 ### Changed
 - Archived `TASKS.md` (root) and `docs/plan.md` — both superseded by `docs/Master-Plan.md` as project source of truth

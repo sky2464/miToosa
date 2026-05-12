@@ -9,7 +9,7 @@
 - Linear project URL: N/A — Master-Plan.md is the PM source of truth
 - GitHub repo: https://github.com/sky2464/miToosa
 - Current milestone: v1.5.0 — Pre-Launch (Sprint 1: Launch Readiness & Validation)
-- Active cycle: Sprint 1 (2026-04-22 → 2026-05-06)
+- Active cycle: Sprint 1B (2026-05-11 → 2026-05-25)
 - Cycle capacity: TBD
 
 ## Epics
@@ -43,12 +43,10 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 
 ## Active Cycle
 
-> Stories committed to Sprint 1.
+> Stories committed to Sprint 1B.
 
 | ID | Title | Type | Estimate | Status | Tasks Done |
 |----|-------|------|----------|--------|------------|
-| S1-01 | Staging Deployment & QA Gate | Feature | L | In Progress | 2/2 |
-| S1-02 | Analytics Backend Integration | Feature | M | Done | 1/1 |
 | S1-03 | Manual Wedge QA Walkthrough | Chore | S | Todo | 0/1 |
 | S1-04 | Playtest Survey & Recruitment | Feature | M | Todo | 0/1 |
 
@@ -56,14 +54,9 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 
 > Task sub-issues under the currently In Progress story. Created at `/agtoosa-build scope`.
 
-- [x] **1. S1-01:** Staging Deployment & QA Gate
-	- [x] 1.1 Add CI conditional deploy gate and deploy helper script — _Requirements: AC-001, AC-002, AC-003_
-	- [x] 1.2 Publish staging setup/runbook docs and release-gate prepopulation — _Requirements: AC-004, AC-005_
-- [x] **2. S1-02:** Analytics Backend Integration
-	- [x] 2.1 Wire Firebase Analytics sink and guarded initialization path — _Requirements: AC-001, AC-002, AC-003, AC-004, AC-005, AC-006, AC-007_
-- [ ] **3. S1-03:** Manual Wedge QA Walkthrough
+- [ ] **1. S1-03:** Manual Wedge QA Walkthrough
 	- [ ] 3.1 Execute manual QA walkthrough and capture findings in QA artifacts — _Requirements: QA walkthrough checklist_
-- [ ] **4. S1-04:** Playtest Survey & Recruitment
+- [ ] **2. S1-04:** Playtest Survey & Recruitment
 	- [ ] 4.1 Finalize survey with staging URL and recruit 15-20 testers — _Requirements: playtest recruitment target_
 
 ## Backlog
@@ -114,7 +107,8 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | C-07 | Aetheric Pulse visual redesign — all P1–P8 items | 2026-04-24 | docs/archived/spec-aetheric-pulse-redesign.md |
 | C-08 | iToosa → miToosa feature migration | 2026-04-24 | docs/archived/spec-itoosa-feature-migration-v1.md |
 | S1-05 | Repo & Docs Cleanup (cleanup_001) | 2026-05-04 | docs/archived/spec-cleanup-001.md · review-cleanup-001.md |
-| S1-02 | Analytics Backend Integration | 2026-05-11 | docs/AgToosa_Spec-S1-02.md · docs/archived/review-s1-02.md · docs/archived/ship-check-s1-02.md |
+| S1-02 | Analytics Backend Integration | 2026-05-11 | docs/archived/spec-s1-02.md · docs/archived/review-s1-02.md · docs/archived/ship-check-s1-02.md |
+| S1-01 | Staging Deployment & QA Gate | 2026-05-11 | docs/AgToosa_Spec-S1-01.md · docs/STAGING-SETUP.md · docs/RELEASE-GATES.md |
 
 ## Update Log
 
@@ -145,3 +139,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-11 | /agtoosa-ship S1-02 — Ship 🚀 Done: managed exception accepted for stash-only WIP history; story moved to Completed This Cycle | AgToosa |
 | 2026-05-11 | /agtoosa-task backlog-hygiene — BL-04/BL-05/BL-06 removed from Blocked aging queue and retained as backlog-gated post-playtest stories | AgToosa |
 | 2026-05-11 | /agtoosa-ship hygiene — dropped stash entry `stash@{0}` containing WIP commit marker; repo-wide WIP/fixup scan now clean | AgToosa |
+| 2026-05-11 | /agtoosa-spec cycle-rollover — active cycle window advanced to Sprint 1B (2026-05-11 → 2026-05-25) to continue open S1 stories | AgToosa |
+| 2026-05-11 | /agtoosa-ship docs S1-02 — spec archived to `docs/archived/spec-s1-02.md`; S1-02 removed from Active Cycle/Active Tasks bookkeeping | AgToosa |
+| 2026-05-11 | /agtoosa-build test S1-01 — staging deploy script executed successfully and hosting URL verified live | AgToosa |
+| 2026-05-11 | /agtoosa-ship docs S1-01 — CI deploy target aligned to `hosting:mitoosa-2121b`; story moved to Completed This Cycle | AgToosa |

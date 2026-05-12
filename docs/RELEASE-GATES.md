@@ -123,5 +123,5 @@ Record each gate exercise here so the team can verify the sequence was followed.
 
 | Date | Feature / Branch | Gate | Outcome | Notes |
 |------|-----------------|------|---------|-------|
-| 2026-05-05 | S1-01 staging deploy setup | 3 — Build | In Progress | CI deploy step + script + setup doc added; awaiting Firebase manual setup and URL |
-| TBD | Sprint 1 staging deploy | 5 — `/qa` | Pending | Awaiting staging URL |
+| 2026-05-05 | S1-01 staging deploy setup | 3 — Build | Pass | CI deploy step + script + setup doc added |
+| 2026-05-11 | Sprint 1 staging deploy | 5 — `/qa` | Pass | Staging deploy verified at https://mitoosa-2121b.web.app |
