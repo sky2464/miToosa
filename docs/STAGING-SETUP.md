@@ -26,7 +26,8 @@ This document covers the manual Firebase steps required for S1-01.
    firebase init hosting
    ```
    Use these selections:
-   - Project: `mitoosa`
+   - Project: `mitoosa`  Please select an option: Use an existing project
+✔ Select a default Firebase project for this directory: mitoosa-2121b (miToosa)
    - Public directory: `build/web`
    - Single-page app rewrite: `Yes`
    - GitHub automated builds: `No` (CI workflow handles deploy)
@@ -43,10 +44,10 @@ This document covers the manual Firebase steps required for S1-01.
    ```bash
    ./scripts/deploy-staging.sh
    ```
-   Copy the generated `*.web.app` or `*.firebaseapp.com` URL into `docs/RELEASE-GATES.md`.
+   The script will build the web app and deploy to Firebase Hosting. Copy the generated `*.web.app` URL (e.g., `https://mitoosa-2121b.web.app`) into `docs/RELEASE-GATES.md`.
 
 ## Verification
 
 - `flutter build web --no-tree-shake-icons --release` succeeds
-- `firebase deploy --only hosting:mitoosa-staging` succeeds
-- Staging URL loads the app in browser
+- `firebase deploy --only hosting:mitoosa-2121b` succeeds
+- Staging URL (https://mitoosa-2121b.web.app) loads the app in browser

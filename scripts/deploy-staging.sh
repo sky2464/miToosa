@@ -12,4 +12,4 @@ if ! command -v firebase >/dev/null 2>&1; then
 fi
 
 flutter build web --no-tree-shake-icons --release
-firebase deploy --only hosting:mitoosa-staging
+firebase deploy --only hosting:mitoosa-2121b

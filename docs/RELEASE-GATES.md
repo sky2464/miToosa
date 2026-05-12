@@ -53,11 +53,10 @@ Every feature and release must pass through these gates in order. Skipping gates
 
 ## Staging URL
 
-<!-- HUMAN-ACTION-REQUIRED: Record the staging URL here once it exists -->
-**Status:** Pending Firebase setup. Host selected: Firebase Hosting. URL will be recorded after manual Firebase Console + `firebase init hosting` steps.
+**Status:** Firebase Hosting configured and deployed. 
 
 ```
-Staging URL: TBD
+Staging URL: https://mitoosa-2121b.web.app
 ```
 
 ## Web Build Command
@@ -70,7 +69,7 @@ Deploy the `build/web/` output directory to your chosen host. The `--no-tree-sha
 
 For Firebase Hosting:
 ```bash
-flutter build web --no-tree-shake-icons --release && firebase deploy --only hosting:mitoosa-staging
+flutter build web --no-tree-shake-icons --release && firebase deploy --only hosting:mitoosa-2121b
 ```
 
 For Vercel (via CLI):
