@@ -56,13 +56,15 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 
 > Task sub-issues under the currently In Progress story. Created at `/agtoosa-build scope`.
 
-| ID | Title | Estimate | Status |
-|----|-------|----------|--------|
-| T-01 | Select web host (Firebase/Vercel/Netlify); record URL in RELEASE-GATES.md | 2h | In Progress |
-| T-02 | Integrate analytics SDK; confirm session_start event in dashboard | 4h | Todo |
-| T-03 | Fresh install → onboarding → first game → share → streak walkthrough | 2h | Todo |
-| T-04 | Fill [STAGING_URL] in SURVEY-TEMPLATE.md; recruit 15–20 testers | 1h | Todo |
-| T-05 | Run /agtoosa-qa on staging; update Gate Log row in RELEASE-GATES.md | 3h | Todo |
+- [x] **1. S1-01:** Staging Deployment & QA Gate
+	- [x] 1.1 Add CI conditional deploy gate and deploy helper script — _Requirements: AC-001, AC-002, AC-003_
+	- [x] 1.2 Publish staging setup/runbook docs and release-gate prepopulation — _Requirements: AC-004, AC-005_
+- [ ] **2. S1-02:** Analytics Backend Integration
+	- [ ] 2.1 Wire Firebase Analytics sink and guarded initialization path — _Requirements: AC-001, AC-002, AC-003, AC-004, AC-005, AC-006, AC-007_
+- [ ] **3. S1-03:** Manual Wedge QA Walkthrough
+	- [ ] 3.1 Execute manual QA walkthrough and capture findings in QA artifacts — _Requirements: QA walkthrough checklist_
+- [ ] **4. S1-04:** Playtest Survey & Recruitment
+	- [ ] 4.1 Finalize survey with staging URL and recruit 15-20 testers — _Requirements: playtest recruitment target_
 
 ## Backlog
 
@@ -81,6 +83,10 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | BL-09 | Accessibility Audit (Physical Devices) | Chore | S | EP-04 | P3 |
 | BL-10 | Test Coverage Expansion (integration tests) | Chore | M | EP-05 | P4 |
 | BL-11 | Web Platform Crypto Hardening | Improvement | S | EP-05 | P4 |
+| BL-12 | Resolve staging URL publication blocker | Chore | S | EP-01 | P1 |
+| BL-13 | Recover playtest response pipeline (>=5 responses) | Chore | S | EP-01 | P1 |
+| BL-14 | Unblock TestFlight beta provisioning handoff | Chore | M | EP-02 | P1 |
+| BL-15 | Unblock Play Store internal track setup | Chore | M | EP-02 | P1 |
 
 ## Blocked
 
@@ -88,10 +94,10 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 
 | ID | Title | Blocked by | Since |
 |----|-------|-----------|-------|
-| B-01 | Staging URL | T-01: Hosting decision pending | 2026-04-22 |
-| B-02 | Playtest responses ≥5 | T-04: Survey distribution pending | 2026-04-22 |
-| B-03 | TestFlight beta | Apple Developer account provisioning (human action) | 2026-04-22 |
-| B-04 | Play Store internal track | Android keystore creation (human action) | 2026-04-22 |
+| BL-12 | Resolve staging URL publication blocker | Hosting decision + first deploy URL pending | 2026-04-22 |
+| BL-13 | Recover playtest response pipeline (>=5 responses) | Survey distribution + staging URL pending | 2026-04-22 |
+| BL-14 | Unblock TestFlight beta provisioning handoff | Apple Developer account provisioning (human action) | 2026-04-22 |
+| BL-15 | Unblock Play Store internal track setup | Android keystore creation (human action) | 2026-04-22 |
 | BL-04 | Backend Leaderboard | Playtest — needs D1 ≥40% signal | 2026-04-22 |
 | BL-05 | Referral Tiers | Playtest — wedge must be proven first | 2026-04-22 |
 | BL-06 | VIP / Ad-Free IAP | Playtest — retention must be proven | 2026-04-22 |
@@ -129,3 +135,6 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-05 | /agtoosa-build S1-01 — Task 🟢 4/4 complete: web workflow, deploy script, staging setup doc, and release-gate row updated; awaiting manual Firebase setup for deploy URL | AgToosa |
 | 2026-05-05 | /agtoosa-build S1-01 — Test ✅ Passed: `dart analyze` clean; `flutter test` 637 passing; requested SAST/DAST tools (semgrep, gitleaks, checkov, tfsec, codeql) not installed locally | AgToosa |
 | 2026-05-05 | /agtoosa-review S1-01 — Review 🔍 In Progress: aligned `docs/RELEASE-GATES.md` Firebase command to `hosting:mitoosa-staging`; remaining blocker is manual Firebase setup + staging URL | AgToosa |
+| 2026-05-11 | /agtoosa-spec tasks S1-01 — Active Tasks converted to hierarchical checkbox tree; Sprint 1 task counters realigned to actual checked/total values | AgToosa |
+| 2026-05-11 | /agtoosa-task blocker-rescope — B-01..B-04 migrated to backlog-tracked BL-12..BL-15 and Blocked table cleaned to canonical IDs | AgToosa |
+| 2026-05-11 | /agtoosa-spec S1-02 — Spec promoted to Approved, build scope/task tree/wave plan finalized, and S1-02 test plan skeleton generated | AgToosa |

@@ -44,8 +44,8 @@ Produce a read-only health dashboard by parsing `Docs/Master-Plan.md`, cross-ref
 5.  **Parse Blocked table:**
     *   Extract each row: ID, Title, Blocked by, Since date.
     *   Calculate age in days from the Since date to today.
-    *   If age > 7 days, record: 🟡 Warning — "`[ID]` has been blocked for `[N]` days since `[date]`. *Fix with:* resolve the blocker or `/agtoosa-task` to re-scope."
-    *   If age > 30 days, escalate to: 🔴 Error — "`[ID]` has been blocked for `[N]` days — likely abandoned."
+    *   If age > 7 days, record: 🟡 Warning — "(escalated to Warning on day 7) `[ID]` has been blocked for `[N]` days since `[date]`. *Fix with:* resolve the blocker or `/agtoosa-task` to re-scope."
+    *   If age > 30 days, escalate to: 🔴 Error — "(escalated to Error on day 30) `[ID]` has been blocked for `[N]` days — likely abandoned."
 
 6.  **Parse Backlog:**
     *   Count items by Priority: High, Medium, Low.
@@ -55,8 +55,8 @@ Produce a read-only health dashboard by parsing `Docs/Master-Plan.md`, cross-ref
 7.  **Parse Update Log:**
     *   Find the most recent entry by date.
     *   Calculate age in days from the most recent entry to today.
-    *   If age > 7 days, record: 🟡 Warning — "Update Log is stale — last entry `[N]` days ago (`[date]`). *Fix with:* run the next workflow phase."
-    *   If age > 30 days, escalate to: 🔴 Error — "Update Log has not been updated in `[N]` days — project may be abandoned."
+    *   If age > 7 days, record: 🟡 Warning — "(escalated to Warning on day 7) Update Log is stale — last entry `[N]` days ago (`[date]`). *Fix with:* run the next workflow phase."
+    *   If age > 30 days, escalate to: 🔴 Error — "(escalated to Error on day 30) Update Log has not been updated in `[N]` days — project may be abandoned."
 
 8.  **Cross-section consistency checks:**
     *   **Orphaned Active Tasks:** For each top-level task group in Active Tasks, extract any referenced story ID. If that ID does not appear in the Active Cycle table, record: 🔴 Error — "Active Task group references `[ID]` which is not in Active Cycle. *Fix with:* `/agtoosa-spec tasks` or `/agtoosa-task`".
@@ -185,12 +185,100 @@ Project: [name] · Cycle: [cycle] · Phase: [phase emoji]
 - [orphan description] — *Fix with:* `/agtoosa-[command]`
 
 ## Recommended Next Actions
-1. [most urgent action based on findings]
-2. [second action]
-3. [third action]
+1. Run `[command]` to [verb-phrase] ([N] findings: [ID1, ID2, …])
+   Rationale: [one short line].
+2. …
 ```
 
 When running a sub-command (`plan`, `git`, or `orphans`), output only the relevant sections of the dashboard. Always include the header and health score sections.
+
+### Part 5.5 — Recommended Next Actions generation
+
+The dashboard MUST emit a deterministic, ranked, deduplicated "Recommended Next Actions" section every run. Do not improvise ordering. Follow this algorithm exactly.
+
+**Step 1 — Map every finding to its fix-command** using this table:
+
+| Finding pattern | Fix command |
+|---|---|
+| Placeholder values still in Project Charter | `/agtoosa-init` |
+| Empty Active Cycle; missing spec for In Progress / Todo story; High-priority backlog with empty Active Cycle; branch ahead with no In Progress story | `/agtoosa-spec` |
+| Empty Active Tasks while Active Cycle has In Progress; Orphaned Active Task group references unknown story ID | `/agtoosa-spec tasks` |
+| Tasks Done counter mismatch; stale checkboxes referenced by recent commits | `/agtoosa-build` |
+| Blocked item > 7d (Warning) or > 30d (Error); Dangling Blocked ID not in Active Cycle/Backlog; Commit references untracked story ID; Orphaned spec file not referenced in Master-Plan | `/agtoosa-task` |
+| WIP / fixup / squash commits; Stuck-Done story (Done in Active Cycle but not in Completed) | `/agtoosa-ship` |
+
+**Step 2 — Sort findings by priority:**
+
+1. 🔴 Errors (regardless of source).
+2. 🟡 Aged Warnings, oldest `since` date first. A warning is "aged" if it has the `(escalated to Warning on day N)` prefix.
+3. 🟡 Other Warnings.
+4. Orphan findings (from Part 3).
+5. ℹ️ Info.
+
+Within each tier, preserve the order findings were discovered (Part 1 → Part 2 → Part 3).
+
+**Step 3 — Group by fix-command.** After sorting, walk the list and group consecutive findings that share the same fix-command into a single action. A later finding with the same command but separated by a different-command finding still belongs to its earlier group — coalesce all findings per command across the whole sorted list. The action's tier is the tier of the highest-priority finding in the group.
+
+**Step 4 — Emit each action** in priority order (highest-tier group first; ties broken by first-discovery order):
+
+```
+N. Run `<command>` to <verb-phrase> (<count> findings: <ID1, ID2, …>)
+   Rationale: <one short sentence>.
+```
+
+Use these verb-phrases verbatim:
+
+- `/agtoosa-init` → "clear charter placeholders"
+- `/agtoosa-spec` → "address missing or unscoped specs"
+- `/agtoosa-spec tasks` → "rebuild the Active Tasks checkbox tree"
+- `/agtoosa-build` → "reconcile task counters and stale checkboxes"
+- `/agtoosa-task` → "resolve blocked, dangling, untracked, or orphan items"
+- `/agtoosa-ship` → "clean up WIP commits and stuck-Done stories"
+
+Rationale lines:
+
+- Errors group: "errors block downstream commands and skew progress reporting."
+- Aged-Warnings group: "aged warnings risk auto-escalation to Errors at day 30."
+- Other-Warnings group: "warnings degrade Freshness and Task Consistency scores."
+- Orphan group: "orphans break the spec ↔ Master-Plan source-of-truth contract."
+- Info group: "informational — address opportunistically."
+
+**Step 5 — Cap at 5 actions.** If more groups exist, emit the top 5 and append a 6th line:
+
+```
+(<N> more findings — run `/agtoosa-status plan` for the full list)
+```
+
+**Step 6 — Quick wins call-out.** After the numbered list, emit a `🎯 Quick wins` block listing finding IDs that match this hard-coded heuristic (each takes <5 min to fix):
+
+- Project Charter placeholders.
+- Tasks Done counter mismatches.
+- Missing spec for the currently-In Progress story (single ID).
+
+Format:
+
+```
+🎯 Quick wins: <ID1>, <ID2>, … (estimated <5 min each)
+```
+
+If no findings match, omit the block entirely.
+
+**Step 7 — Empty state.** If there are zero Errors, Warnings, Orphans, and Info findings, replace the entire Next Actions section with:
+
+```
+## Recommended Next Actions
+✅ No findings. Run `/agtoosa-spec` to start the next story, or `/agtoosa-ship` if a cycle is complete.
+```
+
+### Part 5.6 — Sub-command typo helper
+
+When invoked as `/agtoosa-status <token>` and `<token>` is not in the set `{plan, git, orphans}`, prepend exactly this line to the dashboard output before any other content:
+
+```
+Note: '<token>' is not a defined sub-command. Did you mean: plan, git, orphans? Falling back to full dashboard.
+```
+
+Then run the full dashboard as usual. This replaces any generic "unknown sub-command" fallback wording.
 
 ## Rules
 
