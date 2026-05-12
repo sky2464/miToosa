@@ -6,6 +6,12 @@ import 'package:mitoosa/data/telemetry_event.dart';
 import 'package:mitoosa/data/telemetry_provider.dart';
 
 void main() {
+  group('firebase flag', () {
+    test('is disabled by default', () {
+      expect(kFirebaseEnabled, isFalse);
+    });
+  });
+
   group('analyticsSinkProvider', () {
     test('returns NoOpAnalyticsSink by default', () {
       final container = ProviderContainer();

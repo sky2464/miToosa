@@ -48,7 +48,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | ID | Title | Type | Estimate | Status | Tasks Done |
 |----|-------|------|----------|--------|------------|
 | S1-01 | Staging Deployment & QA Gate | Feature | L | In Progress | 2/2 |
-| S1-02 | Analytics Backend Integration | Feature | M | Todo | 0/1 |
+| S1-02 | Analytics Backend Integration | Feature | M | In Progress | 1/1 |
 | S1-03 | Manual Wedge QA Walkthrough | Chore | S | Todo | 0/1 |
 | S1-04 | Playtest Survey & Recruitment | Feature | M | Todo | 0/1 |
 
@@ -60,7 +60,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 	- [x] 1.1 Add CI conditional deploy gate and deploy helper script — _Requirements: AC-001, AC-002, AC-003_
 	- [x] 1.2 Publish staging setup/runbook docs and release-gate prepopulation — _Requirements: AC-004, AC-005_
 - [ ] **2. S1-02:** Analytics Backend Integration
-	- [ ] 2.1 Wire Firebase Analytics sink and guarded initialization path — _Requirements: AC-001, AC-002, AC-003, AC-004, AC-005, AC-006, AC-007_
+	- [x] 2.1 Wire Firebase Analytics sink and guarded initialization path — _Requirements: AC-001, AC-002, AC-003, AC-004, AC-005, AC-006, AC-007_
 - [ ] **3. S1-03:** Manual Wedge QA Walkthrough
 	- [ ] 3.1 Execute manual QA walkthrough and capture findings in QA artifacts — _Requirements: QA walkthrough checklist_
 - [ ] **4. S1-04:** Playtest Survey & Recruitment
@@ -94,10 +94,10 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 
 | ID | Title | Blocked by | Since |
 |----|-------|-----------|-------|
-| BL-12 | Resolve staging URL publication blocker | Hosting decision + first deploy URL pending | 2026-04-22 |
-| BL-13 | Recover playtest response pipeline (>=5 responses) | Survey distribution + staging URL pending | 2026-04-22 |
-| BL-14 | Unblock TestFlight beta provisioning handoff | Apple Developer account provisioning (human action) | 2026-04-22 |
-| BL-15 | Unblock Play Store internal track setup | Android keystore creation (human action) | 2026-04-22 |
+| BL-12 | Resolve staging URL publication blocker | Hosting decision + first deploy URL pending (next check: 2026-05-18) | 2026-05-11 |
+| BL-13 | Recover playtest response pipeline (>=5 responses) | Survey distribution + staging URL pending (next check: 2026-05-18) | 2026-05-11 |
+| BL-14 | Unblock TestFlight beta provisioning handoff | Apple Developer account provisioning (human action) (next check: 2026-05-18) | 2026-05-11 |
+| BL-15 | Unblock Play Store internal track setup | Android keystore creation (human action) (next check: 2026-05-18) | 2026-05-11 |
 | BL-04 | Backend Leaderboard | Playtest — needs D1 ≥40% signal | 2026-04-22 |
 | BL-05 | Referral Tiers | Playtest — wedge must be proven first | 2026-04-22 |
 | BL-06 | VIP / Ad-Free IAP | Playtest — retention must be proven | 2026-04-22 |
@@ -138,3 +138,6 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-11 | /agtoosa-spec tasks S1-01 — Active Tasks converted to hierarchical checkbox tree; Sprint 1 task counters realigned to actual checked/total values | AgToosa |
 | 2026-05-11 | /agtoosa-task blocker-rescope — B-01..B-04 migrated to backlog-tracked BL-12..BL-15 and Blocked table cleaned to canonical IDs | AgToosa |
 | 2026-05-11 | /agtoosa-spec S1-02 — Spec promoted to Approved, build scope/task tree/wave plan finalized, and S1-02 test plan skeleton generated | AgToosa |
+| 2026-05-11 | /agtoosa-build S1-02 — Build 🏗️ Started: Firebase dependencies added, sink/provider wiring implemented, guarded app initialization and placeholder options file added | AgToosa |
+| 2026-05-11 | /agtoosa-build S1-02 — Test ✅ Passed: targeted tests green, `dart analyze` clean, and full `flutter test` passing (639 tests) | AgToosa |
+| 2026-05-11 | blocker-management — BL-12..BL-15 retained as blocked, `Since` refreshed and weekly next-check cadence added | AgToosa |

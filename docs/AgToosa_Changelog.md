@@ -7,6 +7,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), version
 
 ## [Unreleased]
 
+### Added
+- S1-02 analytics backend implementation scaffolding: `firebase_core` + `firebase_analytics` dependencies, `FirebaseAnalyticsSink`, guarded `FIREBASE_ENABLED` provider wiring, conditional Firebase initialization in app bootstrap, and placeholder `lib/firebase_options.dart`
+- `docs/ANALYTICS-SETUP.md` manual Firebase/FlutterFire setup runbook
+- `docs/AgToosa_TestPlan-S1-02.md` AC-mapped test plan with `@smoke` tags
+
+_Spec: `docs/AgToosa_Spec-S1-02.md` · Story: S1-02_
+
 ### Changed
 - Archived `TASKS.md` (root) and `docs/plan.md` — both superseded by `docs/Master-Plan.md` as project source of truth
 - Updated `GEMINI.md` with full AgToosa command table, corrected file paths, and consistent style (no emoji headers) — now consistent with `CLAUDE.md` and `AGENTS.md`
