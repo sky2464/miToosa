@@ -10,6 +10,7 @@ import '../../widgets/kinetic_background.dart';
 import '../../widgets/kinetic_chip.dart';
 import '../../widgets/kinetic_progress_bar.dart';
 import '../../widgets/progress_ring.dart';
+import '../../widgets/stat_pill.dart';
 import 'track_detail_screen.dart';
 import '../local_play/local_play_mode_screen.dart';
 
@@ -67,6 +68,41 @@ class _TracksBody extends StatelessWidget {
                     ),
                   )
               : null,
+        ),
+        const SizedBox(height: 14),
+        // Aetheric Pulse stat strip — real player metrics from PlayerProgress.
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          physics: const BouncingScrollPhysics(),
+          child: Row(
+            children: [
+              StatPill(
+                icon: const Icon(Icons.local_fire_department),
+                label: '${progress.streakCount} day streak',
+                tint: StatPillTint.orange,
+              ),
+              const SizedBox(width: 8),
+              StatPill(
+                icon: const Icon(Icons.bolt),
+                label: '${progress.freeGamesRemaining}/25 energy',
+                tint: StatPillTint.amber,
+                glow: true,
+              ),
+              const SizedBox(width: 8),
+              StatPill(
+                icon: const Icon(Icons.star),
+                label:
+                    '${progress.levelStars.values.fold<int>(0, (a, b) => a + b)} stars',
+                tint: StatPillTint.purple,
+              ),
+              const SizedBox(width: 8),
+              StatPill(
+                icon: const Icon(Icons.bolt_outlined),
+                label: '${progress.totalXP} XP',
+                tint: StatPillTint.blue,
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 16),
         ...screenTracks.map((t) => Padding(

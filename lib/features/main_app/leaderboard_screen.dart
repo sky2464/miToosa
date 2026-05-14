@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/player_progress_provider.dart';
-import '../../theme/design_system.dart';
 import '../../theme/design_tokens.dart';
 
 /// Leaderboard screen — podium (top 3) + segmented control + ranked rows.
@@ -96,7 +95,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
         ],
 
         const SizedBox(height: 16),
-        Center(
+        const Center(
           child: Text(
             'Leaderboard preview · live in v1.3',
             style: TextStyle(
