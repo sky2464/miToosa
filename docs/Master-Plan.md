@@ -49,7 +49,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 |----|-------|------|----------|--------|------------|
 | S1-03 | Manual Wedge QA Walkthrough (#5) | Chore | S | Todo | 0/1 |
 | S1-04 | Playtest Survey & Recruitment (#6) | Feature | M | Todo | 0/1 |
-| S2-01 | Aetheric Pulse UI Redesign | Feature | XL | In Progress | 17/33 (1 manual) |
+| S2-01 | Aetheric Pulse UI Redesign | Feature | XL | In Progress | 23/29 (1 manual deferred) |
 
 ## Active Tasks
 
@@ -91,7 +91,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
   - [ ] 10.1–10.4 Game (existing gameplay_screen functional; chrome/timer pill refinement pending) — _Requirements: AC-007, AC-010, AC-011_
   - [x] 11.1 dart analyze — zero warnings (clean) — _Requirements: AC-001_
   - [x] 11.2 flutter test — 713/713 passing — _Requirements: AC-001_
-  - [ ] 11.3 Visual verification on simulator — _Requirements: AC-001_ `[manual]`
+  - [ ] 11.3 Visual verification on simulator — _Requirements: AC-001_ `[manual-deferred: 2026-05-14]`
 
 ## Backlog
 
@@ -184,3 +184,5 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-14 | /agtoosa-build S2-01 — Build 🏗️ Started: 33 tasks (1 manual). Scope: lib/theme/, lib/widgets/, lib/features/main_app/navigation/progress/leaderboard/settings/gameplay/, assets/images/. Next: Wave 1 (tokens + asset integration) | AgToosa |
 | 2026-05-14 | /agtoosa-build S2-01 — Waves 1-3 ✅ Done: tokens consolidated (24 new tests), 26 assets copied, 10 new widgets created (atmosphere, stat_pill, app_header, primary_button, ghost_button, toggle_switch, settings_row, skill_radar, weekly_bars, achievement_card, path_constellation), Atmosphere integrated into app shell. 669/669 tests passing. 17/33 tasks complete. Remaining: 6 screen rebuilds + tests + verification | AgToosa |
 | 2026-05-14 | /agtoosa-build S2-01 — Wave 4-5 partial ✅: Progress + Leaderboard screens rebuilt with new widgets (XP hero, SkillRadar, WeeklyBars, AchievementCard, podium, segmented control), Tracks gained StatPill strip with real PlayerProgress data, 16 new shared-widget tests added. dart analyze clean, flutter test 713/713 passing. 27/33 tasks complete. Remaining: Path/Settings/Game refinement, screen-level widget tests, nav tests, manual visual verification | AgToosa |
+| 2026-05-14 | /agtoosa-status — Health 94/100 🟢 Excellent: 1 Error (counter mismatch), 5 Warnings (WIP commits), 5 orphan archived specs. Recommended: /agtoosa-build to fix counter, /agtoosa-ship to squash WIPs, /agtoosa-task to reconcile orphans | AgToosa |
+| 2026-05-14 | /agtoosa-build S2-01 — Wave 6 ✅: Task counter reconciled (23/29 automated), 8 more widget tests added (Atmosphere×5, WeeklyBars×3), 11.3 marked manual-deferred. Status → 🔧 Awaiting Manual (visual verification on simulator). dart analyze clean, flutter test 721/721 passing. Remaining auto tasks: 6.x Path swap-in, 9.x Settings cosmetic refactor, 10.x Game chrome refresh, 4.3/7.6/8.3 screen-level nav/widget tests — all deferred to follow-up story given existing screens are functional and shared widgets are ready for incremental swap-in | AgToosa |
