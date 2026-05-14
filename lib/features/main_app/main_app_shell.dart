@@ -9,8 +9,10 @@ import '../navigation/world_map_path_screen.dart';
 import 'progress_screen.dart';
 import 'leaderboard_screen.dart';
 import '../../features/settings/settings_screen.dart';
+import '../../data/player_progress_provider.dart';
 import '../../data/telemetry_provider.dart';
 import '../../theme/design_system.dart';
+import '../../widgets/app_header.dart';
 import '../../widgets/atmosphere.dart';
 import '../../widgets/kinetic_background.dart';
 
@@ -62,6 +64,10 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final coins = ref.watch(playerProgressProvider).maybeWhen(
+      data: (p) => p.coins,
+      orElse: () => 0,
+    );
     return Scaffold(
       backgroundColor: isDark
           ? AethericPulseDark.surface
@@ -77,7 +83,7 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
             const Positioned.fill(child: KineticBackground(child: SizedBox.expand())),
           Column(
             children: [
-              const _TopBar(),
+              _SafeAppHeader(coins: coins),
               Expanded(
                 child: IndexedStack(
                   index: _selectedIndex,
@@ -96,117 +102,18 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
   }
 }
 
-// ─── Top app bar ──────────────────────────────────────────────────────────────
+// ─── Safe app header wrapper ──────────────────────────────────────────────────
 
-class _TopBar extends StatelessWidget {
-  const _TopBar();
+class _SafeAppHeader extends StatelessWidget {
+  final int coins;
+  const _SafeAppHeader({required this.coins});
 
   @override
   Widget build(BuildContext context) {
     final top = MediaQuery.of(context).padding.top;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final surfaceTint = isDark ? const Color(0xA80B0E14) : const Color(0xCCFBFAFF);
-    final borderTint = isDark ? const Color(0x14FFFFFF) : const Color(0x1A1A1B2B);
-    return ClipRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-        child: Container(
-          height: 56 + top,
-          padding: EdgeInsets.only(top: top, left: 16, right: 16),
-          decoration: BoxDecoration(
-            color: surfaceTint,
-            border: Border(bottom: BorderSide(color: borderTint, width: 1)),
-          ),
-          child: Row(
-            children: [
-              Semantics(
-                label: 'Your avatar',
-                image: true,
-                child: Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: isDark
-                          ? AethericPulseDark.brandBlue
-                          : AethericPulseLight.softBlueDeep,
-                      width: 1,
-                    ),
-                    image: const DecorationImage(
-                      image: AssetImage('assets/images/avatars/avatar_4.png'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              ShaderMask(
-                shaderCallback: (bounds) => (isDark
-                        ? AethericPulseDark.gradPrimary
-                        : AethericPulseLight.gradient)
-                    .createShader(bounds),
-                blendMode: BlendMode.srcIn,
-                child: Text(
-                  'MITOOSA',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 0.9,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              const Spacer(),
-              const _CreditPill(value: '1,250'),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _CreditPill extends StatelessWidget {
-  final String value;
-  const _CreditPill({required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final accent =
-        isDark ? AethericPulseDark.brandBlue : AethericPulseLight.softBlueDeep;
-    return Semantics(
-      label: '$value credits',
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-        decoration: BoxDecoration(
-          color: isDark
-              ? AethericPulseDark.glassFill
-              : AethericPulseLight.lightSurfaceContainer,
-          borderRadius: BorderRadius.circular(AethericPulseDark.radiusPill),
-          border: Border.all(
-            color: isDark
-                ? AethericPulseDark.glassBorder
-                : AethericPulseLight.lightOutlineVariant,
-            width: 1,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.stars_rounded, size: 16, color: accent),
-            const SizedBox(width: 6),
-            Text(
-              '$value CR',
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                fontWeight: FontWeight.w500,
-                letterSpacing: 0.84,
-                color: accent,
-              ),
-            ),
-          ],
-        ),
-      ),
+    return Padding(
+      padding: EdgeInsets.only(top: top),
+      child: AppHeader(credits: coins),
     );
   }
 }
@@ -242,11 +149,11 @@ class _FloatingGlassNav extends StatelessWidget {
         16,
         0,
         16,
-        bottomInset > 0 ? bottomInset + 6 : 18,
+        bottomInset > 0 ? bottomInset + 6 : 14,
       ),
       child: ClipRRect(
         borderRadius:
-            BorderRadius.circular(AethericPulseDark.radiusHeroCard),
+            BorderRadius.circular(AethericPulseDark.radiusCard),
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
           child: Container(
@@ -255,7 +162,7 @@ class _FloatingGlassNav extends StatelessWidget {
               color: navFill,
               border: Border.all(color: navBorder, width: 1),
               borderRadius:
-                  BorderRadius.circular(AethericPulseDark.radiusHeroCard),
+                  BorderRadius.circular(AethericPulseDark.radiusCard),
               boxShadow: isDark
                   ? AethericPulseDark.cardOuter
                   : AethericPulseLight.shadowSoftBlue,
@@ -322,13 +229,38 @@ class _NavItem extends StatelessWidget {
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: onTap,
-          child: AnimatedContainer(
-            duration: AethericPulseDark.durHover,
-            curve: Curves.easeOutCubic,
-            padding: EdgeInsets.symmetric(
-              horizontal: isActive ? 14 : 10,
-              vertical: 8,
-            ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                height: 2,
+                child: Center(
+                  child: AnimatedContainer(
+                    duration: AethericPulseDark.durHover,
+                    width: isActive ? 20.0 : 0.0,
+                    height: 2,
+                    decoration: isActive
+                        ? BoxDecoration(
+                            color: activeColor,
+                            borderRadius: BorderRadius.circular(1),
+                            boxShadow: [
+                              BoxShadow(
+                                color: activeColor.withValues(alpha: 0.6),
+                                blurRadius: 4,
+                              ),
+                            ],
+                          )
+                        : null,
+                  ),
+                ),
+              ),
+              AnimatedContainer(
+                duration: AethericPulseDark.durHover,
+                curve: Curves.easeOutCubic,
+                padding: EdgeInsets.symmetric(
+                  horizontal: isActive ? 14 : 10,
+                  vertical: 8,
+                ),
             decoration: BoxDecoration(
               color: isActive ? activeFill : Colors.transparent,
               border: Border.all(
@@ -359,6 +291,8 @@ class _NavItem extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+            ],
           ),
         ),
       ),
