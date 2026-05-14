@@ -27,6 +27,10 @@ _Spec: `docs/archived/spec-S2-01.md` · Review: `docs/archived/review-S2-01.md` 
 
 _Spec: `docs/archived/spec-s1-02.md` · Story: S1-02_
 
+- S1-01 staging deployment & QA gate: conditional Firebase deploy step in `.github/workflows/web-build.yml` (skips gracefully without `FIREBASE_TOKEN`), `scripts/deploy-staging.sh` build+deploy wrapper, `docs/STAGING-SETUP.md` step-by-step Firebase CLI setup runbook, and `docs/RELEASE-GATES.md` Sprint 1 Gate Log row pre-populated. CI passes on all branches; auto-deploys to `hosting:mitoosa-2121b` on main once secret is present.
+
+_Spec: `docs/archived/spec-S1-01.md` · Story: S1-01_
+
 ### Changed
 - Archived `TASKS.md` (root) and `docs/plan.md` — both superseded by `docs/Master-Plan.md` as project source of truth
 - Updated `GEMINI.md` with full AgToosa command table, corrected file paths, and consistent style (no emoji headers) — now consistent with `CLAUDE.md` and `AGENTS.md`

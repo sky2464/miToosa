@@ -51,7 +51,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | S1-04 | Playtest Survey & Recruitment (#6) | Feature | M | Todo | 0/1 |
 | S2-02 | Aetheric Pulse — Path screen swap-in (AC-003) | Feature | M | 🟦 Todo | 0/8 |
 | S2-03 | Aetheric Pulse — Game screen chrome refresh (AC-007, AC-011) | Feature | M | 🟨 In Progress | 2/8 |
-| S2-04 | Aetheric Pulse — Tracks polish + Settings + screen tests | Feature | L | 🟨 In Progress | 3/14 |
+| S2-04 | Aetheric Pulse — Tracks polish + Settings + screen tests | Feature | L | 🟨 In Progress | 3/13 tasks (1 manual-deferred) |
 
 ## Active Tasks
 
@@ -157,7 +157,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | C-08 | iToosa → miToosa feature migration | 2026-04-24 | docs/archived/spec-itoosa-feature-migration-v1.md |
 | S1-05 | Repo & Docs Cleanup (cleanup_001) | 2026-05-04 | docs/archived/spec-cleanup-001.md · review-cleanup-001.md |
 | S1-02 | Analytics Backend Integration | 2026-05-11 | docs/archived/spec-s1-02.md · docs/archived/review-s1-02.md · docs/archived/ship-check-s1-02.md |
-| S1-01 | Staging Deployment & QA Gate | 2026-05-11 | docs/AgToosa_Spec-S1-01.md · docs/STAGING-SETUP.md · docs/RELEASE-GATES.md |
+| S1-01 | Staging Deployment & QA Gate | 2026-05-11 | docs/archived/spec-S1-01.md · docs/STAGING-SETUP.md · docs/RELEASE-GATES.md |
 | S2-01 | Aetheric Pulse UI Redesign — foundation + 3 screens (partial) | 2026-05-14 | docs/archived/spec-S2-01.md · docs/archived/review-S2-01.md · 23/29 tasks · 4 P0 follow-ups filed (S2-02/03/04) |
 
 ## Update Log
@@ -208,3 +208,5 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-14 | /agtoosa-task — no actual task to capture (args were a command-chain to /agtoosa-build); skipped to build phase | AgToosa |
 | 2026-05-14 | /agtoosa-build S2-04 partial — 11 screen tests landed: 5 progress_screen tests (XP hero, radar, weekly bars, achievement grid, real XP wiring), 6 leaderboard_screen tests (heading, segmented control, podium, YOU badge, real XP, interaction). Layout fixes: progress_screen Row overflow (Flexible+ellipsis on Cognitive map heading), leaderboard fixed-height SizedBox removed. Full suite 732/732 passing, dart analyze clean. Shell nav test removed (Hive init via telemetry blocks shell-level integration tests). S2-02 + S2-03 not yet started in this turn — moved back to Todo to reflect honest state | AgToosa |
 | 2026-05-14 | /agtoosa-build S2-03 partial — TDD cycle: 🔴 RED (5 new tests for AC-011 pink timer at ≤4s, 2 failing) → 🟢 GREEN (CountdownTimerWidget converted to StatefulWidget with pulse animation, threshold 5s→4s, color MiToosaTheme.error→AP.pink) → 🔵 REFACTOR (dropped unused MiToosaTheme import). Tasks 1.2 (timer pill, AC-011) and 4.2/4.4 (widget test + verification) done. 2 of 8 tasks complete. Remaining: 1.1 top chrome, 2.1 options grid, 3.1/3.2 hint+submit button swap, 4.1 full puzzle flow test, 4.3 option selection test — all require touching the 1003-line gameplay_screen.dart and warrant a dedicated focused session. Full suite 737/737 passing, dart analyze clean | AgToosa |
+| 2026-05-14 | /agtoosa-build counter-fix S2-04 — corrected Tasks Done counter from `3/14` → `3/13 tasks (1 manual-deferred)`: task 4.3 (visual verification on simulator) is tagged `[manual]` and must be excluded from the automated total per build workflow format rules | AgToosa |
+| 2026-05-14 | /agtoosa-ship docs S1-01 — spec archived to `docs/archived/spec-S1-01.md`; Master-Plan S1-01 row reference updated; changelog entry added. ⚠️ Warning: no `review-S1-01.md` artifact (review was done in-line; accepted for this story) | AgToosa |
