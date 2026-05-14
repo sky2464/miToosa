@@ -11,6 +11,7 @@ import 'leaderboard_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../data/telemetry_provider.dart';
 import '../../theme/design_system.dart';
+import '../../widgets/atmosphere.dart';
 import '../../widgets/kinetic_background.dart';
 
 class MainAppShell extends ConsumerStatefulWidget {
@@ -67,18 +68,25 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
           : AethericPulseLight.lightSurface,
       extendBody: true,
       extendBodyBehindAppBar: true,
-      body: KineticBackground(
-        child: Column(
-          children: [
-            const _TopBar(),
-            Expanded(
-              child: IndexedStack(
-                index: _selectedIndex,
-                children: _pages,
+      body: Stack(
+        children: [
+          // Aetheric Pulse atmosphere — animated glow blobs + star field
+          if (isDark)
+            const Positioned.fill(child: Atmosphere(accent: 'blue'))
+          else
+            const Positioned.fill(child: KineticBackground(child: SizedBox.expand())),
+          Column(
+            children: [
+              const _TopBar(),
+              Expanded(
+                child: IndexedStack(
+                  index: _selectedIndex,
+                  children: _pages,
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+        ],
       ),
       bottomNavigationBar: _FloatingGlassNav(
         selectedIndex: _selectedIndex,
