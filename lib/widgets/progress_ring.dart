@@ -23,13 +23,13 @@ class ProgressRing extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final trackColor = isDark
-        ? KineticObsidian.surfaceContainerHigh
+        ? Colors.white.withValues(alpha: 0.08)
         : AethericPulseLight.lightSurfaceContainerHigh;
     final arcColors = isDark
-        ? const [KineticObsidian.protonPurple, KineticObsidian.electricCyan]
+        ? const [AethericPulseDark.brandBlue, AethericPulseDark.brandPurple]
         : const [AethericPulseLight.softBlue, AethericPulseLight.pinkPastel];
     final glowColor = isDark
-        ? KineticObsidian.electricCyan
+        ? AethericPulseDark.brandBlueLight
         : AethericPulseLight.softBlue;
 
     return SizedBox(
