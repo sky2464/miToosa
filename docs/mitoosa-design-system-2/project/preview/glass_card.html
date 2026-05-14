@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  html,body{margin:0;padding:0;background:var(--bg-app);color:var(--fg-1);min-height:100vh;position:relative;overflow:hidden;}
+  .glow{position:absolute;inset:0;background:var(--bg-radial-hero);pointer-events:none;}
+  .wrap{padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:14px;position:relative;z-index:1;}
+  .glass{background:var(--bg-card);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--border-card);border-radius:24px;box-shadow:var(--shadow-card);padding:16px;}
+  .name{font:var(--t-label);color:var(--fg-2);text-transform:uppercase;letter-spacing:.06em;}
+  .meta{font:var(--t-body-sm);color:var(--fg-3);font-family:var(--font-mono);margin-top:4px;}
+  .well{background:var(--bg-card-inner);border-radius:16px;height:46px;margin-top:10px;border:1px solid var(--border-soft);}
+</style></head>
+<body class="ds-bg">
+<div class="glow"></div>
+<div class="wrap">
+  <div class="glass"><div class="name">.ds-glass card</div><div class="meta">white/8% · blur 24px</div><div class="well"></div></div>
+  <div class="glass" style="border-color:var(--border-active);box-shadow:var(--shadow-card),var(--shadow-glow-blue);">
+    <div class="name">active state</div><div class="meta">blue border + glow</div><div class="well"></div>
+  </div>
+</div>
+</body></html>

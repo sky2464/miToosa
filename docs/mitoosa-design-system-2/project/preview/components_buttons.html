@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  html,body{margin:0;padding:0;background:var(--bg-app);color:var(--fg-1);}
+  .wrap{padding:22px;display:flex;flex-direction:column;gap:14px;align-items:flex-start;}
+  .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+  .btn{font:var(--t-h3);padding:14px 28px;border-radius:999px;border:0;cursor:pointer;color:#fff;}
+  .primary{background:var(--grad-primary);box-shadow:var(--shadow-glow-blue);}
+  .ghost{background:var(--bg-card);border:1px solid var(--border-card);backdrop-filter:blur(8px);}
+  .danger{background:transparent;color:var(--semantic-danger);font-weight:700;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .pill{font:var(--t-label);background:var(--bg-pill);border:1px solid var(--border-card);border-radius:999px;padding:6px 12px;color:var(--fg-1);}
+  .meta{font:var(--t-body-sm);color:var(--fg-3);font-family:var(--font-mono);}
+</style></head>
+<body class="ds-bg">
+<div class="wrap">
+  <div class="row">
+    <button class="btn primary">Next Level</button>
+    <button class="btn ghost">Replay</button>
+    <button class="btn danger">⏻ Log Out</button>
+  </div>
+  <div class="row">
+    <span class="pill">Easy</span>
+    <span class="pill" style="color:var(--brand-amber);">Premium</span>
+    <span class="pill" style="color:var(--brand-blue-50);border-color:var(--border-active);">Active</span>
+  </div>
+  <div class="meta">Primary CTA: pill, gradient bg, blue glow · Ghost: glass · Danger: text + icon, no fill</div>
+</div>
+</body></html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  html,body{margin:0;padding:0;background:var(--bg-app);color:var(--fg-1);}
+  .wrap{padding:18px;display:flex;gap:14px;align-items:center;}
+  .nav{flex:1;background:var(--bg-card);backdrop-filter:blur(24px);border:1px solid var(--border-soft);border-top:1px solid rgba(255,255,255,.06);border-radius:18px;display:flex;justify-content:space-around;padding:14px 0 12px;position:relative;}
+  .item{display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--fg-3);font:var(--t-eyebrow);text-transform:capitalize;letter-spacing:0;font-size:11px;font-weight:700;position:relative;}
+  .item svg{stroke:currentColor;width:22px;height:22px;}
+  .active{color:var(--brand-blue-50);}
+  .active::before{content:"";position:absolute;top:-14px;left:50%;transform:translateX(-50%);width:34px;height:2px;background:var(--brand-blue);border-radius:2px;box-shadow:0 0 8px var(--brand-blue-glow);}
+  .meta{font:var(--t-body-sm);color:var(--fg-3);font-family:var(--font-mono);width:140px;}
+</style></head>
+<body class="ds-bg">
+<div class="wrap">
+  <div class="nav">
+    <div class="item active"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Tracks</div>
+    <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/></svg>Progress</div>
+    <div class="item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M8 21h8M12 17v4M17 4H7v6a5 5 0 0 0 10 0V4zM21 4h-4v3a4 4 0 0 0 4-3zM3 4h4v3a4 4 0 0 1-4-3z"/></svg>Leaderboard</div>
+  </div>
+  <div class="meta">Glass nav · Lucide icons · active = blue label + top bar w/ glow</div>
+</div>
+</body></html>

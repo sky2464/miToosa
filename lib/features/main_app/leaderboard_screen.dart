@@ -3,12 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
-import '../../widgets/glass_card.dart';
-import '../../widgets/kinetic_background.dart';
-import '../../widgets/kinetic_text.dart';
+import '../../theme/design_tokens.dart';
 
-// ─── Leaderboard screen — Aetheric Pulse ─────────────────────────────────────
-
+/// Leaderboard screen — podium (top 3) + segmented control + ranked rows.
 class LeaderboardScreen extends ConsumerStatefulWidget {
   const LeaderboardScreen({super.key});
 
@@ -17,33 +14,17 @@ class LeaderboardScreen extends ConsumerStatefulWidget {
 }
 
 class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
-  int _filterIndex = 0;
+  String _scope = 'global';
 
-  static const _filters = ['Global', 'Friends', 'Local'];
-
-  static const _demoRows = [
-    _RankData(rank: 1, name: 'Mira K.', score: 24820, avatarIndex: 1),
-    _RankData(rank: 2, name: 'Diego R.', score: 22110, avatarIndex: 2),
-    _RankData(rank: 3, name: 'Aiko T.', score: 19500, avatarIndex: 3),
-    _RankData(rank: 5, name: 'Priya S.', score: 11230, avatarIndex: 5),
-    _RankData(rank: 6, name: 'Jordan L.', score: 10870, avatarIndex: 6),
-    _RankData(rank: 7, name: 'Sam O.', score: 9420, avatarIndex: 7),
+  static const _demo = [
+    _Person(rank: 1, name: 'Mira K.', xp: 24820, avatar: 1, frame: 'gold'),
+    _Person(rank: 2, name: 'Diego R.', xp: 22110, avatar: 2, frame: 'silver'),
+    _Person(rank: 3, name: 'Aiko T.', xp: 19500, avatar: 3, frame: 'bronze'),
+    _Person(rank: 5, name: 'Priya S.', xp: 11230, avatar: 5),
+    _Person(rank: 6, name: 'Jordan L.', xp: 10870, avatar: 6),
+    _Person(rank: 7, name: 'Kenji M.', xp: 9420, avatar: 7),
+    _Person(rank: 8, name: 'Sasha B.', xp: 8120, avatar: 8),
   ];
-
-  List<_RankData> _buildRows(int playerXP) {
-    final youRow = _RankData(
-      rank: 4,
-      name: 'Pilot_042',
-      score: playerXP,
-      avatarIndex: 4,
-      isYou: true,
-    );
-    return [
-      ..._demoRows.where((r) => r.rank < 4),
-      youRow,
-      ..._demoRows.where((r) => r.rank >= 4),
-    ];
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,223 +32,339 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
           data: (p) => p.totalXP,
           orElse: () => 0,
         );
-    final rows = _buildRows(playerXP);
-    return KineticBackground(
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(
-          AethericPulseDark.spaceLg,
-          AethericPulseDark.spaceMd,
-          AethericPulseDark.spaceLg,
-          AethericPulseDark.spaceXl + 80,
-        ),
-        children: [
-          // Header
-          GlassCard(
-            borderRadius: AethericPulseDark.radiusCard,
-            padding: const EdgeInsets.all(20),
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Positioned.fill(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(AethericPulseDark.radiusCard),
-                      gradient: RadialGradient(
-                        center: Alignment.topRight,
-                        radius: 1.0,
-                        colors: [
-                          AethericPulseDark.brandPurple.withValues(alpha: 0.15),
-                          Colors.transparent,
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'WEEKLY · GLOBAL',
-                      style: AethericPulseDark.label(
-                        color: AethericPulseDark.brandBlue,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    KineticText(
-                      'Leaderboard',
-                      style: AethericPulseDark.headlineLg(),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+    final you = _Person(rank: 4, name: 'Pilot_042', xp: playerXP, avatar: 4, isYou: true);
+    final all = [..._demo.where((p) => p.rank < 4), you, ..._demo.where((p) => p.rank >= 4)];
+    final podium = all.where((p) => p.rank <= 3).toList()..sort((a, b) => a.rank - b.rank);
+    final xpToTop3 = (_demo.firstWhere((p) => p.rank == 3).xp - playerXP).clamp(0, 999999);
+
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 140),
+      children: [
+        // Header
+        Text('WEEKLY · RESETS SUN 23:59',
+            style: AP.eyebrow(color: AP.purple)),
+        const SizedBox(height: 4),
+        ShaderMask(
+          shaderCallback: (r) => const LinearGradient(
+            colors: [Color(0xFF60A5FA), Color(0xFFC084FC), Color(0xFFEC4899)],
+          ).createShader(r),
+          child: Text(
+            'Leaderboard',
+            style: AP.display(color: Colors.white).copyWith(fontSize: 32, height: 1.0),
           ),
-          const SizedBox(height: 16),
-          // Filter tabs
-          Row(
+        ),
+        const SizedBox(height: 6),
+        RichText(
+          text: TextSpan(
+            style: const TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 12,
+              color: AP.fgMeta,
+            ),
             children: [
-              for (var i = 0; i < _filters.length; i++) ...[
-                Expanded(child: _FilterTab(
-                  label: _filters[i],
-                  isActive: _filterIndex == i,
-                  onTap: () => setState(() => _filterIndex = i),
-                )),
-                if (i < _filters.length - 1) const SizedBox(width: 8),
-              ],
+              const TextSpan(text: 'You’re ranked '),
+              const TextSpan(
+                text: '#4',
+                style: TextStyle(color: AP.fg, fontWeight: FontWeight.w700),
+              ),
+              TextSpan(text: ' · $xpToTop3 XP to top 3'),
             ],
           ),
-          const SizedBox(height: 16),
-          // Rank list — each row in its own GlassCard; top-3 get blueGlow
-          for (var i = 0; i < rows.length; i++) ...[
-            GlassCard(
-              neonGlow: rows[i].rank <= 3,
-              borderRadius: AethericPulseDark.radiusWell,
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-              child: _RankRow(data: rows[i]),
-            ),
-            if (i < rows.length - 1) const SizedBox(height: 8),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-// ─── Filter tab ────────────────────────────────────────────────────────────────
-
-class _FilterTab extends StatelessWidget {
-  final String label;
-  final bool isActive;
-  final VoidCallback onTap;
-
-  const _FilterTab({required this.label, required this.isActive, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-          gradient: isActive ? AethericPulseDark.gradPrimary : null,
-          color: isActive ? null : AethericPulseDark.glassFill,
-          border: isActive
-              ? null
-              : Border.all(color: AethericPulseDark.glassBorder, width: 1),
-          borderRadius: BorderRadius.circular(AethericPulseDark.radiusChip),
-          boxShadow: isActive ? AethericPulseDark.blueGlow : null,
         ),
-        child: Center(
+        const SizedBox(height: 14),
+
+        // Segmented control
+        _SegmentedControl(
+          value: _scope,
+          options: const ['global', 'friends', 'local'],
+          onChanged: (v) => setState(() => _scope = v),
+        ),
+        const SizedBox(height: 14),
+
+        // Podium
+        SizedBox(height: 170, child: _Podium(people: podium)),
+        const SizedBox(height: 14),
+
+        // You row pinned
+        _LeaderRow(person: you),
+        const SizedBox(height: 8),
+
+        // Rest
+        for (final p in all.where((p) => !p.isYou && p.rank > 3)) ...[
+          _LeaderRow(person: p),
+          const SizedBox(height: 8),
+        ],
+
+        const SizedBox(height: 16),
+        Center(
           child: Text(
-            label.toUpperCase(),
-            style: AethericPulseDark.label(
-              color: isActive ? AethericPulseDark.onSurface : AethericPulseDark.onSurfaceMuted,
+            'Leaderboard preview · live in v1.3',
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 10,
+              color: AP.fgMuted,
+              letterSpacing: 1.0,
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 }
 
-// ─── Rank row ──────────────────────────────────────────────────────────────────
-
-class _RankData {
+class _Person {
   final int rank;
   final String name;
-  final int score;
-  final int avatarIndex;
+  final int xp;
+  final int avatar;
+  final String? frame;
   final bool isYou;
-
-  const _RankData({
+  const _Person({
     required this.rank,
     required this.name,
-    required this.score,
-    required this.avatarIndex,
+    required this.xp,
+    required this.avatar,
+    this.frame,
     this.isYou = false,
   });
 }
 
-class _RankRow extends StatelessWidget {
-  final _RankData data;
-  const _RankRow({required this.data});
+class _SegmentedControl extends StatelessWidget {
+  final String value;
+  final List<String> options;
+  final ValueChanged<String> onChanged;
+  const _SegmentedControl({
+    required this.value,
+    required this.options,
+    required this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final medalGradient = switch (data.rank) {
-      1 => AethericPulseDark.gradPrimary,
-      2 => const LinearGradient(colors: [Color(0xFFD1BCFF), Color(0xFFE9DDFF)]),
-      3 => const LinearGradient(colors: [Color(0xFFFFB1C3), Color(0xFFFFCCD6)]),
-      _ => null,
-    };
-
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: data.isYou ? 14 : 4,
-        vertical: 12,
-      ),
+      padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: data.isYou
-            ? AethericPulseDark.brandBlue.withValues(alpha: 0.08)
-            : Colors.transparent,
-        border: Border.all(
-          color: data.isYou
-              ? AethericPulseDark.brandBlue.withValues(alpha: 0.30)
-              : Colors.transparent,
-          width: 1,
-        ),
-        borderRadius: BorderRadius.circular(AethericPulseDark.radiusWell),
-        boxShadow: data.isYou ? AethericPulseDark.blueGlow : null,
+        color: Colors.white.withValues(alpha: 0.04),
+        borderRadius: BorderRadius.circular(AP.radiusPill),
+        border: Border.all(color: AP.glassBorder, width: 1),
       ),
       child: Row(
-        children: [
-          // Rank pill
-          Container(
-            width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: medalGradient,
-              color: medalGradient == null ? AethericPulseDark.glassFill : null,
-            ),
-            child: Center(
-              child: Text(
-                '${data.rank}',
-                style: TextStyle(
-                  fontFamily: AethericPulseDark.fontBody,
-                  fontFamilyFallback: AethericPulseDark.fontFallback,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0,
-                  color: medalGradient != null
-                      ? AethericPulseDark.surface
-                      : AethericPulseDark.onSurfaceMuted,
+        children: options.map((o) {
+          final active = value == o;
+          return Expanded(
+            child: GestureDetector(
+              onTap: () => onChanged(o),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 9),
+                decoration: BoxDecoration(
+                  gradient: active ? AP.gradPrimary : null,
+                  borderRadius: BorderRadius.circular(AP.radiusPill),
+                  boxShadow: active
+                      ? [BoxShadow(color: AP.blue.withValues(alpha: 0.4), blurRadius: 14)]
+                      : null,
+                ),
+                child: Center(
+                  child: Text(
+                    o.toUpperCase(),
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.72,
+                      color: active ? Colors.white : AP.fgMeta,
+                    ),
+                  ),
                 ),
               ),
             ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+class _Podium extends StatelessWidget {
+  final List<_Person> people; // [1st, 2nd, 3rd] sorted by rank
+  const _Podium({required this.people});
+
+  @override
+  Widget build(BuildContext context) {
+    if (people.length < 3) return const SizedBox.shrink();
+    // Display order: 2nd · 1st · 3rd
+    final order = [people[1], people[0], people[2]];
+    final heights = [70.0, 100.0, 56.0];
+    final fills = [
+      Colors.white.withValues(alpha: 0.13),
+      AP.amber.withValues(alpha: 0.28),
+      AP.orange.withValues(alpha: 0.25),
+    ];
+    final borders = [
+      Colors.white.withValues(alpha: 0.5),
+      AP.amber.withValues(alpha: 0.7),
+      AP.orange.withValues(alpha: 0.55),
+    ];
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: List.generate(3, (i) {
+        final p = order[i];
+        final isFirst = p.rank == 1;
+        return Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                if (isFirst)
+                  const Icon(Icons.workspace_premium,
+                      color: AP.amber, size: 22),
+                if (isFirst) const SizedBox(height: 2),
+                Container(
+                  width: isFirst ? 64 : 52,
+                  height: isFirst ? 64 : 52,
+                  padding: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AP.surface,
+                    border: Border.all(color: borders[i], width: 2),
+                  ),
+                  child: ClipOval(
+                    child: Image.asset(
+                      AP.avatar(p.avatar),
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, _, _) =>
+                          const Icon(Icons.person, color: AP.fgMuted),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  p.name,
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: AP.fg,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  '${p.xp} XP',
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 10,
+                    color: AP.fgMeta,
+                    fontFeatures: [FontFeature.tabularFigures()],
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Container(
+                  width: double.infinity,
+                  height: heights[i],
+                  decoration: BoxDecoration(
+                    color: fills[i],
+                    border: Border.all(
+                      color: borders[i].withValues(alpha: 0.35),
+                      width: 1,
+                    ),
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      topRight: Radius.circular(12),
+                      bottomLeft: Radius.circular(4),
+                      bottomRight: Radius.circular(4),
+                    ),
+                    boxShadow: [
+                      BoxShadow(color: fills[i], blurRadius: 18),
+                    ],
+                  ),
+                  child: Center(
+                    child: Text(
+                      '${p.rank}',
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
+                        letterSpacing: -0.48,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-          const SizedBox(width: 12),
-          // Avatar
+        );
+      }),
+    );
+  }
+}
+
+class _LeaderRow extends StatelessWidget {
+  final _Person person;
+  const _LeaderRow({required this.person});
+
+  @override
+  Widget build(BuildContext context) {
+    final isYou = person.isYou;
+    return Container(
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+      decoration: BoxDecoration(
+        color: isYou
+            ? AP.blueLight.withValues(alpha: 0.10)
+            : Colors.white.withValues(alpha: 0.04),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: isYou
+              ? AP.blueLight.withValues(alpha: 0.45)
+              : AP.glassBorder,
+          width: 1,
+        ),
+        boxShadow: isYou
+            ? [BoxShadow(color: AP.blueLight.withValues(alpha: 0.25), blurRadius: 18)]
+            : null,
+      ),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 28,
+            child: Text(
+              '${person.rank}',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 14,
+                fontWeight: FontWeight.w800,
+                color: isYou ? const Color(0xFFBFDBFE) : AP.fgMeta,
+                fontFeatures: const [FontFeature.tabularFigures()],
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
           Container(
-            width: 40,
-            height: 40,
+            width: 36,
+            height: 36,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
+              color: AP.surface,
               border: Border.all(
-                color: data.isYou
-                    ? AethericPulseDark.brandBlue
-                    : AethericPulseDark.glassBorder,
-                width: 1,
+                color: isYou
+                    ? AP.blueLight.withValues(alpha: 0.6)
+                    : Colors.white.withValues(alpha: 0.1),
+                width: 1.5,
               ),
-              image: DecorationImage(
-                image: AssetImage(
-                    'assets/images/avatars/avatar_${data.avatarIndex}.png'),
+            ),
+            child: ClipOval(
+              child: Image.asset(
+                AP.avatar(person.avatar),
                 fit: BoxFit.cover,
+                errorBuilder: (_, _, _) =>
+                    const Icon(Icons.person, color: AP.fgMuted, size: 18),
               ),
             ),
           ),
           const SizedBox(width: 12),
-          // Name + XP
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -275,51 +372,50 @@ class _RankRow extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      data.name,
-                      style: AethericPulseDark.bodyMd(
-                        color: AethericPulseDark.onSurface,
+                      person.name,
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: AP.fg,
                       ),
                     ),
-                    if (data.isYou) ...[
+                    if (isYou) ...[
                       const SizedBox(width: 6),
-                      Text(
-                        '· YOU',
-                        style: AethericPulseDark.label(
-                          color: AethericPulseDark.brandBlue,
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: AP.blueLight.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: const Text(
+                          'YOU',
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 9,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFFBFDBFE),
+                            letterSpacing: 0.9,
+                          ),
                         ),
                       ),
                     ],
                   ],
                 ),
-                const SizedBox(height: 2),
                 Text(
-                  '${_formatScore(data.score)} XP',
-                  style: AethericPulseDark.label(
-                    color: AethericPulseDark.brandBlue,
+                  '${person.xp} XP',
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 11,
+                    color: AP.fgMeta,
+                    fontFeatures: [FontFeature.tabularFigures()],
                   ),
                 ),
               ],
             ),
           ),
-          // Trophy icon
-          Icon(
-            Icons.military_tech,
-            size: 20,
-            color: data.rank <= 3
-                ? AethericPulseDark.brandBlue
-                : AethericPulseDark.onSurfaceMuted,
-          ),
         ],
       ),
     );
-  }
-
-  String _formatScore(int score) {
-    if (score >= 1000) {
-      final thousands = score ~/ 1000;
-      final remainder = score % 1000;
-      return '$thousands,${remainder.toString().padLeft(3, '0')}';
-    }
-    return '$score';
   }
 }

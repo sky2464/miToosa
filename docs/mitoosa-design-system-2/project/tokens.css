@@ -1,0 +1,99 @@
+/* miToosa redesign — design tokens */
+
+:root {
+  /* Surfaces */
+  --bg-0: #06080f;
+  --bg-1: #0a0d17;
+  --bg-2: #0e1220;
+
+  /* Foreground */
+  --fg-primary:   #f4f5fa;
+  --fg-secondary: #c8cad6;
+  --fg-tertiary:  #8a8fa3;
+  --fg-muted:     #5a6075;
+
+  /* Brand */
+  --blue-400:  #60a5fa;
+  --blue-500:  #3b82f6;
+  --purple-500:#a855f7;
+  --cyan-400:  #22d3ee;
+  --pink-500:  #ec4899;
+  --amber-400: #facc15;
+  --orange-400:#fb923c;
+  --emerald-400:#34d399;
+
+  /* Gradients */
+  --grad-primary: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%);
+  --grad-energy:  linear-gradient(135deg, #fb923c 0%, #facc15 100%);
+  --grad-gold:    linear-gradient(135deg, #fde68a 0%, #f59e0b 100%);
+  --grad-aurora:  linear-gradient(135deg, #60a5fa 0%, #a855f7 50%, #ec4899 100%);
+
+  /* Glass */
+  --glass-fill: rgba(255,255,255,.045);
+  --glass-blur: blur(24px) saturate(140%);
+  --glass-border: rgba(255,255,255,.08);
+  --glass-border-strong: rgba(255,255,255,.14);
+
+  /* Shadows */
+  --sh-card: 0 8px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.05);
+  --sh-glow-blue:   0 0 24px rgba(59,130,246,.35);
+  --sh-glow-purple: 0 0 24px rgba(168,85,247,.35);
+
+  /* Radii */
+  --r-pill: 9999px;
+  --r-card: 22px;
+
+  /* Motion */
+  --e-out:    cubic-bezier(.2,.8,.2,1);
+  --e-smooth: cubic-bezier(.4,0,.2,1);
+  --e-snappy: cubic-bezier(.4,1.4,.4,1);
+}
+
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  color: var(--fg-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em;
+}
+
+button { font-family: inherit; }
+
+.tabular { font-variant-numeric: tabular-nums; }
+
+.eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-tertiary);
+}
+
+.kinetic {
+  background: var(--grad-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+.app-scroll::-webkit-scrollbar { width: 0; }
+.app-scroll { scrollbar-width: none; }
+
+/* Animations */
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(20px, -10px) scale(1.05); }
+}
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .55; transform: scale(1.05); }
+}
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  html,body{margin:0;padding:0;background:var(--bg-app);color:var(--fg-1);}
+  .wrap{padding:24px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:center;}
+  .cell{display:flex;flex-direction:column;align-items:center;gap:10px;}
+  .box{width:90px;height:60px;background:#1a1d2e;border:1px solid var(--border-card);border-radius:14px;}
+  .b1{box-shadow:var(--shadow-card);}
+  .b2{box-shadow:var(--shadow-elev);}
+  .b3{box-shadow:var(--shadow-glow-blue);}
+  .b4{box-shadow:var(--shadow-glow-purple);}
+  .b5{box-shadow:var(--shadow-glow-amber);}
+  .b6{box-shadow:var(--shadow-glow-orange);}
+  .name{font:var(--t-label);color:var(--fg-2);text-transform:uppercase;letter-spacing:.06em;}
+</style></head>
+<body class="ds-bg">
+<div class="wrap">
+  <div class="cell"><div class="box b1"></div><div class="name">card</div></div>
+  <div class="cell"><div class="box b2"></div><div class="name">elev</div></div>
+  <div class="cell"><div class="box b3"></div><div class="name">glow blue</div></div>
+  <div class="cell"><div class="box b4"></div><div class="name">glow purple</div></div>
+  <div class="cell"><div class="box b5"></div><div class="name">glow amber</div></div>
+  <div class="cell"><div class="box b6"></div><div class="name">glow orange</div></div>
+</div>
+</body></html>
