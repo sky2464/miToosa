@@ -47,16 +47,16 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 
 | ID | Title | Type | Estimate | Status | Tasks Done |
 |----|-------|------|----------|--------|------------|
-| S1-03 | Manual Wedge QA Walkthrough | Chore | S | Todo | 0/1 |
-| S1-04 | Playtest Survey & Recruitment | Feature | M | Todo | 0/1 |
+| S1-03 | Manual Wedge QA Walkthrough (#5) | Chore | S | Todo | 0/1 |
+| S1-04 | Playtest Survey & Recruitment (#6) | Feature | M | Todo | 0/1 |
 
 ## Active Tasks
 
 > Task sub-issues under the currently In Progress story. Created at `/agtoosa-build scope`.
 
-- [ ] **1. S1-03:** Manual Wedge QA Walkthrough
+- [ ] **1. S1-03:** Manual Wedge QA Walkthrough (#5)
 	- [ ] 3.1 Execute manual QA walkthrough and capture findings in QA artifacts — _Requirements: QA walkthrough checklist_
-- [ ] **2. S1-04:** Playtest Survey & Recruitment
+- [ ] **2. S1-04:** Playtest Survey & Recruitment (#6)
 	- [ ] 4.1 Finalize survey with staging URL and recruit 15-20 testers — _Requirements: playtest recruitment target_
 
 ## Backlog
@@ -65,21 +65,21 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 
 | ID | Title | Type | Estimate | Epic | Priority |
 |----|-------|------|----------|------|----------|
-| BL-01 | iOS Provisioning & Signing Setup | Chore | M | EP-02 | P1 |
-| BL-02 | Android Keystore & Signing Setup | Chore | M | EP-02 | P1 |
-| BL-03 | Firebase Project Setup | Feature | M | EP-02 | P1 |
-| BL-04 | Backend Leaderboard (Real-Time) | Feature | L | EP-03 | P2 |
-| BL-05 | Referral Tiers | Feature | L | EP-03 | P2 |
-| BL-06 | VIP / Ad-Free IAP | Feature | L | EP-03 | P2 |
-| BL-07 | First-Session Onboarding Optimisation | Improvement | M | EP-04 | P3 |
-| BL-08 | Economy Messaging Clarity | Improvement | S | EP-04 | P3 |
-| BL-09 | Accessibility Audit (Physical Devices) | Chore | S | EP-04 | P3 |
-| BL-10 | Test Coverage Expansion (integration tests) | Chore | M | EP-05 | P4 |
-| BL-11 | Web Platform Crypto Hardening | Improvement | S | EP-05 | P4 |
-| BL-12 | Resolve staging URL publication blocker | Chore | S | EP-01 | P1 |
-| BL-13 | Recover playtest response pipeline (>=5 responses) | Chore | S | EP-01 | P1 |
-| BL-14 | Unblock TestFlight beta provisioning handoff | Chore | M | EP-02 | P1 |
-| BL-15 | Unblock Play Store internal track setup | Chore | M | EP-02 | P1 |
+| BL-01 | iOS Provisioning & Signing Setup (#7) | Chore | M | EP-02 | P1 |
+| BL-02 | Android Keystore & Signing Setup (#8) | Chore | M | EP-02 | P1 |
+| BL-03 | Firebase Project Setup (#9) | Feature | M | EP-02 | P1 |
+| BL-04 | Backend Leaderboard (Real-Time) (#10) | Feature | L | EP-03 | P2 |
+| BL-05 | Referral Tiers (#11) | Feature | L | EP-03 | P2 |
+| BL-06 | VIP / Ad-Free IAP (#12) | Feature | L | EP-03 | P2 |
+| BL-07 | First-Session Onboarding Optimisation (#13) | Improvement | M | EP-04 | P3 |
+| BL-08 | Economy Messaging Clarity (#14) | Improvement | S | EP-04 | P3 |
+| BL-09 | Accessibility Audit (Physical Devices) (#15) | Chore | S | EP-04 | P3 |
+| BL-10 | Test Coverage Expansion (integration tests) (#16) | Chore | M | EP-05 | P4 |
+| BL-11 | Web Platform Crypto Hardening (#17) | Improvement | S | EP-05 | P4 |
+| BL-12 | Resolve staging URL publication blocker (#18) | Chore | S | EP-01 | P1 |
+| BL-13 | Recover playtest response pipeline (>=5 responses) (#19) | Chore | S | EP-01 | P1 |
+| BL-14 | Unblock TestFlight beta provisioning handoff (#20) | Chore | M | EP-02 | P1 |
+| BL-15 | Unblock Play Store internal track setup (#21) | Chore | M | EP-02 | P1 |
 
 ## Blocked
 
@@ -87,10 +87,10 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 
 | ID | Title | Blocked by | Since |
 |----|-------|-----------|-------|
-| BL-12 | Resolve staging URL publication blocker | Hosting decision + first deploy URL pending (next check: 2026-05-18) | 2026-05-11 |
-| BL-13 | Recover playtest response pipeline (>=5 responses) | Survey distribution + staging URL pending (next check: 2026-05-18) | 2026-05-11 |
-| BL-14 | Unblock TestFlight beta provisioning handoff | Apple Developer account provisioning (human action) (next check: 2026-05-18) | 2026-05-11 |
-| BL-15 | Unblock Play Store internal track setup | Android keystore creation (human action) (next check: 2026-05-18) | 2026-05-11 |
+| BL-12 | Resolve staging URL publication blocker (#18) | Hosting decision + first deploy URL pending (next check: 2026-05-18) | 2026-05-11 |
+| BL-13 | Recover playtest response pipeline (>=5 responses) (#19) | Survey distribution + staging URL pending (next check: 2026-05-18) | 2026-05-11 |
+| BL-14 | Unblock TestFlight beta provisioning handoff (#20) | Apple Developer account provisioning (human action) (next check: 2026-05-18) | 2026-05-11 |
+| BL-15 | Unblock Play Store internal track setup (#21) | Android keystore creation (human action) (next check: 2026-05-18) | 2026-05-11 |
 
 ## Completed This Cycle
 
@@ -115,7 +115,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 > Append a row at every phase transition. Never delete rows.
 
 | Date | Event | By |
-|------|-------|----|
+|------|-------|----||
 | 2026-05-04 | /agtoosa-init — initialization complete; context files populated, Epics seeded, TDD enabled | AgToosa |
 | 2026-05-04 | /agtoosa-init re-run — confirmed all context files already populated; removed Linear references; assigned EP/S1/T/BL IDs; populated Completed This Cycle from TASKS.md | AgToosa |
 | 2026-05-04 | /agtoosa-init re-run — AI configs validated (CLAUDE.md ✅, copilot-instructions.md ✅); AGENTS.md created; context files confirmed current; TDD enforced | AgToosa |
@@ -143,3 +143,4 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-11 | /agtoosa-ship docs S1-02 — spec archived to `docs/archived/spec-s1-02.md`; S1-02 removed from Active Cycle/Active Tasks bookkeeping | AgToosa |
 | 2026-05-11 | /agtoosa-build test S1-01 — staging deploy script executed successfully and hosting URL verified live | AgToosa |
 | 2026-05-11 | /agtoosa-ship docs S1-01 — CI deploy target aligned to `hosting:mitoosa-2121b`; story moved to Completed This Cycle | AgToosa |
+| 2026-05-14 | automated-maintenance — linked all 17 Master-Plan tasks to GitHub issues (#5–#21); health check failed (Flutter not installed in agent env, issue #4) | AgToosa |
