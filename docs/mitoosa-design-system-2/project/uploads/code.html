@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MiToosa Training Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;700&amp;family=Orbitron:wght@500;600;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#10131a",
+                        "secondary": "#d1bcff",
+                        "on-tertiary-container": "#bb0058",
+                        "primary-fixed": "#7df4ff",
+                        "on-secondary-container": "#ddcdff",
+                        "on-tertiary-fixed": "#3f0019",
+                        "error-container": "#93000a",
+                        "outline-variant": "#3b494b",
+                        "on-secondary": "#3c0090",
+                        "primary-fixed-dim": "#00dbe9",
+                        "background": "#10131a",
+                        "tertiary": "#fff3f4",
+                        "inverse-surface": "#e1e2eb",
+                        "outline": "#849495",
+                        "tertiary-fixed": "#ffd9e0",
+                        "error": "#ffb4ab",
+                        "secondary-fixed-dim": "#d1bcff",
+                        "tertiary-container": "#ffccd6",
+                        "surface-container": "#1d2026",
+                        "on-background": "#e1e2eb",
+                        "on-secondary-fixed": "#23005b",
+                        "on-error-container": "#ffdad6",
+                        "on-primary-container": "#006970",
+                        "on-primary-fixed": "#002022",
+                        "surface": "#10131a",
+                        "inverse-on-surface": "#2e3037",
+                        "on-error": "#690005",
+                        "tertiary-fixed-dim": "#ffb1c3",
+                        "surface-bright": "#363940",
+                        "inverse-primary": "#006970",
+                        "on-surface": "#e1e2eb",
+                        "secondary-fixed": "#e9ddff",
+                        "on-tertiary-fixed-variant": "#8f0041",
+                        "surface-tint": "#00dbe9",
+                        "primary": "#dbfcff",
+                        "on-primary": "#00363a",
+                        "on-primary-fixed-variant": "#004f54",
+                        "primary-container": "#00f0ff",
+                        "surface-container-high": "#272a31",
+                        "secondary-container": "#7000ff",
+                        "surface-variant": "#32353c",
+                        "surface-container-highest": "#32353c",
+                        "surface-container-low": "#191c22",
+                        "on-surface-variant": "#b9cacb",
+                        "on-tertiary": "#66002c",
+                        "on-secondary-fixed-variant": "#5700c9",
+                        "surface-container-lowest": "#0b0e14"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "sm": "12px",
+                        "md": "24px",
+                        "base": "8px",
+                        "xl": "80px",
+                        "margin": "32px",
+                        "lg": "48px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Orbitron"],
+                        "label-sm": ["Exo 2"],
+                        "body-lg": ["Exo 2"],
+                        "display-lg": ["Orbitron"],
+                        "body-md": ["Exo 2"],
+                        "headline-lg": ["Orbitron"],
+                        "label-lg": ["Exo 2"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "0.03em", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.04em", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0.02em", "fontWeight": "300"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0.02em", "fontWeight": "300"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                        "label-lg": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.06em", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(29, 32, 38, 0.5);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .neon-shadow {
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col pt-[80px] pb-[90px] md:pb-0 font-body-md text-body-md">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-slate-900/40 backdrop-blur-xl border-b border-white/10 shadow-[0_4px_20px_rgba(0,240,255,0.1)]">
+<div class="flex items-center gap-sm">
+<img alt="Player Profile Pilot" class="w-10 h-10 rounded-full border border-primary-container" data-alt="Futuristic glowing avatar profile picture of a pilot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNSFndfelPg_uQMb_18TI_ne0Me_gwRs7z0PjW8oRTIVDral_TRiABY1f38EC0T6-6gbxCcRHZbIDIg4DSIGiAS8lgYGQcO9FJ66m3MOZgaT0c3PYzBkjcLRjbFO5TBHNwxRxDBfC_bfQhwRo1UeQRZl4GK3Zetw6GiU6n5wSwJ4W8mAz3FpB_ar5Jawh4AKan1hNVqFoLojkQP40zU4bKHFxPb2rRFeAdUmWe7wiv7VcbpHow5MjHhy6ptjIdCzfACGfjQZT6XfGV"/>
+<span class="text-2xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-400 font-['Orbitron']">MITOOSA</span>
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden md:flex gap-md">
+<a class="text-slate-400 hover:bg-white/5 transition-colors font-['Orbitron'] tracking-widest uppercase" href="#">Tracks</a>
+<a class="text-cyan-400 opacity-80 scale-95 transition-all font-['Orbitron'] tracking-widest uppercase" href="#">Progress</a>
+<a class="text-slate-400 hover:bg-white/5 transition-colors font-['Orbitron'] tracking-widest uppercase" href="#">Leaderboard</a>
+</div>
+<div class="flex items-center gap-xs px-3 py-1 rounded-full bg-surface-container border border-outline-variant">
+<span class="material-symbols-outlined text-primary-container text-sm">stars</span>
+<span class="font-label-lg text-label-lg text-primary-container">1,250 CR</span>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 w-full max-w-7xl mx-auto px-gutter py-margin flex flex-col gap-margin">
+<!-- Hero Section -->
+<section class="relative w-full rounded-xl overflow-hidden glass-panel p-md md:p-lg flex flex-col md:flex-row items-center justify-between gap-md border border-outline-variant">
+<div class="flex flex-col gap-sm z-10 w-full md:w-1/2">
+<h1 class="font-display-lg text-display-lg text-primary">Daily Training</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Complete your tasks to maintain your streak and earn bonus credits.</p>
+<div class="mt-sm flex gap-sm">
+<button class="bg-gradient-to-r from-secondary-container to-primary-container text-on-primary font-label-lg text-label-lg px-6 py-3 rounded-full hover:opacity-90 transition-opacity neon-shadow">Start Sequence</button>
+</div>
+</div>
+<!-- Progress Ring Widget -->
+<div class="relative w-48 h-48 flex items-center justify-center z-10">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 100 100">
+<circle class="text-surface-container-high" cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" stroke-width="8"></circle>
+<circle class="drop-shadow-[0_0_8px_rgba(0,240,255,0.8)]" cx="50" cy="50" fill="transparent" r="40" stroke="url(#gradient)" stroke-dasharray="251.2" stroke-dashoffset="62.8" stroke-width="8"></circle>
+<defs>
+<lineargradient id="gradient" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#7000ff"></stop>
+<stop offset="100%" stop-color="#00f0ff"></stop>
+</lineargradient>
+</defs>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-headline-lg text-headline-lg text-primary">75%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Goal</span>
+</div>
+</div>
+<!-- Background Decorative Element -->
+<div class="absolute inset-0 bg-gradient-to-br from-surface-dim to-surface-container-highest opacity-50 z-0 pointer-events-none"></div>
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary-container blur-[100px] opacity-10 z-0 pointer-events-none"></div>
+</section>
+<!-- Bento Grid Modules -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
+<!-- Pattern Match Card -->
+<div class="glass-panel rounded-xl p-md flex flex-col gap-sm relative overflow-hidden group cursor-pointer hover:border-primary/50 transition-colors">
+<div class="absolute top-0 right-0 p-sm text-secondary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">extension</span>
+</div>
+<div class="w-16 h-16 rounded-lg bg-surface-container-high flex items-center justify-center mb-sm shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] border border-outline-variant">
+<span class="material-symbols-outlined text-3xl text-secondary" style="font-variation-settings: 'FILL' 1;">category</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Pattern Match</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md">Enhance cognitive speed by identifying complex sequences.</p>
+<div class="mt-auto flex items-center justify-between border-t border-white/5 pt-sm">
+<span class="font-label-sm text-label-sm text-primary-container uppercase">Level 4</span>
+<button class="font-label-sm text-label-sm text-on-background bg-white/5 hover:bg-white/10 px-3 py-1 rounded border border-white/10 transition-colors">Play</button>
+</div>
+<div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-secondary-container to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
+</div>
+<!-- Shape Counter Card -->
+<div class="glass-panel rounded-xl p-md flex flex-col gap-sm relative overflow-hidden group cursor-pointer hover:border-primary/50 transition-colors">
+<div class="absolute top-0 right-0 p-sm text-primary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">functions</span>
+</div>
+<div class="w-16 h-16 rounded-lg bg-surface-container-high flex items-center justify-center mb-sm shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] border border-outline-variant">
+<span class="material-symbols-outlined text-3xl text-primary-container" style="font-variation-settings: 'FILL' 1;">token</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Shape Counter</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md">Test your spatial awareness and rapid calculation.</p>
+<div class="mt-auto flex items-center justify-between border-t border-white/5 pt-sm">
+<span class="font-label-sm text-label-sm text-primary-container uppercase">Level 2</span>
+<button class="font-label-sm text-label-sm text-on-background bg-white/5 hover:bg-white/10 px-3 py-1 rounded border border-white/10 transition-colors">Play</button>
+</div>
+<div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary-container to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
+</div>
+<!-- Statistics Card -->
+<div class="glass-panel rounded-xl p-md flex flex-col gap-sm col-span-1 md:col-span-2 lg:col-span-1 border border-outline-variant">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary-container">monitoring</span> Stats
+                </h3>
+<div class="flex flex-col gap-md flex-1 justify-center">
+<div>
+<div class="flex justify-between mb-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Accuracy</span>
+<span class="font-label-sm text-label-sm text-primary">92%</span>
+</div>
+<div class="w-full h-1 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-secondary-container to-primary-container w-[92%] shadow-[0_0_10px_rgba(0,240,255,0.5)]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Reaction Time</span>
+<span class="font-label-sm text-label-sm text-secondary">0.8s</span>
+</div>
+<div class="w-full h-1 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container w-[75%]"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-slate-950/60 backdrop-blur-2xl rounded-t-3xl border-t border-white/10 shadow-[0_-8px_30px_rgba(0,0,0,0.5)]">
+<a class="flex flex-col items-center justify-center text-slate-500 hover:text-cyan-300 transition-all font-['Exo_2'] font-bold text-[10px] tracking-widest uppercase gap-1" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="route">route</span>
+            Tracks
+        </a>
+<a class="flex flex-col items-center justify-center text-cyan-400 bg-cyan-500/10 rounded-xl px-4 py-1 border border-cyan-500/30 scale-110 duration-300 ease-out font-['Exo_2'] font-bold text-[10px] tracking-widest uppercase gap-1 hover:text-cyan-300 transition-all" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="insights" style="font-variation-settings: 'FILL' 1;">insights</span>
+            Progress
+        </a>
+<a class="flex flex-col items-center justify-center text-slate-500 hover:text-cyan-300 transition-all font-['Exo_2'] font-bold text-[10px] tracking-widest uppercase gap-1" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="leaderboard">leaderboard</span>
+            Leaderboard
+        </a>
+</nav>
+</body></html>

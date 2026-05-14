@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  html,body{margin:0;padding:0;background:var(--bg-app);color:var(--fg-1);}
+  .wrap{padding:24px;display:flex;flex-direction:column;gap:14px;}
+  .lbl{display:flex;justify-content:space-between;font:var(--t-eyebrow);text-transform:uppercase;letter-spacing:.1em;color:var(--fg-3);}
+  .lbl b{color:var(--fg-1);font-weight:800;}
+  .track{height:8px;background:rgba(255,255,255,0.10);border-radius:999px;overflow:hidden;}
+  .fill{height:100%;background:var(--grad-primary);border-radius:999px;box-shadow:0 0 10px rgba(168,85,247,.6);}
+  .meta{font:var(--t-body-sm);color:var(--fg-3);font-family:var(--font-mono);}
+</style></head>
+<body class="ds-bg">
+<div class="wrap">
+  <div>
+    <div class="lbl"><span>Progress</span><span><b>4/10</b></span></div>
+    <div class="track" style="margin-top:6px;"><div class="fill" style="width:40%;"></div></div>
+  </div>
+  <div>
+    <div class="lbl"><span>Daily Goal</span><span><b>60% Done</b></span></div>
+    <div class="track" style="margin-top:6px;"><div class="fill" style="width:60%;"></div></div>
+  </div>
+  <div class="meta">Track: white/10% · Fill: grad-primary + purple glow · Eyebrow + tabular fraction</div>
+</div>
+</body></html>

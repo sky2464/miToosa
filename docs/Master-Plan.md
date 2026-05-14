@@ -49,6 +49,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 |----|-------|------|----------|--------|------------|
 | S1-03 | Manual Wedge QA Walkthrough (#5) | Chore | S | Todo | 0/1 |
 | S1-04 | Playtest Survey & Recruitment (#6) | Feature | M | Todo | 0/1 |
+| S2-01 | Aetheric Pulse UI Redesign | Feature | XL | In Progress | 0/33 (1 manual) |
 
 ## Active Tasks
 
@@ -58,6 +59,36 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 	- [ ] 3.1 Execute manual QA walkthrough and capture findings in QA artifacts — _Requirements: QA walkthrough checklist_
 - [ ] **2. S1-04:** Playtest Survey & Recruitment (#6)
 	- [ ] 4.1 Finalize survey with staging URL and recruit 15-20 testers — _Requirements: playtest recruitment target_
+- [ ] **3. S2-01:** Aetheric Pulse UI Redesign
+  - [ ] 1.1 Update design_system.dart — add missing shadow/motion presets, verify colors match prototype — _Requirements: AC-001_
+  - [ ] 1.2 Create design_tokens.dart — consolidated Aetheric Pulse namespace — _Requirements: AC-001_
+  - [ ] 1.3 Write token value unit tests — _Requirements: AC-001_
+  - [ ] 2.1 Copy 8 track icon PNGs to assets/images/icons/ — _Requirements: AC-002_
+  - [ ] 2.2 Copy 12 avatar PNGs to assets/images/avatars/ — _Requirements: AC-005, AC-006_
+  - [ ] 2.3 Copy 6 badge PNGs to assets/images/badges/ — _Requirements: AC-004, AC-013_
+  - [ ] 2.4 Update pubspec.yaml with new asset paths — _Requirements: AC-002, AC-004, AC-005, AC-006_
+  - [ ] 3.1 Create atmosphere.dart — animated glow blob background — _Requirements: AC-008_
+  - [ ] 3.2 Create stat_pill.dart — tinted stat chip — _Requirements: AC-002, AC-012_
+  - [ ] 3.3 Create app_header.dart — avatar + logo + credits bar — _Requirements: AC-009_
+  - [ ] 3.4 Update glass_card.dart — align to refined Aetheric Pulse recipe — _Requirements: AC-001_
+  - [ ] 3.5 Create primary_button.dart — gradient CTA — _Requirements: AC-002, AC-007_
+  - [ ] 3.6 Create ghost_button.dart — outlined CTA — _Requirements: AC-007_
+  - [ ] 3.7 Update progress_ring.dart — gradient + glow — _Requirements: AC-002, AC-004_
+  - [ ] 3.8 Create toggle_switch.dart — gradient active toggle — _Requirements: AC-006_
+  - [ ] 3.9 Create settings_row.dart — icon + title + trailing row — _Requirements: AC-006_
+  - [ ] 3.10 Write shared component widget tests — _Requirements: AC-001, AC-008_
+  - [ ] 4.1 Rebuild bottom nav — floating glass bar with 5 tabs — _Requirements: AC-009_
+  - [ ] 4.2 Replace top app bar with AppHeader — _Requirements: AC-009_
+  - [ ] 4.3 Write navigation tests — _Requirements: AC-009_
+  - [ ] 5.1–5.7 Tracks screen (7 sub-tasks) — _Requirements: AC-002, AC-010, AC-012, AC-013_
+  - [ ] 6.1–6.4 Path screen (4 sub-tasks) — _Requirements: AC-003, AC-010_
+  - [ ] 7.1–7.6 Progress screen (6 sub-tasks) — _Requirements: AC-004, AC-010, AC-013_
+  - [ ] 8.1–8.3 Leaderboard screen (3 sub-tasks) — _Requirements: AC-005, AC-010, AC-014_
+  - [ ] 9.1–9.3 Settings screen (3 sub-tasks) — _Requirements: AC-006, AC-010_
+  - [ ] 10.1–10.4 Game screen (4 sub-tasks) — _Requirements: AC-007, AC-010, AC-011_
+  - [ ] 11.1 dart analyze — zero warnings — _Requirements: AC-001_
+  - [ ] 11.2 flutter test — all passing — _Requirements: AC-001_
+  - [ ] 11.3 Visual verification on simulator — _Requirements: AC-001_ `[manual]`
 
 ## Backlog
 
@@ -144,3 +175,6 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-11 | /agtoosa-build test S1-01 — staging deploy script executed successfully and hosting URL verified live | AgToosa |
 | 2026-05-11 | /agtoosa-ship docs S1-01 — CI deploy target aligned to `hosting:mitoosa-2121b`; story moved to Completed This Cycle | AgToosa |
 | 2026-05-14 | automated-maintenance — linked all 17 Master-Plan tasks to GitHub issues (#5–#21); health check failed (Flutter not installed in agent env, issue #4) | AgToosa |
+| 2026-05-14 | /agtoosa-spec S2-01 — Aetheric Pulse UI Redesign specced (14 ACs, 10 Must-priority, STRIDE complete); 33 atomic tasks derived; test plan skeleton: 33 test IDs mapped to 14 ACs | AgToosa |
+| 2026-05-14 | /agtoosa-spec S2-01 — Spec ✅ Approved (2026-05-14 09:30); enrolled in Sprint 1B; estimate XL | AgToosa |
+| 2026-05-14 | /agtoosa-build S2-01 — Build 🏗️ Started: 33 tasks (1 manual). Scope: lib/theme/, lib/widgets/, lib/features/main_app/navigation/progress/leaderboard/settings/gameplay/, assets/images/. Next: Wave 1 (tokens + asset integration) | AgToosa |

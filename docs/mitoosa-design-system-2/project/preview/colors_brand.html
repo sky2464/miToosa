@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  html,body{margin:0;padding:0;background:var(--bg-app);color:var(--fg-1);font-family:var(--font-body);}
+  .wrap{padding:18px 22px;display:flex;flex-direction:column;gap:14px;}
+  .row{display:flex;gap:10px;align-items:center;}
+  .sw{width:64px;height:64px;border-radius:14px;border:1px solid var(--border-soft);box-shadow:var(--shadow-card);position:relative;overflow:hidden;flex-shrink:0;}
+  .sw .lbl{position:absolute;left:6px;bottom:6px;font:var(--t-eyebrow);text-transform:uppercase;letter-spacing:.08em;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.6);}
+  .meta{font:var(--t-body-sm);color:var(--fg-3);}
+  .meta b{color:var(--fg-1);font-weight:600;}
+  .name{font:var(--t-label);color:var(--fg-2);text-transform:uppercase;letter-spacing:.06em;}
+</style></head>
+<body class="ds-bg">
+<div class="wrap">
+  <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:12px;">
+    <div><div class="sw" style="background:#3b82f6"></div><div class="name" style="margin-top:6px;">Brand Blue</div><div class="meta">#3b82f6</div></div>
+    <div><div class="sw" style="background:#a855f7"></div><div class="name" style="margin-top:6px;">Brand Purple</div><div class="meta">#a855f7</div></div>
+    <div><div class="sw" style="background:#22d3ee"></div><div class="name" style="margin-top:6px;">Cyan</div><div class="meta">#22d3ee</div></div>
+    <div><div class="sw" style="background:#ec4899"></div><div class="name" style="margin-top:6px;">Pink</div><div class="meta">#ec4899</div></div>
+    <div><div class="sw" style="background:#facc15"></div><div class="name" style="margin-top:6px;">Amber</div><div class="meta">#facc15</div></div>
+    <div><div class="sw" style="background:#fb923c"></div><div class="name" style="margin-top:6px;">Orange</div><div class="meta">#fb923c</div></div>
+  </div>
+</div>
+</body></html>

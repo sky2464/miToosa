@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  html,body{margin:0;padding:0;background:var(--bg-app);color:var(--fg-1);min-height:100vh;position:relative;overflow:hidden;}
+  .glow{position:absolute;inset:0;background:var(--bg-radial-hero);}
+  .wrap{position:relative;z-index:1;padding:18px;display:flex;align-items:center;gap:18px;}
+  .ring{position:relative;width:130px;height:130px;flex-shrink:0;filter:drop-shadow(0 0 16px rgba(59,130,246,.3));}
+  svg{transform:rotate(-90deg);width:130px;height:130px;}
+  .bg-c{fill:none;stroke:rgba(255,255,255,.06);stroke-width:12;}
+  .fg-c{fill:none;stroke:url(#g);stroke-width:12;stroke-linecap:round;stroke-dasharray:345;stroke-dashoffset:138;filter:drop-shadow(0 0 6px rgba(168,85,247,.4));}
+  .center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+  .center .lbl{font:var(--t-body-sm);color:var(--fg-3);}
+  .center .num{font:800 26px/1 var(--font-display);}
+  .meta{font:var(--t-body-sm);color:var(--fg-3);}
+  .meta b{color:var(--fg-1);font-weight:600;}
+</style></head>
+<body class="ds-bg">
+<div class="glow"></div>
+<div class="wrap">
+  <div class="ring">
+    <svg viewBox="0 0 130 130"><defs><linearGradient id="g" x1="0%" x2="100%" y1="0%" y2="100%"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs>
+      <circle class="bg-c" cx="65" cy="65" r="55"/><circle class="fg-c" cx="65" cy="65" r="55"/></svg>
+    <div class="center"><span class="lbl">Daily Goal</span><span class="num">600 XP</span></div>
+  </div>
+  <div class="meta">
+    <b>Progress ring</b><br/>
+    grad-primary stroke<br/>
+    drop-shadow blue + purple<br/>
+    centered numeric + label
+  </div>
+</div>
+</body></html>

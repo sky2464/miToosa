@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  html,body{margin:0;padding:0;background:var(--bg-app);color:var(--fg-1);}
+  .wrap{padding:18px 22px;}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  .row{display:flex;align-items:center;gap:12px;}
+  .sw{width:56px;height:56px;border-radius:14px;border:1px solid var(--border-soft);flex-shrink:0;}
+  .name{font:var(--t-label);text-transform:uppercase;letter-spacing:.06em;color:var(--fg-1);}
+  .meta{font:var(--t-body-sm);color:var(--fg-3);font-family:var(--font-mono);}
+</style></head>
+<body class="ds-bg">
+<div class="wrap">
+  <div class="grid">
+    <div class="row"><div class="sw" style="background:#0a0d17"></div><div><div class="name">bg-app</div><div class="meta">#0a0d17</div></div></div>
+    <div class="row"><div class="sw" style="background:#060810"></div><div><div class="name">bg-app-deep</div><div class="meta">#060810</div></div></div>
+    <div class="row"><div class="sw" style="background:rgba(255,255,255,0.08);backdrop-filter:blur(8px);"></div><div><div class="name">bg-card</div><div class="meta">white / 8%</div></div></div>
+    <div class="row"><div class="sw" style="background:rgba(255,255,255,0.04);"></div><div><div class="name">bg-card-inner</div><div class="meta">white / 4%</div></div></div>
+    <div class="row"><div class="sw" style="background:#ffffff"></div><div><div class="name">fg-1</div><div class="meta">#ffffff</div></div></div>
+    <div class="row"><div class="sw" style="background:#d1d5db"></div><div><div class="name">fg-2</div><div class="meta">#d1d5db</div></div></div>
+    <div class="row"><div class="sw" style="background:#9ca3af"></div><div><div class="name">fg-3</div><div class="meta">#9ca3af</div></div></div>
+    <div class="row"><div class="sw" style="background:#6b7280"></div><div><div class="name">fg-4</div><div class="meta">#6b7280</div></div></div>
+  </div>
+</div>
+</body></html>
