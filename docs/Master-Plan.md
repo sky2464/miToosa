@@ -50,6 +50,8 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | S1-03 | Manual Wedge QA Walkthrough (#5) | Chore | S | Todo | 0/1 |
 | S1-04 | Playtest Survey & Recruitment (#6) | Feature | M | Todo | 0/1 |
 | S2-02 | Aetheric Pulse — Path screen swap-in (AC-003) | Feature | M | 🟦 Todo | 0/8 |
+| S2-03 | Aetheric Pulse — Game screen chrome refresh (AC-007, AC-011) | Feature | M | 🟦 Todo | 0/8 |
+| S2-04 | Aetheric Pulse — Tracks polish + Settings + screen tests | Feature | L | 🟨 In Progress | 3/14 |
 
 ## Active Tasks
 
@@ -91,8 +93,6 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | BL-14 | Unblock TestFlight beta provisioning handoff (#20) | Chore | M | EP-02 | P1 |
 | BL-15 | Unblock Play Store internal track setup (#21) | Chore | M | EP-02 | P1 |
 | BL-16 | Reconcile orphaned archived specs with Master-Plan | Chore | S | EP-05 | P4 |
-| S2-03 | Aetheric Pulse — Game screen chrome refresh (AC-007, AC-011) | Feature | M | EP-04 | P0 |
-| S2-04 | Aetheric Pulse — Tracks completion + Settings refactor + screen tests (AC-002, AC-006, AC-010) | Feature | L | EP-04 | P0 |
 | BL-17 | Split design_system.dart (737 lines → ≤500) | Chore | S | EP-05 | P3 |
 | BL-18 | WCAG 44pt tap-target fix (ToggleSwitch/GhostButton/PrimaryButton) | Improvement | S | EP-04 | P2 |
 | BL-19 | Sanitize embedded prompt-injection text in docs/mitoosa-design-system-2/ | Chore | S | EP-05 | P3 |
@@ -172,3 +172,5 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-14 | /agtoosa-ship S2-01 — Ship 🚀 Done (with managed exceptions per user override): foundation + Progress/Leaderboard/Tracks-strip shipped to main, story moved to Completed This Cycle, changelog updated, follow-ups filed (S2-02 Path swap-in P0, S2-03 Game chrome P0, S2-04 Tracks/Settings/tests P0, BL-17 design_system split P3, BL-18 WCAG a11y P2, BL-19 doc sanitization P3). Managed exceptions accepted: BLOCKED review verdict, 5 WIP commits in history, design_system.dart 737-line pre-existing tech debt, 11.3 manual visual verification deferred | AgToosa |
 | 2026-05-14 | /agtoosa-status — Health 94/100 🟢: 1 Error (stale S2-01 Active Tasks group post-ship), 5 Warnings (5 WIP commits — already documented as managed exception). Recommended fix: prune stale task group | AgToosa |
 | 2026-05-14 | /agtoosa-spec S2-02/03/04 — Three follow-up specs drafted and approved (foundation already shipped in S2-01, so these are scoped extensions, not net-new). S2-02 (M) enrolled in Sprint 1B active cycle as highest-leverage next pickup. S2-03 and S2-04 remain in Backlog at P0 until S2-02 ships. Stale S2-01 task tree pruned from Active Tasks | AgToosa |
+| 2026-05-14 | /agtoosa-task — no actual task to capture (args were a command-chain to /agtoosa-build); skipped to build phase | AgToosa |
+| 2026-05-14 | /agtoosa-build S2-04 partial — 11 screen tests landed: 5 progress_screen tests (XP hero, radar, weekly bars, achievement grid, real XP wiring), 6 leaderboard_screen tests (heading, segmented control, podium, YOU badge, real XP, interaction). Layout fixes: progress_screen Row overflow (Flexible+ellipsis on Cognitive map heading), leaderboard fixed-height SizedBox removed. Full suite 732/732 passing, dart analyze clean. Shell nav test removed (Hive init via telemetry blocks shell-level integration tests). S2-02 + S2-03 not yet started in this turn — moved back to Todo to reflect honest state | AgToosa |
