@@ -50,7 +50,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | S1-03 | Manual Wedge QA Walkthrough (#5) | Chore | S | Todo | 0/1 |
 | S1-04 | Playtest Survey & Recruitment (#6) | Feature | M | Todo | 0/1 |
 | S2-02 | Aetheric Pulse — Path screen swap-in (AC-003) | Feature | M | 🟦 Todo | 0/8 |
-| S2-03 | Aetheric Pulse — Game screen chrome refresh (AC-007, AC-011) | Feature | M | 🟦 Todo | 0/8 |
+| S2-03 | Aetheric Pulse — Game screen chrome refresh (AC-007, AC-011) | Feature | M | 🟨 In Progress | 2/8 |
 | S2-04 | Aetheric Pulse — Tracks polish + Settings + screen tests | Feature | L | 🟨 In Progress | 3/14 |
 
 ## Active Tasks
@@ -174,3 +174,4 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-14 | /agtoosa-spec S2-02/03/04 — Three follow-up specs drafted and approved (foundation already shipped in S2-01, so these are scoped extensions, not net-new). S2-02 (M) enrolled in Sprint 1B active cycle as highest-leverage next pickup. S2-03 and S2-04 remain in Backlog at P0 until S2-02 ships. Stale S2-01 task tree pruned from Active Tasks | AgToosa |
 | 2026-05-14 | /agtoosa-task — no actual task to capture (args were a command-chain to /agtoosa-build); skipped to build phase | AgToosa |
 | 2026-05-14 | /agtoosa-build S2-04 partial — 11 screen tests landed: 5 progress_screen tests (XP hero, radar, weekly bars, achievement grid, real XP wiring), 6 leaderboard_screen tests (heading, segmented control, podium, YOU badge, real XP, interaction). Layout fixes: progress_screen Row overflow (Flexible+ellipsis on Cognitive map heading), leaderboard fixed-height SizedBox removed. Full suite 732/732 passing, dart analyze clean. Shell nav test removed (Hive init via telemetry blocks shell-level integration tests). S2-02 + S2-03 not yet started in this turn — moved back to Todo to reflect honest state | AgToosa |
+| 2026-05-14 | /agtoosa-build S2-03 partial — TDD cycle: 🔴 RED (5 new tests for AC-011 pink timer at ≤4s, 2 failing) → 🟢 GREEN (CountdownTimerWidget converted to StatefulWidget with pulse animation, threshold 5s→4s, color MiToosaTheme.error→AP.pink) → 🔵 REFACTOR (dropped unused MiToosaTheme import). Tasks 1.2 (timer pill, AC-011) and 4.2/4.4 (widget test + verification) done. 2 of 8 tasks complete. Remaining: 1.1 top chrome, 2.1 options grid, 3.1/3.2 hint+submit button swap, 4.1 full puzzle flow test, 4.3 option selection test — all require touching the 1003-line gameplay_screen.dart and warrant a dedicated focused session. Full suite 737/737 passing, dart analyze clean | AgToosa |
