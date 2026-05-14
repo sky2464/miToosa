@@ -8,6 +8,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), version
 ## [Unreleased]
 
 ### Added
+- **S2-01 Aetheric Pulse UI Redesign — partial ship (foundation + 3 screens)**: consolidated Aetheric Pulse design tokens (`lib/theme/design_tokens.dart` `AP` namespace), 11 new shared widgets (`atmosphere`, `stat_pill`, `app_header`, `primary_button`, `ghost_button`, `toggle_switch`, `settings_row`, `skill_radar`, `weekly_bars`, `achievement_card`, `path_constellation`), 26 design assets (8 track icons + 12 avatars + 6 badges in `assets/images/`), and rebuilt Progress + Leaderboard screens with real `playerProgressProvider` wiring. Tracks screen gained a horizontal `StatPill` strip with real streak/energy/stars/XP data. App shell now uses `AppHeader` (sticky avatar ring + brand mark + credits pill) over an animated `Atmosphere` background (radial glow blobs + star field).
+- 32 new tests added across `test/theme/design_tokens_test.dart` and `test/widgets/{stat_pill,primary_button,toggle_switch,skill_radar,achievement_card,atmosphere,weekly_bars}_test.dart` — full suite now **721/721 passing**.
+- `docs/archived/spec-S2-01.md`, `docs/AgToosa_TestPlan-S2-01.md` (33 test IDs mapped to 14 ACs), `docs/archived/review-S2-01.md` (4-persona audit: Security ✅, Eng 🔴, CEO 🟡, QA 🔴)
+
+_Spec: `docs/archived/spec-S2-01.md` · Review: `docs/archived/review-S2-01.md` · Story: S2-01_
+
+**Shipped with managed exceptions** (user override of review BLOCKED verdict):
+- 5 of 10 Must-priority ACs partial/deferred: AC-002 (Tracks polish), AC-003 (Path constellation swap-in), AC-006 (Settings refactor), AC-007 (Game chrome), AC-010 (full provider wiring) — tracked as follow-up stories S2-02/S2-03/S2-04
+- `lib/theme/design_system.dart` is 737 lines (over the 500-line rule); pre-existing condition — accepted as documented tech debt
+- WCAG 2.1 AA 44pt tap-target violated by `ToggleSwitch`/`GhostButton`/`PrimaryButton` — a11y ticket queued
+- 5 `WIP:` commits retained in main history (managed exception per S1-02 precedent)
+- 11.3 visual verification on simulator deferred — manual task
+
 - S1-02 analytics backend implementation scaffolding: `firebase_core` + `firebase_analytics` dependencies, `FirebaseAnalyticsSink`, guarded `FIREBASE_ENABLED` provider wiring, conditional Firebase initialization in app bootstrap, and placeholder `lib/firebase_options.dart`
 - `docs/ANALYTICS-SETUP.md` manual Firebase/FlutterFire setup runbook
 - `docs/AgToosa_TestPlan-S1-02.md` AC-mapped test plan with `@smoke` tags

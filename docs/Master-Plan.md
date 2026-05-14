@@ -49,7 +49,6 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 |----|-------|------|----------|--------|------------|
 | S1-03 | Manual Wedge QA Walkthrough (#5) | Chore | S | Todo | 0/1 |
 | S1-04 | Playtest Survey & Recruitment (#6) | Feature | M | Todo | 0/1 |
-| S2-01 | Aetheric Pulse UI Redesign | Feature | XL | In Review (🔴 BLOCKED) | 23/29 (1 manual deferred) |
 
 ## Active Tasks
 
@@ -115,6 +114,12 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | BL-14 | Unblock TestFlight beta provisioning handoff (#20) | Chore | M | EP-02 | P1 |
 | BL-15 | Unblock Play Store internal track setup (#21) | Chore | M | EP-02 | P1 |
 | BL-16 | Reconcile orphaned archived specs with Master-Plan | Chore | S | EP-05 | P4 |
+| S2-02 | Aetheric Pulse — Path screen swap-in (AC-003) | Feature | M | EP-04 | P0 |
+| S2-03 | Aetheric Pulse — Game screen chrome refresh (AC-007, AC-011) | Feature | M | EP-04 | P0 |
+| S2-04 | Aetheric Pulse — Tracks completion + Settings refactor + screen tests (AC-002, AC-006, AC-010) | Feature | L | EP-04 | P0 |
+| BL-17 | Split design_system.dart (737 lines → ≤500) | Chore | S | EP-05 | P3 |
+| BL-18 | WCAG 44pt tap-target fix (ToggleSwitch/GhostButton/PrimaryButton) | Improvement | S | EP-04 | P2 |
+| BL-19 | Sanitize embedded prompt-injection text in docs/mitoosa-design-system-2/ | Chore | S | EP-05 | P3 |
 
 ## Blocked
 
@@ -144,6 +149,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | S1-05 | Repo & Docs Cleanup (cleanup_001) | 2026-05-04 | docs/archived/spec-cleanup-001.md · review-cleanup-001.md |
 | S1-02 | Analytics Backend Integration | 2026-05-11 | docs/archived/spec-s1-02.md · docs/archived/review-s1-02.md · docs/archived/ship-check-s1-02.md |
 | S1-01 | Staging Deployment & QA Gate | 2026-05-11 | docs/AgToosa_Spec-S1-01.md · docs/STAGING-SETUP.md · docs/RELEASE-GATES.md |
+| S2-01 | Aetheric Pulse UI Redesign — foundation + 3 screens (partial) | 2026-05-14 | docs/archived/spec-S2-01.md · docs/archived/review-S2-01.md · 23/29 tasks · 4 P0 follow-ups filed (S2-02/03/04) |
 
 ## Update Log
 
@@ -187,3 +193,4 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-14 | /agtoosa-status — Health 94/100 🟢 Excellent: 1 Error (counter mismatch), 5 Warnings (WIP commits), 5 orphan archived specs. Recommended: /agtoosa-build to fix counter, /agtoosa-ship to squash WIPs, /agtoosa-task to reconcile orphans | AgToosa |
 | 2026-05-14 | /agtoosa-build S2-01 — Wave 6 ✅: Task counter reconciled (23/29 automated), 8 more widget tests added (Atmosphere×5, WeeklyBars×3), 11.3 marked manual-deferred. Status → 🔧 Awaiting Manual (visual verification on simulator). dart analyze clean, flutter test 721/721 passing. Remaining auto tasks: 6.x Path swap-in, 9.x Settings cosmetic refactor, 10.x Game chrome refresh, 4.3/7.6/8.3 screen-level nav/widget tests — all deferred to follow-up story given existing screens are functional and shared widgets are ready for incremental swap-in | AgToosa |
 | 2026-05-14 | /agtoosa-review S2-01 — Review 🔴 BLOCKED: 4-persona parallel audit complete (Security ✅, Eng 🔴, CEO 🟡, QA 🔴). 10 Critical findings: 2× 500-line violations (design_system.dart 737, world_map_screen.dart 509), 5 Must ACs not fully delivered (AC-002, 003, 006, 007, 010), 5 Must ACs uncovered by tests (AC-002, 003, 005, 009, 010). 9 Warnings: WCAG tap-target violations on ToggleSwitch/GhostButton/PrimaryButton, missing CONTEXT.md + ADRs. Report saved to docs/archived/review-S2-01.md. Recommended path: split into S2-02/S2-03/S2-04 follow-up stories | AgToosa |
+| 2026-05-14 | /agtoosa-ship S2-01 — Ship 🚀 Done (with managed exceptions per user override): foundation + Progress/Leaderboard/Tracks-strip shipped to main, story moved to Completed This Cycle, changelog updated, follow-ups filed (S2-02 Path swap-in P0, S2-03 Game chrome P0, S2-04 Tracks/Settings/tests P0, BL-17 design_system split P3, BL-18 WCAG a11y P2, BL-19 doc sanitization P3). Managed exceptions accepted: BLOCKED review verdict, 5 WIP commits in history, design_system.dart 737-line pre-existing tech debt, 11.3 manual visual verification deferred | AgToosa |
