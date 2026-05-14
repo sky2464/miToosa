@@ -76,18 +76,21 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
   - [x] 3.7 Update progress_ring.dart — gradient + glow — _Requirements: AC-002, AC-004_
   - [x] 3.8 Create toggle_switch.dart — gradient active toggle — _Requirements: AC-006_
   - [x] 3.9 Create settings_row.dart — icon + title + trailing row — _Requirements: AC-006_
-  - [ ] 3.10 Write shared component widget tests — _Requirements: AC-001, AC-008_
-  - [ ] 4.1 Rebuild bottom nav — floating glass bar with 5 tabs — _Requirements: AC-009_
-  - [ ] 4.2 Replace top app bar with AppHeader — _Requirements: AC-009_
+  - [x] 3.10 Write shared component widget tests (16 new: StatPill/PrimaryButton/ToggleSwitch/SkillRadar/AchievementCard) — _Requirements: AC-001, AC-008_
+  - [x] 4.1 Rebuild bottom nav — floating glass bar with 5 tabs (existing _FloatingGlassNav matches prototype) — _Requirements: AC-009_
+  - [x] 4.2 Replace top app bar with AppHeader (integrated via _SafeAppHeader) — _Requirements: AC-009_
   - [ ] 4.3 Write navigation tests — _Requirements: AC-009_
-  - [ ] 5.1–5.7 Tracks screen (7 sub-tasks) — _Requirements: AC-002, AC-010, AC-012, AC-013_
-  - [ ] 6.1–6.4 Path screen (4 sub-tasks) — _Requirements: AC-003, AC-010_
-  - [ ] 7.1–7.6 Progress screen (6 sub-tasks) — _Requirements: AC-004, AC-010, AC-013_
-  - [ ] 8.1–8.3 Leaderboard screen (3 sub-tasks) — _Requirements: AC-005, AC-010, AC-014_
-  - [ ] 9.1–9.3 Settings screen (3 sub-tasks) — _Requirements: AC-006, AC-010_
-  - [ ] 10.1–10.4 Game screen (4 sub-tasks) — _Requirements: AC-007, AC-010, AC-011_
-  - [ ] 11.1 dart analyze — zero warnings — _Requirements: AC-001_
-  - [ ] 11.2 flutter test — all passing — _Requirements: AC-001_
+  - [x] 5.2 Tracks: StatPill strip (streak/energy/stars/XP) wired to PlayerProgress — _Requirements: AC-002, AC-010, AC-012, AC-013_
+  - [ ] 5.1, 5.3-5.7 Tracks: Daily Spark refinement, filter chips, featured/grid tiles with PNG icons, widget tests — _Requirements: AC-002, AC-010_
+  - [ ] 6.1–6.4 Path screen (existing world_map_path_screen functional; PathConstellation widget ready for swap-in) — _Requirements: AC-003, AC-010_
+  - [x] 7.1-7.5 Progress screen rebuilt — XP hero, SkillRadar, WeeklyBars, AchievementCard grid, wired to playerProgressProvider — _Requirements: AC-004, AC-010, AC-013_
+  - [ ] 7.6 Progress screen widget tests — _Requirements: AC-004, AC-013_
+  - [x] 8.1-8.2 Leaderboard rebuilt — segmented control, podium, ranked rows, real player XP — _Requirements: AC-005, AC-010, AC-014_
+  - [ ] 8.3 Leaderboard widget tests — _Requirements: AC-005, AC-014_
+  - [ ] 9.1–9.3 Settings (existing settings_screen functional with audio/music/haptics wiring; cosmetic ToggleSwitch swap pending) — _Requirements: AC-006, AC-010_
+  - [ ] 10.1–10.4 Game (existing gameplay_screen functional; chrome/timer pill refinement pending) — _Requirements: AC-007, AC-010, AC-011_
+  - [x] 11.1 dart analyze — zero warnings (clean) — _Requirements: AC-001_
+  - [x] 11.2 flutter test — 713/713 passing — _Requirements: AC-001_
   - [ ] 11.3 Visual verification on simulator — _Requirements: AC-001_ `[manual]`
 
 ## Backlog
@@ -180,3 +183,4 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-14 | /agtoosa-spec S2-01 — Spec ✅ Approved (2026-05-14 09:30); enrolled in Sprint 1B; estimate XL | AgToosa |
 | 2026-05-14 | /agtoosa-build S2-01 — Build 🏗️ Started: 33 tasks (1 manual). Scope: lib/theme/, lib/widgets/, lib/features/main_app/navigation/progress/leaderboard/settings/gameplay/, assets/images/. Next: Wave 1 (tokens + asset integration) | AgToosa |
 | 2026-05-14 | /agtoosa-build S2-01 — Waves 1-3 ✅ Done: tokens consolidated (24 new tests), 26 assets copied, 10 new widgets created (atmosphere, stat_pill, app_header, primary_button, ghost_button, toggle_switch, settings_row, skill_radar, weekly_bars, achievement_card, path_constellation), Atmosphere integrated into app shell. 669/669 tests passing. 17/33 tasks complete. Remaining: 6 screen rebuilds + tests + verification | AgToosa |
+| 2026-05-14 | /agtoosa-build S2-01 — Wave 4-5 partial ✅: Progress + Leaderboard screens rebuilt with new widgets (XP hero, SkillRadar, WeeklyBars, AchievementCard, podium, segmented control), Tracks gained StatPill strip with real PlayerProgress data, 16 new shared-widget tests added. dart analyze clean, flutter test 713/713 passing. 27/33 tasks complete. Remaining: Path/Settings/Game refinement, screen-level widget tests, nav tests, manual visual verification | AgToosa |
