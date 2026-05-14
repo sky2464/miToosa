@@ -70,6 +70,39 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
   - [ ] 2.1 Widget test: constellation node states from mocked progress — _Requirements: AC-001, AC-002_
   - [ ] 2.2 Widget test: track switching re-renders constellation — _Requirements: AC-003_
   - [ ] 2.3 `dart analyze` clean + `flutter test` passing — _Requirements: AC-001_
+- [ ] **4. S2-03:** Aetheric Pulse — Game screen chrome refresh
+  - [ ] **1.** Top chrome
+    - [ ] 1.1 Replace existing top bar with circular back button + centered eyebrow + 5-dot progress bar — _Requirements: AC-001_
+    - [x] 1.2 Replace timer widget call site with new timer pill (blue ≤4s → pink + pulse) — _Requirements: AC-002_
+  - [ ] **2.** Options grid
+    - [ ] 2.1 Wrap option cards in glass-card recipe; cyan glow border + 1.02× scale on selected — _Requirements: AC-003_
+  - [ ] **3.** Bottom CTAs
+    - [ ] 3.1 Replace existing hint button with `GhostButton` — _Requirements: AC-004_
+    - [ ] 3.2 Replace existing submit button with `PrimaryButton` (full-width, glow on enabled) — _Requirements: AC-004_
+  - [ ] **4.** Preservation tests
+    - [ ] 4.1 Widget test: full puzzle flow (select → submit → next) using real engine, no chrome regressions — _Requirements: AC-005_
+    - [x] 4.2 Widget test: timer pill color switches at 4s threshold — _Requirements: AC-002_
+    - [ ] 4.3 Widget test: option selection shows cyan border + scale — _Requirements: AC-003_
+    - [ ] 4.4 `dart analyze` clean, `flutter test` 100% — _Requirements: AC-005_
+- [ ] **5. S2-04:** Aetheric Pulse — Tracks polish + Settings + screen tests
+  - [ ] **1.** Tracks polish
+    - [ ] 1.1 Refine Daily Spark hero: eyebrow timer, "Today's session" headline, ProgressRing N/5, skill sequence dots, Start session PrimaryButton — _Requirements: AC-001_
+    - [ ] 1.2 Add filter chip row (all/memory/logic/speed/spatial) with active blue glow — _Requirements: AC-002_
+    - [ ] 1.3 Create `lib/widgets/featured_track.dart` and `lib/widgets/track_tile.dart` — _Requirements: AC-003_
+    - [ ] 1.4 Replace existing track cards with FeaturedTrack + 2-col TrackTile grid; wire PNG icons via `AP.trackIcon(id)` — _Requirements: AC-003_
+  - [ ] **2.** Settings refactor
+    - [ ] 2.1 Swap `_SettingRow` → `SettingsRow` and `_KineticToggle` → `ToggleSwitch` in `settings_screen.dart`, preserving service wiring — _Requirements: AC-004_
+  - [ ] **3.** Screen-level tests
+    - [ ] 3.1 `tracks_screen_test.dart` — Daily Spark hero, filter chips, featured + grid (3 tests) — _Requirements: AC-005_
+    - [x] 3.2 `progress_screen_test.dart` — XP hero, radar, weekly bars, achievement grid (3 tests) — _Requirements: AC-005_
+    - [x] 3.3 `leaderboard_screen_test.dart` — podium, segmented control, YOU row (3 tests) — _Requirements: AC-005_
+    - [x] 3.4 `world_map_path_screen_test.dart` — constellation renders, track switch (2 tests) — _Requirements: AC-005_
+    - [ ] 3.5 `main_app_shell_nav_test.dart` — 5-tab nav, active indicator (2 tests) — _Requirements: AC-005_
+    - [ ] 3.6 `progress_provider_integration_test.dart` — mocked provider, screens show real values (3 tests) — _Requirements: AC-005, AC-006_
+  - [ ] **4.** Verification
+    - [ ] 4.1 `dart analyze` clean — _Requirements: AC-001_
+    - [ ] 4.2 `flutter test` all passing — _Requirements: AC-001_
+    - [ ] 4.3 Visual verification on simulator — _Requirements: AC-001_ `[manual]`
 
 ## Backlog
 
