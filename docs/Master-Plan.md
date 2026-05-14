@@ -49,6 +49,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 |----|-------|------|----------|--------|------------|
 | S1-03 | Manual Wedge QA Walkthrough (#5) | Chore | S | Todo | 0/1 |
 | S1-04 | Playtest Survey & Recruitment (#6) | Feature | M | Todo | 0/1 |
+| S2-02 | Aetheric Pulse — Path screen swap-in (AC-003) | Feature | M | 🟦 Todo | 0/8 |
 
 ## Active Tasks
 
@@ -58,39 +59,15 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 	- [ ] 3.1 Execute manual QA walkthrough and capture findings in QA artifacts — _Requirements: QA walkthrough checklist_
 - [ ] **2. S1-04:** Playtest Survey & Recruitment (#6)
 	- [ ] 4.1 Finalize survey with staging URL and recruit 15-20 testers — _Requirements: playtest recruitment target_
-- [ ] **3. S2-01:** Aetheric Pulse UI Redesign
-  - [x] 1.1 Update design_system.dart — add missing shadow/motion presets, verify colors match prototype — _Requirements: AC-001_
-  - [x] 1.2 Create design_tokens.dart — consolidated Aetheric Pulse namespace — _Requirements: AC-001_
-  - [x] 1.3 Write token value unit tests — _Requirements: AC-001_
-  - [x] 2.1 Copy 8 track icon PNGs to assets/images/icons/ — _Requirements: AC-002_
-  - [x] 2.2 Copy 12 avatar PNGs to assets/images/avatars/ — _Requirements: AC-005, AC-006_
-  - [x] 2.3 Copy 6 badge PNGs to assets/images/badges/ — _Requirements: AC-004, AC-013_
-  - [x] 2.4 Update pubspec.yaml with new asset paths — _Requirements: AC-002, AC-004, AC-005, AC-006_
-  - [x] 3.1 Create atmosphere.dart — animated glow blob background — _Requirements: AC-008_
-  - [x] 3.2 Create stat_pill.dart — tinted stat chip — _Requirements: AC-002, AC-012_
-  - [x] 3.3 Create app_header.dart — avatar + logo + credits bar — _Requirements: AC-009_
-  - [x] 3.4 Update glass_card.dart — align to refined Aetheric Pulse recipe — _Requirements: AC-001_
-  - [x] 3.5 Create primary_button.dart — gradient CTA — _Requirements: AC-002, AC-007_
-  - [x] 3.6 Create ghost_button.dart — outlined CTA — _Requirements: AC-007_
-  - [x] 3.7 Update progress_ring.dart — gradient + glow — _Requirements: AC-002, AC-004_
-  - [x] 3.8 Create toggle_switch.dart — gradient active toggle — _Requirements: AC-006_
-  - [x] 3.9 Create settings_row.dart — icon + title + trailing row — _Requirements: AC-006_
-  - [x] 3.10 Write shared component widget tests (16 new: StatPill/PrimaryButton/ToggleSwitch/SkillRadar/AchievementCard) — _Requirements: AC-001, AC-008_
-  - [x] 4.1 Rebuild bottom nav — floating glass bar with 5 tabs (existing _FloatingGlassNav matches prototype) — _Requirements: AC-009_
-  - [x] 4.2 Replace top app bar with AppHeader (integrated via _SafeAppHeader) — _Requirements: AC-009_
-  - [ ] 4.3 Write navigation tests — _Requirements: AC-009_
-  - [x] 5.2 Tracks: StatPill strip (streak/energy/stars/XP) wired to PlayerProgress — _Requirements: AC-002, AC-010, AC-012, AC-013_
-  - [ ] 5.1, 5.3-5.7 Tracks: Daily Spark refinement, filter chips, featured/grid tiles with PNG icons, widget tests — _Requirements: AC-002, AC-010_
-  - [ ] 6.1–6.4 Path screen (existing world_map_path_screen functional; PathConstellation widget ready for swap-in) — _Requirements: AC-003, AC-010_
-  - [x] 7.1-7.5 Progress screen rebuilt — XP hero, SkillRadar, WeeklyBars, AchievementCard grid, wired to playerProgressProvider — _Requirements: AC-004, AC-010, AC-013_
-  - [ ] 7.6 Progress screen widget tests — _Requirements: AC-004, AC-013_
-  - [x] 8.1-8.2 Leaderboard rebuilt — segmented control, podium, ranked rows, real player XP — _Requirements: AC-005, AC-010, AC-014_
-  - [ ] 8.3 Leaderboard widget tests — _Requirements: AC-005, AC-014_
-  - [ ] 9.1–9.3 Settings (existing settings_screen functional with audio/music/haptics wiring; cosmetic ToggleSwitch swap pending) — _Requirements: AC-006, AC-010_
-  - [ ] 10.1–10.4 Game (existing gameplay_screen functional; chrome/timer pill refinement pending) — _Requirements: AC-007, AC-010, AC-011_
-  - [x] 11.1 dart analyze — zero warnings (clean) — _Requirements: AC-001_
-  - [x] 11.2 flutter test — 713/713 passing — _Requirements: AC-001_
-  - [ ] 11.3 Visual verification on simulator — _Requirements: AC-001_ `[manual-deferred: 2026-05-14]`
+- [ ] **3. S2-02:** Aetheric Pulse — Path screen swap-in
+  - [ ] 1.1 Replace InteractiveViewer node loop with `PathConstellation` widget call — _Requirements: AC-001, AC-002_
+  - [ ] 1.2 Map per-track `levelStars` → `List<PathLevel>` with state/type — _Requirements: AC-002_
+  - [ ] 1.3 Preserve track-switching UX from existing screen — _Requirements: AC-003_
+  - [ ] 1.4 Scroll current node into view on first frame — _Requirements: AC-004_
+  - [ ] 1.5 Guard empty-track edge case — _Requirements: AC-002_
+  - [ ] 2.1 Widget test: constellation node states from mocked progress — _Requirements: AC-001, AC-002_
+  - [ ] 2.2 Widget test: track switching re-renders constellation — _Requirements: AC-003_
+  - [ ] 2.3 `dart analyze` clean + `flutter test` passing — _Requirements: AC-001_
 
 ## Backlog
 
@@ -114,7 +91,6 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | BL-14 | Unblock TestFlight beta provisioning handoff (#20) | Chore | M | EP-02 | P1 |
 | BL-15 | Unblock Play Store internal track setup (#21) | Chore | M | EP-02 | P1 |
 | BL-16 | Reconcile orphaned archived specs with Master-Plan | Chore | S | EP-05 | P4 |
-| S2-02 | Aetheric Pulse — Path screen swap-in (AC-003) | Feature | M | EP-04 | P0 |
 | S2-03 | Aetheric Pulse — Game screen chrome refresh (AC-007, AC-011) | Feature | M | EP-04 | P0 |
 | S2-04 | Aetheric Pulse — Tracks completion + Settings refactor + screen tests (AC-002, AC-006, AC-010) | Feature | L | EP-04 | P0 |
 | BL-17 | Split design_system.dart (737 lines → ≤500) | Chore | S | EP-05 | P3 |
@@ -194,3 +170,5 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-14 | /agtoosa-build S2-01 — Wave 6 ✅: Task counter reconciled (23/29 automated), 8 more widget tests added (Atmosphere×5, WeeklyBars×3), 11.3 marked manual-deferred. Status → 🔧 Awaiting Manual (visual verification on simulator). dart analyze clean, flutter test 721/721 passing. Remaining auto tasks: 6.x Path swap-in, 9.x Settings cosmetic refactor, 10.x Game chrome refresh, 4.3/7.6/8.3 screen-level nav/widget tests — all deferred to follow-up story given existing screens are functional and shared widgets are ready for incremental swap-in | AgToosa |
 | 2026-05-14 | /agtoosa-review S2-01 — Review 🔴 BLOCKED: 4-persona parallel audit complete (Security ✅, Eng 🔴, CEO 🟡, QA 🔴). 10 Critical findings: 2× 500-line violations (design_system.dart 737, world_map_screen.dart 509), 5 Must ACs not fully delivered (AC-002, 003, 006, 007, 010), 5 Must ACs uncovered by tests (AC-002, 003, 005, 009, 010). 9 Warnings: WCAG tap-target violations on ToggleSwitch/GhostButton/PrimaryButton, missing CONTEXT.md + ADRs. Report saved to docs/archived/review-S2-01.md. Recommended path: split into S2-02/S2-03/S2-04 follow-up stories | AgToosa |
 | 2026-05-14 | /agtoosa-ship S2-01 — Ship 🚀 Done (with managed exceptions per user override): foundation + Progress/Leaderboard/Tracks-strip shipped to main, story moved to Completed This Cycle, changelog updated, follow-ups filed (S2-02 Path swap-in P0, S2-03 Game chrome P0, S2-04 Tracks/Settings/tests P0, BL-17 design_system split P3, BL-18 WCAG a11y P2, BL-19 doc sanitization P3). Managed exceptions accepted: BLOCKED review verdict, 5 WIP commits in history, design_system.dart 737-line pre-existing tech debt, 11.3 manual visual verification deferred | AgToosa |
+| 2026-05-14 | /agtoosa-status — Health 94/100 🟢: 1 Error (stale S2-01 Active Tasks group post-ship), 5 Warnings (5 WIP commits — already documented as managed exception). Recommended fix: prune stale task group | AgToosa |
+| 2026-05-14 | /agtoosa-spec S2-02/03/04 — Three follow-up specs drafted and approved (foundation already shipped in S2-01, so these are scoped extensions, not net-new). S2-02 (M) enrolled in Sprint 1B active cycle as highest-leverage next pickup. S2-03 and S2-04 remain in Backlog at P0 until S2-02 ships. Stale S2-01 task tree pruned from Active Tasks | AgToosa |
