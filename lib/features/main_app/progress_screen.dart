@@ -4,28 +4,30 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/player_progress.dart';
 import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
+import '../../theme/design_tokens.dart';
+import '../../widgets/achievement_card.dart';
 import '../../widgets/glass_card.dart';
-import '../../widgets/kinetic_background.dart';
-import '../../widgets/kinetic_chip.dart';
-import '../../widgets/kinetic_progress_bar.dart';
-import '../../widgets/kinetic_text.dart' hide KineticProgressBar;
+import '../../widgets/progress_ring.dart';
+import '../../widgets/skill_radar.dart';
+import '../../widgets/stat_pill.dart';
+import '../../widgets/weekly_bars.dart';
 
-// ─── Progress screen — Aetheric Pulse ────────────────────────────────────────
-
+/// Progress screen — XP hero, cognitive radar, weekly activity, achievements.
 class ProgressScreen extends ConsumerWidget {
   const ProgressScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final progressAsync = ref.watch(playerProgressProvider);
-    return KineticBackground(
-      child: progressAsync.when(
-        loading: () => const Center(
-            child: CircularProgressIndicator(color: AethericPulseDark.brandBlue)),
-        error: (e, _) => Center(
-            child: Text('Error', style: Theme.of(context).textTheme.bodyMedium)),
-        data: (progress) => _ProgressBody(progress: progress),
+    return progressAsync.when(
+      loading: () => const Center(
+        child: CircularProgressIndicator(color: AethericPulseDark.brandBlue),
       ),
+      error: (e, _) => Center(
+        child: Text('Error loading progress',
+            style: Theme.of(context).textTheme.bodyMedium),
+      ),
+      data: (progress) => _ProgressBody(progress: progress),
     );
   }
 }
@@ -34,361 +36,343 @@ class _ProgressBody extends StatelessWidget {
   final PlayerProgress progress;
   const _ProgressBody({required this.progress});
 
+  // Derive 6 skill scores from adaptive history + level stars.
+  // These are approximations — the engine doesn't expose per-skill scores yet.
+  List<SkillScore> _deriveSkills() {
+    final history = progress.adaptiveHistory;
+    final base = history.isEmpty
+        ? 50
+        : (history.reduce((a, b) => a + b) / history.length * 20).clamp(0, 100);
+    final totalStars =
+        progress.levelStars.values.fold<int>(0, (a, b) => a + b);
+    final starScore = (totalStars * 1.0).clamp(0, 100).toInt();
+    final blended = ((base + starScore) / 2).toInt();
+    return [
+      SkillScore(name: 'Pattern Recognition', value: blended.toDouble(), color: AP.blueLight),
+      SkillScore(name: 'Working Memory', value: (blended + 8).clamp(0, 100).toDouble(), color: AP.cyan),
+      SkillScore(name: 'Logical Reasoning', value: (blended + 16).clamp(0, 100).toDouble(), color: AP.purple),
+      SkillScore(name: 'Reaction Speed', value: (blended + 24).clamp(0, 100).toDouble(), color: AP.orange),
+      SkillScore(name: 'Spatial Sense', value: (blended - 8).clamp(0, 100).toDouble(), color: AP.emerald),
+      SkillScore(name: 'Focus', value: (blended + 11).clamp(0, 100).toDouble(), color: AP.pink),
+    ];
+  }
+
+  List<int> _deriveWeeklyXp() {
+    final today = DateTime.now();
+    // play history is a list of DateTime — count plays per day, multiply by avg 4 XP
+    final byDay = List<int>.filled(7, 0);
+    for (final d in progress.playHistory) {
+      final diff = today.difference(DateTime(d.year, d.month, d.day)).inDays;
+      if (diff >= 0 && diff < 7) {
+        byDay[6 - diff] += 4; // rough XP estimate per play
+      }
+    }
+    // Override today with real dailyXP if available
+    if (progress.dailyXPDate != null &&
+        DateTime(progress.dailyXPDate!.year, progress.dailyXPDate!.month,
+                progress.dailyXPDate!.day) ==
+            DateTime(today.year, today.month, today.day)) {
+      byDay[6] = progress.dailyXP;
+    }
+    return byDay;
+  }
+
+  List<AchievementData> _buildAchievements() {
+    final unlocked = progress.unlockedAchievements.toSet();
+    final prog = progress.achievementProgress;
+    final defs = [
+      ('novice_mind', 'Novice mind', 'Complete your first puzzle', 1),
+      ('focus_master', 'Focus master', '15 perfect runs', 15),
+      ('memory_marvel', 'Memory marvel', 'Beat Memory Lab level 25', 25),
+      ('logic_legend', 'Logic legend', '30 logic puzzles, no hints', 30),
+      ('daily_spark', 'Daily spark', '7-day streak', 7),
+      ('ultimate_brain', 'Ultimate brain', 'All tracks at level 20+', 23),
+    ];
+    return defs.map((d) {
+      final (id, name, sub, total) = d;
+      return AchievementData(
+        id: id,
+        name: name,
+        subtitle: sub,
+        unlocked: unlocked.contains(id),
+        progress: prog[id] ?? 0,
+        total: total,
+      );
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     final xp = progress.totalXP;
-    final levelXp = xp % 1000;
-    final levelPct = levelXp / 10.0;
     final level = (xp ~/ 1000) + 1;
-    final totalStars = progress.levelStars.values.fold(0, (a, b) => a + b);
+    final levelXp = xp % 1000;
+    final levelPct = levelXp / 10.0; // 0–100
+    final totalStars = progress.levelStars.values.fold<int>(0, (a, b) => a + b);
+    final skills = _deriveSkills();
+    final weekly = _deriveWeeklyXp();
+    final achievements = _buildAchievements();
+    final unlockedCount = achievements.where((a) => a.unlocked).length;
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(
-        AethericPulseDark.spaceLg,
-        AethericPulseDark.spaceLg,
-        AethericPulseDark.spaceLg,
-        AethericPulseDark.spaceXl + 80,
-      ),
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 140),
       children: [
-        // XP Hero
-        _XpHero(xp: xp, levelPct: levelPct, level: level),
-        const SizedBox(height: 16),
-        // Stats chips row
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            KineticChip(
-              label: '${progress.streakCount} day streak',
-              leading: const Icon(Icons.local_fire_department, size: 12,
-                  color: AethericPulseDark.accentOrange),
-            ),
-            KineticChip(
-              label: '$xp XP',
-              color: AethericPulseDark.brandBlue,
-            ),
-            KineticChip(
-              label: '$totalStars stars',
-              leading: const Icon(Icons.military_tech, size: 12,
-                  color: AethericPulseDark.accentCyan),
-            ),
-            KineticChip(
-              label: '${progress.hearts} energy',
-              leading: const Icon(Icons.bolt, size: 12,
-                  color: AethericPulseDark.brandPurple),
-              color: AethericPulseDark.brandPurple,
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        // Cognitive skills
-        _SkillsCard(progress: progress),
-        const SizedBox(height: 16),
-        // Achievements / badges
-        _AchievementsCard(progress: progress),
-      ],
-    );
-  }
-}
-
-// ─── XP Hero ──────────────────────────────────────────────────────────────────
-
-class _XpHero extends StatelessWidget {
-  final int xp;
-  final double levelPct;
-  final int level;
-
-  const _XpHero({required this.xp, required this.levelPct, required this.level});
-
-  @override
-  Widget build(BuildContext context) {
-    return GlassCard(
-      borderRadius: AethericPulseDark.radiusCard,
-      padding: const EdgeInsets.all(AethericPulseDark.spaceLg),
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          // Purple bloom top-right
-          Positioned(
-            top: -40, right: -40,
-            child: Container(
-              width: 180,
-              height: 180,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    AethericPulseDark.brandPurple.withValues(alpha: 0.25),
-                    Colors.transparent,
+        // ── XP Hero ───────────────────────────────────────────────────────
+        GlassCard(
+          borderRadius: 28,
+          padding: const EdgeInsets.all(22),
+          child: Row(
+            children: [
+              ProgressRing(
+                percent: levelPct,
+                size: 132,
+                strokeWidth: 10,
+                centerChild: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ShaderMask(
+                      shaderCallback: (r) => AP.gradPrimary.createShader(r),
+                      child: Text(
+                        '$xp',
+                        style: const TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 28,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                          fontFeatures: [FontFeature.tabularFigures()],
+                          height: 1.0,
+                          letterSpacing: -0.84,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text('TOTAL XP', style: AP.eyebrow()),
                   ],
                 ),
               ),
-            ),
+              const SizedBox(width: 18),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('PILOT RANK', style: AP.eyebrow()),
+                    const SizedBox(height: 2),
+                    Row(
+                      children: [
+                        Text('Lv ',
+                            style: AP.headlineMd()
+                                .copyWith(fontWeight: FontWeight.w800)),
+                        ShaderMask(
+                          shaderCallback: (r) =>
+                              AP.gradPrimary.createShader(r),
+                          child: Text(
+                            '$level',
+                            style: AP.headlineMd().copyWith(
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+                    Text('${1000 - levelXp} XP to level ${level + 1}',
+                        style: const TextStyle(
+                            fontFamily: 'Inter', fontSize: 11, color: AP.fgMeta)),
+                    const SizedBox(height: 10),
+                    Container(
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.06),
+                        borderRadius: BorderRadius.circular(3),
+                      ),
+                      child: FractionallySizedBox(
+                        widthFactor: (levelPct / 100).clamp(0.0, 1.0),
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: AP.gradPrimary,
+                            borderRadius: BorderRadius.circular(3),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AP.blueLight.withValues(alpha: 0.6),
+                                blurRadius: 8,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 6,
+                      children: [
+                        StatPill(
+                          icon: const Icon(Icons.local_fire_department),
+                          label: '${progress.streakCount} day',
+                          tint: StatPillTint.orange,
+                        ),
+                        StatPill(
+                          icon: const Icon(Icons.star),
+                          label: '$totalStars',
+                          tint: StatPillTint.purple,
+                        ),
+                        StatPill(
+                          icon: const Icon(Icons.bolt),
+                          label: '${progress.freeGamesRemaining}',
+                          tint: StatPillTint.amber,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          Column(
+        ),
+        const SizedBox(height: 16),
+
+        // ── Cognitive radar ───────────────────────────────────────────────
+        GlassCard(
+          borderRadius: 24,
+          padding: const EdgeInsets.all(20),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'TOTAL XP',
-                style: AethericPulseDark.label(color: AethericPulseDark.onSurfaceMuted),
-              ),
-              const SizedBox(height: 6),
-              KineticText(
-                _formatXp(xp),
-                style: AethericPulseDark.display(),
-              ),
-              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Level $level · Next',
-                    style: AethericPulseDark.headlineMd(),
-                  ),
-                  Text(
-                    '${levelPct.toStringAsFixed(0)}%',
-                    style: AethericPulseDark.label(color: AethericPulseDark.brandBlue),
+                  Text('Cognitive map',
+                      style: AP.headlineMd()
+                          .copyWith(fontSize: 16, fontWeight: FontWeight.w700)),
+                  Text('7-DAY DELTA', style: AP.eyebrow()),
+                ],
+              ),
+              const SizedBox(height: 14),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SkillRadar(skills: skills),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      children: skills.map((s) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 3),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 8,
+                                height: 8,
+                                decoration: BoxDecoration(
+                                  color: s.color,
+                                  borderRadius: BorderRadius.circular(2),
+                                  boxShadow: [
+                                    BoxShadow(color: s.color, blurRadius: 6),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  s.name,
+                                  style: const TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: 10.5,
+                                    color: AP.fgSecondary,
+                                    height: 1.2,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                '${s.value.toInt()}',
+                                style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w700,
+                                  color: s.color,
+                                  fontFeatures: const [FontFeature.tabularFigures()],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(height: 6),
-              KineticProgressBar(value: levelPct / 100.0, height: 4),
             ],
           ),
-        ],
-      ),
-    );
-  }
+        ),
+        const SizedBox(height: 16),
 
-  String _formatXp(int xp) {
-    if (xp >= 1000) {
-      return '${(xp / 1000).toStringAsFixed(1).replaceAll('.0', '')},${(xp % 1000).toString().padLeft(3, '0')}';
-    }
-    return '$xp';
-  }
-}
-
-// ─── Cognitive skills card ────────────────────────────────────────────────────
-
-class _SkillsCard extends StatelessWidget {
-  final PlayerProgress progress;
-  const _SkillsCard({required this.progress});
-
-  @override
-  Widget build(BuildContext context) {
-    final history = progress.adaptiveHistory;
-    final patternPct = _pctFromHistory(history, 0);
-    final memoryPct = _pctFromHistory(history, 1);
-    final logicPct = _pctFromHistory(history, 2);
-    final speedPct = _pctFromHistory(history, 3);
-
-    return GlassCard(
-      borderRadius: AethericPulseDark.radiusCard,
-      padding: const EdgeInsets.all(AethericPulseDark.spaceLg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+        // ── Weekly bars ───────────────────────────────────────────────────
+        GlassCard(
+          borderRadius: 24,
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(Icons.psychology_outlined,
-                  size: 22, color: AethericPulseDark.accentCyan),
-              const SizedBox(width: 8),
-              Text('Cognitive Skills',
-                  style: Theme.of(context).textTheme.headlineMedium),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('This week',
+                      style: AP.headlineMd()
+                          .copyWith(fontSize: 16, fontWeight: FontWeight.w700)),
+                  Row(
+                    children: [
+                      Text(
+                        '${weekly.fold<int>(0, (a, b) => a + b)}',
+                        style: const TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          color: AP.amber,
+                          fontFeatures: [FontFeature.tabularFigures()],
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      const Text(' XP earned',
+                          style: TextStyle(
+                              fontFamily: 'Inter', fontSize: 11, color: AP.fgMeta)),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              WeeklyBars(dailyXp: weekly),
             ],
           ),
-          const SizedBox(height: 16),
-          _SkillBar(name: 'Pattern Recognition', pct: patternPct,
-              value: patternPct.toStringAsFixed(0)),
-          const SizedBox(height: 14),
-          _SkillBar(name: 'Working Memory', pct: memoryPct,
-              value: memoryPct.toStringAsFixed(0)),
-          const SizedBox(height: 14),
-          _SkillBar(name: 'Logical Reasoning', pct: logicPct,
-              value: logicPct.toStringAsFixed(0)),
-          const SizedBox(height: 14),
-          _SkillBar(name: 'Reaction Speed', pct: speedPct,
-              value: speedPct.toStringAsFixed(0)),
-        ],
-      ),
-    );
-  }
+        ),
+        const SizedBox(height: 16),
 
-  double _pctFromHistory(List<int> history, int offset) {
-    if (history.isEmpty) return 60 + (offset * 8).toDouble();
-    final relevant = history.skip(offset).toList();
-    if (relevant.isEmpty) return 60 + (offset * 8).toDouble();
-    final avg = relevant.reduce((a, b) => a + b) / relevant.length;
-    return (avg / 5 * 100).clamp(0, 100).toDouble();
-  }
-}
-
-class _SkillBar extends StatelessWidget {
-  final String name;
-  final double pct;
-  final String value;
-
-  const _SkillBar({required this.name, required this.pct, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
+        // ── Milestones / achievements ─────────────────────────────────────
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              name.toUpperCase(),
-              style: AethericPulseDark.label(color: AethericPulseDark.onSurfaceMuted),
-            ),
-            Text(
-              value,
-              style: AethericPulseDark.label(color: AethericPulseDark.brandBlue),
-            ),
+            Text('Milestones',
+                style: AP.headlineMd()
+                    .copyWith(fontSize: 18, fontWeight: FontWeight.w700)),
+            Text('$unlockedCount of ${achievements.length} unlocked',
+                style: const TextStyle(
+                    fontFamily: 'Inter', fontSize: 11, color: AP.fgMuted)),
           ],
         ),
-        const SizedBox(height: 6),
-        KineticProgressBar(value: pct / 100.0, height: 3),
+        const SizedBox(height: 8),
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            childAspectRatio: 0.78,
+          ),
+          itemCount: achievements.length,
+          itemBuilder: (_, i) => AchievementCard(a: achievements[i]),
+        ),
       ],
-    );
-  }
-}
-
-// ─── Achievements card ────────────────────────────────────────────────────────
-
-class _AchievementsCard extends StatelessWidget {
-  final PlayerProgress progress;
-  const _AchievementsCard({required this.progress});
-
-  @override
-  Widget build(BuildContext context) {
-    final unlocked = progress.unlockedAchievements;
-
-    final badges = [
-      (
-        img: 'assets/images/badges/novice_mind.png',
-        title: 'Novice Mind',
-        sub: 'Complete your first puzzle',
-        id: 'novice_mind',
-      ),
-      (
-        img: 'assets/images/badges/daily_spark.png',
-        title: 'Daily Spark',
-        sub: 'Play 7 days in a row',
-        id: 'daily_spark',
-      ),
-      (
-        img: 'assets/images/badges/focus_master.png',
-        title: 'Focus Master',
-        sub: 'Earn 25 stars',
-        id: 'focus_master',
-      ),
-      (
-        img: 'assets/images/badges/memory_marvel.png',
-        title: 'Memory Marvel',
-        sub: 'Perfect score on a memory level',
-        id: 'memory_marvel',
-      ),
-      (
-        img: 'assets/images/badges/logic_legend.png',
-        title: 'Logic Legend',
-        sub: 'Complete all logic challenges',
-        id: 'logic_legend',
-      ),
-      (
-        img: 'assets/images/badges/ultimate_brain.png',
-        title: 'Ultimate Brain',
-        sub: 'Reach the top of every track',
-        id: 'ultimate_brain',
-      ),
-    ];
-
-    return GlassCard(
-      borderRadius: AethericPulseDark.radiusCard,
-      padding: const EdgeInsets.all(AethericPulseDark.spaceLg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Achievements',
-              style: Theme.of(context).textTheme.headlineMedium),
-          const SizedBox(height: 8),
-          for (var i = 0; i < badges.length; i++) ...[
-            _AchievementRow(
-              img: badges[i].img,
-              title: badges[i].title,
-              sub: badges[i].sub,
-              unlocked: unlocked.contains(badges[i].id),
-            ),
-            if (i < badges.length - 1)
-              const Divider(height: 1, color: AethericPulseDark.glassBorder),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-class _AchievementRow extends StatelessWidget {
-  final String img;
-  final String title;
-  final String sub;
-  final bool unlocked;
-
-  const _AchievementRow({
-    required this.img,
-    required this.title,
-    required this.sub,
-    required this.unlocked,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        children: [
-          ColorFiltered(
-            colorFilter: unlocked
-                ? const ColorFilter.mode(Colors.transparent, BlendMode.saturation)
-                : const ColorFilter.mode(Colors.grey, BlendMode.saturation),
-            child: Image.asset(img, width: 48, height: 48, fit: BoxFit.contain),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title.toUpperCase(),
-                  style: AethericPulseDark.label(color: AethericPulseDark.onSurface),
-                ),
-                const SizedBox(height: 2),
-                Text(sub,
-                    style: AethericPulseDark.label(
-                        color: AethericPulseDark.onSurfaceMuted)),
-              ],
-            ),
-          ),
-          if (unlocked)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: AethericPulseDark.brandBlue.withValues(alpha: 0.12),
-                border: Border.all(
-                    color: AethericPulseDark.brandBlue.withValues(alpha: 0.30),
-                    width: 1),
-                borderRadius: BorderRadius.circular(AethericPulseDark.radiusPill),
-              ),
-              child: Text(
-                'UNLOCKED',
-                style: AethericPulseDark.label(color: AethericPulseDark.brandBlue),
-              ),
-            )
-          else
-            const Icon(Icons.lock_outline, size: 18,
-                color: AethericPulseDark.onSurfaceMuted),
-        ],
-      ),
     );
   }
 }
