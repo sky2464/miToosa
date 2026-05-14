@@ -242,9 +242,12 @@ class _ProgressBody extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Cognitive map',
-                      style: AP.headlineMd()
-                          .copyWith(fontSize: 16, fontWeight: FontWeight.w700)),
+                  Flexible(
+                    child: Text('Cognitive map',
+                        overflow: TextOverflow.ellipsis,
+                        style: AP.headlineMd()
+                            .copyWith(fontSize: 16, fontWeight: FontWeight.w700)),
+                  ),
                   Text('7-DAY DELTA', style: AP.eyebrow()),
                 ],
               ),

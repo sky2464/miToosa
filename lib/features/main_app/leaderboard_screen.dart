@@ -81,7 +81,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
         const SizedBox(height: 14),
 
         // Podium
-        SizedBox(height: 170, child: _Podium(people: podium)),
+        _Podium(people: podium),
         const SizedBox(height: 14),
 
         // You row pinned
