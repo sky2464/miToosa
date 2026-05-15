@@ -202,6 +202,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-14 | automated-maintenance — linked all 17 Master-Plan tasks to GitHub issues (#5–#21); health check failed (Flutter not installed in agent env, issue #4) | AgToosa |
 | 2026-05-14 | backlog-sync — added BL-20 (#4) for CI/automation Flutter toolchain fix; all 18 open GitHub issues now tracked in Master-Plan | AgToosa |
 | 2026-05-14 | github-sync — updated #4 (BL-20 ref + accurate title); created #22 (S2-02), #23 (S2-03), #24 (S2-04); updated Active Cycle table with issue numbers; no issues closed (none map to completed work) | AgToosa |
+| 2026-05-14 | github-sync — created #26 (BL-17 design_system split), #27 (BL-18 WCAG tap-target), #28 (BL-19 doc sanitization); updated Backlog table with issue numbers; all 28 open issues now tracked (21 existing + 3 today) | AgToosa |
 | 2026-05-14 | /agtoosa-spec S2-01 — Aetheric Pulse UI Redesign specced (14 ACs, 10 Must-priority, STRIDE complete); 33 atomic tasks derived; test plan skeleton: 33 test IDs mapped to 14 ACs | AgToosa |
 | 2026-05-14 | /agtoosa-spec S2-01 — Spec ✅ Approved (2026-05-14 09:30); enrolled in Sprint 1B; estimate XL | AgToosa |
 | 2026-05-14 | /agtoosa-build S2-01 — Build 🏗️ Started: 33 tasks (1 manual). Scope: lib/theme/, lib/widgets/, lib/features/main_app/navigation/progress/leaderboard/settings/gameplay/, assets/images/. Next: Wave 1 (tokens + asset integration) | AgToosa |
