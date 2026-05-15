@@ -5,12 +5,12 @@ import '../../core/content_provider.dart';
 import '../../data/player_progress.dart';
 import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
-import '../../widgets/glass_card.dart';
+import '../../widgets/path_constellation.dart';
 import 'track_detail_screen.dart';
 
-/// Path-map tab — vertical or horizontal scrollable path of levels with
-/// pulsing unlocked nodes. Zooms and centers on the current (highest
-/// unlocked) level on entry via [InteractiveViewer].
+/// Path-map tab — vertical scrollable S-curve constellation of level nodes,
+/// rendered by [PathConstellation]. Scrolls to the current node on first frame.
+/// Supports track switching via chips when multiple tracks are available.
 class WorldMapPathScreen extends ConsumerWidget {
   const WorldMapPathScreen({super.key});
 
@@ -38,425 +38,154 @@ class _PathView extends StatefulWidget {
   State<_PathView> createState() => _PathViewState();
 }
 
-class _PathViewState extends State<_PathView> with TickerProviderStateMixin {
-  final TransformationController _tCtrl = TransformationController();
-  late final AnimationController _pulseController;
-  late final AnimationController _zoomController;
-  Animation<Matrix4>? _zoomAnim;
-  bool _orientationIsVertical = true;
-  bool _didCenterOnCurrent = false;
+class _PathViewState extends State<_PathView> {
+  int _selectedTrackIndex = 0;
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    _pulseController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    )..repeat(reverse: true);
-    _zoomController = AnimationController(
-      vsync: this,
-      duration: AethericPulseDark.durCelebrate,
-    )..addListener(() {
-        if (_zoomAnim != null) _tCtrl.value = _zoomAnim!.value;
-      });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToCurrentNode());
   }
 
   @override
   void dispose() {
-    _pulseController.dispose();
-    _zoomController.dispose();
-    _tCtrl.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
-  int _currentLevelIndexFor(TrackDefinition track) {
-    var highest = 0;
+  TrackDefinition? get _selectedTrack {
+    final tracks = widget.tracks;
+    if (tracks.isEmpty) return null;
+    return tracks[_selectedTrackIndex.clamp(0, tracks.length - 1)];
+  }
+
+  /// Returns the 0-based index of the first unstarred level (= the current level).
+  int _currentLevelIndex(TrackDefinition track) {
     for (int i = 0; i < track.targetLevelCount; i++) {
-      final levelId = '${track.id}_$i';
-      if ((widget.progress.levelStars[levelId] ?? 0) > 0) {
-        highest = i + 1;
-      }
+      if ((widget.progress.levelStars['${track.id}_$i'] ?? 0) == 0) return i;
     }
-    return highest.clamp(0, track.targetLevelCount - 1);
+    return (track.targetLevelCount - 1).clamp(0, track.targetLevelCount - 1);
   }
 
-  void _animateTo(Matrix4 target) {
-    _zoomAnim = Matrix4Tween(begin: _tCtrl.value, end: target).animate(
-      CurvedAnimation(parent: _zoomController, curve: AethericPulseDark.easeOut),
-    );
-    _zoomController.forward(from: 0);
+  /// Maps per-track levelStars into a [PathLevel] list for [PathConstellation].
+  List<PathLevel> _buildLevels(TrackDefinition track) {
+    final currentIdx = _currentLevelIndex(track);
+    return [
+      for (int i = 0; i < track.targetLevelCount; i++)
+        PathLevel(
+          n: i + 1,
+          state: (widget.progress.levelStars['${track.id}_$i'] ?? 0) > 0
+              ? PathNodeState.done
+              : i == currentIdx
+                  ? PathNodeState.current
+                  : PathNodeState.locked,
+          type: (i + 1) % 5 == 0 ? PathNodeType.boss : PathNodeType.regular,
+        ),
+    ];
   }
 
-  Matrix4 _matrixCenteredOn(Offset nodeCenter, Size viewportSize) {
-    const targetScale = 1.4;
-    final dx = viewportSize.width / 2 - nodeCenter.dx * targetScale;
-    final dy = viewportSize.height / 2 - nodeCenter.dy * targetScale;
-    return Matrix4.identity()
-      ..translateByDouble(dx, dy, 0, 1)
-      ..scaleByDouble(targetScale, targetScale, 1, 1);
+  void _scrollToCurrentNode() {
+    final track = _selectedTrack;
+    if (track == null || !_scrollController.hasClients) return;
+    try {
+      const rowHeight = 84.0;
+      final idx = _currentLevelIndex(track);
+      final targetY = idx * rowHeight + 40.0;
+      final maxExtent = _scrollController.position.maxScrollExtent;
+      final viewportHeight = _scrollController.position.viewportDimension;
+      final offset = (targetY - viewportHeight / 2).clamp(0.0, maxExtent);
+      _scrollController.animateTo(
+        offset,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeOut,
+      );
+    } catch (_) {
+      // Scroll position may not be ready yet — will center on next interaction.
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    _orientationIsVertical =
-        MediaQuery.of(context).orientation == Orientation.portrait;
     final tracks = widget.tracks.take(6).toList();
+    final selectedTrack = _selectedTrack;
+    final levels =
+        selectedTrack != null ? _buildLevels(selectedTrack) : <PathLevel>[];
 
-    return LayoutBuilder(builder: (context, constraints) {
-      final viewport = Size(constraints.maxWidth, constraints.maxHeight);
-      final focusTrack = tracks.isNotEmpty ? tracks.first : null;
-      final currentIndex =
-          focusTrack != null ? _currentLevelIndexFor(focusTrack) : 0;
-
-      // Lay out nodes along a zig-zag path. Spacing depends on orientation.
-      const nodeDiameter = 72.0;
-      const spacing = 120.0;
-      final totalCount =
-          tracks.fold<int>(0, (sum, t) => sum + t.targetLevelCount);
-      final pathLengthAxis = spacing * totalCount + spacing;
-      final crossAxis = _orientationIsVertical
-          ? constraints.maxWidth
-          : constraints.maxHeight;
-      final contentWidth =
-          _orientationIsVertical ? crossAxis : pathLengthAxis;
-      final contentHeight =
-          _orientationIsVertical ? pathLengthAxis : crossAxis;
-
-      // Post-frame: zoom to current node once we know its position.
-      if (!_didCenterOnCurrent && focusTrack != null) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!mounted) return;
-          final nodeCenter = _positionForIndex(
-            trackIndex: 0,
-            levelIndex: currentIndex,
-            spacing: spacing,
-            crossAxis: crossAxis,
-            vertical: _orientationIsVertical,
-            nodeDiameter: nodeDiameter,
-          );
-          _animateTo(_matrixCenteredOn(nodeCenter, viewport));
-          _didCenterOnCurrent = true;
-        });
-      }
-
-      return Stack(
-        children: [
-          InteractiveViewer(
-            transformationController: _tCtrl,
-            minScale: 0.5,
-            maxScale: 2.5,
-            boundaryMargin: const EdgeInsets.all(400),
-            constrained: false,
-            child: SizedBox(
-              width: contentWidth,
-              height: contentHeight,
-              child: Stack(
-                children: [
-                  // Connector line under everything (gradient adapts to brightness).
-                  CustomPaint(
-                    size: Size(contentWidth, contentHeight),
-                    painter: _PathLinePainter(
-                      spacing: spacing,
-                      crossAxis: crossAxis,
-                      totalCount: totalCount,
-                      vertical: _orientationIsVertical,
-                      nodeDiameter: nodeDiameter,
-                      brightness: Theme.of(context).brightness,
-                    ),
+    return Column(
+      children: [
+        // Track selector chips — shown only when there are multiple tracks.
+        if (tracks.length > 1)
+          _TrackChips(
+            tracks: tracks,
+            selectedIndex: _selectedTrackIndex,
+            onSelect: (i) {
+              setState(() => _selectedTrackIndex = i);
+              WidgetsBinding.instance
+                  .addPostFrameCallback((_) => _scrollToCurrentNode());
+            },
+          ),
+        // PathConstellation in a scrollable view.
+        Expanded(
+          child: levels.isEmpty
+              ? Center(
+                  child: Text(
+                    'No levels yet',
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  for (int t = 0; t < tracks.length; t++)
-                    ..._buildNodesForTrack(
-                      track: tracks[t],
-                      trackIndex: t,
-                      priorCount:
-                          tracks.take(t).fold<int>(0, (s, x) => s + x.targetLevelCount),
-                      spacing: spacing,
-                      crossAxis: crossAxis,
-                      nodeDiameter: nodeDiameter,
-                      currentLevelIndex: t == 0 ? currentIndex : -1,
-                    ),
-                ],
+                )
+              : SingleChildScrollView(
+                  controller: _scrollController,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: PathConstellation(
+                    levels: levels,
+                    onTapLevel: selectedTrack != null
+                        ? (_) => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    TrackDetailScreen(track: selectedTrack),
+                              ),
+                            )
+                        : null,
+                  ),
+                ),
+        ),
+      ],
+    );
+  }
+}
+
+class _TrackChips extends StatelessWidget {
+  final List<TrackDefinition> tracks;
+  final int selectedIndex;
+  final void Function(int) onSelect;
+
+  const _TrackChips({
+    required this.tracks,
+    required this.selectedIndex,
+    required this.onSelect,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        children: [
+          for (int i = 0; i < tracks.length; i++)
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: ChoiceChip(
+                label: Text(tracks[i].name),
+                selected: selectedIndex == i,
+                onSelected: (_) => onSelect(i),
               ),
             ),
-          ),
-          // Orientation toggle (floating) — bottom-right.
-          Positioned(
-          right: AethericPulseDark.spaceLg,
-          bottom: AethericPulseDark.spaceLg,
-            child: _OrientationToggle(
-              isVertical: _orientationIsVertical,
-              onTap: () {
-                setState(() {
-                  _orientationIsVertical = !_orientationIsVertical;
-                  _didCenterOnCurrent = false; // re-center in new orientation
-                  _tCtrl.value = Matrix4.identity();
-                });
-              },
-            ),
-          ),
-        ],
-      );
-    });
-  }
-
-  Offset _positionForIndex({
-    required int trackIndex,
-    required int levelIndex,
-    required double spacing,
-    required double crossAxis,
-    required bool vertical,
-    required double nodeDiameter,
-  }) {
-    final axisPos = spacing * (levelIndex + 1);
-    final zig = (levelIndex.isEven ? 0.18 : 0.82) * crossAxis;
-    if (vertical) {
-      return Offset(zig, axisPos);
-    }
-    return Offset(axisPos, zig);
-  }
-
-  List<Widget> _buildNodesForTrack({
-    required TrackDefinition track,
-    required int trackIndex,
-    required int priorCount,
-    required double spacing,
-    required double crossAxis,
-    required double nodeDiameter,
-    required int currentLevelIndex,
-  }) {
-    final widgets = <Widget>[];
-    for (int i = 0; i < track.targetLevelCount; i++) {
-      final overallIndex = priorCount + i;
-      final pos = _positionForIndex(
-        trackIndex: trackIndex,
-        levelIndex: overallIndex,
-        spacing: spacing,
-        crossAxis: crossAxis,
-        vertical: _orientationIsVertical,
-        nodeDiameter: nodeDiameter,
-      );
-      final levelId = '${track.id}_$i';
-      final stars = widget.progress.levelStars[levelId] ?? 0;
-      final isUnlocked = i == 0 ||
-          (widget.progress.levelStars['${track.id}_${i - 1}'] ?? 0) > 0;
-      final isCurrent = i == currentLevelIndex;
-      widgets.add(Positioned(
-        left: pos.dx - nodeDiameter / 2,
-        top: pos.dy - nodeDiameter / 2,
-        child: _LevelNode(
-          diameter: nodeDiameter,
-          label: '${i + 1}',
-          stars: stars,
-          unlocked: isUnlocked,
-          current: isCurrent,
-          pulseController: _pulseController,
-          onTap: isUnlocked
-              ? () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => TrackDetailScreen(track: track),
-                    ),
-                  );
-                }
-              : null,
-        ),
-      ));
-    }
-    return widgets;
-  }
-}
-
-class _PathLinePainter extends CustomPainter {
-  final double spacing;
-  final double crossAxis;
-  final int totalCount;
-  final bool vertical;
-  final double nodeDiameter;
-  final Brightness brightness;
-
-  _PathLinePainter({
-    required this.spacing,
-    required this.crossAxis,
-    required this.totalCount,
-    required this.vertical,
-    required this.nodeDiameter,
-    required this.brightness,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (totalCount == 0) return;
-    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
-    final gradient = brightness == Brightness.dark
-        ? AethericPulseDark.gradPrimary
-        : AethericPulseLight.gradient;
-    final paint = Paint()
-      ..shader = gradient.createShader(rect)
-      ..strokeWidth = 6
-      ..strokeCap = StrokeCap.round
-      ..style = PaintingStyle.stroke;
-    final path = Path();
-    for (int i = 0; i < totalCount; i++) {
-      final axisPos = spacing * (i + 1);
-      final zig = (i.isEven ? 0.18 : 0.82) * crossAxis;
-      final p = vertical ? Offset(zig, axisPos) : Offset(axisPos, zig);
-      if (i == 0) {
-        path.moveTo(p.dx, p.dy);
-      } else {
-        path.lineTo(p.dx, p.dy);
-      }
-    }
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant _PathLinePainter old) =>
-      old.spacing != spacing ||
-      old.crossAxis != crossAxis ||
-      old.totalCount != totalCount ||
-      old.vertical != vertical ||
-      old.brightness != brightness;
-}
-
-class _LevelNode extends StatelessWidget {
-  final double diameter;
-  final String label;
-  final int stars;
-  final bool unlocked;
-  final bool current;
-  final AnimationController pulseController;
-  final VoidCallback? onTap;
-
-  const _LevelNode({
-    required this.diameter,
-    required this.label,
-    required this.stars,
-    required this.unlocked,
-    required this.current,
-    required this.pulseController,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final lockedFill = isDark
-        ? AethericPulseDark.gradLocked
-        : const LinearGradient(
-            colors: [
-              AethericPulseLight.lightSurfaceContainer,
-              AethericPulseLight.lightSurfaceContainerHigh,
-            ],
-          );
-    final fill = unlocked
-        ? (isDark ? AethericPulseDark.gradPrimary : AethericPulseLight.gradient)
-        : lockedFill;
-    final borderColor = unlocked
-        ? (isDark
-            ? AethericPulseDark.onSurface.withValues(alpha: 0.7)
-            : Colors.white.withValues(alpha: 0.9))
-        : (isDark ? AethericPulseDark.glassBorder : AethericPulseLight.glassBorderDimLight);
-    final labelColor = unlocked
-        ? Colors.white
-        : (isDark
-            ? AethericPulseDark.onSurface.withValues(alpha: 0.38)
-            : AethericPulseLight.lightOnSurface.withValues(alpha: 0.38));
-    final sem = stars > 0
-        ? 'Level $label completed with $stars stars'
-        : unlocked
-            ? 'Level $label, unlocked'
-            : 'Level $label, locked';
-    final node = Container(
-      width: diameter,
-      height: diameter,
-      decoration: BoxDecoration(
-        gradient: fill,
-        shape: BoxShape.circle,
-        boxShadow: unlocked
-            ? (isDark ? AethericPulseDark.blueGlow : AethericPulseLight.shadowSoftBlue)
-            : null,
-        border: Border.all(color: borderColor, width: 2),
-      ),
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            label,
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.w700,
-              color: labelColor,
-              letterSpacing: 1.2,
-            ),
-          ),
-          if (stars > 0)
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                for (int i = 0; i < stars.clamp(0, 3); i++)
-                  const Icon(Icons.star_rounded, color: Colors.amber, size: 10),
-              ],
-            ),
         ],
       ),
     );
-
-    Widget pulsed = node;
-    if (unlocked) {
-      pulsed = ScaleTransition(
-        scale: Tween<double>(begin: 1.0, end: current ? 1.08 : 1.03).animate(
-          CurvedAnimation(
-            parent: pulseController,
-            curve: AethericPulseDark.easeSnappy,
-          ),
-        ),
-        child: node,
-      );
-    }
-
-    return Semantics(
-      button: onTap != null,
-      enabled: onTap != null,
-      label: sem,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(
-          minWidth: AethericPulseDark.minTapTarget,
-          minHeight: AethericPulseDark.minTapTarget,
-        ),
-        child: GestureDetector(
-          onTap: onTap,
-          behavior: HitTestBehavior.opaque,
-          child: pulsed,
-        ),
-      ),
-    );
   }
 }
 
-class _OrientationToggle extends StatelessWidget {
-  final bool isVertical;
-  final VoidCallback onTap;
-  const _OrientationToggle({required this.isVertical, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    final label = isVertical ? 'Switch to horizontal layout' : 'Switch to vertical layout';
-    return Semantics(
-      button: true,
-      label: label,
-      child: GestureDetector(
-        onTap: onTap,
-        child: GlassCard(
-          borderRadius: AethericPulseDark.radiusCard,
-          padding: const EdgeInsets.all(12),
-          child: Icon(
-            isVertical ? Icons.view_week_rounded : Icons.view_stream_rounded,
-            color: Theme.of(context).colorScheme.primary,
-            size: 24,
-          ),
-        ),
-      ),
-    );
-  }
-}

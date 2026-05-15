@@ -51,7 +51,7 @@ void main() {
 
     test('findAvailablePort throws when no ports available', () async {
       // Use a range of reserved ports that are likely in use
-      expect(
+      await expectLater(
         () async {
           // Ports 1-10 are typically reserved
           await LocalNetworkInfo.findAvailablePort(

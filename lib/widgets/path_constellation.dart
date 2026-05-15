@@ -15,14 +15,19 @@ class PathLevel {
 
 /// Vertical S-curve constellation of level nodes. Dashed connections in muted
 /// gradient; solid path through completed levels with blue glow.
+///
+/// [onTapLevel] is called with the 0-based index of the tapped node.
+/// Only done and current nodes are tappable; locked nodes receive no callback.
 class PathConstellation extends StatelessWidget {
   final List<PathLevel> levels;
   final double rowHeight;
+  final void Function(int levelIndex)? onTapLevel;
 
   const PathConstellation({
     super.key,
     required this.levels,
     this.rowHeight = 84,
+    this.onTapLevel,
   });
 
   @override
@@ -63,7 +68,12 @@ class PathConstellation extends StatelessWidget {
               Positioned(
                 left: positions[i].dx - _nodeSize(levels[i]) / 2,
                 top: positions[i].dy - _nodeSize(levels[i]) / 2,
-                child: _PathNodeView(level: levels[i]),
+                child: _PathNodeView(
+                  level: levels[i],
+                  onTap: levels[i].state != PathNodeState.locked && onTapLevel != null
+                      ? () => onTapLevel!(i)
+                      : null,
+                ),
               ),
           ],
         ),
@@ -154,7 +164,8 @@ class _PathLinePainter extends CustomPainter {
 
 class _PathNodeView extends StatelessWidget {
   final PathLevel level;
-  const _PathNodeView({required this.level});
+  final VoidCallback? onTap;
+  const _PathNodeView({required this.level, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +174,13 @@ class _PathNodeView extends StatelessWidget {
 
     final (gradient, borderColor, glowColor) = _stateColors();
 
-    return SizedBox(
+    final semanticsLabel = switch (level.state) {
+      PathNodeState.done => 'Level ${level.n} completed',
+      PathNodeState.current => 'Level ${level.n}, current',
+      PathNodeState.locked => 'Level ${level.n}, locked',
+    };
+
+    final node = SizedBox(
       width: size,
       height: size + (level.state == PathNodeState.current ? 28 : 0),
       child: Stack(
@@ -250,6 +267,17 @@ class _PathNodeView extends StatelessWidget {
               ),
             ),
         ],
+      ),
+    );
+
+    return Semantics(
+      button: onTap != null,
+      enabled: onTap != null,
+      label: semanticsLabel,
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: node,
       ),
     );
   }
