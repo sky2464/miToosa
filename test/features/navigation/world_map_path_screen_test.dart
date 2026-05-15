@@ -278,6 +278,111 @@ void main() {
               'guards textTheme.headlineMedium?.copyWith(...) from Phase 2');
     });
   });
+
+  // S2-02 task 2.1 — all three node states have correct Semantics labels
+  group('WorldMapPathScreen — node states (S2-02 2.1)', () {
+    testWidgets(
+        'done/current/locked nodes expose correct Semantics labels from mocked progress',
+        (tester) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
+      // Level 0 = done (3 stars), Level 1 = current (first unstarred), Level 2 = locked
+      final progress = _freshWithOneCompletedLevel();
+      await tester.pumpWidget(_buildScreen(progress: progress));
+      await tester.pump();
+
+      // Done state: PathConstellation labels done nodes as "Level N completed"
+      expect(
+        find.bySemanticsLabel(RegExp(r'Level 1 completed', caseSensitive: false)),
+        findsAtLeastNWidgets(1),
+        reason: 'Level 1 (index 0) is done — label must say "Level 1 completed"',
+      );
+      // Current state: labelled "Level N, current"
+      expect(
+        find.bySemanticsLabel(RegExp(r'Level 2, current', caseSensitive: false)),
+        findsAtLeastNWidgets(1),
+        reason: 'Level 2 (index 1) is current — label must say "Level 2, current"',
+      );
+      // Locked state: labelled "Level N, locked"
+      expect(
+        find.bySemanticsLabel(RegExp(r'Level 3, locked', caseSensitive: false)),
+        findsAtLeastNWidgets(1),
+        reason: 'Level 3 (index 2) is locked — label must say "Level 3, locked"',
+      );
+    });
+  });
+
+  // S2-02 task 2.2 — track switching re-renders constellation
+  group('WorldMapPathScreen — track switching (S2-02 2.2)', () {
+    testWidgets('switching to a second track shows that track\'s nodes',
+        (tester) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
+      // Two tracks — second track has id 'track_b' with 2 levels.
+      // Set BEFORE building so WorldMapPathScreen reads both tracks.
+      ContentProvider().tracks = [
+        ..._fakeTracks(),
+        TrackDefinition(
+          id: 'track_b',
+          name: 'Track B',
+          subtitle: 'B subtitle',
+          rule: PuzzleRule.oddOneOut,
+          icon: '🅱️',
+          targetLevelCount: 2,
+          category: 'Logic',
+        ),
+      ];
+
+      // Progress has no stars for track_b — both its levels should be current/locked.
+      final progress = _freshWithOneCompletedLevel();
+
+      // Build widget directly (not via _buildScreen, which would reset to 1 track).
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            playerProgressProvider.overrideWith((ref) async => progress),
+          ],
+          child: MaterialApp(
+            themeMode: ThemeMode.dark,
+            theme: AethericPulseLight.lightTheme,
+            darkTheme: AethericPulseDark.themeData,
+            home: const Scaffold(body: WorldMapPathScreen()),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      // The first track (track_test) has "Level 1 completed" visible.
+      expect(
+        find.bySemanticsLabel(RegExp(r'Level 1 completed', caseSensitive: false)),
+        findsAtLeastNWidgets(1),
+        reason: 'Track Test Level 1 should be shown as completed initially',
+      );
+
+      // Tap the "Track B" chip to switch tracks.
+      expect(find.text('Track B'), findsOneWidget,
+          reason: 'Track B chip should be visible when 2 tracks are loaded');
+      await tester.tap(find.text('Track B'));
+      await tester.pump();
+
+      // After switching, Track B's Level 1 (index 0) should be current.
+      expect(
+        find.bySemanticsLabel(RegExp(r'Level 1, current', caseSensitive: false)),
+        findsAtLeastNWidgets(1),
+        reason: 'Track B Level 1 should be "current" (no stars) after switching',
+      );
+    });
+  });
 }
 
 // ── Test helpers ─────────────────────────────────────────────────────────────
