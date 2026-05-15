@@ -10,6 +10,8 @@ import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
 import '../../widgets/glass_card.dart';
 import '../../widgets/kinetic_background.dart';
+import '../../widgets/settings_row.dart';
+import '../../widgets/toggle_switch.dart';
 
 // ─── Settings screen — Aetheric Pulse ────────────────────────────────────────
 
@@ -129,25 +131,25 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
         // Account
         const _SectionLabel('Account'),
         const SizedBox(height: 8),
-        const GlassCard(
+        GlassCard(
           borderRadius: AethericPulseDark.radiusCard,
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
               vertical: 2, horizontal: AethericPulseDark.spaceMd),
           child: Column(
             children: [
-              _SettingRow(
-                icon: Icons.share_outlined,
+              SettingsRow(
+                icon: const Icon(Icons.share_outlined),
                 title: 'Share miToosa',
                 subtitle: '+40 sessions per invite',
-                right: Icon(Icons.chevron_right,
+                trailing: const Icon(Icons.chevron_right,
                     size: 22, color: AethericPulseDark.onSurfaceMuted),
               ),
-              Divider(height: 1, color: AethericPulseDark.glassBorder),
-              _SettingRow(
-                icon: Icons.workspace_premium_outlined,
+              const Divider(height: 1, color: AethericPulseDark.glassBorder),
+              SettingsRow(
+                icon: const Icon(Icons.workspace_premium_outlined),
                 title: 'Go VIP',
                 subtitle: 'Ad-free + 10 bonus sessions / day',
-                right: _PurpleChip(label: 'Upgrade'),
+                trailing: const _PurpleChip(label: 'Upgrade'),
               ),
             ],
           ),
@@ -163,10 +165,10 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
               vertical: 2, horizontal: AethericPulseDark.spaceMd),
           child: Column(
             children: [
-              _SettingRow(
-                icon: Icons.volume_up_outlined,
+              SettingsRow(
+                icon: const Icon(Icons.volume_up_outlined),
                 title: 'Sound FX',
-                right: _KineticToggle(
+                trailing: ToggleSwitch(
                   value: _soundEffectsEnabled,
                   onChanged: (v) {
                     AudioService().enabled = v;
@@ -175,11 +177,11 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                 ),
               ),
               const Divider(height: 1, color: AethericPulseDark.glassBorder),
-              _SettingRow(
-                icon: Icons.music_note_outlined,
+              SettingsRow(
+                icon: const Icon(Icons.music_note_outlined),
                 title: 'Music',
                 subtitle: 'Background music during gameplay',
-                right: _KineticToggle(
+                trailing: ToggleSwitch(
                   value: MusicService().enabled,
                   onChanged: (v) {
                     MusicService().enabled = v;
@@ -188,20 +190,20 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                 ),
               ),
               const Divider(height: 1, color: AethericPulseDark.glassBorder),
-              _SettingRow(
-                icon: Icons.notifications_outlined,
+              SettingsRow(
+                icon: const Icon(Icons.notifications_outlined),
                 title: 'Daily reminder',
                 subtitle: 'Nudges if your streak is at risk',
-                right: _KineticToggle(
+                trailing: ToggleSwitch(
                   value: true,
                   onChanged: (_) {},
                 ),
               ),
               const Divider(height: 1, color: AethericPulseDark.glassBorder),
-              _SettingRow(
-                icon: Icons.vibration_outlined,
+              SettingsRow(
+                icon: const Icon(Icons.vibration_outlined),
                 title: 'Haptics',
-                right: _KineticToggle(
+                trailing: ToggleSwitch(
                   value: HapticsService().enabled,
                   onChanged: (v) {
                     HapticsService().enabled = v;
@@ -210,11 +212,11 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                 ),
               ),
               const Divider(height: 1, color: AethericPulseDark.glassBorder),
-              _SettingRow(
-                icon: Icons.tune_outlined,
+              SettingsRow(
+                icon: const Icon(Icons.tune_outlined),
                 title: 'Adaptive Difficulty',
                 subtitle: 'Adjusts puzzles to your skill level',
-                right: _KineticToggle(
+                trailing: ToggleSwitch(
                   value: widget.progress.difficultyMode ==
                       DifficultyMode.adaptive,
                   onChanged: (enabled) async {
@@ -229,11 +231,11 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                 ),
               ),
               const Divider(height: 1, color: AethericPulseDark.glassBorder),
-              _SettingRow(
-                icon: Icons.contrast_rounded,
+              SettingsRow(
+                icon: const Icon(Icons.contrast_rounded),
                 title: 'Appearance',
                 subtitle: 'System follows iOS; pick Light or Dark to override',
-                right: _ThemeModeSelector(
+                trailing: _ThemeModeSelector(
                   value: widget.progress.themeModeOverride,
                   onChanged: (v) async {
                     widget.progress.themeModeOverride = v;
@@ -250,15 +252,15 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
         const SizedBox(height: 16),
 
         // Danger zone
-        const GlassCard(
+        GlassCard(
           borderRadius: AethericPulseDark.radiusCard,
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
               vertical: 2, horizontal: AethericPulseDark.spaceMd),
-          child: _SettingRow(
-            icon: Icons.restart_alt_outlined,
+          child: SettingsRow(
+            icon: const Icon(Icons.restart_alt_outlined),
             title: 'Reset progress',
             subtitle: 'Clear all credits and stats',
-            right: Icon(Icons.chevron_right,
+            trailing: const Icon(Icons.chevron_right,
                 size: 22, color: AethericPulseDark.onSurfaceMuted),
           ),
         ),
@@ -288,89 +290,6 @@ class _SectionLabel extends StatelessWidget {
       child: Text(
         label.toUpperCase(),
         style: AethericPulseDark.label(color: AethericPulseDark.onSurfaceMuted),
-      ),
-    );
-  }
-}
-
-// ─── Setting row ──────────────────────────────────────────────────────────────
-
-class _SettingRow extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String? subtitle;
-  final Widget right;
-
-  const _SettingRow({
-    required this.icon,
-    required this.title,
-    this.subtitle,
-    required this.right,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 14),
-      child: Row(
-        children: [
-          Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(
-              color: AethericPulseDark.glassFill,
-              borderRadius: BorderRadius.circular(AethericPulseDark.radiusWell),
-              border:
-                  Border.all(color: AethericPulseDark.glassBorder, width: 1),
-            ),
-            child: Center(
-                child: Icon(icon,
-                    size: 20, color: AethericPulseDark.brandBlue)),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AethericPulseDark.bodyMd(color: AethericPulseDark.onSurface),
-                ),
-                if (subtitle != null) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle!,
-                    style: AethericPulseDark.label(color: AethericPulseDark.onSurfaceMuted),
-                  ),
-                ],
-              ],
-            ),
-          ),
-          right,
-        ],
-      ),
-    );
-  }
-}
-
-// ─── Kinetic toggle ───────────────────────────────────────────────────────────
-
-class _KineticToggle extends StatelessWidget {
-  final bool value;
-  final ValueChanged<bool> onChanged;
-
-  const _KineticToggle({required this.value, required this.onChanged});
-
-  @override
-  Widget build(BuildContext context) {
-    // Material ancestor required by Switch when screen has no Scaffold.
-    return Material(
-      type: MaterialType.transparency,
-      child: Switch(
-        value: value,
-        onChanged: onChanged,
-        activeTrackColor: AethericPulseDark.brandBlue,
-        activeThumbColor: Colors.white,
       ),
     );
   }

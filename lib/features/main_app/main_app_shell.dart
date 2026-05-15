@@ -11,6 +11,7 @@ import 'leaderboard_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../data/player_progress_provider.dart';
 import '../../data/telemetry_provider.dart';
+import '../../data/telemetry_session_controller.dart';
 import '../../theme/design_system.dart';
 import '../../widgets/app_header.dart';
 import '../../widgets/atmosphere.dart';
@@ -26,6 +27,7 @@ class MainAppShell extends ConsumerStatefulWidget {
 class _MainAppShellState extends ConsumerState<MainAppShell> {
   int _selectedIndex = 0;
   late final AppLifecycleListener _lifecycleListener;
+  late final TelemetrySessionController _telemetryController;
 
   static const _pages = [
     WorldMapScreen(),
@@ -38,6 +40,7 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
   @override
   void initState() {
     super.initState();
+    _telemetryController = ref.read(telemetrySessionControllerProvider);
     _lifecycleListener = AppLifecycleListener(
       onPause: _endTelemetrySession,
       onResume: _startTelemetrySession,
@@ -47,11 +50,11 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
   }
 
   Future<void> _startTelemetrySession() async {
-    await ref.read(telemetrySessionControllerProvider).startSession();
+    await _telemetryController.startSession();
   }
 
   Future<void> _endTelemetrySession() async {
-    await ref.read(telemetrySessionControllerProvider).endSession();
+    await _telemetryController.endSession();
   }
 
   @override

@@ -5,12 +5,14 @@ import '../../core/content_provider.dart';
 import '../../data/player_progress.dart';
 import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
+import '../../widgets/featured_track.dart';
 import '../../widgets/glass_card.dart';
 import '../../widgets/kinetic_background.dart';
-import '../../widgets/kinetic_chip.dart';
 import '../../widgets/kinetic_progress_bar.dart';
+import '../../widgets/primary_button.dart';
 import '../../widgets/progress_ring.dart';
 import '../../widgets/stat_pill.dart';
+import '../../widgets/track_tile.dart';
 import 'track_detail_screen.dart';
 import '../local_play/local_play_mode_screen.dart';
 
@@ -37,18 +39,35 @@ class WorldMapScreen extends ConsumerWidget {
   }
 }
 
-class _TracksBody extends StatelessWidget {
+class _TracksBody extends StatefulWidget {
   final PlayerProgress progress;
   final List<TrackDefinition> tracks;
 
   const _TracksBody({required this.progress, required this.tracks});
 
   @override
+  State<_TracksBody> createState() => _TracksBodyState();
+}
+
+class _TracksBodyState extends State<_TracksBody> {
+  String _filter = 'all';
+
+  List<TrackDefinition> get _filtered {
+    if (_filter == 'all') return widget.tracks;
+    return widget.tracks
+        .where((t) => t.category.toLowerCase() == _filter)
+        .toList();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final screenTracks = tracks.take(6).toList();
-    final gamesPlayed = 25 - progress.freeGamesRemaining;
-    final dailyGoalPct =
-        (gamesPlayed / 25 * 100).clamp(0, 100).toDouble();
+    final progress = widget.progress;
+    final gamesPlayed = (25 - progress.freeGamesRemaining).clamp(0, 25);
+    final gamesInSession = gamesPlayed.clamp(0, 5);
+
+    final filtered = _filtered;
+    final featured = filtered.isNotEmpty ? filtered.first : null;
+    final rest = filtered.length > 1 ? filtered.sublist(1) : <TrackDefinition>[];
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(
@@ -58,13 +77,13 @@ class _TracksBody extends StatelessWidget {
         AethericPulseDark.spaceXl + 80,
       ),
       children: [
-        _DailyTrainingHero(
-          dailyGoalPct: dailyGoalPct,
-          onStart: screenTracks.isNotEmpty
+        // AC-001: Daily Spark hero
+        _DailySparkHero(
+          gamesComplete: gamesInSession,
+          onStart: featured != null
               ? () => Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) =>
-                          TrackDetailScreen(track: screenTracks.first),
+                      builder: (_) => TrackDetailScreen(track: featured),
                     ),
                   )
               : null,
@@ -105,17 +124,46 @@ class _TracksBody extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        ...screenTracks.map((t) => Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: _TrackCard(
-                track: t,
-                onPlay: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => TrackDetailScreen(track: t),
-                  ),
+        // AC-002: Filter chips
+        _FilterChips(
+          selected: _filter,
+          onSelected: (f) => setState(() => _filter = f),
+        ),
+        const SizedBox(height: 16),
+        // AC-003: Featured track
+        if (featured != null) ...[FeaturedTrack(
+              track: featured,
+              progress: progress,
+              onPlay: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => TrackDetailScreen(track: featured),
                 ),
               ),
-            )),
+            ),
+          const SizedBox(height: 12),
+        ],
+        // AC-003: 2-col TrackTile grid
+        if (rest.isNotEmpty)
+          GridView.count(
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 12,
+            childAspectRatio: 1.05,
+            children: rest
+                .map((t) => TrackTile(
+                      track: t,
+                      progress: progress,
+                      onPlay: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => TrackDetailScreen(track: t),
+                        ),
+                      ),
+                    ))
+                .toList(),
+          ),
+        const SizedBox(height: 16),
         _StatsCard(progress: progress),
         const SizedBox(height: 12),
         _LocalPlayCard(
@@ -128,16 +176,24 @@ class _TracksBody extends StatelessWidget {
   }
 }
 
-// ─── Daily Training Hero ───────────────────────────────────────────────────────
+// ─── Daily Spark Hero (AC-001) ────────────────────────────────────────────────
 
-class _DailyTrainingHero extends StatelessWidget {
-  final double dailyGoalPct;
+class _DailySparkHero extends StatelessWidget {
+  final int gamesComplete; // 0–5
   final VoidCallback? onStart;
 
-  const _DailyTrainingHero({required this.dailyGoalPct, this.onStart});
+  const _DailySparkHero({required this.gamesComplete, this.onStart});
 
   @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
+    final tomorrow = DateTime(now.year, now.month, now.day + 1);
+    final remaining = tomorrow.difference(now);
+    final h = remaining.inHours;
+    final m = remaining.inMinutes % 60;
+
+    const skillLabels = ['Pattern', 'Logic', 'Memory', 'Speed', 'Spatial'];
+
     return GlassCard(
       borderRadius: AethericPulseDark.radiusCard,
       padding: const EdgeInsets.all(AethericPulseDark.spaceLg),
@@ -146,7 +202,8 @@ class _DailyTrainingHero extends StatelessWidget {
         children: [
           // Brand-blue glow bloom top-right
           Positioned(
-            top: -60, right: -60,
+            top: -60,
+            right: -60,
             child: Container(
               width: 220,
               height: 220,
@@ -164,41 +221,98 @@ class _DailyTrainingHero extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Eyebrow timer
               Text(
-                'Daily\nTraining',
+                'Daily spark · resets in ${h}h ${m}m',
+                style: AethericPulseDark.label(
+                    color: AethericPulseDark.brandBlue),
+              ),
+              const SizedBox(height: 8),
+              // Headline
+              Text(
+                "Today's session",
                 style: AethericPulseDark.display(),
               ),
-              const SizedBox(height: 14),
-              Text(
-                'Complete your tasks to maintain your streak and earn bonus credits.',
-                style: AethericPulseDark.bodyMd(),
+              const SizedBox(height: 20),
+              // ProgressRing N/5 + skill dot sequence
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ProgressRing(
+                    percent: (gamesComplete / 5 * 100).clamp(0, 100).toDouble(),
+                    size: 96,
+                    strokeWidth: 7,
+                    centerChild: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          '$gamesComplete/5',
+                          style: AethericPulseDark.headlineMd(),
+                        ),
+                        Text(
+                          'games',
+                          style: AethericPulseDark.label(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // 5-dot sequence row
+                        Row(
+                          children: List.generate(5, (i) {
+                            final done = i < gamesComplete;
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 6),
+                              child: Container(
+                                width: 10,
+                                height: 10,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: done
+                                      ? AethericPulseDark.brandBlue
+                                      : Colors.white.withValues(alpha: 0.10),
+                                  border: Border.all(
+                                    color: done
+                                        ? AethericPulseDark.brandBlue
+                                        : Colors.white.withValues(alpha: 0.30),
+                                    width: 1,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                        const SizedBox(height: 10),
+                        // Skill labels
+                        ...List.generate(5, (i) {
+                          final done = i < gamesComplete;
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 2),
+                            child: Text(
+                              skillLabels[i],
+                              style: AethericPulseDark.label(
+                                color: done
+                                    ? AethericPulseDark.onSurface
+                                    : AethericPulseDark.onSurfaceMuted,
+                              ),
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 20),
-              _KineticButton(
-                label: 'Start Sequence',
-                onTap: onStart,
-              ),
-              const SizedBox(height: 28),
-              Center(
-                child: ProgressRing(
-                  percent: dailyGoalPct,
-                  size: 170,
-                  strokeWidth: 8,
-                  centerChild: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        '${dailyGoalPct.toStringAsFixed(0)}%',
-                        style: AethericPulseDark.headlineLg(),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        'GOAL',
-                        style: AethericPulseDark.label(),
-                      ),
-                    ],
-                  ),
-                ),
+              // PrimaryButton CTA
+              PrimaryButton(
+                fullWidth: true,
+                onPressed: onStart,
+                child: const Text('Start session'),
               ),
             ],
           ),
@@ -208,85 +322,64 @@ class _DailyTrainingHero extends StatelessWidget {
   }
 }
 
-// ─── Track card ────────────────────────────────────────────────────────────────
+// ─── Filter chips (AC-002) ────────────────────────────────────────────────────
 
-class _TrackCard extends StatelessWidget {
-  final TrackDefinition track;
-  final VoidCallback onPlay;
+class _FilterChips extends StatelessWidget {
+  final String selected;
+  final ValueChanged<String> onSelected;
 
-  const _TrackCard({required this.track, required this.onPlay});
+  const _FilterChips({required this.selected, required this.onSelected});
+
+  static const _labels = ['all', 'memory', 'logic', 'speed', 'spatial'];
 
   @override
   Widget build(BuildContext context) {
-    final name = track.name;
-    final subtitle = track.subtitle;
-    final levelCount = track.targetLevelCount;
-
-    return GlassCard(
-      borderRadius: AethericPulseDark.radiusCard,
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // PNG icon in nested well
-          Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: AethericPulseDark.brandBlue.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Center(
-              child: Image.asset(
-                'assets/images/icons/${track.id}.png',
-                width: 32,
-                height: 32,
-                errorBuilder: (context, error, _) => const Icon(
-                  Icons.grid_view_rounded,
-                  size: 28,
-                  color: AethericPulseDark.brandBlue,
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      physics: const BouncingScrollPhysics(),
+      child: Row(
+        children: _labels.map((label) {
+          final active = selected == label;
+          return Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: GestureDetector(
+              onTap: () => onSelected(label),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                decoration: BoxDecoration(
+                  color: active
+                      ? AethericPulseDark.brandBlue.withValues(alpha: 0.25)
+                      : Colors.white.withValues(alpha: 0.06),
+                  borderRadius:
+                      BorderRadius.circular(AethericPulseDark.radiusPill),
+                  border: Border.all(
+                    color: active
+                        ? AethericPulseDark.brandBlue.withValues(alpha: 0.70)
+                        : Colors.white.withValues(alpha: 0.10),
+                    width: 1,
+                  ),
+                  boxShadow: active ? AethericPulseDark.blueGlow : null,
+                ),
+                child: Text(
+                  label[0].toUpperCase() + label.substring(1),
+                  style: AethericPulseDark.label(
+                    color: active
+                        ? AethericPulseDark.brandBlue
+                        : AethericPulseDark.onSurfaceMuted,
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 14),
-          Text(name, style: AethericPulseDark.headlineMd()),
-          const SizedBox(height: 8),
-          // Stat pills
-          Row(
-            children: [
-              const KineticChip(
-                label: 'XP',
-                leading: Icon(Icons.star, size: 12, color: AethericPulseDark.brandBlue),
-                color: AethericPulseDark.brandBlue,
-              ),
-              const SizedBox(width: 8),
-              KineticChip(
-                label: '$levelCount levels',
-                color: AethericPulseDark.brandPurple,
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Text(subtitle, style: AethericPulseDark.bodyMd()),
-          const SizedBox(height: 14),
-          const KineticProgressBar(value: 0.0),
-          const Divider(height: 24, color: Color(0x0DFFFFFF)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'LEVEL $levelCount',
-                style: AethericPulseDark.label(color: AethericPulseDark.brandBlue),
-              ),
-              _PlayButton(onTap: onPlay),
-            ],
-          ),
-        ],
+          );
+        }).toList(),
       ),
     );
   }
 }
+
+// ─── Stats card ────────────────────────────────────────────────────────────────
 
 // ─── Stats card ────────────────────────────────────────────────────────────────
 
@@ -371,84 +464,6 @@ class _LabeledBar extends StatelessWidget {
         const SizedBox(height: 6),
         KineticProgressBar(value: percent / 100, height: 3.0),
       ],
-    );
-  }
-}
-
-// ─── Shared buttons ────────────────────────────────────────────────────────────
-
-class _KineticButton extends StatelessWidget {
-  final String label;
-  final VoidCallback? onTap;
-
-  const _KineticButton({required this.label, this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      button: true,
-      enabled: onTap != null,
-      label: label,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(
-          minWidth: AethericPulseDark.minTapTarget,
-          minHeight: AethericPulseDark.minTapTarget,
-        ),
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: onTap,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              gradient: AethericPulseDark.gradPrimary,
-              borderRadius: BorderRadius.circular(AethericPulseDark.radiusPill),
-              boxShadow: AethericPulseDark.blueGlow,
-            ),
-            child: Text(
-              label,
-              style: AethericPulseDark.label(color: AethericPulseDark.onSurface),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _PlayButton extends StatelessWidget {
-  final VoidCallback onTap;
-
-  const _PlayButton({required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      button: true,
-      label: 'Play',
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(
-          minWidth: AethericPulseDark.minTapTarget,
-          minHeight: AethericPulseDark.minTapTarget,
-        ),
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: onTap,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: const Color(0x0DFFFFFF),
-              border: Border.all(color: const Color(0x1AFFFFFF), width: 1),
-              borderRadius: BorderRadius.circular(AethericPulseDark.radiusChip),
-            ),
-            child: Text(
-              'Play',
-              style: AethericPulseDark.label(color: AethericPulseDark.onSurface),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
