@@ -42,6 +42,7 @@ class _PrimaryButtonState extends State<PrimaryButton> {
           opacity: disabled ? 0.55 : 1.0,
           child: Container(
             width: widget.fullWidth ? double.infinity : null,
+            constraints: const BoxConstraints(minHeight: 44, minWidth: 44),
             padding: widget.padding,
             decoration: BoxDecoration(
               gradient: AP.gradPrimary,

@@ -54,5 +54,14 @@ void main() {
       );
       expect(container.constraints?.maxWidth ?? double.infinity, double.infinity);
     });
+
+    testWidgets('tap-target is at least 44×44 pt (WCAG 2.5.5)', (tester) async {
+      await tester.pumpWidget(_wrap(
+        const PrimaryButton(child: Text('Play')),
+      ));
+      final size = tester.getSize(find.byType(PrimaryButton));
+      expect(size.width, greaterThanOrEqualTo(44));
+      expect(size.height, greaterThanOrEqualTo(44));
+    });
   });
 }

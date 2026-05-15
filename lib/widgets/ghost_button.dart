@@ -23,6 +23,7 @@ class GhostButton extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         width: fullWidth ? double.infinity : null,
+        constraints: const BoxConstraints(minHeight: 44, minWidth: 44),
         padding: padding,
         decoration: BoxDecoration(
           color: Colors.white.withValues(alpha: 0.04),

@@ -44,5 +44,14 @@ void main() {
       await tester.tap(find.byType(ToggleSwitch));
       expect(received, isTrue);
     });
+
+    testWidgets('tap-target is at least 44×44 pt (WCAG 2.5.5)', (tester) async {
+      await tester.pumpWidget(_wrap(
+        ToggleSwitch(value: false, onChanged: (_) {}),
+      ));
+      final size = tester.getSize(find.byType(ToggleSwitch));
+      expect(size.width, greaterThanOrEqualTo(44));
+      expect(size.height, greaterThanOrEqualTo(44));
+    });
   });
 }
