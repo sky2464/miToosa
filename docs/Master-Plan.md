@@ -125,10 +125,10 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | BL-13 | Recover playtest response pipeline (>=5 responses) (#19) | Chore | S | EP-01 | P1 |
 | BL-14 | Unblock TestFlight beta provisioning handoff (#20) | Chore | M | EP-02 | P1 |
 | BL-15 | Unblock Play Store internal track setup (#21) | Chore | M | EP-02 | P1 |
-| BL-16 | Reconcile orphaned archived specs with Master-Plan | Chore | S | EP-05 | P4 |
-| BL-17 | Split design_system.dart (737 lines → ≤500) | Chore | S | EP-05 | P3 |
-| BL-18 | WCAG 44pt tap-target fix (ToggleSwitch/GhostButton/PrimaryButton) | Improvement | S | EP-04 | P2 |
-| BL-19 | Sanitize embedded prompt-injection text in docs/mitoosa-design-system-2/ | Chore | S | EP-05 | P3 |
+| BL-16 | Reconcile orphaned archived specs with Master-Plan (#30) | Chore | S | EP-05 | P4 |
+| BL-17 | Split design_system.dart (737 lines → ≤500) (#31) | Chore | S | EP-05 | P3 |
+| BL-18 | WCAG 44pt tap-target fix (ToggleSwitch/GhostButton/PrimaryButton) (#32) | Improvement | S | EP-04 | P2 |
+| BL-19 | Sanitize embedded prompt-injection text in docs/mitoosa-design-system-2/ (#33) | Chore | S | EP-05 | P3 |
 | BL-20 | Fix automation env: Flutter/Dart toolchain not on PATH (#4) | Bug | S | EP-05 | P3 |
 
 ## Blocked
