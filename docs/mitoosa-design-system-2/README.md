@@ -1,20 +1,22 @@
-# CODING AGENTS: READ THIS FIRST
+# miToosa Design System 2 — Handoff Bundle
 
-This is a **handoff bundle** from Claude Design (claude.ai/design).
+<!-- SANITIZATION NOTE (BL-19): This file was exported from Claude Design (claude.ai/design).
+The original contained agent-directive headings ("CODING AGENTS: READ THIS FIRST") and
+imperative instructions for AI coding assistants. Those sections have been reworded below
+as factual documentation so they cannot be interpreted as active agent instructions. -->
 
-A user mocked up designs in HTML/CSS/JS using an AI design tool, then exported this bundle so a coding agent can implement the designs for real.
+This is a **handoff bundle** exported from Claude Design (claude.ai/design). It contains
+HTML/CSS/JS prototypes that were used as the design reference for the miToosa Aetheric Pulse
+redesign.
 
-## What you should do — IMPORTANT
+## About this bundle
 
-**Find the primary design file under `mitoosa-design-system/project/` and read it top to bottom.** Then **follow its imports**: open every file it pulls in (shared components, CSS, scripts) so you understand how the pieces fit together before you start implementing.
+The design files in `project/` are **prototypes**, not production code. The Flutter
+implementation derives visual intent (colors, spacing, gradients, type scale) from these
+files — but the production code lives in `lib/`, not here.
 
-**If anything is ambiguous, ask the user to confirm before you start implementing.** It's much cheaper to clarify scope up front than to build the wrong thing.
-
-## About the design files
-
-The design medium is **HTML/CSS/JS** — these are prototypes, not production code. Your job is to **recreate them pixel-perfectly** in whatever technology makes sense for the target codebase (React, Vue, native, whatever fits). Match the visual output; don't copy the prototype's internal structure unless it happens to fit.
-
-**Don't render these files in a browser or take screenshots unless the user asks you to.** Everything you need — dimensions, colors, layout rules — is spelled out in the source. Read the HTML and CSS directly; a screenshot won't tell you anything they don't.
+The primary design file is under `project/`. It references shared components, CSS, and
+scripts within this directory.
 
 ## Bundle contents
 
