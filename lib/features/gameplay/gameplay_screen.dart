@@ -15,6 +15,7 @@ import '../../core/haptics_service.dart';
 import '../../core/music_service.dart';
 import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
+import '../../theme/design_tokens.dart';
 import '../../widgets/countdown_timer_widget.dart';
 import '../../widgets/feedback_toast.dart';
 import '../../widgets/hint_button.dart';
@@ -583,11 +584,27 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
         children: [
           Row(
             children: [
-              IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: Icon(Icons.arrow_back_ios_rounded,
-                    color: theme.colorScheme.primary, size: 22),
+              // S2-03 AC-001: circular glass back button
+              Semantics(
+                button: true,
+                label: 'Back',
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Container(
+                    key: const ValueKey('back_button_circular'),
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white.withValues(alpha: 0.04),
+                      border: Border.all(color: AP.glassBorder, width: 1),
+                    ),
+                    child: const Icon(Icons.arrow_back_ios_new_rounded,
+                        color: AP.fgSecondary, size: 16),
+                  ),
+                ),
               ),
+              const SizedBox(width: 4),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -706,16 +723,8 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
             ],
           ),
           const SizedBox(height: MiToosaTheme.spacingSm),
-          // Progress bar
-          ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: LinearProgressIndicator(
-              value: progress.clamp(0.0, 1.0),
-              minHeight: 4,
-              backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.08),
-              valueColor: AlwaysStoppedAnimation(theme.colorScheme.primary),
-            ),
-          ),
+          // S2-03 AC-001: 5-dot progress strip (replaces linear bar)
+          _DotProgressStrip(progress: progress),
         ],
       ),
     );
@@ -912,6 +921,12 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
         ? (isCorrect ? 'Correct answer' : 'Incorrect answer')
         : null;
 
+    // S2-03 AC-003: cyan glow border + 1.02× scale on selected, glass-card recipe
+    final preCompletionSelected = isSelected && !isCompleted;
+    if (preCompletionSelected) {
+      borderColor = AP.cyan;
+    }
+
     return Semantics(
       button: true,
       label: 'Option ${index + 1}',
@@ -923,17 +938,23 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
         curve: Curves.easeOut,
         width: cardWidth.clamp(120.0, 200.0),
         transform: Matrix4.diagonal3Values(
-          isSelected ? 0.96 : 1.0,
-          isSelected ? 0.96 : 1.0,
+          preCompletionSelected ? 1.02 : 1.0,
+          preCompletionSelected ? 1.02 : 1.0,
           1.0,
         ),
         padding: const EdgeInsets.all(MiToosaTheme.spacingMd),
         decoration: BoxDecoration(
-          color: bgColor,
+          color: preCompletionSelected ? AP.glassFill : bgColor,
           borderRadius: BorderRadius.circular(MiToosaTheme.radiusLg),
           border: Border.all(color: borderColor, width: 3),
           boxShadow: [
-            if (borderColor != theme.colorScheme.primary.withValues(alpha: 0.08))
+            if (preCompletionSelected)
+              BoxShadow(
+                color: AP.cyan.withValues(alpha: 0.45),
+                blurRadius: 20,
+                offset: const Offset(0, 4),
+              )
+            else if (borderColor != theme.colorScheme.primary.withValues(alpha: 0.08))
               BoxShadow(
                 color: borderColor.withValues(alpha: 0.25),
                 blurRadius: 16,
@@ -1001,3 +1022,41 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
   }
 }
 
+/// S2-03 AC-001 — 5-dot progress strip.
+///
+/// Fills dots left-to-right based on `progress` (0..1). Whole-dot increments
+/// give the gameplay screen the Aetheric Pulse 5-step rhythm in place of the
+/// linear bar.
+class _DotProgressStrip extends StatelessWidget {
+  final double progress;
+  static const int totalDots = 5;
+
+  const _DotProgressStrip({required this.progress});
+
+  @override
+  Widget build(BuildContext context) {
+    final filled = (progress.clamp(0.0, 1.0) * totalDots).ceil().clamp(0, totalDots);
+    return Semantics(
+      label: 'Progress: $filled of $totalDots',
+      child: Row(
+        key: const ValueKey('dot_progress_strip'),
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(totalDots, (i) {
+          final isOn = i < filled;
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 3),
+            child: Container(
+              width: isOn ? 22 : 8,
+              height: 8,
+              decoration: BoxDecoration(
+                gradient: isOn ? AP.gradPrimary : null,
+                color: isOn ? null : Colors.white.withValues(alpha: 0.10),
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+}
