@@ -17,6 +17,7 @@ import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
 import '../../theme/design_tokens.dart';
 import '../../widgets/countdown_timer_widget.dart';
+import '../../widgets/dot_progress_strip.dart';
 import '../../widgets/feedback_toast.dart';
 import '../../widgets/hint_button.dart';
 import '../../widgets/how_to_play_modal.dart';
@@ -724,7 +725,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
           ),
           const SizedBox(height: MiToosaTheme.spacingSm),
           // S2-03 AC-001: 5-dot progress strip (replaces linear bar)
-          _DotProgressStrip(progress: progress),
+          DotProgressStrip(progress: progress),
         ],
       ),
     );
@@ -1022,41 +1023,3 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
   }
 }
 
-/// S2-03 AC-001 — 5-dot progress strip.
-///
-/// Fills dots left-to-right based on `progress` (0..1). Whole-dot increments
-/// give the gameplay screen the Aetheric Pulse 5-step rhythm in place of the
-/// linear bar.
-class _DotProgressStrip extends StatelessWidget {
-  final double progress;
-  static const int totalDots = 5;
-
-  const _DotProgressStrip({required this.progress});
-
-  @override
-  Widget build(BuildContext context) {
-    final filled = (progress.clamp(0.0, 1.0) * totalDots).ceil().clamp(0, totalDots);
-    return Semantics(
-      label: 'Progress: $filled of $totalDots',
-      child: Row(
-        key: const ValueKey('dot_progress_strip'),
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(totalDots, (i) {
-          final isOn = i < filled;
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 3),
-            child: Container(
-              width: isOn ? 22 : 8,
-              height: 8,
-              decoration: BoxDecoration(
-                gradient: isOn ? AP.gradPrimary : null,
-                color: isOn ? null : Colors.white.withValues(alpha: 0.10),
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ),
-          );
-        }),
-      ),
-    );
-  }
-}
