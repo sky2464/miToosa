@@ -19,8 +19,9 @@ import '../../theme/design_tokens.dart';
 import '../../widgets/countdown_timer_widget.dart';
 import '../../widgets/dot_progress_strip.dart';
 import '../../widgets/feedback_toast.dart';
-import '../../widgets/hint_button.dart';
+import '../../widgets/ghost_button.dart';
 import '../../widgets/how_to_play_modal.dart';
+import '../../widgets/primary_button.dart';
 import '../../widgets/run_timer_overlay.dart';
 import '../auth/auth_provider.dart';
 import 'gameplay_view_model.dart';
@@ -59,6 +60,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
   late GameplayLevel level;
   bool _animatingTransition = false;
   bool _gameOverActive = false;
+  PuzzleOption? _pendingOption;
   bool _sessionCompleteActive = false;
   int _sessionCompleteXP = 0;
   late AnimationController _entryController;
@@ -506,6 +508,9 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
                       ),
                     ),
                   ),
+                  // ─── Bottom CTAs ─────────────────────────────
+                  if (!state.phase.isCompleted)
+                    _buildBottomCta(context, level, state),
                   // ─── Footer ─────────────────────────────────
                   _buildFooter(context, state),
                 ],
@@ -563,11 +568,6 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     final theme = Theme.of(context);
     final maxLevels = widget.track.targetLevelCount;
     final progress = (widget.levelIndex + 1) / maxLevels;
-    final progressAsync = ref.watch(playerProgressProvider);
-    final hearts = progressAsync.maybeWhen(
-      data: (p) => p.hearts,
-      orElse: () => 5,
-    );
 
     // Live XP potential (decreases with wrong answers / hint)
     final liveStars =
@@ -629,21 +629,6 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
                   ],
                 ),
               ),
-              // Hint button
-              HintButton(
-                hint: level.hint,
-                hearts: hearts,
-                hintUsed: eng.hintUsed,
-                onUseHint: () => _useHint(hearts),
-                onNoHearts: () => ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      'Not enough hearts – use a 💎 or play a lower level',
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 4),
               // Puzzle countdown timer (visible when difficulty tier is set)
               if (eng.difficultyTier != null)
                 Padding(
@@ -834,7 +819,9 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     return Column(
       children: options.asMap().entries.map((entry) {
         final option = entry.value;
-        final isSelected = eng.selectedOptionId == option.id;
+        final isSelected = eng.phase.isCompleted
+            ? eng.selectedOptionId == option.id
+            : _pendingOption?.id == option.id;
         final isCorrect = option.id == level.puzzle.correctOptionId;
         final isCompleted = eng.phase.isCompleted;
 
@@ -861,7 +848,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
             label: option.label ?? '',
             hint: hint,
             child: GestureDetector(
-              onTap: () => _handleOptionTap(option, level),
+              onTap: isCompleted ? null : () => setState(() => _pendingOption = option),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
                 width: double.infinity,
@@ -900,7 +887,9 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     double screenWidth,
   ) {
     final theme = Theme.of(context);
-    final isSelected = eng.selectedOptionId == option.id;
+    final isSelected = eng.phase.isCompleted
+        ? eng.selectedOptionId == option.id
+        : _pendingOption?.id == option.id;
     final isCorrect = option.id == level.puzzle.correctOptionId;
     final isCompleted = eng.phase.isCompleted;
 
@@ -933,7 +922,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
       label: 'Option ${index + 1}',
       hint: cardHint,
       child: GestureDetector(
-      onTap: () => _handleOptionTap(option, level),
+      onTap: isCompleted ? null : () => setState(() => _pendingOption = option),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeOut,
@@ -975,6 +964,68 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
         ),
       ),
     ),
+    );
+  }
+
+  Widget _buildBottomCta(BuildContext context, GameplayLevel level, GameplayState eng) {
+    final progressAsync = ref.watch(playerProgressProvider);
+    final hearts = progressAsync.maybeWhen(data: (p) => p.hearts, orElse: () => 5);
+    final hintAvailable = level.hint != null && !eng.hintUsed && hearts > 0;
+    final canSubmit = _pendingOption != null && !_animatingTransition;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        MiToosaTheme.spacingLg, 0,
+        MiToosaTheme.spacingLg, MiToosaTheme.spacingMd,
+      ),
+      child: Row(
+        children: [
+          GhostButton(
+            key: const ValueKey('hint_ghost_button'),
+            onPressed: () {
+              if (!hintAvailable) {
+                if (hearts <= 0) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Not enough hearts – use a 💎 or play a lower level',
+                      ),
+                    ),
+                  );
+                }
+                return;
+              }
+              _useHint(hearts);
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.lightbulb_outline_rounded,
+                  size: 16,
+                  color: hintAvailable
+                      ? null
+                      : const Color(0xFF6B7280),
+                ),
+                const SizedBox(width: 6),
+                const Text('Hint'),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: PrimaryButton(
+              key: const ValueKey('submit_primary_button'),
+              fullWidth: true,
+              glow: canSubmit,
+              onPressed: canSubmit
+                  ? () => _handleOptionTap(_pendingOption!, level)
+                  : null,
+              child: const Text('Submit'),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
