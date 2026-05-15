@@ -150,17 +150,23 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      // The GestureDetectors in the tree are (in widget-tree order):
-      //   [0] back button  [1..N] option cards  [N+1] GhostButton  [N+2] PrimaryButton
-      // Tapping index 1 hits the first option card — no Submit fired.
-      final gestureDetectors = find.byType(GestureDetector);
+      // Option GestureDetectors live inside the SingleChildScrollView (the back
+      // button and CTA buttons are outside it).
+      final scrollView = find.byType(SingleChildScrollView);
+      expect(scrollView, findsOneWidget,
+          reason: 'Expect a SingleChildScrollView in the options content area');
+
+      final optionsInScroll = find.descendant(
+        of: scrollView,
+        matching: find.byType(GestureDetector),
+      );
       expect(
-        gestureDetectors.evaluate().length,
-        greaterThanOrEqualTo(2),
-        reason: 'Expect at least back button + one option GestureDetector',
+        optionsInScroll.evaluate().length,
+        greaterThanOrEqualTo(1),
+        reason: 'Expect at least one option GestureDetector in the scroll area',
       );
 
-      await tester.tap(gestureDetectors.at(1));
+      await tester.tap(optionsInScroll.first);
       await tester.pump();
 
       // After tapping an option, Submit should be enabled.
