@@ -50,7 +50,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | S1-03 | Manual Wedge QA Walkthrough (#5) | Chore | S | Todo | 0/1 |
 | S1-04 | Playtest Survey & Recruitment (#6) | Feature | M | Todo | 0/1 |
 | S2-02 | Aetheric Pulse — Path screen swap-in (#22) | Feature | M | 🟦 Todo | 0/8 |
-| S2-03 | Aetheric Pulse — Game screen chrome refresh (#23) | Feature | M | 🟨 In Progress | 2/8 |
+| S2-03 | Aetheric Pulse — Game screen chrome refresh (#23) | Feature | M | 🟨 In Progress | 2/9 |
 | S2-04 | Aetheric Pulse — Tracks polish + Settings + screen tests (#24) | Feature | L | 🟨 In Progress | 3/13 tasks (1 manual-deferred) |
 
 ## Active Tasks
@@ -160,6 +160,11 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | S1-02 | Analytics Backend Integration | 2026-05-11 | docs/archived/spec-s1-02.md · docs/archived/review-s1-02.md · docs/archived/ship-check-s1-02.md |
 | S1-01 | Staging Deployment & QA Gate | 2026-05-11 | docs/archived/spec-S1-01.md · docs/STAGING-SETUP.md · docs/RELEASE-GATES.md |
 | S2-01 | Aetheric Pulse UI Redesign — foundation + 3 screens (partial) | 2026-05-14 | docs/archived/spec-S2-01.md · docs/archived/review-S2-01.md · 23/29 tasks · 4 P0 follow-ups filed (S2-02/03/04) |
+| H-01 | Autonomous Dependency & Skill Maintenance System (historical) | pre-2026-05 | docs/archived/spec-dependency-skill-maintenance-v1.md |
+| H-02 | Engagement Loop v1 — Hearts, Hints, Countdown & Star Rework (historical) | pre-2026-05 | docs/archived/spec-engagement-loop-v1.md |
+| H-03 | Launch Readiness — Close Out Remaining LAUNCH.md Items (historical) | pre-2026-05 | docs/archived/spec-launch-readiness-v1.md |
+| H-04 | Local Network QR Code Play (historical) | pre-2026-05 | docs/archived/spec-local-network-qr-play-v1.md |
+| H-05 | Local Telemetry Collection v1 (historical) | pre-2026-05 | docs/archived/spec-local-telemetry-collection-v1.md |
 
 ## Update Log
 
@@ -213,3 +218,6 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-14 | /agtoosa-build S2-03 partial — TDD cycle: 🔴 RED (5 new tests for AC-011 pink timer at ≤4s, 2 failing) → 🟢 GREEN (CountdownTimerWidget converted to StatefulWidget with pulse animation, threshold 5s→4s, color MiToosaTheme.error→AP.pink) → 🔵 REFACTOR (dropped unused MiToosaTheme import). Tasks 1.2 (timer pill, AC-011) and 4.2/4.4 (widget test + verification) done. 2 of 8 tasks complete. Remaining: 1.1 top chrome, 2.1 options grid, 3.1/3.2 hint+submit button swap, 4.1 full puzzle flow test, 4.3 option selection test — all require touching the 1003-line gameplay_screen.dart and warrant a dedicated focused session. Full suite 737/737 passing, dart analyze clean | AgToosa |
 | 2026-05-14 | /agtoosa-build counter-fix S2-04 — corrected Tasks Done counter from `3/14` → `3/13 tasks (1 manual-deferred)`: task 4.3 (visual verification on simulator) is tagged `[manual]` and must be excluded from the automated total per build workflow format rules | AgToosa |
 | 2026-05-14 | /agtoosa-ship docs S1-01 — spec archived to `docs/archived/spec-S1-01.md`; Master-Plan S1-01 row reference updated; changelog entry added. ⚠️ Warning: no `review-S1-01.md` artifact (review was done in-line; accepted for this story) | AgToosa |
+| 2026-05-14 | /agtoosa-spec tasks — Active Tasks tree rebuilt: S2-02 (0/8), S2-03 (2/9 — 1.2 timer + 4.2 timer test ✅), S2-04 (3/13 + 1 manual — 3.2/3.3/3.4 screen tests ✅) now mirror their approved specs. S2-03 counter fix-up (was 2/8) | AgToosa |
+| 2026-05-14 | /agtoosa-ship WIP-hygiene — 5 WIP/fixup commits (08fc208, 3488c6e, a5f11c8, 300e274, fc3e710) confirmed retained in main history as managed exception per S1-02 precedent. Squashing would rewrite already-shipped history and is not warranted. Findings re-acknowledged; no rebase performed. Recorded as policy: WIP commits prior to 2026-05-14 are accepted; new WIP commits after this point should be squashed before /agtoosa-ship | AgToosa |
+| 2026-05-14 | /agtoosa-task BL-16 — 5 orphan archived specs reconciled into Completed This Cycle as historical entries (H-01 dependency-skill-maintenance, H-02 engagement-loop, H-03 launch-readiness, H-04 local-network-qr-play, H-05 local-telemetry-collection). All 5 specs are status:Archived in their file headers; spec ↔ Master-Plan contract restored. BL-16 removed from Backlog | AgToosa |
