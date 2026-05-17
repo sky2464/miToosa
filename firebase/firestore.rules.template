@@ -1,0 +1,114 @@
+// BL-04 — Firestore Security Rules TEMPLATE (NOT deployed).
+//
+// Status: pre-gate authoring. This file is a TEMPLATE, not a live
+// deploy artifact. It cannot be `firebase deploy --only firestore:rules`
+// today because:
+//   - BL-03 (Firebase production project + App Check enforcement) is
+//     not yet ✅ Done. No project to deploy to.
+//   - BL-04 itself is gated on the S1-04 playtest D1≥40% +
+//     social-motivation signal. Spec lives at
+//     `docs/archived/spec-BL-04.md`.
+//
+// When BL-03 lands, this template is the spec's threat-model output
+// and should be promoted to `firestore.rules` (drop the
+// `.template` suffix) inside the active Firebase project directory,
+// and deployed via the BL-03 CI deploy pipeline.
+//
+// Mappings — every rule below ties to an acceptance criterion in
+// `docs/archived/spec-BL-04.md` §1.2:
+//   AC-005 — App Check token required for every read/write.
+//   AC-006 — Writer's auth.uid must equal request.resource.data.playerId.
+//   AC-008 — Min-interval throttle: 5 s between writes per playerId.
+//   AC-004 — Server-side score clamp lives in the Cloud Function,
+//            NOT in rules (rules cannot read the audit-log subcollection
+//            atomically). Rules enforce only the hard ceiling.
+//   AC-007 — Display name v1 = server-minted Pilot_NNNN. Rules
+//            reject any client-set displayName (Cloud Function mints
+//            and writes it server-side on first ever write).
+//
+// Hard ceiling kept in sync with `kMaxLeaderboardScore` in
+// lib/data/leaderboard_entry.dart (Dart const = 120000).
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── leaderboard_entries/{playerId} ─────────────────────────────
+    // One doc per player, doc id == Firebase Auth UID. Public-readable
+    // (subject to App Check), self-writable.
+    match /leaderboard_entries/{playerId} {
+
+      // AC-005: every read requires a valid App Check token.
+      allow read: if request.auth != null
+                  && request.app != null;  // App Check token present
+
+      // AC-005 + AC-006 + AC-008 + display-name guard + score bound:
+      allow create, update: if request.auth != null
+        && request.app != null
+        // AC-006: writer is the player.
+        && request.auth.uid == request.resource.data.playerId
+        && request.auth.uid == playerId
+        // AC-008: 5-second min-interval throttle (only enforced on
+        // update; first create has no resource to compare to).
+        && (
+          !exists(/databases/$(database)/documents/leaderboard_entries/$(playerId))
+          || request.time > resource.data.updatedAt + duration.value(5, 's')
+        )
+        // Wire-format guard: required fields with correct types.
+        && request.resource.data.score is int
+        && request.resource.data.score >= 0
+        && request.resource.data.score <= 120000           // hard ceiling
+        && request.resource.data.week is string
+        && request.resource.data.week.matches('^[12][0-9]{3}-W(0[1-9]|[1-4][0-9]|5[0-3])$')
+        && request.resource.data.updatedAt == request.time  // server timestamp
+        // AC-007: clients NEVER set displayName. The Cloud Function
+        // mints `Pilot_NNNN` on first write and writes it back.
+        && !('displayName' in request.resource.data.keys());
+
+      // Hard-deny client deletes. Leaderboard pruning is a Cloud
+      // Function janitor concern (post-v1).
+      allow delete: if false;
+    }
+
+    // ─── xp_audit_log/{playerId}/events/{eventId} ───────────────────
+    // Append-only XP-grant audit log feeding the Cloud Function clamp
+    // (AC-004). Client can READ its own log (for offline preflight in
+    // the validator), but never WRITE — only the Cloud Function's
+    // service account writes.
+    match /xp_audit_log/{playerId}/events/{eventId} {
+      allow read: if request.auth != null
+                  && request.app != null
+                  && request.auth.uid == playerId;
+      allow write: if false;  // service-account-only via Admin SDK
+    }
+
+    // ─── rate_limits/{uid} ──────────────────────────────────────────
+    // Sliding-window write tracker (Cloud Function maintained).
+    // Clients never touch this collection.
+    match /rate_limits/{uid} {
+      allow read, write: if false;
+    }
+
+    // ─── display_names/{uid} ────────────────────────────────────────
+    // Server-minted Pilot_NNNN per UID (AC-007). Client can READ its
+    // own name to display in the YOU row; never writes.
+    match /display_names/{uid} {
+      allow read: if request.auth != null
+                  && request.app != null
+                  && request.auth.uid == uid;
+      allow write: if false;  // Cloud Function-only via Admin SDK
+    }
+
+    // ─── leaderboard_meta/{docId} ───────────────────────────────────
+    // Atomic counter for Pilot_NNNN minting. Server-only.
+    match /leaderboard_meta/{docId} {
+      allow read, write: if false;
+    }
+
+    // ─── default-deny ───────────────────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
