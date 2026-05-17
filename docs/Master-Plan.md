@@ -54,8 +54,12 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 ## Active Tasks
 
 > No active in-flight tasks. New tasks land here at `/agtoosa-spec tasks`.
-- [ ] **2. S1-04:** Playtest Survey & Recruitment (#6) `[blocked: staging URL + response pipeline]`
-	- [ ] 4.1 Finalize survey with staging URL and recruit 15-20 testers — _Requirements: playtest recruitment target_
+>
+> **Pruned 2026-05-16:** stale S1-04 task group removed (GitHub #6 closed
+> with handoff to BL-12 staging URL + BL-13 response pipeline). The
+> `Docs/AgToosa_Spec-S1-04.md` Draft spec is retained on disk; when the
+> staging URL lands, run `/agtoosa-spec` to approve + re-enroll S1-04 and
+> `/agtoosa-spec tasks` will rebuild this section from the approved spec.
 
 ## Backlog
 
@@ -153,3 +157,4 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-15 | /agtoosa-build S2-03 — Tasks 1.1 + 2.1 + 4.3 + 4.4 ✅: circular glass back button + 5-dot progress strip (DotProgressStrip widget extracted to lib/widgets/), option cards switch to cyan border + AP.glassFill + 1.02× scale + cyan glow on pre-completion selection (preserves success/error feedback states). 6 new DotProgressStrip tests, 743/743 passing, dart analyze clean. 5 of 9 tasks done (1.1, 1.2, 2.1, 4.2, 4.3, 4.4). Discovery Triage: tasks 3.1 (GhostButton hint), 3.2 (PrimaryButton submit), 4.1 (full puzzle flow test) deferred — current engine flow is tap-to-submit (selectOption evaluates immediately); spec assumes select-then-submit buffered flow requiring view-model / UX change. Belongs in a follow-up scoped story | AgToosa |
 | 2026-05-16 | /agtoosa-build S2-02/S2-03/S2-04 — ✅ All Done: audit of open GitHub issues revealed all 3 stories were fully implemented in prior sessions. S2-02 (path screen): PathConstellation already integrated, 2 new widget tests added (node states: done/current/locked · track switching). S2-03 (game chrome): GhostButton hint + PrimaryButton submit + select-then-submit flow already shipped; 3 gameplay_screen tests already passing. S2-04 (tracks/settings/tests): all 6 test files already present. dart analyze clean, flutter test 770/770 passing (commit 61bf5a6). GitHub issues #22/#23/#24 closed. Issues #26/#29/#30/#31 closed (already done). Active Cycle pruned to S1-03 (manual) + S1-04 (blocked). S2-02/03/04 moved to Completed This Cycle. | AgToosa |
 | 2026-05-16 | /agtoosa-build — ✅ Repo-wide close-out: 5 backlog items implemented and shipped to main (commit 05ff6fe): BL-11 web crypto hardening (HMAC keystream + 6 tests), BL-10 Hive integration tests (+8), BL-08 economy messaging clarity (Semantics + copy), BL-07 first-session onboarding (4th expectation page), BL-20 CI-based daily health check workflow. #35 (daily check) fixed by making the network test deterministic. All 19 open GitHub issues closed (6 implemented + 13 not-planned with handoff notes for blocked/manual/gated items). PR #34 squash-merged (dep upgrade), PR #25 closed (superseded). Stale branches deleted (copilot/update-github-issues, deps/auto-update-2026-05-15). Only main remains. dart analyze clean, flutter test 784/784 passing. | AgToosa |
+| 2026-05-16 | /agtoosa-spec tasks — pruned dangling Active Task group S1-04 (GitHub #6 closed; story deferred until BL-12 staging URL lands). Active Tasks now matches empty Active Cycle. Spec file Docs/AgToosa_Spec-S1-04.md retained on disk as Draft for re-enrollment when ready. Cleared status finding 🔴 "Active Task group references S1-04 which is not in Active Cycle." | AgToosa |
