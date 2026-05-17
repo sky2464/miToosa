@@ -36,5 +36,24 @@ void main() {
       final process = await Process.run('git', ['check-ignore', '-q', 'android/key.properties']);
       expect(process.exitCode, equals(0), reason: 'android/key.properties should be ignored by gitignore');
     });
+
+    test('runbook contains iOS, Verification, Secret rotation, Troubleshooting sections', () {
+      // Regression guard for BL-01+02 task 4.1 — these headings document the
+      // pbxproj escape hatch + cross-platform verification + key lifecycle.
+      // The Android section is intentionally not asserted here (covered by
+      // 'template and runbook exist' above).
+      final docsFile = File('Docs/RELEASE-SIGNING.md');
+      expect(docsFile.existsSync(), isTrue);
+      final docsText = docsFile.readAsStringSync();
+
+      expect(docsText, contains('# iOS'),
+          reason: 'iOS section heading missing from RELEASE-SIGNING.md');
+      expect(docsText, contains('# Verification'),
+          reason: 'Verification section heading missing from RELEASE-SIGNING.md');
+      expect(docsText, contains('# Secret rotation'),
+          reason: 'Secret rotation section heading missing from RELEASE-SIGNING.md');
+      expect(docsText, contains('# Troubleshooting'),
+          reason: 'Troubleshooting section heading missing from RELEASE-SIGNING.md');
+    });
   });
 }
