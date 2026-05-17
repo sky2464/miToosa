@@ -43,23 +43,46 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 
 ## Active Cycle
 
-> Sprint 1B closed out 2026-05-16 — all GitHub-tracked work resolved.
-> Next sprint pickups will be drawn from the backlog (gated/manual items
-> reopen on GitHub when ready) or fresh /agtoosa-spec stories.
+> Sprint 1B re-opened 2026-05-16 with 3 newly-specced stories
+> (BL-19 ready-to-build, BL-01+02 ready-to-build with manual gates,
+> BL-04 spec'd-but-gated on playtest signal). Pick up BL-19 next as
+> highest-leverage automatable work.
 
 | ID | Title | Type | Estimate | Status | Tasks Done |
 |----|-------|------|----------|--------|------------|
-| _(sprint window quiet — see Backlog and Completed This Cycle)_ | | | | | |
+| BL-19 | Sanitize prompt-injection text + CI guard (#33) | Chore | S | 🟦 Todo | 5/9 (5 pre-shipped, 4 CI-guard tasks remain) |
+| BL-01+02 | Platform Release Signing Scaffolding (iOS + Android) (#7, #8) | Chore | M | 🟦 Todo | 0/11 (7 automatable + 4 `[manual]` human-action) |
 
 ## Active Tasks
 
-> No active in-flight tasks. New tasks land here at `/agtoosa-spec tasks`.
->
-> **Pruned 2026-05-16:** stale S1-04 task group removed (GitHub #6 closed
-> with handoff to BL-12 staging URL + BL-13 response pipeline). The
-> `Docs/AgToosa_Spec-S1-04.md` Draft spec is retained on disk; when the
-> staging URL lands, run `/agtoosa-spec` to approve + re-enroll S1-04 and
-> `/agtoosa-spec tasks` will rebuild this section from the approved spec.
+> Mirrored from approved specs `Docs/archived/spec-BL-19.md` and
+> `Docs/archived/spec-BL-01-BL-02-platform-signing.md`. BL-04 is spec'd
+> but stays in Backlog pending playtest gate.
+
+- [ ] **1. BL-19:** Sanitize prompt-injection text + CI guard (#33)
+  - [x] 1.1 Audit + sanitize `docs/mitoosa-design-system-2/README.md` (shipped 2ba2c87) — _Requirements: AC-001_
+  - [x] 1.2 Audit + sanitize `docs/mitoosa-design-system-2/project/SKILL.md` (shipped 2ba2c87) — _Requirements: AC-001_
+  - [x] 2.1 Spec authored + sanitization log committed — _Requirements: AC-002_
+  - [x] 2.2 28 other doc files confirmed clean — _Requirements: AC-001_
+  - [x] 2.3 False-positive grep hits documented (`screen-path.jsx` UI copy) — _Requirements: AC-001_
+  - [ ] 3.1 Write `scripts/check_prompt_injection.sh` — banned-pattern grep — _Requirements: AC-003_
+  - [ ] 3.2 Add `.github/workflows/prompt-injection-guard.yml` running 3.1 on PRs — _Requirements: AC-003_
+  - [ ] 3.3 Dry-run guard against current main; verify exit 0 — _Requirements: AC-003_
+  - [ ] 3.4 Fixture test: inject sentinel pattern, verify guard fails red — _Requirements: AC-003_
+- [ ] **2. BL-01+02:** Platform Release Signing Scaffolding (#7, #8)
+  - [ ] 1.1 Parameterize `android/app/build.gradle.kts` signingConfig via `key.properties` — _Requirements: AC-001_
+  - [ ] 1.2 Add `android/key.properties.template` committed; real `key.properties` gitignored — _Requirements: AC-002, AC-003_
+  - [ ] 1.3 Add Dart guard test: build fails loudly if `key.properties` is missing in release mode — _Requirements: AC-002_
+  - [ ] 2.1 Update `.gitignore`: `*.keystore`, `key.properties`, `*.mobileprovision`, `*.p12` — _Requirements: AC-003_
+  - [ ] 2.2 Test: `git check-ignore` confirms patterns match a synthetic test file — _Requirements: AC-003_
+  - [ ] 3.1 Inspect `ios/Runner.xcodeproj/project.pbxproj` for env-driven `DEVELOPMENT_TEAM` (may downgrade to runbook-only if pbxproj edit is fragile) — _Requirements: AC-008_
+  - [ ] 3.2 Set up Xcode automatic-sign with provisioning profile — _Requirements: AC-008_ `[manual]`
+  - [ ] 4.1 Author `Docs/RELEASE-SIGNING.md` runbook (iOS + Android sections + verification + rotation + troubleshooting) — _Requirements: AC-004_
+  - [ ] 5.1 Generate Android keystore via `keytool` — _Requirements: AC-006_ `[manual]`
+  - [ ] 5.2 Generate Apple Distribution cert + App Store Connect app record — _Requirements: AC-007_ `[manual]`
+  - [ ] 5.3 Register upload-key SHA-256 fingerprint in Play Console — _Requirements: AC-006_ `[manual]`
+  - [ ] 5.4 End-to-end: upload to TestFlight + Play Internal Test — _Requirements: AC-005_ `[manual]`
+  - [ ] 6.1 Verification: dart analyze clean, flutter test 100% — _Requirements: AC-010_
 
 ## Backlog
 
@@ -67,13 +90,10 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 
 | ID | Title | Type | Estimate | Epic | Priority |
 |----|-------|------|----------|------|----------|
-| BL-01 | iOS Provisioning & Signing Setup (#7) | Chore | M | EP-02 | P1 |
-| BL-02 | Android Keystore & Signing Setup (#8) | Chore | M | EP-02 | P1 |
-| BL-04 | Backend Leaderboard (Real-Time) | Feature | L | EP-03 | P2 — _gated on playtest_ |
+| BL-04 | Backend Leaderboard (Real-Time) (#10) | Feature | L | EP-03 | P2 — _spec'd 2026-05-16 (docs/archived/spec-BL-04.md); gated on playtest D1≥40% + social signal + BL-03 Firebase setup_ |
 | BL-05 | Referral Tiers | Feature | L | EP-03 | P2 — _gated on playtest_ |
 | BL-06 | VIP / Ad-Free IAP | Feature | L | EP-03 | P2 — _gated on playtest_ |
 | BL-09 | Accessibility Audit (Physical Devices) | Chore | S | EP-04 | P3 — _manual_ |
-| BL-19 | Sanitize embedded prompt-injection text in docs/mitoosa-design-system-2/ (#33) | Chore | S | EP-05 | P3 |
 
 > **External-handoff items** (BL-01/02/03/12/13/14/15) and **S1-03/S1-04**
 > have been closed on GitHub with handoff notes. They reopen when the
@@ -158,3 +178,4 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-16 | /agtoosa-build S2-02/S2-03/S2-04 — ✅ All Done: audit of open GitHub issues revealed all 3 stories were fully implemented in prior sessions. S2-02 (path screen): PathConstellation already integrated, 2 new widget tests added (node states: done/current/locked · track switching). S2-03 (game chrome): GhostButton hint + PrimaryButton submit + select-then-submit flow already shipped; 3 gameplay_screen tests already passing. S2-04 (tracks/settings/tests): all 6 test files already present. dart analyze clean, flutter test 770/770 passing (commit 61bf5a6). GitHub issues #22/#23/#24 closed. Issues #26/#29/#30/#31 closed (already done). Active Cycle pruned to S1-03 (manual) + S1-04 (blocked). S2-02/03/04 moved to Completed This Cycle. | AgToosa |
 | 2026-05-16 | /agtoosa-build — ✅ Repo-wide close-out: 5 backlog items implemented and shipped to main (commit 05ff6fe): BL-11 web crypto hardening (HMAC keystream + 6 tests), BL-10 Hive integration tests (+8), BL-08 economy messaging clarity (Semantics + copy), BL-07 first-session onboarding (4th expectation page), BL-20 CI-based daily health check workflow. #35 (daily check) fixed by making the network test deterministic. All 19 open GitHub issues closed (6 implemented + 13 not-planned with handoff notes for blocked/manual/gated items). PR #34 squash-merged (dep upgrade), PR #25 closed (superseded). Stale branches deleted (copilot/update-github-issues, deps/auto-update-2026-05-15). Only main remains. dart analyze clean, flutter test 784/784 passing. | AgToosa |
 | 2026-05-16 | /agtoosa-spec tasks — pruned dangling Active Task group S1-04 (GitHub #6 closed; story deferred until BL-12 staging URL lands). Active Tasks now matches empty Active Cycle. Spec file Docs/AgToosa_Spec-S1-04.md retained on disk as Draft for re-enrollment when ready. Cleared status finding 🔴 "Active Task group references S1-04 which is not in Active Cycle." | AgToosa |
+| 2026-05-16 | /agtoosa-spec ×3 (parallel sub-agents in isolated worktrees) — 3 specs drafted, threat-modelled, and approved in one round-trip: (a) BL-19 sanitization + CI guard (7 ACs, 6 Must, 9 tasks — 5 already shipped in 2ba2c87, 4 CI-guard tasks remain) → spec-BL-19.md; (b) BL-04 Backend Leaderboard tech-design (12 ACs, 8 Must, 27 tasks across 8 groups, Firestore + Cloud Functions + App Check, Wave-1 has 6-way parallelism, hard dep on BL-03) → spec-BL-04.md; (c) BL-01+02 Platform Release Signing merged spec (10 ACs, 7 Must, 11 tasks: 7 automatable + 4 [manual], single combined story preferred over split) → spec-BL-01-BL-02-platform-signing.md. Active Cycle re-opened with BL-19 + BL-01+02; BL-04 kept in Backlog with spec ref + gate. Commits e79196c, 032e0c7, 8068517 cherry-picked from worktrees onto main. | AgToosa |
