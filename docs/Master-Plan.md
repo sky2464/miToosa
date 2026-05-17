@@ -43,19 +43,17 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 
 ## Active Cycle
 
-> Stories committed to Sprint 1B.
+> Sprint 1B closed out 2026-05-16 — all GitHub-tracked work resolved.
+> Next sprint pickups will be drawn from the backlog (gated/manual items
+> reopen on GitHub when ready) or fresh /agtoosa-spec stories.
 
 | ID | Title | Type | Estimate | Status | Tasks Done |
 |----|-------|------|----------|--------|------------|
-| S1-03 | Manual Wedge QA Walkthrough (#5) | Chore | S | 🔧 Awaiting Manual | 0/1 `[manual]` |
-| S1-04 | Playtest Survey & Recruitment (#6) | Feature | M | 🚧 Blocked | 0/1 |
+| _(sprint window quiet — see Backlog and Completed This Cycle)_ | | | | | |
 
 ## Active Tasks
 
-> Task sub-issues under the currently In Progress story. Created at `/agtoosa-build scope`.
-
-- [ ] **1. S1-03:** Manual Wedge QA Walkthrough (#5) `[manual]`
-	- [ ] 3.1 Execute manual QA walkthrough and capture findings in QA artifacts — _Requirements: QA walkthrough checklist_ `[manual]`
+> No active in-flight tasks. New tasks land here at `/agtoosa-spec tasks`.
 - [ ] **2. S1-04:** Playtest Survey & Recruitment (#6) `[blocked: staging URL + response pipeline]`
 	- [ ] 4.1 Finalize survey with staging URL and recruit 15-20 testers — _Requirements: playtest recruitment target_
 
@@ -67,22 +65,15 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 |----|-------|------|----------|------|----------|
 | BL-01 | iOS Provisioning & Signing Setup (#7) | Chore | M | EP-02 | P1 |
 | BL-02 | Android Keystore & Signing Setup (#8) | Chore | M | EP-02 | P1 |
-| BL-03 | Firebase Project Setup (#9) | Feature | M | EP-02 | P1 |
-| BL-04 | Backend Leaderboard (Real-Time) (#10) | Feature | L | EP-03 | P2 |
-| BL-05 | Referral Tiers (#11) | Feature | L | EP-03 | P2 |
-| BL-06 | VIP / Ad-Free IAP (#12) | Feature | L | EP-03 | P2 |
-| BL-07 | First-Session Onboarding Optimisation (#13) | Improvement | M | EP-04 | P3 |
-| BL-08 | Economy Messaging Clarity (#14) | Improvement | S | EP-04 | P3 |
-| BL-09 | Accessibility Audit (Physical Devices) (#15) | Chore | S | EP-04 | P3 |
-| BL-10 | Test Coverage Expansion (integration tests) (#16) | Chore | M | EP-05 | P4 |
-| BL-11 | Web Platform Crypto Hardening (#17) | Improvement | S | EP-05 | P4 |
-| BL-12 | Resolve staging URL publication blocker (#18) | Chore | S | EP-01 | P1 |
-| BL-13 | Recover playtest response pipeline (>=5 responses) (#19) | Chore | S | EP-01 | P1 |
-| BL-14 | Unblock TestFlight beta provisioning handoff (#20) | Chore | M | EP-02 | P1 |
-| BL-15 | Unblock Play Store internal track setup (#21) | Chore | M | EP-02 | P1 |
-| BL-18 | WCAG 44pt tap-target fix (ToggleSwitch/GhostButton/PrimaryButton) (#32) | Improvement | S | EP-04 | P2 |
+| BL-04 | Backend Leaderboard (Real-Time) | Feature | L | EP-03 | P2 — _gated on playtest_ |
+| BL-05 | Referral Tiers | Feature | L | EP-03 | P2 — _gated on playtest_ |
+| BL-06 | VIP / Ad-Free IAP | Feature | L | EP-03 | P2 — _gated on playtest_ |
+| BL-09 | Accessibility Audit (Physical Devices) | Chore | S | EP-04 | P3 — _manual_ |
 | BL-19 | Sanitize embedded prompt-injection text in docs/mitoosa-design-system-2/ (#33) | Chore | S | EP-05 | P3 |
-| BL-20 | Fix automation env: Flutter/Dart toolchain not on PATH (#4) | Bug | S | EP-05 | P3 |
+
+> **External-handoff items** (BL-01/02/03/12/13/14/15) and **S1-03/S1-04**
+> have been closed on GitHub with handoff notes. They reopen when the
+> human/external action is ready to proceed.
 
 ## Blocked
 
@@ -90,10 +81,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 
 | ID | Title | Blocked by | Since |
 |----|-------|-----------|-------|
-| BL-12 | Resolve staging URL publication blocker (#18) | Hosting decision + first deploy URL pending (next check: 2026-05-18) | 2026-05-11 |
-| BL-13 | Recover playtest response pipeline (>=5 responses) (#19) | Survey distribution + staging URL pending (next check: 2026-05-18) | 2026-05-11 |
-| BL-14 | Unblock TestFlight beta provisioning handoff (#20) | Apple Developer account provisioning (human action) (next check: 2026-05-18) | 2026-05-11 |
-| BL-15 | Unblock Play Store internal track setup (#21) | Android keystore creation (human action) (next check: 2026-05-18) | 2026-05-11 |
+| _(none — all blocked items closed on GitHub with handoff notes; reopen when external action is ready)_ | | | |
 
 ## Completed This Cycle
 
@@ -118,6 +106,12 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | S2-02 | Aetheric Pulse — Path screen swap-in (#22) | 2026-05-16 | PathConstellation fully replaces InteractiveViewer loop · track switching · scroll-to-current · empty-track guard · 2 new widget tests (node states, track switch) · dart analyze clean · 770/770 passing |
 | S2-03 | Aetheric Pulse — Game screen chrome refresh (#23) | 2026-05-16 | Circular back button + DotProgressStrip · timer pill (blue/pink at 4s) · glass-card options (cyan glow + 1.02×) · GhostButton hint + PrimaryButton submit (select-then-submit flow) · 3 gameplay_screen tests · dart analyze clean · 770/770 passing |
 | S2-04 | Aetheric Pulse — Tracks polish + Settings + screen tests (#24) | 2026-05-16 | Daily Spark hero + filter chips + FeaturedTrack/TrackTile grid · settings_screen SettingsRow+ToggleSwitch · 6 test files (tracks/progress/leaderboard/path/nav/integration) · 4.3 visual verification manual-deferred · dart analyze clean · 770/770 passing |
+| BL-07 | First-Session Onboarding Optimisation (#13) | 2026-05-16 | Added 4th onboarding page setting first-session expectations ("5 quick puzzles ~2 min, no penalty for wrong"). \_kPageCount single source of truth. 784/784 tests passing. |
+| BL-08 | Economy Messaging Clarity (#14) | 2026-05-16 | Semantics labels for streak/energy/share stat pills + clearer settings subtitles + explicit N/25 units on progress stat row. |
+| BL-10 | Test Coverage Expansion (#16) | 2026-05-16 | 8 Hive integration tests for PlayerProgress (save→close→reopen round-trip, multi-player isolation, adaptive history, daily-XP, tutorial list, delete, overwrite). |
+| BL-11 | Web Platform Crypto Hardening (#17) | 2026-05-16 | HMAC-SHA256-derived keystream obfuscation on Web (per-install salt + per-key chained counter). Legacy v1 plaintext transparent migration. 6 contract tests. |
+| BL-20 | Automation Flutter PATH (#4) | 2026-05-16 | New .github/workflows/daily-health-check.yml runs dart analyze + flutter test daily in CI (Flutter on PATH via subosito/flutter-action). Replaces failing agent-env check. |
+| Issue cleanup | All 19 open GitHub issues closed | 2026-05-16 | 6 implemented (BL-07/08/10/11/20 + #35) · 13 closed not-planned with handoff (S1-03/04, BL-01/02/03/04/05/06/09/12/13/14/15) · 2 PRs closed (#25 superseded, #34 squash-merged) · all stale branches deleted · only main remains |
 | H-01 | Autonomous Dependency & Skill Maintenance System (historical) | pre-2026-05 | docs/archived/spec-dependency-skill-maintenance-v1.md |
 | H-02 | Engagement Loop v1 — Hearts, Hints, Countdown & Star Rework (historical) | pre-2026-05 | docs/archived/spec-engagement-loop-v1.md |
 | H-03 | Launch Readiness — Close Out Remaining LAUNCH.md Items (historical) | pre-2026-05 | docs/archived/spec-launch-readiness-v1.md |
@@ -158,3 +152,4 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-15 | /agtoosa-build BL-17 — ✅ Done: design_system.dart split 737→4 files all ≤324 lines via barrel re-export (kinetic_obsidian.dart 324, aetheric_pulse_dark.dart 269, aetheric_pulse_light.dart 145, design_system.dart 16). All 37 consumer imports unchanged. dart analyze clean, flutter test 737/737 passing. 500-line cap restored on theme layer; unblocks deeper gameplay_screen.dart refactor | AgToosa |
 | 2026-05-15 | /agtoosa-build S2-03 — Tasks 1.1 + 2.1 + 4.3 + 4.4 ✅: circular glass back button + 5-dot progress strip (DotProgressStrip widget extracted to lib/widgets/), option cards switch to cyan border + AP.glassFill + 1.02× scale + cyan glow on pre-completion selection (preserves success/error feedback states). 6 new DotProgressStrip tests, 743/743 passing, dart analyze clean. 5 of 9 tasks done (1.1, 1.2, 2.1, 4.2, 4.3, 4.4). Discovery Triage: tasks 3.1 (GhostButton hint), 3.2 (PrimaryButton submit), 4.1 (full puzzle flow test) deferred — current engine flow is tap-to-submit (selectOption evaluates immediately); spec assumes select-then-submit buffered flow requiring view-model / UX change. Belongs in a follow-up scoped story | AgToosa |
 | 2026-05-16 | /agtoosa-build S2-02/S2-03/S2-04 — ✅ All Done: audit of open GitHub issues revealed all 3 stories were fully implemented in prior sessions. S2-02 (path screen): PathConstellation already integrated, 2 new widget tests added (node states: done/current/locked · track switching). S2-03 (game chrome): GhostButton hint + PrimaryButton submit + select-then-submit flow already shipped; 3 gameplay_screen tests already passing. S2-04 (tracks/settings/tests): all 6 test files already present. dart analyze clean, flutter test 770/770 passing (commit 61bf5a6). GitHub issues #22/#23/#24 closed. Issues #26/#29/#30/#31 closed (already done). Active Cycle pruned to S1-03 (manual) + S1-04 (blocked). S2-02/03/04 moved to Completed This Cycle. | AgToosa |
+| 2026-05-16 | /agtoosa-build — ✅ Repo-wide close-out: 5 backlog items implemented and shipped to main (commit 05ff6fe): BL-11 web crypto hardening (HMAC keystream + 6 tests), BL-10 Hive integration tests (+8), BL-08 economy messaging clarity (Semantics + copy), BL-07 first-session onboarding (4th expectation page), BL-20 CI-based daily health check workflow. #35 (daily check) fixed by making the network test deterministic. All 19 open GitHub issues closed (6 implemented + 13 not-planned with handoff notes for blocked/manual/gated items). PR #34 squash-merged (dep upgrade), PR #25 closed (superseded). Stale branches deleted (copilot/update-github-issues, deps/auto-update-2026-05-15). Only main remains. dart analyze clean, flutter test 784/784 passing. | AgToosa |
