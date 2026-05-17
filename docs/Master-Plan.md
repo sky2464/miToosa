@@ -50,8 +50,8 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 
 | ID | Title | Type | Estimate | Status | Tasks Done |
 |----|-------|------|----------|--------|------------|
-| BL-19 | Sanitize prompt-injection text + CI guard (#33) | Chore | S | 🟦 Todo | 5/9 (5 pre-shipped, 4 CI-guard tasks remain) |
-| BL-01+02 | Platform Release Signing Scaffolding (iOS + Android) (#7, #8) | Chore | M | 🟦 Todo | 0/11 (7 automatable + 4 `[manual]` human-action) |
+| BL-19 | Sanitize prompt-injection text + CI guard (#33) | Chore | S | ✅ Done | 9/9 (all guard tasks shipped) |
+| BL-01+02 | Platform Release Signing Scaffolding (iOS + Android) (#7, #8) | Chore | M | 🟨 In Progress | 6/8 tasks (5 `[manual]`) — remaining: 3.1 pbxproj inspect, 4.1 runbook iOS+verification+rotation+troubleshooting sections |
 
 ## Active Tasks
 
@@ -59,22 +59,22 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 > `Docs/archived/spec-BL-01-BL-02-platform-signing.md`. BL-04 is spec'd
 > but stays in Backlog pending playtest gate.
 
-- [ ] **1. BL-19:** Sanitize prompt-injection text + CI guard (#33)
+- [x] **1. BL-19:** Sanitize prompt-injection text + CI guard (#33) ✅ Done
   - [x] 1.1 Audit + sanitize `docs/mitoosa-design-system-2/README.md` (shipped 2ba2c87) — _Requirements: AC-001_
   - [x] 1.2 Audit + sanitize `docs/mitoosa-design-system-2/project/SKILL.md` (shipped 2ba2c87) — _Requirements: AC-001_
   - [x] 2.1 Spec authored + sanitization log committed — _Requirements: AC-002_
   - [x] 2.2 28 other doc files confirmed clean — _Requirements: AC-001_
   - [x] 2.3 False-positive grep hits documented (`screen-path.jsx` UI copy) — _Requirements: AC-001_
-  - [ ] 3.1 Write `scripts/check_prompt_injection.sh` — banned-pattern grep — _Requirements: AC-003_
-  - [ ] 3.2 Add `.github/workflows/prompt-injection-guard.yml` running 3.1 on PRs — _Requirements: AC-003_
-  - [ ] 3.3 Dry-run guard against current main; verify exit 0 — _Requirements: AC-003_
-  - [ ] 3.4 Fixture test: inject sentinel pattern, verify guard fails red — _Requirements: AC-003_
+  - [x] 3.1 Write `scripts/check_prompt_injection.sh` — banned-pattern grep — _Requirements: AC-003_
+  - [x] 3.2 Add `.github/workflows/prompt-injection-guard.yml` running 3.1 on PRs — _Requirements: AC-003_
+  - [x] 3.3 Dry-run guard against current main; verify exit 0 — _Requirements: AC-003_
+  - [x] 3.4 Fixture test: inject sentinel pattern, verify guard fails red — _Requirements: AC-003_
 - [ ] **2. BL-01+02:** Platform Release Signing Scaffolding (#7, #8)
-  - [ ] 1.1 Parameterize `android/app/build.gradle.kts` signingConfig via `key.properties` — _Requirements: AC-001_
-  - [ ] 1.2 Add `android/key.properties.template` committed; real `key.properties` gitignored — _Requirements: AC-002, AC-003_
-  - [ ] 1.3 Add Dart guard test: build fails loudly if `key.properties` is missing in release mode — _Requirements: AC-002_
-  - [ ] 2.1 Update `.gitignore`: `*.keystore`, `key.properties`, `*.mobileprovision`, `*.p12` — _Requirements: AC-003_
-  - [ ] 2.2 Test: `git check-ignore` confirms patterns match a synthetic test file — _Requirements: AC-003_
+  - [x] 1.1 Parameterize `android/app/build.gradle.kts` signingConfig via `key.properties` — _Requirements: AC-001_
+  - [x] 1.2 Add `android/key.properties.template` committed; real `key.properties` gitignored — _Requirements: AC-002, AC-003_
+  - [x] 1.3 Add Dart guard test: build fails loudly if `key.properties` is missing in release mode — _Requirements: AC-002_
+  - [x] 2.1 Update `.gitignore`: `*.keystore`, `key.properties`, `*.mobileprovision`, `*.p12` — _Requirements: AC-003_
+  - [x] 2.2 Test: `git check-ignore` confirms patterns match a synthetic test file — _Requirements: AC-003_
   - [ ] 3.1 Inspect `ios/Runner.xcodeproj/project.pbxproj` for env-driven `DEVELOPMENT_TEAM` (may downgrade to runbook-only if pbxproj edit is fragile) — _Requirements: AC-008_
   - [ ] 3.2 Set up Xcode automatic-sign with provisioning profile — _Requirements: AC-008_ `[manual]`
   - [ ] 4.1 Author `Docs/RELEASE-SIGNING.md` runbook (iOS + Android sections + verification + rotation + troubleshooting) — _Requirements: AC-004_
@@ -82,7 +82,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
   - [ ] 5.2 Generate Apple Distribution cert + App Store Connect app record — _Requirements: AC-007_ `[manual]`
   - [ ] 5.3 Register upload-key SHA-256 fingerprint in Play Console — _Requirements: AC-006_ `[manual]`
   - [ ] 5.4 End-to-end: upload to TestFlight + Play Internal Test — _Requirements: AC-005_ `[manual]`
-  - [ ] 6.1 Verification: dart analyze clean, flutter test 100% — _Requirements: AC-010_
+  - [x] 6.1 Verification: dart analyze clean, flutter test 789/789 — _Requirements: AC-010_
 
 ## Backlog
 
@@ -135,6 +135,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | BL-10 | Test Coverage Expansion (#16) | 2026-05-16 | 8 Hive integration tests for PlayerProgress (save→close→reopen round-trip, multi-player isolation, adaptive history, daily-XP, tutorial list, delete, overwrite). |
 | BL-11 | Web Platform Crypto Hardening (#17) | 2026-05-16 | HMAC-SHA256-derived keystream obfuscation on Web (per-install salt + per-key chained counter). Legacy v1 plaintext transparent migration. 6 contract tests. |
 | BL-20 | Automation Flutter PATH (#4) | 2026-05-16 | New .github/workflows/daily-health-check.yml runs dart analyze + flutter test daily in CI (Flutter on PATH via subosito/flutter-action). Replaces failing agent-env check. |
+| BL-19 | Sanitize prompt-injection text + CI guard (#33) | 2026-05-16 | All 9/9 tasks done: 5 pre-shipped sanitization (2ba2c87) + 4 new CI guard tasks (scripts/check_prompt_injection.sh banned-pattern grep · .github/workflows/prompt-injection-guard.yml on PR + push · .prompt-injection-allowlist · test/security/prompt_injection_guard_test.dart fixture test). Dry-run guard exit 0 against current docs. 789/789 tests passing. |
 | Issue cleanup | All 19 open GitHub issues closed | 2026-05-16 | 6 implemented (BL-07/08/10/11/20 + #35) · 13 closed not-planned with handoff (S1-03/04, BL-01/02/03/04/05/06/09/12/13/14/15) · 2 PRs closed (#25 superseded, #34 squash-merged) · all stale branches deleted · only main remains |
 | H-01 | Autonomous Dependency & Skill Maintenance System (historical) | pre-2026-05 | docs/archived/spec-dependency-skill-maintenance-v1.md |
 | H-02 | Engagement Loop v1 — Hearts, Hints, Countdown & Star Rework (historical) | pre-2026-05 | docs/archived/spec-engagement-loop-v1.md |
@@ -179,3 +180,6 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-16 | /agtoosa-build — ✅ Repo-wide close-out: 5 backlog items implemented and shipped to main (commit 05ff6fe): BL-11 web crypto hardening (HMAC keystream + 6 tests), BL-10 Hive integration tests (+8), BL-08 economy messaging clarity (Semantics + copy), BL-07 first-session onboarding (4th expectation page), BL-20 CI-based daily health check workflow. #35 (daily check) fixed by making the network test deterministic. All 19 open GitHub issues closed (6 implemented + 13 not-planned with handoff notes for blocked/manual/gated items). PR #34 squash-merged (dep upgrade), PR #25 closed (superseded). Stale branches deleted (copilot/update-github-issues, deps/auto-update-2026-05-15). Only main remains. dart analyze clean, flutter test 784/784 passing. | AgToosa |
 | 2026-05-16 | /agtoosa-spec tasks — pruned dangling Active Task group S1-04 (GitHub #6 closed; story deferred until BL-12 staging URL lands). Active Tasks now matches empty Active Cycle. Spec file Docs/AgToosa_Spec-S1-04.md retained on disk as Draft for re-enrollment when ready. Cleared status finding 🔴 "Active Task group references S1-04 which is not in Active Cycle." | AgToosa |
 | 2026-05-16 | /agtoosa-spec ×3 (parallel sub-agents in isolated worktrees) — 3 specs drafted, threat-modelled, and approved in one round-trip: (a) BL-19 sanitization + CI guard (7 ACs, 6 Must, 9 tasks — 5 already shipped in 2ba2c87, 4 CI-guard tasks remain) → spec-BL-19.md; (b) BL-04 Backend Leaderboard tech-design (12 ACs, 8 Must, 27 tasks across 8 groups, Firestore + Cloud Functions + App Check, Wave-1 has 6-way parallelism, hard dep on BL-03) → spec-BL-04.md; (c) BL-01+02 Platform Release Signing merged spec (10 ACs, 7 Must, 11 tasks: 7 automatable + 4 [manual], single combined story preferred over split) → spec-BL-01-BL-02-platform-signing.md. Active Cycle re-opened with BL-19 + BL-01+02; BL-04 kept in Backlog with spec ref + gate. Commits e79196c, 032e0c7, 8068517 cherry-picked from worktrees onto main. | AgToosa |
+| 2026-05-16 | /agtoosa-build counter-fix BL-01+02 — corrected Tasks Done counter from `0/11 (7 automatable + 4 [manual])` → `6/8 tasks (5 [manual])`. Recount: 8 automated tasks (1.1, 1.2, 1.3, 2.1, 2.2, 3.1, 4.1, 6.1) and 5 [manual] human-action tasks (3.2, 5.1, 5.2, 5.3, 5.4). Earlier counter undercounted both totals. Cleared status finding 🔴 "Tasks Done counter does not match actual checkboxes for BL-01+02." | AgToosa |
+| 2026-05-16 | /agtoosa-build BL-19 + BL-01+02 — ✅ BL-19 Done (9/9): CI guard implementation shipped (scripts/check_prompt_injection.sh + .github/workflows/prompt-injection-guard.yml + .prompt-injection-allowlist + test/security/prompt_injection_guard_test.dart). 🟨 BL-01+02 In Progress (6/8 + 5 [manual]): Android signing scaffolding shipped (android/app/build.gradle.kts parameterized via key.properties with loud-fail on missing fields · android/key.properties.template · .gitignore additions for *.keystore/*.jks/*.p12/key.properties · test/release/signing_config_test.dart 4 tests · docs/RELEASE-SIGNING.md Android section). Remaining auto: 3.1 pbxproj inspect, 4.1 runbook iOS+verification+rotation+troubleshooting sections. dart analyze clean, flutter test 789/789. | AgToosa |
+| 2026-05-16 | /agtoosa-ship WIP-hygiene re-audit — 5 pre-policy WIP commits (08fc208, 3488c6e, a5f11c8, 300e274, fc3e710) re-confirmed as managed exceptions per established policy (2026-05-14, 2026-05-15 entries). Verified 0 new post-policy WIPs since 2026-05-14 (the 2 grep hits `3eb65ba` chore(ship) and `55226df` chore(plan) are false-positive body-text matches per documented exception). No squash performed; rewriting already-shipped main history is not warranted. Cleared status findings 🟡 ×5. | AgToosa |

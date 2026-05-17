@@ -35,6 +35,16 @@ migrate_working_dir/
 /build/
 /coverage/
 
+# Release signing secrets
+*.keystore
+*.jks
+*.p12
+*.mobileprovision
+*.cer
+android/key.properties
+**/GoogleService-Info.plist
+**/google-services.json
+
 # Symbolication related
 app.*.symbols
 

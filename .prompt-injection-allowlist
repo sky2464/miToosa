@@ -1,0 +1,4 @@
+# Allowlist entries for known safe docs that refer to sanitized prompt injection examples.
+# Each line is treated as a regex string matching either a file path or a line contents.
+
+^docs/mitoosa-design-system-2/README\.md$

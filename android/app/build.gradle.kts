@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -31,10 +33,40 @@ android {
         versionName = flutter.versionName
     }
 
+    val keystoreProperties = Properties().apply {
+        val keyPropsFile = rootProject.file("android/key.properties")
+        if (keyPropsFile.exists()) {
+            keyPropsFile.inputStream().use { load(it) }
+        }
+    }
+
+    signingConfigs {
+        create("release") {
+            storeFile = keystoreProperties.getProperty("storeFile")
+                ?.takeIf { it.isNotBlank() }
+                ?.let { file(it) }
+            storePassword = keystoreProperties.getProperty("storePassword")
+            keyAlias = keystoreProperties.getProperty("keyAlias")
+            keyPassword = keystoreProperties.getProperty("keyPassword")
+        }
+    }
+
     buildTypes {
         release {
-            // Signing with the debug keys for now; replace with release keystore before publishing.
-            signingConfig = signingConfigs.getByName("debug")
+            val releaseConfig = signingConfigs.getByName("release")
+            val missingFields = buildList<String> {
+                if (releaseConfig.storeFile == null) add("storeFile")
+                if (releaseConfig.storePassword.isNullOrBlank()) add("storePassword")
+                if (releaseConfig.keyAlias.isNullOrBlank()) add("keyAlias")
+                if (releaseConfig.keyPassword.isNullOrBlank()) add("keyPassword")
+            }
+            if (missingFields.isNotEmpty()) {
+                throw GradleException(
+                    "Release build requires android/key.properties with valid signing configuration. " +
+                    "Missing: ${missingFields.joinToString(", ")}. See Docs/RELEASE-SIGNING.md."
+                )
+            }
+            signingConfig = releaseConfig
         }
     }
 }
