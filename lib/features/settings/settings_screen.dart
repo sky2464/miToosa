@@ -131,25 +131,28 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
         // Account
         const _SectionLabel('Account'),
         const SizedBox(height: 8),
-        GlassCard(
+        const GlassCard(
           borderRadius: AethericPulseDark.radiusCard,
-          padding: const EdgeInsets.symmetric(
+          padding: EdgeInsets.symmetric(
               vertical: 2, horizontal: AethericPulseDark.spaceMd),
           child: Column(
             children: [
+              // BL-08 Economy Messaging Clarity: subtitles spell out the
+              // "what you get / when" so players understand value without
+              // tapping into the screen.
               SettingsRow(
-                icon: const Icon(Icons.share_outlined),
+                icon: Icon(Icons.share_outlined),
                 title: 'Share miToosa',
-                subtitle: '+40 sessions per invite',
-                trailing: const Icon(Icons.chevron_right,
+                subtitle: 'Earn +40 bonus sessions per share (once per day)',
+                trailing: Icon(Icons.chevron_right,
                     size: 22, color: AethericPulseDark.onSurfaceMuted),
               ),
-              const Divider(height: 1, color: AethericPulseDark.glassBorder),
+              Divider(height: 1, color: AethericPulseDark.glassBorder),
               SettingsRow(
-                icon: const Icon(Icons.workspace_premium_outlined),
+                icon: Icon(Icons.workspace_premium_outlined),
                 title: 'Go VIP',
-                subtitle: 'Ad-free + 10 bonus sessions / day',
-                trailing: const _PurpleChip(label: 'Upgrade'),
+                subtitle: 'Ad-free play, +10 bonus sessions daily, streak shield',
+                trailing: _PurpleChip(label: 'Upgrade'),
               ),
             ],
           ),
@@ -252,15 +255,15 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
         const SizedBox(height: 16),
 
         // Danger zone
-        GlassCard(
+        const GlassCard(
           borderRadius: AethericPulseDark.radiusCard,
-          padding: const EdgeInsets.symmetric(
+          padding: EdgeInsets.symmetric(
               vertical: 2, horizontal: AethericPulseDark.spaceMd),
           child: SettingsRow(
-            icon: const Icon(Icons.restart_alt_outlined),
+            icon: Icon(Icons.restart_alt_outlined),
             title: 'Reset progress',
             subtitle: 'Clear all credits and stats',
-            trailing: const Icon(Icons.chevron_right,
+            trailing: Icon(Icons.chevron_right,
                 size: 22, color: AethericPulseDark.onSurfaceMuted),
           ),
         ),

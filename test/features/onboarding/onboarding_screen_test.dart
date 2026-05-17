@@ -14,23 +14,30 @@ void main() {
           theme: MiToosaTheme.darkTheme,
         );
 
-    testWidgets('renders all 3 pages', (WidgetTester tester) async {
+    testWidgets('renders all 4 pages (BL-07 first-session expectation page)',
+        (WidgetTester tester) async {
       await tester.pumpWidget(buildSubject());
       await tester.pumpAndSettle();
 
-      // Check first page
+      // Page 1
       expect(find.text('Welcome to miToosa'), findsOneWidget);
       expect(find.text('🧩'), findsOneWidget);
 
-      // Navigate to second page
+      // Page 2
       await tester.tap(find.text('Next'));
       await tester.pumpAndSettle();
       expect(find.text('Earn Stars & XP'), findsOneWidget);
 
-      // Navigate to third page
+      // Page 3
       await tester.tap(find.text('Next'));
       await tester.pumpAndSettle();
       expect(find.text('25 Free Games Daily'), findsOneWidget);
+
+      // Page 4 (BL-07): first-session expectation-setting
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle();
+      expect(find.text("Here's what happens next"), findsOneWidget);
+      expect(find.text('🚀'), findsOneWidget);
     });
 
     testWidgets('shows back button on pages 2+', (WidgetTester tester) async {
@@ -48,15 +55,16 @@ void main() {
       expect(find.text('Back'), findsOneWidget);
     });
 
-    testWidgets('shows Get Started button on last page', (WidgetTester tester) async {
+    testWidgets('shows Get Started button on last page (page 4)',
+        (WidgetTester tester) async {
       await tester.pumpWidget(buildSubject());
       await tester.pumpAndSettle();
 
-      // Navigate to third (last) page
-      await tester.tap(find.text('Next'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Next'));
-      await tester.pumpAndSettle();
+      // Navigate to last (4th) page
+      for (int i = 0; i < 3; i++) {
+        await tester.tap(find.text('Next'));
+        await tester.pumpAndSettle();
+      }
 
       expect(find.text('Get Started'), findsOneWidget);
     });
@@ -65,11 +73,11 @@ void main() {
       await tester.pumpWidget(buildSubject());
       await tester.pumpAndSettle();
 
-      // Navigate to last page
-      await tester.tap(find.text('Next'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Next'));
-      await tester.pumpAndSettle();
+      // Navigate to last (4th) page
+      for (int i = 0; i < 3; i++) {
+        await tester.tap(find.text('Next'));
+        await tester.pumpAndSettle();
+      }
 
       await tester.tap(find.text('Get Started'));
       await tester.pumpAndSettle();

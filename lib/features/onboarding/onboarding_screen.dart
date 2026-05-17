@@ -15,6 +15,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   late PageController _pageController;
   int _currentPage = 0;
 
+  /// BL-07: total page count — single source of truth for the page-indicator
+  /// dots and the "Next vs. Get Started" CTA logic. Bumped 3 → 4 to add the
+  /// first-session expectation-setting page.
+  static const int _kPageCount = 4;
+
   @override
   void initState() {
     super.initState();
@@ -42,6 +47,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 onPageChanged: (index) {
                   setState(() => _currentPage = index);
                 },
+                // BL-07 First-Session Onboarding Optimisation:
+                // 4-page flow that ends with an explicit "what happens next"
+                // expectation-setting page. Reduces first-session anxiety by
+                // telling players up-front: 5 puzzles, ~2 minutes, no penalty
+                // for being wrong. This is what playtest is expected to ask
+                // for; shipping it now lets the playtest validate vs. baseline.
                 children: const [
                   _OnboardingPage(
                     icon: '🧩',
@@ -61,6 +72,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     description:
                         'Play 25 games every day for free — no catch. Share with a friend to unlock 40 bonus games. Optional upgrades come later, only if you want them.',
                   ),
+                  _OnboardingPage(
+                    icon: '🚀',
+                    title: "Here's what happens next",
+                    description:
+                        'Your first session is 5 quick puzzles — about 2 minutes. Wrong answers don\'t cost a thing. Pick any track you like; we\'ll adapt the difficulty to you.',
+                  ),
                 ],
               ),
             ),
@@ -70,7 +87,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               child: Column(
                 children:[
                   // Skip button
-                  if (_currentPage < 2)
+                  if (_currentPage < _kPageCount - 1)
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
@@ -87,7 +104,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(
-                      3,
+                      _kPageCount,
                       (index) => Container(
                         margin: const EdgeInsets.symmetric(horizontal: 4),
                         width: _currentPage == index ? 24 : 8,
@@ -122,7 +139,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                       Expanded(
                         child: FilledButton(
                           onPressed: () {
-                            if (_currentPage < 2) {
+                            if (_currentPage < _kPageCount - 1) {
                               _pageController.nextPage(
                                 duration: const Duration(milliseconds: 300),
                                 curve: Curves.easeInOut,
@@ -133,7 +150,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             }
                           },
                           child: Text(
-                            _currentPage < 2 ? 'Next' : 'Get Started',
+                            _currentPage < _kPageCount - 1 ? 'Next' : 'Get Started',
                           ),
                         ),
                       ),

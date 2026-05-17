@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mitoosa/core/network/local_network_info.dart';
 import 'package:mitoosa/data/network/network_exceptions.dart';
@@ -50,17 +52,25 @@ void main() {
     });
 
     test('findAvailablePort throws when no ports available', () async {
-      // Use a range of reserved ports that are likely in use
-      await expectLater(
-        () async {
-          // Ports 1-10 are typically reserved
-          await LocalNetworkInfo.findAvailablePort(
-            startPort: 1,
-            endPort: 10,
-          );
-        },
-        throwsA(isA<PortBindingException>()),
-      );
+      // Bind a single port ourselves to make it unavailable, then ask
+      // findAvailablePort to search only that exact port range.
+      // This makes the test deterministic across environments (works on
+      // CI containers that can bind to low ports as well as dev boxes).
+      final server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
+      final boundPort = server.port;
+      try {
+        await expectLater(
+          () async {
+            await LocalNetworkInfo.findAvailablePort(
+              startPort: boundPort,
+              endPort: boundPort,
+            );
+          },
+          throwsA(isA<PortBindingException>()),
+        );
+      } finally {
+        await server.close();
+      }
     });
 
     test('generateWebSocketURL returns correctly formatted URL', () async {

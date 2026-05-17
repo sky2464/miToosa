@@ -95,17 +95,27 @@ class _TracksBodyState extends State<_TracksBody> {
           physics: const BouncingScrollPhysics(),
           child: Row(
             children: [
-              StatPill(
-                icon: const Icon(Icons.local_fire_department),
-                label: '${progress.streakCount} day streak',
-                tint: StatPillTint.orange,
+              // BL-08 Economy Messaging Clarity — Semantics labels explain
+              // each stat in plain English (streak meaning + energy reset window).
+              Semantics(
+                label:
+                    'Daily streak: ${progress.streakCount} ${progress.streakCount == 1 ? 'day' : 'days'}. Earn a milestone reward every 3, 7, 14, 30, 60, 90, 180, and 365 days.',
+                child: StatPill(
+                  icon: const Icon(Icons.local_fire_department),
+                  label: '${progress.streakCount} day streak',
+                  tint: StatPillTint.orange,
+                ),
               ),
               const SizedBox(width: 8),
-              StatPill(
-                icon: const Icon(Icons.bolt),
-                label: '${progress.freeGamesRemaining}/25 energy',
-                tint: StatPillTint.amber,
-                glow: true,
+              Semantics(
+                label:
+                    '${progress.freeGamesRemaining} of 25 free sessions remaining today. Resets at midnight. Share miToosa for +40 bonus sessions.',
+                child: StatPill(
+                  icon: const Icon(Icons.bolt),
+                  label: '${progress.freeGamesRemaining}/25 energy',
+                  tint: StatPillTint.amber,
+                  glow: true,
+                ),
               ),
               const SizedBox(width: 8),
               StatPill(

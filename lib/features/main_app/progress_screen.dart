@@ -207,20 +207,34 @@ class _ProgressBody extends StatelessWidget {
                       spacing: 6,
                       runSpacing: 6,
                       children: [
-                        StatPill(
-                          icon: const Icon(Icons.local_fire_department),
-                          label: '${progress.streakCount} day',
-                          tint: StatPillTint.orange,
+                        // BL-08 Economy Messaging Clarity:
+                        // explicit units + Semantics labels so players
+                        // understand what each stat means without tapping.
+                        Semantics(
+                          label:
+                              'Daily streak: ${progress.streakCount} day${progress.streakCount == 1 ? '' : 's'}',
+                          child: StatPill(
+                            icon: const Icon(Icons.local_fire_department),
+                            label: '${progress.streakCount} day',
+                            tint: StatPillTint.orange,
+                          ),
                         ),
-                        StatPill(
-                          icon: const Icon(Icons.star),
-                          label: '$totalStars',
-                          tint: StatPillTint.purple,
+                        Semantics(
+                          label: 'Total stars earned: $totalStars',
+                          child: StatPill(
+                            icon: const Icon(Icons.star),
+                            label: '$totalStars ★',
+                            tint: StatPillTint.purple,
+                          ),
                         ),
-                        StatPill(
-                          icon: const Icon(Icons.bolt),
-                          label: '${progress.freeGamesRemaining}',
-                          tint: StatPillTint.amber,
+                        Semantics(
+                          label:
+                              '${progress.freeGamesRemaining} of 25 daily sessions remaining. Resets at midnight.',
+                          child: StatPill(
+                            icon: const Icon(Icons.bolt),
+                            label: '${progress.freeGamesRemaining}/25',
+                            tint: StatPillTint.amber,
+                          ),
                         ),
                       ],
                     ),
