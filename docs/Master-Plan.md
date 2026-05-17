@@ -47,62 +47,17 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 
 | ID | Title | Type | Estimate | Status | Tasks Done |
 |----|-------|------|----------|--------|------------|
-| S1-03 | Manual Wedge QA Walkthrough (#5) | Chore | S | Todo | 0/1 |
-| S1-04 | Playtest Survey & Recruitment (#6) | Feature | M | Todo | 0/1 |
-| S2-02 | Aetheric Pulse — Path screen swap-in (#22) | Feature | M | 🟦 Todo | 0/8 |
-| S2-03 | Aetheric Pulse — Game screen chrome refresh (#23) | Feature | M | 🟨 In Progress | 5/9 (3 deferred — flow change) |
-| S2-04 | Aetheric Pulse — Tracks polish + Settings + screen tests (#24) | Feature | L | 🟨 In Progress | 3/13 tasks (1 manual-deferred) |
+| S1-03 | Manual Wedge QA Walkthrough (#5) | Chore | S | 🔧 Awaiting Manual | 0/1 `[manual]` |
+| S1-04 | Playtest Survey & Recruitment (#6) | Feature | M | 🚧 Blocked | 0/1 |
 
 ## Active Tasks
 
 > Task sub-issues under the currently In Progress story. Created at `/agtoosa-build scope`.
 
-- [ ] **1. S1-03:** Manual Wedge QA Walkthrough (#5)
-	- [ ] 3.1 Execute manual QA walkthrough and capture findings in QA artifacts — _Requirements: QA walkthrough checklist_
-- [ ] **2. S1-04:** Playtest Survey & Recruitment (#6)
+- [ ] **1. S1-03:** Manual Wedge QA Walkthrough (#5) `[manual]`
+	- [ ] 3.1 Execute manual QA walkthrough and capture findings in QA artifacts — _Requirements: QA walkthrough checklist_ `[manual]`
+- [ ] **2. S1-04:** Playtest Survey & Recruitment (#6) `[blocked: staging URL + response pipeline]`
 	- [ ] 4.1 Finalize survey with staging URL and recruit 15-20 testers — _Requirements: playtest recruitment target_
-- [ ] **3. S2-02:** Aetheric Pulse — Path screen swap-in
-  - [ ] 1.1 Replace InteractiveViewer node loop with `PathConstellation` widget call — _Requirements: AC-001, AC-002_
-  - [ ] 1.2 Map per-track `levelStars` → `List<PathLevel>` with state/type — _Requirements: AC-002_
-  - [ ] 1.3 Preserve track-switching UX from existing screen — _Requirements: AC-003_
-  - [ ] 1.4 Scroll current node into view on first frame — _Requirements: AC-004_
-  - [ ] 1.5 Guard empty-track edge case — _Requirements: AC-002_
-  - [ ] 2.1 Widget test: constellation node states from mocked progress — _Requirements: AC-001, AC-002_
-  - [ ] 2.2 Widget test: track switching re-renders constellation — _Requirements: AC-003_
-  - [ ] 2.3 `dart analyze` clean + `flutter test` passing — _Requirements: AC-001_
-- [ ] **4. S2-03:** Aetheric Pulse — Game screen chrome refresh
-  - [x] **1.** Top chrome
-    - [x] 1.1 Replace existing top bar with circular back button + 5-dot progress bar — _Requirements: AC-001_
-    - [x] 1.2 Replace timer widget call site with new timer pill (blue ≤4s → pink + pulse) — _Requirements: AC-002_
-  - [x] **2.** Options grid
-    - [x] 2.1 Wrap option cards in glass-card recipe; cyan glow border + 1.02× scale on selected — _Requirements: AC-003_
-  - [ ] **3.** Bottom CTAs `[deferred — Discovery Triage]`
-    - [ ] 3.1 Replace existing hint button with `GhostButton` — _Requirements: AC-004_ `[deferred: depends on bottom-CTA UX scope decision]`
-    - [ ] 3.2 Replace existing submit button with `PrimaryButton` (full-width, glow on enabled) — _Requirements: AC-004_ `[deferred: requires select-then-submit flow change; current model is tap-to-submit]`
-  - [ ] **4.** Preservation tests
-    - [ ] 4.1 Widget test: full puzzle flow (select → submit → next) using real engine, no chrome regressions — _Requirements: AC-005_ `[deferred: depends on 3.x]`
-    - [x] 4.2 Widget test: timer pill color switches at 4s threshold — _Requirements: AC-002_
-    - [x] 4.3 Widget test: DotProgressStrip dot states (5 sub-tests) — _Requirements: AC-001/AC-003_ `[option cyan test deferred with 3.x]`
-    - [x] 4.4 `dart analyze` clean, `flutter test` 743/743 passing — _Requirements: AC-005_
-- [ ] **5. S2-04:** Aetheric Pulse — Tracks polish + Settings + screen tests
-  - [ ] **1.** Tracks polish
-    - [ ] 1.1 Refine Daily Spark hero: eyebrow timer, "Today's session" headline, ProgressRing N/5, skill sequence dots, Start session PrimaryButton — _Requirements: AC-001_
-    - [ ] 1.2 Add filter chip row (all/memory/logic/speed/spatial) with active blue glow — _Requirements: AC-002_
-    - [ ] 1.3 Create `lib/widgets/featured_track.dart` and `lib/widgets/track_tile.dart` — _Requirements: AC-003_
-    - [ ] 1.4 Replace existing track cards with FeaturedTrack + 2-col TrackTile grid; wire PNG icons via `AP.trackIcon(id)` — _Requirements: AC-003_
-  - [ ] **2.** Settings refactor
-    - [ ] 2.1 Swap `_SettingRow` → `SettingsRow` and `_KineticToggle` → `ToggleSwitch` in `settings_screen.dart`, preserving service wiring — _Requirements: AC-004_
-  - [ ] **3.** Screen-level tests
-    - [ ] 3.1 `tracks_screen_test.dart` — Daily Spark hero, filter chips, featured + grid (3 tests) — _Requirements: AC-005_
-    - [x] 3.2 `progress_screen_test.dart` — XP hero, radar, weekly bars, achievement grid (3 tests) — _Requirements: AC-005_
-    - [x] 3.3 `leaderboard_screen_test.dart` — podium, segmented control, YOU row (3 tests) — _Requirements: AC-005_
-    - [x] 3.4 `world_map_path_screen_test.dart` — constellation renders, track switch (2 tests) — _Requirements: AC-005_
-    - [ ] 3.5 `main_app_shell_nav_test.dart` — 5-tab nav, active indicator (2 tests) — _Requirements: AC-005_
-    - [ ] 3.6 `progress_provider_integration_test.dart` — mocked provider, screens show real values (3 tests) — _Requirements: AC-005, AC-006_
-  - [ ] **4.** Verification
-    - [ ] 4.1 `dart analyze` clean — _Requirements: AC-001_
-    - [ ] 4.2 `flutter test` all passing — _Requirements: AC-001_
-    - [ ] 4.3 Visual verification on simulator — _Requirements: AC-001_ `[manual]`
 
 ## Backlog
 
@@ -125,7 +80,6 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | BL-13 | Recover playtest response pipeline (>=5 responses) (#19) | Chore | S | EP-01 | P1 |
 | BL-14 | Unblock TestFlight beta provisioning handoff (#20) | Chore | M | EP-02 | P1 |
 | BL-15 | Unblock Play Store internal track setup (#21) | Chore | M | EP-02 | P1 |
-| BL-16 | Reconcile orphaned archived specs with Master-Plan (#30) | Chore | S | EP-05 | P4 |
 | BL-18 | WCAG 44pt tap-target fix (ToggleSwitch/GhostButton/PrimaryButton) (#32) | Improvement | S | EP-04 | P2 |
 | BL-19 | Sanitize embedded prompt-injection text in docs/mitoosa-design-system-2/ (#33) | Chore | S | EP-05 | P3 |
 | BL-20 | Fix automation env: Flutter/Dart toolchain not on PATH (#4) | Bug | S | EP-05 | P3 |
@@ -159,7 +113,11 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | S1-02 | Analytics Backend Integration | 2026-05-11 | docs/archived/spec-s1-02.md · docs/archived/review-s1-02.md · docs/archived/ship-check-s1-02.md |
 | S1-01 | Staging Deployment & QA Gate | 2026-05-11 | docs/archived/spec-S1-01.md · docs/STAGING-SETUP.md · docs/RELEASE-GATES.md |
 | S2-01 | Aetheric Pulse UI Redesign — foundation + 3 screens (partial) | 2026-05-14 | docs/archived/spec-S2-01.md · docs/archived/review-S2-01.md · 23/29 tasks · 4 P0 follow-ups filed (S2-02/03/04) |
-| BL-17 | Split design_system.dart (737→4 files ≤324 lines) | 2026-05-15 | kinetic_obsidian.dart 324 · aetheric_pulse_dark.dart 269 · aetheric_pulse_light.dart 145 · design_system.dart 16 (barrel) · 743/743 tests passing |
+| BL-16 | Reconcile orphaned archived specs with Master-Plan | 2026-05-14 | All 5 orphan specs reconciled as H-01–H-05 historical entries. GitHub #30 closed. |
+| BL-17 | Split design_system.dart (737→4 files ≤324 lines) | 2026-05-15 | kinetic_obsidian.dart 324 · aetheric_pulse_dark.dart 269 · aetheric_pulse_light.dart 145 · design_system.dart 16 (barrel) · 743/743 tests passing. GitHub #26 #31 closed. |
+| S2-02 | Aetheric Pulse — Path screen swap-in (#22) | 2026-05-16 | PathConstellation fully replaces InteractiveViewer loop · track switching · scroll-to-current · empty-track guard · 2 new widget tests (node states, track switch) · dart analyze clean · 770/770 passing |
+| S2-03 | Aetheric Pulse — Game screen chrome refresh (#23) | 2026-05-16 | Circular back button + DotProgressStrip · timer pill (blue/pink at 4s) · glass-card options (cyan glow + 1.02×) · GhostButton hint + PrimaryButton submit (select-then-submit flow) · 3 gameplay_screen tests · dart analyze clean · 770/770 passing |
+| S2-04 | Aetheric Pulse — Tracks polish + Settings + screen tests (#24) | 2026-05-16 | Daily Spark hero + filter chips + FeaturedTrack/TrackTile grid · settings_screen SettingsRow+ToggleSwitch · 6 test files (tracks/progress/leaderboard/path/nav/integration) · 4.3 visual verification manual-deferred · dart analyze clean · 770/770 passing |
 | H-01 | Autonomous Dependency & Skill Maintenance System (historical) | pre-2026-05 | docs/archived/spec-dependency-skill-maintenance-v1.md |
 | H-02 | Engagement Loop v1 — Hearts, Hints, Countdown & Star Rework (historical) | pre-2026-05 | docs/archived/spec-engagement-loop-v1.md |
 | H-03 | Launch Readiness — Close Out Remaining LAUNCH.md Items (historical) | pre-2026-05 | docs/archived/spec-launch-readiness-v1.md |
@@ -199,3 +157,4 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-15 | /agtoosa-ship hygiene — WIP audit: 5 pre-policy WIP commits (08fc208..fc3e710) confirmed as managed exceptions (no new post-policy WIPs); 6th finding was false-positive grep match on chore(plan) commit. Branch divergence resolved (up to date with origin/main). Master-Plan.md compacted: 27 pre-2026-05-14 Update Log entries archived to Docs/archived/update-log-2026-05.md; file trimmed from 224→198 lines | AgToosa |
 | 2026-05-15 | /agtoosa-build BL-17 — ✅ Done: design_system.dart split 737→4 files all ≤324 lines via barrel re-export (kinetic_obsidian.dart 324, aetheric_pulse_dark.dart 269, aetheric_pulse_light.dart 145, design_system.dart 16). All 37 consumer imports unchanged. dart analyze clean, flutter test 737/737 passing. 500-line cap restored on theme layer; unblocks deeper gameplay_screen.dart refactor | AgToosa |
 | 2026-05-15 | /agtoosa-build S2-03 — Tasks 1.1 + 2.1 + 4.3 + 4.4 ✅: circular glass back button + 5-dot progress strip (DotProgressStrip widget extracted to lib/widgets/), option cards switch to cyan border + AP.glassFill + 1.02× scale + cyan glow on pre-completion selection (preserves success/error feedback states). 6 new DotProgressStrip tests, 743/743 passing, dart analyze clean. 5 of 9 tasks done (1.1, 1.2, 2.1, 4.2, 4.3, 4.4). Discovery Triage: tasks 3.1 (GhostButton hint), 3.2 (PrimaryButton submit), 4.1 (full puzzle flow test) deferred — current engine flow is tap-to-submit (selectOption evaluates immediately); spec assumes select-then-submit buffered flow requiring view-model / UX change. Belongs in a follow-up scoped story | AgToosa |
+| 2026-05-16 | /agtoosa-build S2-02/S2-03/S2-04 — ✅ All Done: audit of open GitHub issues revealed all 3 stories were fully implemented in prior sessions. S2-02 (path screen): PathConstellation already integrated, 2 new widget tests added (node states: done/current/locked · track switching). S2-03 (game chrome): GhostButton hint + PrimaryButton submit + select-then-submit flow already shipped; 3 gameplay_screen tests already passing. S2-04 (tracks/settings/tests): all 6 test files already present. dart analyze clean, flutter test 770/770 passing (commit 61bf5a6). GitHub issues #22/#23/#24 closed. Issues #26/#29/#30/#31 closed (already done). Active Cycle pruned to S1-03 (manual) + S1-04 (blocked). S2-02/03/04 moved to Completed This Cycle. | AgToosa |
