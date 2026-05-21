@@ -18,7 +18,7 @@ void main() {
       final templateFile = File('android/key.properties.template');
       expect(templateFile.existsSync(), isTrue);
 
-      final docsFile = File('Docs/RELEASE-SIGNING.md');
+      final docsFile = File('docs/RELEASE-SIGNING.md');
       expect(docsFile.existsSync(), isTrue);
     });
 
@@ -42,7 +42,7 @@ void main() {
       // pbxproj escape hatch + cross-platform verification + key lifecycle.
       // The Android section is intentionally not asserted here (covered by
       // 'template and runbook exist' above).
-      final docsFile = File('Docs/RELEASE-SIGNING.md');
+      final docsFile = File('docs/RELEASE-SIGNING.md');
       expect(docsFile.existsSync(), isTrue);
       final docsText = docsFile.readAsStringSync();
 
