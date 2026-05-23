@@ -82,7 +82,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
   - [ ] 5.2 Generate Apple Distribution cert + App Store Connect app record — _Requirements: AC-007_ `[manual]`
   - [ ] 5.3 Register upload-key SHA-256 fingerprint in Play Console — _Requirements: AC-006_ `[manual]`
   - [ ] 5.4 End-to-end: upload to TestFlight + Play Internal Test — _Requirements: AC-005_ `[manual]`
-  - [x] 6.1 Verification: dart analyze clean, flutter test 789/789 — _Requirements: AC-010_
+  - [x] 6.1 Verification: dart analyze clean, flutter test 870/870 (re-verified 2026-05-23) — _Requirements: AC-010_
 
 ## Backlog
 
