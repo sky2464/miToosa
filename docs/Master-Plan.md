@@ -76,12 +76,12 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
   - [x] 2.1 Update `.gitignore`: `*.keystore`, `key.properties`, `*.mobileprovision`, `*.p12` — _Requirements: AC-003_
   - [x] 2.2 Test: `git check-ignore` confirms patterns match a synthetic test file — _Requirements: AC-003_
   - [x] 3.1 Inspect `ios/Runner.xcodeproj/project.pbxproj` for env-driven `DEVELOPMENT_TEAM` — _Requirements: AC-008_ `[runbook-only]` (downgrade per spec escape hatch — pbxproj has hardcoded `DEVELOPMENT_TEAM = TYK6BBNDW5;` at lines 478, 661, 684; programmatic patches are fragile because Xcode rewrites the file; per-team override path is documented in iOS section of `docs/RELEASE-SIGNING.md`)
-  - [ ] 3.2 Set up Xcode automatic-sign with provisioning profile — _Requirements: AC-008_ `[manual]`
-  - [x] 4.1 Author `Docs/RELEASE-SIGNING.md` runbook (iOS + Android sections + verification + rotation + troubleshooting) — _Requirements: AC-004_
-  - [ ] 5.1 Generate Android keystore via `keytool` — _Requirements: AC-006_ `[manual]`
-  - [ ] 5.2 Generate Apple Distribution cert + App Store Connect app record — _Requirements: AC-007_ `[manual]`
-  - [ ] 5.3 Register upload-key SHA-256 fingerprint in Play Console — _Requirements: AC-006_ `[manual]`
-  - [ ] 5.4 End-to-end: upload to TestFlight + Play Internal Test — _Requirements: AC-005_ `[manual]`
+  - [ ] 3.2 Set up Xcode automatic-sign with provisioning profile — _Requirements: AC-008_ `[manual]` → [docs/release/BL-01-02-3.2-xcode-automatic-signing.md](release/BL-01-02-3.2-xcode-automatic-signing.md)
+  - [x] 4.1 Author `docs/RELEASE-SIGNING.md` runbook (iOS + Android sections + verification + rotation + troubleshooting) — _Requirements: AC-004_
+  - [ ] 5.1 Generate Android keystore via `keytool` — _Requirements: AC-006_ `[manual]` → [docs/release/BL-01-02-5.1-android-keystore-keytool.md](release/BL-01-02-5.1-android-keystore-keytool.md)
+  - [ ] 5.2 Generate Apple Distribution cert + App Store Connect app record — _Requirements: AC-007_ `[manual]` → [docs/release/BL-01-02-5.2-apple-distribution-app-store-connect.md](release/BL-01-02-5.2-apple-distribution-app-store-connect.md)
+  - [ ] 5.3 Register upload-key SHA-256 fingerprint in Play Console — _Requirements: AC-006_ `[manual]` → [docs/release/BL-01-02-5.3-play-console-upload-key.md](release/BL-01-02-5.3-play-console-upload-key.md)
+  - [ ] 5.4 End-to-end: upload to TestFlight + Play Internal Test — _Requirements: AC-005_ `[manual]` → [docs/release/BL-01-02-5.4-e2e-testflight-play-internal.md](release/BL-01-02-5.4-e2e-testflight-play-internal.md)
   - [x] 6.1 Verification: dart analyze clean, flutter test 789/789 — _Requirements: AC-010_
 
 ## Backlog

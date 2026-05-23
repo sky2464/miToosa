@@ -2,6 +2,21 @@
 
 This runbook covers release signing for both target stores — Google Play (Android) and the App Store / TestFlight (iOS). Signing material is platform-managed and never lives in source control. See also: spec `docs/archived/spec-BL-01-BL-02-platform-signing.md` (AC-001 through AC-010).
 
+## Step-by-step manuals (BL-01+02 deferred tasks)
+
+For numbered click-by-click procedures (tasks **3.2**, **5.1**, **5.2**, **5.3**, **5.4**), use the dedicated guides under **`docs/release/`**:
+
+| Task | Guide |
+|------|--------|
+| Index + recommended order | [docs/release/BL-01-02-README.md](release/BL-01-02-README.md) |
+| 3.2 Xcode automatic signing | [docs/release/BL-01-02-3.2-xcode-automatic-signing.md](release/BL-01-02-3.2-xcode-automatic-signing.md) |
+| 5.1 Android keystore (`keytool`) | [docs/release/BL-01-02-5.1-android-keystore-keytool.md](release/BL-01-02-5.1-android-keystore-keytool.md) |
+| 5.2 Apple Distribution + ASC app | [docs/release/BL-01-02-5.2-apple-distribution-app-store-connect.md](release/BL-01-02-5.2-apple-distribution-app-store-connect.md) |
+| 5.3 Play upload-key SHA-256 | [docs/release/BL-01-02-5.3-play-console-upload-key.md](release/BL-01-02-5.3-play-console-upload-key.md) |
+| 5.4 TestFlight + Play Internal | [docs/release/BL-01-02-5.4-e2e-testflight-play-internal.md](release/BL-01-02-5.4-e2e-testflight-play-internal.md) |
+
+The sections below remain a concise reference; follow the manuals when executing the manual gates for the first time.
+
 # Android Release Signing
 
 This project requires a secure keystore for Android release builds. The signing configuration is loaded from `android/key.properties`, which must be excluded from source control.
