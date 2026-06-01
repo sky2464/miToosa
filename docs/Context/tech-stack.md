@@ -55,8 +55,7 @@ iac_tool: "N/A — no cloud infrastructure in v1"
 ## CI/CD
 ci_platform: "GitHub Actions"
 workflows:
-  - ".github/workflows/dependency-maintenance.yml — weekly Mon 06:00 UTC pub.dev outdated scan + safe upgrades + advisory check"
-  - ".github/workflows/docs-archival-check.yml — triggered on docs/ changes; verifies completed specs are archived"
+  - ".github/workflows/pr-validation.yml — triggered on all PRs targeting main; runs cached static analysis, unit/widget tests, conditional prompt injection guard, and conditional docs archival check"
 
 ## Notes
 <!-- CRITICAL: share_plus is PINNED at ^12.0.2 — do NOT upgrade to 13.0.0+ without checking flutter_secure_storage compatibility -->

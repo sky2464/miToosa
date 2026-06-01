@@ -2,7 +2,7 @@
 
 **Story ID:** S1-01
 **Epic:** EP-01 — Launch Readiness & Validation
-**Status:** Done
+**Status:** Archived
 **Date:** 2026-05-04
 **Author:** AgToosa
 

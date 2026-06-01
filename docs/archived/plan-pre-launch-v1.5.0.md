@@ -2,7 +2,7 @@
 
 **Last Updated:** 2026-04-24
 **Current Version:** v1.5.0
-**Status:** Pre-Launch — Core features complete, staging deployment pending
+**Status:** Archived
 
 ---
 

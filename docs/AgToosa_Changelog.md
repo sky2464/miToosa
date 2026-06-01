@@ -8,6 +8,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), version
 ## [Unreleased]
 
 ### Added
+- **BL-21 Streamline GitHub Automation and CI/CD**: removed 7 expensive GitHub Actions workflows (`claude.yml`, `claude-code-review.yml`, `daily-health-check.yml`, `dependency-maintenance.yml`, `docs-archival-check.yml`, `prompt-injection-guard.yml`, `web-build.yml`); added unified PR-only `pr-validation.yml` with cached Flutter setup, `dart analyze`, `flutter test`, and path-filtered local guards (`verify_docs_archival.sh`, `check_prompt_injection.sh`). ADR `docs/decisions/remove-expensive-ci-cd.md` (Accepted). Domain dictionary `docs/Context/CONTEXT.md`. **870/870 tests passing.**
+
+_Spec: `docs/archived/spec-BL-21.md` · Test plan: `docs/AgToosa_TestPlan-BL-21.md` · Story: BL-21_
+
 - **S2-01 Aetheric Pulse UI Redesign — partial ship (foundation + 3 screens)**: consolidated Aetheric Pulse design tokens (`lib/theme/design_tokens.dart` `AP` namespace), 11 new shared widgets (`atmosphere`, `stat_pill`, `app_header`, `primary_button`, `ghost_button`, `toggle_switch`, `settings_row`, `skill_radar`, `weekly_bars`, `achievement_card`, `path_constellation`), 26 design assets (8 track icons + 12 avatars + 6 badges in `assets/images/`), and rebuilt Progress + Leaderboard screens with real `playerProgressProvider` wiring. Tracks screen gained a horizontal `StatPill` strip with real streak/energy/stars/XP data. App shell now uses `AppHeader` (sticky avatar ring + brand mark + credits pill) over an animated `Atmosphere` background (radial glow blobs + star field).
 - 32 new tests added across `test/theme/design_tokens_test.dart` and `test/widgets/{stat_pill,primary_button,toggle_switch,skill_radar,achievement_card,atmosphere,weekly_bars}_test.dart` — full suite now **721/721 passing**.
 - `docs/archived/spec-S2-01.md`, `docs/AgToosa_TestPlan-S2-01.md` (33 test IDs mapped to 14 ACs), `docs/archived/review-S2-01.md` (4-persona audit: Security ✅, Eng 🔴, CEO 🟡, QA 🔴)

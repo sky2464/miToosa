@@ -6,7 +6,7 @@
 **Priority:** P4  
 **Estimate:** XS (< 2h)  
 **Created:** 2026-05-04  
-**Status:** Todo
+**Status:** Archived
 
 ---
 

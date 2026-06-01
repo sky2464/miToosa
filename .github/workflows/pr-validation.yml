@@ -1,0 +1,55 @@
+name: PR Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Lint, Test, and Guard
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for accurate git diff comparisons
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Static Analysis
+        run: dart analyze
+
+      - name: Run Test Suite
+        run: flutter test
+
+      - name: Conditional Docs Archival Check
+        run: |
+          git fetch origin ${{ github.base_ref }} --depth=1
+          if git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '^docs/.*\.md$' > /dev/null; then
+            echo "Documentation changed, running verify_docs_archival.sh..."
+            bash scripts/verify_docs_archival.sh
+          else
+            echo "No documentation changes detected, skipping archival check."
+          fi
+
+      - name: Conditional Prompt Injection Guard
+        run: |
+          git fetch origin ${{ github.base_ref }} --depth=1
+          if git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '^docs/mitoosa-design-system-2/' > /dev/null; then
+            echo "Design docs changed, running check_prompt_injection.sh..."
+            chmod +x scripts/check_prompt_injection.sh
+            ./scripts/check_prompt_injection.sh docs/mitoosa-design-system-2
+          else
+            echo "No design doc changes detected, skipping prompt injection guard."
+          fi

@@ -43,33 +43,19 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 
 ## Active Cycle
 
-> Sprint 1B re-opened 2026-05-16 with 3 newly-specced stories
-> (BL-19 ready-to-build, BL-01+02 ready-to-build with manual gates,
-> BL-04 spec'd-but-gated on playtest signal). Pick up BL-19 next as
-> highest-leverage automatable work.
+> Sprint 1B — only BL-01+02 remains active (awaiting manual signing steps).
+> BL-19 and BL-21 shipped 2026-05-22. BL-04 stays in Backlog (playtest gate).
 
 | ID | Title | Type | Estimate | Status | Tasks Done |
 |----|-------|------|----------|--------|------------|
-| BL-19 | Sanitize prompt-injection text + CI guard (#33) | Chore | S | ✅ Done | 9/9 (all guard tasks shipped) |
 | BL-01+02 | Platform Release Signing Scaffolding (iOS + Android) (#7, #8) | Chore | M | 🔧 Awaiting Manual | 8/8 tasks (5 `[manual]`) — all automatable tasks done; awaiting 3.2/5.1/5.2/5.3/5.4 human action |
 
 ## Active Tasks
 
-> Mirrored from approved specs `Docs/archived/spec-BL-19.md` and
-> `Docs/archived/spec-BL-01-BL-02-platform-signing.md`. BL-04 is spec'd
-> but stays in Backlog pending playtest gate.
+> Mirrored from `docs/archived/spec-BL-01-BL-02-platform-signing.md`.
+> BL-04 is spec'd but stays in Backlog pending playtest gate.
 
-- [x] **1. BL-19:** Sanitize prompt-injection text + CI guard (#33) ✅ Done
-  - [x] 1.1 Audit + sanitize `docs/mitoosa-design-system-2/README.md` (shipped 2ba2c87) — _Requirements: AC-001_
-  - [x] 1.2 Audit + sanitize `docs/mitoosa-design-system-2/project/SKILL.md` (shipped 2ba2c87) — _Requirements: AC-001_
-  - [x] 2.1 Spec authored + sanitization log committed — _Requirements: AC-002_
-  - [x] 2.2 28 other doc files confirmed clean — _Requirements: AC-001_
-  - [x] 2.3 False-positive grep hits documented (`screen-path.jsx` UI copy) — _Requirements: AC-001_
-  - [x] 3.1 Write `scripts/check_prompt_injection.sh` — banned-pattern grep — _Requirements: AC-003_
-  - [x] 3.2 Add `.github/workflows/prompt-injection-guard.yml` running 3.1 on PRs — _Requirements: AC-003_
-  - [x] 3.3 Dry-run guard against current main; verify exit 0 — _Requirements: AC-003_
-  - [x] 3.4 Fixture test: inject sentinel pattern, verify guard fails red — _Requirements: AC-003_
-- [ ] **2. BL-01+02:** Platform Release Signing Scaffolding (#7, #8)
+- [ ] **1. BL-01+02:** Platform Release Signing Scaffolding (#7, #8)
   - [x] 1.1 Parameterize `android/app/build.gradle.kts` signingConfig via `key.properties` — _Requirements: AC-001_
   - [x] 1.2 Add `android/key.properties.template` committed; real `key.properties` gitignored — _Requirements: AC-002, AC-003_
   - [x] 1.3 Add Dart guard test: build fails loudly if `key.properties` is missing in release mode — _Requirements: AC-002_
@@ -136,6 +122,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | BL-11 | Web Platform Crypto Hardening (#17) | 2026-05-16 | HMAC-SHA256-derived keystream obfuscation on Web (per-install salt + per-key chained counter). Legacy v1 plaintext transparent migration. 6 contract tests. |
 | BL-20 | Automation Flutter PATH (#4) | 2026-05-16 | New .github/workflows/daily-health-check.yml runs dart analyze + flutter test daily in CI (Flutter on PATH via subosito/flutter-action). Replaces failing agent-env check. |
 | BL-19 | Sanitize prompt-injection text + CI guard (#33) | 2026-05-16 | All 9/9 tasks done: 5 pre-shipped sanitization (2ba2c87) + 4 new CI guard tasks (scripts/check_prompt_injection.sh banned-pattern grep · .github/workflows/prompt-injection-guard.yml on PR + push · .prompt-injection-allowlist · test/security/prompt_injection_guard_test.dart fixture test). Dry-run guard exit 0 against current docs. 789/789 tests passing. |
+| BL-21 | Streamline GitHub Automation and CI/CD | 2026-05-22 | Deleted 7 expensive workflows (Claude Actions, crons, standalone guards, web-build); unified `pr-validation.yml` (PR-only, cached Flutter, `dart analyze` + `flutter test`, path-filtered `verify_docs_archival.sh` + `check_prompt_injection.sh`). ADR `docs/decisions/remove-expensive-ci-cd.md` Accepted. `docs/Context/CONTEXT.md` added. 870/870 tests passing. Spec: `docs/archived/spec-BL-21.md` · Test plan: `docs/AgToosa_TestPlan-BL-21.md` |
 | Issue cleanup | All 19 open GitHub issues closed | 2026-05-16 | 6 implemented (BL-07/08/10/11/20 + #35) · 13 closed not-planned with handoff (S1-03/04, BL-01/02/03/04/05/06/09/12/13/14/15) · 2 PRs closed (#25 superseded, #34 squash-merged) · all stale branches deleted · only main remains |
 | H-01 | Autonomous Dependency & Skill Maintenance System (historical) | pre-2026-05 | docs/archived/spec-dependency-skill-maintenance-v1.md |
 | H-02 | Engagement Loop v1 — Hearts, Hints, Countdown & Star Rework (historical) | pre-2026-05 | docs/archived/spec-engagement-loop-v1.md |
@@ -186,4 +173,6 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-16 | /agtoosa-ship WIP-hygiene re-audit — 5 pre-policy WIP commits (08fc208, 3488c6e, a5f11c8, 300e274, fc3e710) re-confirmed as managed exceptions per established policy (2026-05-14, 2026-05-15 entries). Verified 0 new post-policy WIPs since 2026-05-14 (the 2 grep hits `3eb65ba` chore(ship) and `55226df` chore(plan) are false-positive body-text matches per documented exception). No squash performed; rewriting already-shipped main history is not warranted. Cleared status findings 🟡 ×5. | AgToosa |
 | 2026-05-16 | /agtoosa-build BL-04 pre-gate foundation — Wave-1 pre-gate-safe portion of spec-BL-04 shipped on worktree `worktree-agent-ab7b900a322f91904`; story REMAINS in Backlog (playtest gate + BL-03 still open). Shipped 5/27 tasks: 1.1 firestore.rules.template (firebase/, NOT deployed — BL-03 dep), 2.1 LeaderboardEntry pure-Dart model (lib/data/leaderboard_entry.dart), 3.4 leaderboard_prefs Hive box (lib/data/leaderboard_prefs.dart), 6.2 score validator pure-Dart mirror of future Cloud Function clamp/throttle (lib/core/engine/leaderboard_score_validator.dart), 7.1-prep telemetry event constants (lib/data/leaderboard_telemetry_events.dart). Also shipped firebase/README.md deploy runbook. Deferred (gate-blocked): 1.2 indexes.json, 1.3 rules unit tests, 2.2 ISO-week derivation runtime (logic landed; persistence wiring deferred), 3.1/3.2/3.3/3.5 repository + Firestore + offline + Remote Config, 4.x Riverpod providers, 5.x UI wiring, 6.1/6.3/6.4/6.5/6.6 Cloud Functions (TS, deploy), 7.2/7.3 Cloud Logging + budget alert, 8.x E2E + load tests. Tests: +80 new (test/data/leaderboard_entry_test.dart 37, test/core/engine/leaderboard_score_validator_test.dart 22, test/data/leaderboard_prefs_test.dart 8, test/data/leaderboard_telemetry_events_test.dart 13). dart analyze clean, flutter test 869/869. No new pubspec deps; nothing wired to live Firebase. | AgToosa |
 | 2026-05-20 | automated-maintenance — health check: dart analyze clean, 2 test failures in test/release/signing_config_test.dart (case-sensitivity: `Docs/` vs `docs/`) → GitHub #38; linked BL-05 (#11), BL-06 (#12), BL-09 (#15) issue numbers to Backlog entries in Master-Plan; dependency scan: patch/minor upgrades available → branch deps/auto-update-2026-05-20 opened | AgToosa |
+| 2026-05-20 | /agtoosa-build BL-21 — Completed TDD build & comprehensive testing flow: removed expensive cron & interactive Claude Actions; unified and cached CI pipeline `pr-validation.yml` triggering on Pull Requests targeting main. Local scripts validated and fully operational. Clean static analysis and all 870 tests passing green. Fixed 5 pre-existing archived docs' status lines to satisfy docs archival check. | AgToosa |
 | 2026-05-21 | automated-maintenance — health check: Flutter not in agent env (CI handles via BL-20 workflow); fixed case-sensitivity bug in test/release/signing_config_test.dart (`Docs/` → `docs/`, 2 occurrences) on main and backported to deps/auto-update-2026-05-20; closed #38 and #40 (completed); issue sync: all tasks already tracked (BL-19 #33, BL-01+02 #7/#8, BL-04 #10, BL-05 #11, BL-06 #12, BL-09 #15) — no new issues created; dep scan: PR #39 (deps/auto-update-2026-05-20) unblocked and marked ready for review; Flutter not in agent env so no new dep scan run | AgToosa |
+| 2026-05-22 | /agtoosa-ship BL-21 — Ship 🚀 Done: moved BL-21 (+ pruned BL-19) from Active Cycle to Completed This Cycle; pruned done Active Tasks; changelog updated. WIP-hygiene re-audit: 0 commits prefixed `WIP:`; 3 status-grep hits (`5a83afb`, `2f9e6c4`, `7da5761`) confirmed false-positives (policy-discussion body text, not WIP commits). No history rewrite per 2026-05-14 policy. dart analyze clean, flutter test 870/870. | AgToosa |
