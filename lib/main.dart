@@ -24,11 +24,7 @@ void main() async {
     );
   }
 
-  runApp(
-    const ProviderScope(
-      child: MiToosaApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: MiToosaApp()));
 }
 
 class MiToosaApp extends ConsumerWidget {
@@ -50,9 +46,8 @@ class MiToosaApp extends ConsumerWidget {
       themeMode: themeMode,
       debugShowCheckedModeBanner: false,
       home: authState.when(
-        data: (playerId) => playerId.isEmpty
-            ? const LoginScreen()
-            : const MainAppShell(),
+        data: (playerId) =>
+            playerId.isEmpty ? const LoginScreen() : const MainAppShell(),
         loading: () => const LoginScreen(),
         error: (_, _) => const LoginScreen(),
       ),

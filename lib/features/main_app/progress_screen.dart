@@ -24,8 +24,10 @@ class ProgressScreen extends ConsumerWidget {
         child: CircularProgressIndicator(color: AethericPulseDark.brandBlue),
       ),
       error: (e, _) => Center(
-        child: Text('Error loading progress',
-            style: Theme.of(context).textTheme.bodyMedium),
+        child: Text(
+          'Error loading progress',
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
       ),
       data: (progress) => _ProgressBody(progress: progress),
     );
@@ -43,17 +45,40 @@ class _ProgressBody extends StatelessWidget {
     final base = history.isEmpty
         ? 50
         : (history.reduce((a, b) => a + b) / history.length * 20).clamp(0, 100);
-    final totalStars =
-        progress.levelStars.values.fold<int>(0, (a, b) => a + b);
+    final totalStars = progress.levelStars.values.fold<int>(0, (a, b) => a + b);
     final starScore = (totalStars * 1.0).clamp(0, 100).toInt();
     final blended = ((base + starScore) / 2).toInt();
     return [
-      SkillScore(name: 'Pattern Recognition', value: blended.toDouble(), color: AP.blueLight),
-      SkillScore(name: 'Working Memory', value: (blended + 8).clamp(0, 100).toDouble(), color: AP.cyan),
-      SkillScore(name: 'Logical Reasoning', value: (blended + 16).clamp(0, 100).toDouble(), color: AP.purple),
-      SkillScore(name: 'Reaction Speed', value: (blended + 24).clamp(0, 100).toDouble(), color: AP.orange),
-      SkillScore(name: 'Spatial Sense', value: (blended - 8).clamp(0, 100).toDouble(), color: AP.emerald),
-      SkillScore(name: 'Focus', value: (blended + 11).clamp(0, 100).toDouble(), color: AP.pink),
+      SkillScore(
+        name: 'Pattern Recognition',
+        value: blended.toDouble(),
+        color: AP.blueLight,
+      ),
+      SkillScore(
+        name: 'Working Memory',
+        value: (blended + 8).clamp(0, 100).toDouble(),
+        color: AP.cyan,
+      ),
+      SkillScore(
+        name: 'Logical Reasoning',
+        value: (blended + 16).clamp(0, 100).toDouble(),
+        color: AP.purple,
+      ),
+      SkillScore(
+        name: 'Reaction Speed',
+        value: (blended + 24).clamp(0, 100).toDouble(),
+        color: AP.orange,
+      ),
+      SkillScore(
+        name: 'Spatial Sense',
+        value: (blended - 8).clamp(0, 100).toDouble(),
+        color: AP.emerald,
+      ),
+      SkillScore(
+        name: 'Focus',
+        value: (blended + 11).clamp(0, 100).toDouble(),
+        color: AP.pink,
+      ),
     ];
   }
 
@@ -69,8 +94,11 @@ class _ProgressBody extends StatelessWidget {
     }
     // Override today with real dailyXP if available
     if (progress.dailyXPDate != null &&
-        DateTime(progress.dailyXPDate!.year, progress.dailyXPDate!.month,
-                progress.dailyXPDate!.day) ==
+        DateTime(
+              progress.dailyXPDate!.year,
+              progress.dailyXPDate!.month,
+              progress.dailyXPDate!.day,
+            ) ==
             DateTime(today.year, today.month, today.day)) {
       byDay[6] = progress.dailyXP;
     }
@@ -159,25 +187,33 @@ class _ProgressBody extends StatelessWidget {
                     const SizedBox(height: 2),
                     Row(
                       children: [
-                        Text('Lv ',
-                            style: AP.headlineMd()
-                                .copyWith(fontWeight: FontWeight.w800)),
+                        Text(
+                          'Lv ',
+                          style: AP.headlineMd().copyWith(
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                         ShaderMask(
-                          shaderCallback: (r) =>
-                              AP.gradPrimary.createShader(r),
+                          shaderCallback: (r) => AP.gradPrimary.createShader(r),
                           child: Text(
                             '$level',
                             style: AP.headlineMd().copyWith(
-                                fontWeight: FontWeight.w800,
-                                color: Colors.white),
+                              fontWeight: FontWeight.w800,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 2),
-                    Text('${1000 - levelXp} XP to level ${level + 1}',
-                        style: const TextStyle(
-                            fontFamily: 'Inter', fontSize: 11, color: AP.fgMeta)),
+                    Text(
+                      '${1000 - levelXp} XP to level ${level + 1}',
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 11,
+                        color: AP.fgMeta,
+                      ),
+                    ),
                     const SizedBox(height: 10),
                     Container(
                       height: 5,
@@ -257,10 +293,14 @@ class _ProgressBody extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Flexible(
-                    child: Text('Cognitive map',
-                        overflow: TextOverflow.ellipsis,
-                        style: AP.headlineMd()
-                            .copyWith(fontSize: 16, fontWeight: FontWeight.w700)),
+                    child: Text(
+                      'Cognitive map',
+                      overflow: TextOverflow.ellipsis,
+                      style: AP.headlineMd().copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
                   Text('7-DAY DELTA', style: AP.eyebrow()),
                 ],
@@ -308,7 +348,9 @@ class _ProgressBody extends StatelessWidget {
                                   fontSize: 11,
                                   fontWeight: FontWeight.w700,
                                   color: s.color,
-                                  fontFeatures: const [FontFeature.tabularFigures()],
+                                  fontFeatures: const [
+                                    FontFeature.tabularFigures(),
+                                  ],
                                 ),
                               ),
                             ],
@@ -334,9 +376,13 @@ class _ProgressBody extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('This week',
-                      style: AP.headlineMd()
-                          .copyWith(fontSize: 16, fontWeight: FontWeight.w700)),
+                  Text(
+                    'This week',
+                    style: AP.headlineMd().copyWith(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                   Row(
                     children: [
                       Text(
@@ -350,9 +396,14 @@ class _ProgressBody extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 4),
-                      const Text(' XP earned',
-                          style: TextStyle(
-                              fontFamily: 'Inter', fontSize: 11, color: AP.fgMeta)),
+                      const Text(
+                        ' XP earned',
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 11,
+                          color: AP.fgMeta,
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -368,12 +419,21 @@ class _ProgressBody extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Milestones',
-                style: AP.headlineMd()
-                    .copyWith(fontSize: 18, fontWeight: FontWeight.w700)),
-            Text('$unlockedCount of ${achievements.length} unlocked',
-                style: const TextStyle(
-                    fontFamily: 'Inter', fontSize: 11, color: AP.fgMuted)),
+            Text(
+              'Milestones',
+              style: AP.headlineMd().copyWith(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            Text(
+              '$unlockedCount of ${achievements.length} unlocked',
+              style: const TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 11,
+                color: AP.fgMuted,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 8),

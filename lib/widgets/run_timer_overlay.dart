@@ -26,20 +26,29 @@ class RunTimerOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (totalTime == Duration.zero) return const SizedBox.shrink();
-    final fraction =
-        (timeRemaining.inMilliseconds / totalTime.inMilliseconds).clamp(0.0, 1.0);
+    final fraction = (timeRemaining.inMilliseconds / totalTime.inMilliseconds)
+        .clamp(0.0, 1.0);
 
     // Smooth colour: green → amber → red
     final Color barColor;
     if (fraction > 0.5) {
-      barColor = Color.lerp(MiToosaTheme.warning, MiToosaTheme.success,
-          (fraction - 0.5) * 2)!;
+      barColor = Color.lerp(
+        MiToosaTheme.warning,
+        MiToosaTheme.success,
+        (fraction - 0.5) * 2,
+      )!;
     } else if (fraction > 0.25) {
       barColor = Color.lerp(
-          const Color(0xFFFF6B35), MiToosaTheme.warning, (fraction - 0.25) * 4)!;
+        const Color(0xFFFF6B35),
+        MiToosaTheme.warning,
+        (fraction - 0.25) * 4,
+      )!;
     } else {
-      barColor =
-          Color.lerp(MiToosaTheme.error, const Color(0xFFFF6B35), fraction * 4)!;
+      barColor = Color.lerp(
+        MiToosaTheme.error,
+        const Color(0xFFFF6B35),
+        fraction * 4,
+      )!;
     }
 
     final secs = timeRemaining.inSeconds;
@@ -68,10 +77,7 @@ class RunTimerOverlay extends StatelessWidget {
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [
-                          barColor.withValues(alpha: 0.7),
-                          barColor,
-                        ],
+                        colors: [barColor.withValues(alpha: 0.7), barColor],
                       ),
                     ),
                   ),
@@ -110,9 +116,7 @@ class RunTimerOverlay extends StatelessWidget {
                 else
                   const SizedBox.shrink(),
                 Text(
-                  secs >= 60
-                      ? '${secs ~/ 60}m ${secs % 60}s'
-                      : '${secs}s',
+                  secs >= 60 ? '${secs ~/ 60}m ${secs % 60}s' : '${secs}s',
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w800,

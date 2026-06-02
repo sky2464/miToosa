@@ -36,12 +36,11 @@ class KineticProgressBar extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   gradient: fillGradient,
-                  borderRadius: BorderRadius.circular(AethericPulseDark.radiusPill),
+                  borderRadius: BorderRadius.circular(
+                    AethericPulseDark.radiusPill,
+                  ),
                   boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x4022D3EE),
-                      blurRadius: 8,
-                    ),
+                    BoxShadow(color: Color(0x4022D3EE), blurRadius: 8),
                   ],
                 ),
               ),

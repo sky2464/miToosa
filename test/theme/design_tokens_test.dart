@@ -58,8 +58,10 @@ void main() {
     test('glassBorderStrong is defined for emphasized states', () {
       expect(AethericPulseDark.glassBorderStrong, isA<Color>());
       // 0.18 alpha is more opaque than glassBorder (0.12)
-      expect(AethericPulseDark.glassBorderStrong.a,
-          greaterThan(AethericPulseDark.glassBorder.a));
+      expect(
+        AethericPulseDark.glassBorderStrong.a,
+        greaterThan(AethericPulseDark.glassBorder.a),
+      );
     });
   });
 
@@ -77,16 +79,28 @@ void main() {
 
   group('Aetheric Pulse — motion durations match prototype', () {
     test('durPress is 120ms', () {
-      expect(AethericPulseDark.durPress, equals(const Duration(milliseconds: 120)));
+      expect(
+        AethericPulseDark.durPress,
+        equals(const Duration(milliseconds: 120)),
+      );
     });
     test('durHover is 180ms', () {
-      expect(AethericPulseDark.durHover, equals(const Duration(milliseconds: 180)));
+      expect(
+        AethericPulseDark.durHover,
+        equals(const Duration(milliseconds: 180)),
+      );
     });
     test('durNormal is 300ms', () {
-      expect(AethericPulseDark.durNormal, equals(const Duration(milliseconds: 300)));
+      expect(
+        AethericPulseDark.durNormal,
+        equals(const Duration(milliseconds: 300)),
+      );
     });
     test('durHero is 600ms', () {
-      expect(AethericPulseDark.durHero, equals(const Duration(milliseconds: 600)));
+      expect(
+        AethericPulseDark.durHero,
+        equals(const Duration(milliseconds: 600)),
+      );
     });
   });
 

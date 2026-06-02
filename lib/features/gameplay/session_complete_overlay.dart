@@ -79,7 +79,8 @@ class SessionCompleteOverlay extends StatelessWidget {
                       backgroundColor: MiToosaTheme.success,
                     ),
                   ),
-                if (hasNextLevel) const SizedBox(height: MiToosaTheme.spacingMd),
+                if (hasNextLevel)
+                  const SizedBox(height: MiToosaTheme.spacingMd),
                 OutlinedButton.icon(
                   onPressed: onBackToTrack,
                   icon: const Icon(Icons.grid_view_rounded),

@@ -128,7 +128,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     );
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: isDark ? AethericPulseDark.surface : AethericPulseLight.lightSurface,
+      backgroundColor: isDark
+          ? AethericPulseDark.surface
+          : AethericPulseLight.lightSurface,
       body: KineticBackground(
         child: SafeArea(
           child: Column(
@@ -158,14 +160,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       ),
                       boxShadow: AethericPulseDark.blueGlow,
                     ),
-                    child: const Icon(Icons.hub_rounded, size: 64, color: Colors.white),
+                    child: const Icon(
+                      Icons.hub_rounded,
+                      size: 64,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: AethericPulseDark.spaceLg),
               // Hero glass card
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AethericPulseDark.spaceMd),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AethericPulseDark.spaceMd,
+                ),
                 child: GlassCard(
                   child: Column(
                     children: [
@@ -183,28 +191,44 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       Wrap(
                         alignment: WrapAlignment.center,
                         spacing: 8,
-                        children: [
-                          (Icons.psychology_rounded, 'Memory'),
-                          (Icons.flash_on_rounded, 'Logic'),
-                          (Icons.brush_rounded, 'Patterns'),
-                        ].map(((IconData icon, String label) pill) {
-                          return Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: AethericPulseDark.nestedWell,
-                              borderRadius: BorderRadius.circular(AethericPulseDark.radiusChip),
-                              border: Border.all(color: AethericPulseDark.glassBorder),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(pill.$1, size: 16, color: AethericPulseDark.onSurfaceSecondary),
-                                const SizedBox(width: 8),
-                                Text(pill.$2, style: AethericPulseDark.label()),
-                              ],
-                            ),
-                          );
-                        }).toList(),
+                        children:
+                            [
+                              (Icons.psychology_rounded, 'Memory'),
+                              (Icons.flash_on_rounded, 'Logic'),
+                              (Icons.brush_rounded, 'Patterns'),
+                            ].map(((IconData icon, String label) pill) {
+                              return Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AethericPulseDark.nestedWell,
+                                  borderRadius: BorderRadius.circular(
+                                    AethericPulseDark.radiusChip,
+                                  ),
+                                  border: Border.all(
+                                    color: AethericPulseDark.glassBorder,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      pill.$1,
+                                      size: 16,
+                                      color:
+                                          AethericPulseDark.onSurfaceSecondary,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      pill.$2,
+                                      style: AethericPulseDark.label(),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
                       ),
                     ],
                   ),
@@ -213,7 +237,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               const Spacer(flex: 2),
               // CTA Button
               if (_isLoading)
-                const CircularProgressIndicator(color: AethericPulseDark.brandBlue)
+                const CircularProgressIndicator(
+                  color: AethericPulseDark.brandBlue,
+                )
               else
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40.0),
@@ -235,7 +261,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                               child: Container(
                                 decoration: BoxDecoration(
                                   gradient: AethericPulseDark.gradPrimary,
-                                  borderRadius: BorderRadius.circular(AethericPulseDark.radiusPill),
+                                  borderRadius: BorderRadius.circular(
+                                    AethericPulseDark.radiusPill,
+                                  ),
                                   boxShadow: AethericPulseDark.blueGlow,
                                 ),
                                 child: ElevatedButton(
@@ -243,15 +271,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                     backgroundColor: Colors.transparent,
                                     shadowColor: Colors.transparent,
                                     shape: const StadiumBorder(),
-                                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 32,
+                                      vertical: 16,
+                                    ),
                                   ),
                                   onPressed: canStart ? _performLogin : null,
                                   child: Text(
                                     'Get Started',
-                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white,
-                                    ),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                        ),
                                   ),
                                 ),
                               ),
@@ -265,7 +299,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                               final playerId = ref.playerId;
                               if (playerId == null) return;
                               final persistence = ref.read(persistenceProvider);
-                              final progress = await persistence.loadProgress(playerId);
+                              final progress = await persistence.loadProgress(
+                                playerId,
+                              );
                               progress.totalXP += 50;
                               await persistence.saveProgress(progress);
                             },

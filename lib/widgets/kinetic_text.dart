@@ -8,12 +8,7 @@ class KineticText extends StatelessWidget {
   final TextStyle? style;
   final TextAlign? textAlign;
 
-  const KineticText(
-    this.text, {
-    super.key,
-    this.style,
-    this.textAlign,
-  });
+  const KineticText(this.text, {super.key, this.style, this.textAlign});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +30,7 @@ class KineticText extends StatelessWidget {
 
 /// A thin [height]-px horizontal bar with the kinetic gradient and cyan glow.
 class KineticProgressBar extends StatelessWidget {
-  final double percent;   // 0–100
+  final double percent; // 0–100
   final double height;
   final bool glow;
 
@@ -74,8 +69,7 @@ class KineticProgressBar extends StatelessWidget {
               height: height,
               decoration: BoxDecoration(
                 gradient: barGradient,
-                borderRadius:
-                    BorderRadius.circular(KineticObsidian.radiusFull),
+                borderRadius: BorderRadius.circular(KineticObsidian.radiusFull),
                 boxShadow: glow
                     ? [BoxShadow(color: glowColor, blurRadius: 10)]
                     : null,

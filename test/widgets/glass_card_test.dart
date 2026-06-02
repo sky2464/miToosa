@@ -3,9 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mitoosa/theme/design_system.dart';
 import 'package:mitoosa/widgets/glass_card.dart';
 
-Widget _wrap(Widget child) => MaterialApp(
-      home: Scaffold(body: child),
-    );
+Widget _wrap(Widget child) => MaterialApp(home: Scaffold(body: child));
 
 /// Returns the BoxDecoration from the innermost Container in GlassCard.
 BoxDecoration _innerDecoration(WidgetTester tester) {
@@ -22,16 +20,14 @@ BoxDecoration _innerDecoration(WidgetTester tester) {
 void main() {
   group('GlassCard', () {
     testWidgets('renders child content', (tester) async {
-      await tester.pumpWidget(_wrap(
-        const GlassCard(child: Text('hello')),
-      ));
+      await tester.pumpWidget(_wrap(const GlassCard(child: Text('hello'))));
       expect(find.text('hello'), findsOneWidget);
     });
 
-    testWidgets('default shadow uses cardOuter + cardInner (2 entries)', (tester) async {
-      await tester.pumpWidget(_wrap(
-        const GlassCard(child: SizedBox.shrink()),
-      ));
+    testWidgets('default shadow uses cardOuter + cardInner (2 entries)', (
+      tester,
+    ) async {
+      await tester.pumpWidget(_wrap(const GlassCard(child: SizedBox.shrink())));
       final deco = _innerDecoration(tester);
       final expected = [
         ...AethericPulseDark.cardOuter,
@@ -41,9 +37,9 @@ void main() {
     });
 
     testWidgets('neonGlow: true uses blueGlow shadow list', (tester) async {
-      await tester.pumpWidget(_wrap(
-        const GlassCard(neonGlow: true, child: SizedBox.shrink()),
-      ));
+      await tester.pumpWidget(
+        _wrap(const GlassCard(neonGlow: true, child: SizedBox.shrink())),
+      );
       final deco = _innerDecoration(tester);
       expect(deco.boxShadow, equals(AethericPulseDark.blueGlow));
     });
@@ -57,22 +53,26 @@ void main() {
     });
 
     testWidgets('custom borderRadius is applied', (tester) async {
-      await tester.pumpWidget(_wrap(
-        const GlassCard(borderRadius: 8, child: SizedBox.shrink()),
-      ));
+      await tester.pumpWidget(
+        _wrap(const GlassCard(borderRadius: 8, child: SizedBox.shrink())),
+      );
       final deco = _innerDecoration(tester);
       expect(deco.borderRadius, equals(BorderRadius.circular(8)));
     });
 
-    testWidgets('custom boxShadow overrides both default and neonGlow', (tester) async {
+    testWidgets('custom boxShadow overrides both default and neonGlow', (
+      tester,
+    ) async {
       const custom = [BoxShadow(color: Colors.red, blurRadius: 5)];
-      await tester.pumpWidget(_wrap(
-        const GlassCard(
-          boxShadow: custom,
-          neonGlow: true,
-          child: SizedBox.shrink(),
+      await tester.pumpWidget(
+        _wrap(
+          const GlassCard(
+            boxShadow: custom,
+            neonGlow: true,
+            child: SizedBox.shrink(),
+          ),
         ),
-      ));
+      );
       final deco = _innerDecoration(tester);
       expect(deco.boxShadow, equals(custom));
     });

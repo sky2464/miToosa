@@ -12,15 +12,10 @@ typedef OnMessageReceived = void Function(NetworkMessage message);
 typedef OnConnectionStateChanged = void Function(LocalNetworkClientState state);
 
 /// Connection state for guest client.
-enum LocalNetworkClientState {
-  disconnected,
-  connecting,
-  connected,
-  error,
-}
+enum LocalNetworkClientState { disconnected, connecting, connected, error }
 
 /// WebSocket client for guest device connecting to host multiplayer session.
-/// 
+///
 /// Responsibilities:
 /// - Connect to host WebSocket via QR-decoded URL
 /// - Perform handshake (join_session) with host
@@ -132,7 +127,11 @@ class LocalNetworkClient {
       _subscription = _channel!.stream.listen(
         (message) {
           try {
-            _handleMessage(message as String, handshakeCompleted, timeoutHandle);
+            _handleMessage(
+              message as String,
+              handshakeCompleted,
+              timeoutHandle,
+            );
           } catch (e) {
             debugPrint('Error handling message: $e');
             _handleError(e);
@@ -208,7 +207,9 @@ class LocalNetworkClient {
             message: 'Session ID mismatch in acknowledgment',
           );
         }
-        debugPrint('Handshake successful, joined with ${message.connectedPlayers.length} players');
+        debugPrint(
+          'Handshake successful, joined with ${message.connectedPlayers.length} players',
+        );
         handshakeCompleted.complete(true);
         return;
       }
@@ -253,15 +254,19 @@ class LocalNetworkClient {
     }
 
     _reconnectAttempts++;
-    debugPrint('Disconnected, will reconnect in ${_currentReconnectDelay.inSeconds}s '
-        '(attempt $_reconnectAttempts/$maxReconnectAttempts)');
+    debugPrint(
+      'Disconnected, will reconnect in ${_currentReconnectDelay.inSeconds}s '
+      '(attempt $_reconnectAttempts/$maxReconnectAttempts)',
+    );
 
     _reconnectTimer?.cancel();
     _reconnectTimer = Timer(_currentReconnectDelay, () {
       // Exponential backoff: 1s, 2s, 4s, 8s, max 30s
       _currentReconnectDelay = Duration(
-        seconds: (_currentReconnectDelay.inSeconds * 2)
-            .clamp(1, maxReconnectDelay.inSeconds),
+        seconds: (_currentReconnectDelay.inSeconds * 2).clamp(
+          1,
+          maxReconnectDelay.inSeconds,
+        ),
       );
       _attemptConnection();
     });
@@ -285,12 +290,16 @@ class LocalNetworkClient {
 
     _reconnectAttempts++;
     final nextDelay = Duration(
-      seconds: (_currentReconnectDelay.inSeconds * 2)
-          .clamp(1, maxReconnectDelay.inSeconds),
+      seconds: (_currentReconnectDelay.inSeconds * 2).clamp(
+        1,
+        maxReconnectDelay.inSeconds,
+      ),
     );
 
-    debugPrint('Connection error: $error, will retry in ${_currentReconnectDelay.inSeconds}s '
-        '(attempt $_reconnectAttempts/$maxReconnectAttempts)');
+    debugPrint(
+      'Connection error: $error, will retry in ${_currentReconnectDelay.inSeconds}s '
+      '(attempt $_reconnectAttempts/$maxReconnectAttempts)',
+    );
 
     _setState(LocalNetworkClientState.error);
 

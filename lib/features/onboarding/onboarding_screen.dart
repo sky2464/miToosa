@@ -85,7 +85,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             Padding(
               padding: const EdgeInsets.all(MiToosaTheme.spacingLg),
               child: Column(
-                children:[
+                children: [
                   // Skip button
                   if (_currentPage < _kPageCount - 1)
                     Align(
@@ -95,7 +95,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         child: Text(
                           'Skip',
                           style: TextStyle(
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                            color: theme.colorScheme.onSurface.withValues(
+                              alpha: 0.5,
+                            ),
                           ),
                         ),
                       ),
@@ -112,7 +114,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         decoration: BoxDecoration(
                           color: _currentPage == index
                               ? theme.colorScheme.primary
-                              : theme.colorScheme.primary.withValues(alpha: 0.3),
+                              : theme.colorScheme.primary.withValues(
+                                  alpha: 0.3,
+                                ),
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
@@ -150,7 +154,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             }
                           },
                           child: Text(
-                            _currentPage < _kPageCount - 1 ? 'Next' : 'Get Started',
+                            _currentPage < _kPageCount - 1
+                                ? 'Next'
+                                : 'Get Started',
                           ),
                         ),
                       ),
@@ -189,10 +195,7 @@ class _OnboardingPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            icon,
-            style: const TextStyle(fontSize: 96),
-          ),
+          Text(icon, style: const TextStyle(fontSize: 96)),
           const SizedBox(height: MiToosaTheme.spacingLg),
           Text(
             title,

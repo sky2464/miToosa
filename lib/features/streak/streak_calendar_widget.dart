@@ -57,11 +57,11 @@ class StreakCalendarWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                _StatChip(label: 'Best: $bestStreak', icon: Icons.emoji_events),
                 _StatChip(
-                    label: 'Best: $bestStreak', icon: Icons.emoji_events),
-                _StatChip(
-                    label: '$streakFreezeCount freezes',
-                    icon: Icons.ac_unit),
+                  label: '$streakFreezeCount freezes',
+                  icon: Icons.ac_unit,
+                ),
               ],
             ),
 
@@ -184,8 +184,7 @@ class _MilestoneProgress extends StatelessWidget {
           child: LinearProgressIndicator(
             value: progress,
             minHeight: 8,
-            backgroundColor:
-                theme.colorScheme.primary.withValues(alpha: 0.1),
+            backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.1),
             valueColor: AlwaysStoppedAnimation<Color>(
               theme.colorScheme.primary,
             ),

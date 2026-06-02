@@ -15,38 +15,52 @@ void main() {
 
     test('every event is snake_case lowercase ASCII', () {
       for (final name in LeaderboardTelemetryEvents.all) {
-        expect(snakeCasePattern.hasMatch(name), isTrue,
-            reason: '"$name" violates snake_case rule');
+        expect(
+          snakeCasePattern.hasMatch(name),
+          isTrue,
+          reason: '"$name" violates snake_case rule',
+        );
       }
     });
 
     test('every event has the "leaderboard_" prefix', () {
       for (final name in LeaderboardTelemetryEvents.all) {
-        expect(name.startsWith('leaderboard_'), isTrue,
-            reason: '"$name" must be prefixed for analytics namespacing');
+        expect(
+          name.startsWith('leaderboard_'),
+          isTrue,
+          reason: '"$name" must be prefixed for analytics namespacing',
+        );
       }
     });
 
     test('no event contains whitespace or hyphens', () {
       for (final name in LeaderboardTelemetryEvents.all) {
-        expect(name.contains(' '), isFalse,
-            reason: '"$name" contains a space');
-        expect(name.contains('-'), isFalse,
-            reason: '"$name" contains a hyphen (use underscore)');
+        expect(name.contains(' '), isFalse, reason: '"$name" contains a space');
+        expect(
+          name.contains('-'),
+          isFalse,
+          reason: '"$name" contains a hyphen (use underscore)',
+        );
       }
     });
 
     test('no event exceeds 40 chars (GA4 event-name limit)', () {
       for (final name in LeaderboardTelemetryEvents.all) {
-        expect(name.length, lessThanOrEqualTo(40),
-            reason: '"$name" exceeds the GA4 40-char event-name limit');
+        expect(
+          name.length,
+          lessThanOrEqualTo(40),
+          reason: '"$name" exceeds the GA4 40-char event-name limit',
+        );
       }
     });
 
     test('event names are unique', () {
       final set = LeaderboardTelemetryEvents.all.toSet();
-      expect(set.length, equals(LeaderboardTelemetryEvents.all.length),
-          reason: 'duplicate event name in LeaderboardTelemetryEvents.all');
+      expect(
+        set.length,
+        equals(LeaderboardTelemetryEvents.all.length),
+        reason: 'duplicate event name in LeaderboardTelemetryEvents.all',
+      );
     });
   });
 
@@ -55,32 +69,46 @@ void main() {
     // requires updating the test, which forces a deliberate decision
     // (and a changelog entry, per the spec's observability story).
     test('viewOpen', () {
-      expect(LeaderboardTelemetryEvents.viewOpen,
-          equals('leaderboard_view_open'));
+      expect(
+        LeaderboardTelemetryEvents.viewOpen,
+        equals('leaderboard_view_open'),
+      );
     });
     test('submitSuccess', () {
-      expect(LeaderboardTelemetryEvents.submitSuccess,
-          equals('leaderboard_submit_success'));
+      expect(
+        LeaderboardTelemetryEvents.submitSuccess,
+        equals('leaderboard_submit_success'),
+      );
     });
     test('submitThrottled', () {
-      expect(LeaderboardTelemetryEvents.submitThrottled,
-          equals('leaderboard_submit_throttled'));
+      expect(
+        LeaderboardTelemetryEvents.submitThrottled,
+        equals('leaderboard_submit_throttled'),
+      );
     });
     test('validationFailed', () {
-      expect(LeaderboardTelemetryEvents.validationFailed,
-          equals('leaderboard_validation_failed'));
+      expect(
+        LeaderboardTelemetryEvents.validationFailed,
+        equals('leaderboard_validation_failed'),
+      );
     });
     test('submitClamped', () {
-      expect(LeaderboardTelemetryEvents.submitClamped,
-          equals('leaderboard_submit_clamped'));
+      expect(
+        LeaderboardTelemetryEvents.submitClamped,
+        equals('leaderboard_submit_clamped'),
+      );
     });
     test('optOutToggled', () {
-      expect(LeaderboardTelemetryEvents.optOutToggled,
-          equals('leaderboard_opt_out_toggled'));
+      expect(
+        LeaderboardTelemetryEvents.optOutToggled,
+        equals('leaderboard_opt_out_toggled'),
+      );
     });
     test('writesDisabled', () {
-      expect(LeaderboardTelemetryEvents.writesDisabled,
-          equals('leaderboard_writes_disabled'));
+      expect(
+        LeaderboardTelemetryEvents.writesDisabled,
+        equals('leaderboard_writes_disabled'),
+      );
     });
 
     test('all list contains exactly the declared constants', () {

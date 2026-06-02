@@ -81,17 +81,20 @@ void main() {
       expect(sink.captured.first.name, equals('session_start'));
     });
 
-    test('record forwards same event instance to both inner and sink', () async {
-      final event = TelemetryEvent.levelComplete(
-        trackId: 'track-1',
-        levelIndex: 3,
-        stars: 4,
-        coinReward: 50,
-      );
-      await repo.record(event);
+    test(
+      'record forwards same event instance to both inner and sink',
+      () async {
+        final event = TelemetryEvent.levelComplete(
+          trackId: 'track-1',
+          levelIndex: 3,
+          stars: 4,
+          coinReward: 50,
+        );
+        await repo.record(event);
 
-      expect(inner.events.first, equals(sink.captured.first));
-    });
+        expect(inner.events.first, equals(sink.captured.first));
+      },
+    );
 
     test('readAll delegates to inner repository', () async {
       final event = TelemetryEvent.streakUpdate(
@@ -121,7 +124,10 @@ void main() {
     test('sink failure is caught — inner record still succeeds', () async {
       // A flaky or misconfigured backend must not interrupt Hive writes.
       final throwingSink = _ThrowingSink();
-      final faultTolerantRepo = ForwardingTelemetryRepository(inner, throwingSink);
+      final faultTolerantRepo = ForwardingTelemetryRepository(
+        inner,
+        throwingSink,
+      );
 
       final event = TelemetryEvent.sessionStart(sessionId: 'y');
       await expectLater(faultTolerantRepo.record(event), completes);
@@ -142,8 +148,10 @@ void main() {
       await repo.record(e1);
       await repo.record(e2);
 
-      expect(sink.captured.map((e) => e.name).toList(),
-          equals(['session_start', 'level_complete']));
+      expect(
+        sink.captured.map((e) => e.name).toList(),
+        equals(['session_start', 'level_complete']),
+      );
     });
   });
 }

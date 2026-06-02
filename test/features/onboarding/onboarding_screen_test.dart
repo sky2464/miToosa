@@ -10,12 +10,13 @@ void main() {
     setUp(() => completed = false);
 
     Widget buildSubject() => MaterialApp(
-          home: OnboardingScreen(onComplete: () => completed = true),
-          theme: MiToosaTheme.darkTheme,
-        );
+      home: OnboardingScreen(onComplete: () => completed = true),
+      theme: MiToosaTheme.darkTheme,
+    );
 
-    testWidgets('renders all 4 pages (BL-07 first-session expectation page)',
-        (WidgetTester tester) async {
+    testWidgets('renders all 4 pages (BL-07 first-session expectation page)', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildSubject());
       await tester.pumpAndSettle();
 
@@ -55,8 +56,9 @@ void main() {
       expect(find.text('Back'), findsOneWidget);
     });
 
-    testWidgets('shows Get Started button on last page (page 4)',
-        (WidgetTester tester) async {
+    testWidgets('shows Get Started button on last page (page 4)', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(buildSubject());
       await tester.pumpAndSettle();
 

@@ -48,11 +48,13 @@ void main() {
     await repo.clear();
 
     for (var i = 0; i < 5; i++) {
-      await repo.record(TelemetryEvent(
-        name: 'session_start',
-        timestamp: DateTime.utc(2026, 4, 17, 12, i),
-        properties: {'session_id': 's$i'},
-      ));
+      await repo.record(
+        TelemetryEvent(
+          name: 'session_start',
+          timestamp: DateTime.utc(2026, 4, 17, 12, i),
+          properties: {'session_id': 's$i'},
+        ),
+      );
     }
 
     final events = await repo.readAll();

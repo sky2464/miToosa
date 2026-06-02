@@ -10,9 +10,7 @@ PlayerProgress _freshProgress() => PlayerProgress(playerId: 'test');
 Widget _wrap({PlayerProgress? progress}) {
   final p = progress ?? _freshProgress();
   return ProviderScope(
-    overrides: [
-      playerProgressProvider.overrideWith((_) => Future.value(p)),
-    ],
+    overrides: [playerProgressProvider.overrideWith((_) => Future.value(p))],
     child: const MaterialApp(home: AchievementsScreen()),
   );
 }
@@ -32,8 +30,9 @@ void main() {
       expect(find.text('First Steps'), findsOneWidget);
     });
 
-    testWidgets('shows progress indicator for unearned achievement',
-        (tester) async {
+    testWidgets('shows progress indicator for unearned achievement', (
+      tester,
+    ) async {
       await tester.pumpWidget(_wrap());
       await tester.pumpAndSettle();
       // At least one LinearProgressIndicator should exist

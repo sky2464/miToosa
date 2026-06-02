@@ -49,9 +49,12 @@ void main() {
       expect(level.stars(0, hintUsed: true), 3);
     });
 
-    test('hintUsed=true: stars below 3 not raised (7 incorrect → 0, not 3)', () {
-      expect(level.stars(7, hintUsed: true), 0);
-    });
+    test(
+      'hintUsed=true: stars below 3 not raised (7 incorrect → 0, not 3)',
+      () {
+        expect(level.stars(7, hintUsed: true), 0);
+      },
+    );
 
     test('hintUsed=true: 2 incorrect (normally 3 stars) stays 3', () {
       expect(level.stars(2, hintUsed: true), 3);
@@ -70,10 +73,7 @@ void main() {
     test('tickTimer decrements runTimeRemaining', () {
       notifier().startRun(10);
       notifier().tickTimer(const Duration(seconds: 30));
-      expect(
-        state().runTimeRemaining,
-        const Duration(minutes: 9, seconds: 30),
-      );
+      expect(state().runTimeRemaining, const Duration(minutes: 9, seconds: 30));
     });
 
     test('tickTimer reaching zero sets isRunActive=false', () {
@@ -103,15 +103,18 @@ void main() {
       expect(state().levelsCompleted, 1);
     });
 
-    test('completeLevel returns true and deactivates run when all levels done', () {
-      notifier().startRun(3);
-      notifier().completeLevel();
-      notifier().completeLevel();
-      final bonus = notifier().completeLevel();
-      expect(bonus, true);
-      expect(state().levelsCompleted, 3);
-      expect(state().isRunActive, false);
-    });
+    test(
+      'completeLevel returns true and deactivates run when all levels done',
+      () {
+        notifier().startRun(3);
+        notifier().completeLevel();
+        notifier().completeLevel();
+        final bonus = notifier().completeLevel();
+        expect(bonus, true);
+        expect(state().levelsCompleted, 3);
+        expect(state().isRunActive, false);
+      },
+    );
 
     test('completeLevel returns false when run is not active', () {
       final bonus = notifier().completeLevel();
@@ -137,19 +140,22 @@ void main() {
       expect(state().puzzleTimeRemaining, 29);
     });
 
-    test('tickPuzzleTimer returns true and increments incorrectAttempts on expiry', () {
-      notifier().setDifficultyTier(DifficultyTier.challenge);
-      // Tick down from 4 to 0
-      for (var i = 0; i < 3; i++) {
-        expect(notifier().tickPuzzleTimer(), false);
-      }
-      // 4th tick expires
-      final expired = notifier().tickPuzzleTimer();
-      expect(expired, true);
-      expect(state().puzzleTimeRemaining, 0);
-      expect(state().incorrectAttempts, 1);
-      expect(state().feedback?.style, GameplayFeedbackStyle.error);
-    });
+    test(
+      'tickPuzzleTimer returns true and increments incorrectAttempts on expiry',
+      () {
+        notifier().setDifficultyTier(DifficultyTier.challenge);
+        // Tick down from 4 to 0
+        for (var i = 0; i < 3; i++) {
+          expect(notifier().tickPuzzleTimer(), false);
+        }
+        // 4th tick expires
+        final expired = notifier().tickPuzzleTimer();
+        expect(expired, true);
+        expect(state().puzzleTimeRemaining, 0);
+        expect(state().incorrectAttempts, 1);
+        expect(state().feedback?.style, GameplayFeedbackStyle.error);
+      },
+    );
 
     test('tickPuzzleTimer does nothing when paused', () {
       notifier().setDifficultyTier(DifficultyTier.hard);
@@ -216,17 +222,20 @@ void main() {
       expect(state().feedback?.style, GameplayFeedbackStyle.success);
     });
 
-    test('incorrect answer increments incorrectAttempts and sets warning feedback', () {
-      final wrongId = level.puzzle.options
-          .firstWhere((o) => o.id != level.puzzle.correctOptionId)
-          .id;
-      notifier().selectOption(wrongId);
+    test(
+      'incorrect answer increments incorrectAttempts and sets warning feedback',
+      () {
+        final wrongId = level.puzzle.options
+            .firstWhere((o) => o.id != level.puzzle.correctOptionId)
+            .id;
+        notifier().selectOption(wrongId);
 
-      expect(state().phase.isPlaying, true);
-      expect(state().incorrectAttempts, 1);
-      expect(state().feedback?.style, GameplayFeedbackStyle.warning);
-      expect(state().selectedOptionId, wrongId);
-    });
+        expect(state().phase.isPlaying, true);
+        expect(state().incorrectAttempts, 1);
+        expect(state().feedback?.style, GameplayFeedbackStyle.warning);
+        expect(state().selectedOptionId, wrongId);
+      },
+    );
 
     test('selectOption is a no-op when phase is not playing', () {
       // Use a fresh container that hasn't called start()

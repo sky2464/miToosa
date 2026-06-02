@@ -8,8 +8,10 @@ import 'hive_telemetry_repository.dart';
 import 'telemetry_repository.dart';
 import 'telemetry_session_controller.dart';
 
-const kFirebaseEnabled =
-    bool.fromEnvironment('FIREBASE_ENABLED', defaultValue: false);
+const kFirebaseEnabled = bool.fromEnvironment(
+  'FIREBASE_ENABLED',
+  defaultValue: false,
+);
 
 final analyticsSinkProvider = Provider<AnalyticsSink>((ref) {
   if (kFirebaseEnabled) {
@@ -23,7 +25,8 @@ final telemetryRepositoryProvider = Provider<TelemetryRepository>((ref) {
   return ForwardingTelemetryRepository(HiveTelemetryRepository(), sink);
 });
 
-final telemetrySessionControllerProvider =
-    Provider<TelemetrySessionController>((ref) {
-  return TelemetrySessionController(ref.watch(telemetryRepositoryProvider));
-});
+final telemetrySessionControllerProvider = Provider<TelemetrySessionController>(
+  (ref) {
+    return TelemetrySessionController(ref.watch(telemetryRepositoryProvider));
+  },
+);

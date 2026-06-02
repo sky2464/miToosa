@@ -22,8 +22,10 @@ class DotProgressStrip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final filled =
-        (progress.clamp(0.0, 1.0) * totalDots).ceil().clamp(0, totalDots);
+    final filled = (progress.clamp(0.0, 1.0) * totalDots).ceil().clamp(
+      0,
+      totalDots,
+    );
     return Semantics(
       label: 'Progress: $filled of $totalDots',
       child: Row(

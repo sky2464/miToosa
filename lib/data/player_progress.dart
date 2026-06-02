@@ -27,14 +27,17 @@ class PlayerProgress {
   DateTime? heartRefuelAt; // when the next timed heart will be granted
   List<String> seenTutorialWorlds; // world IDs where tutorial was dismissed
   // Schema version 3: share refuel (Hive field 16).
-  DateTime? lastShareDate; // last calendar day on which a share-refuel was granted
+  DateTime?
+  lastShareDate; // last calendar day on which a share-refuel was granted
   // Schema version 4: engagement fields (Hive fields 17–22).
   int streakFreezeCount; // streak freeze items owned
   List<int> streakMilestones; // milestone thresholds already achieved
   Map<String, int> achievementProgress; // partial progress per achievement id
   int dailyRewardDay; // current day in 7-day reward cycle (0 = not started)
-  DateTime? lastDailyRewardClaim; // last calendar day a daily reward was claimed
-  List<DateTime> playHistory; // dates played (capped at 365) for streak calendar
+  DateTime?
+  lastDailyRewardClaim; // last calendar day a daily reward was claimed
+  List<DateTime>
+  playHistory; // dates played (capped at 365) for streak calendar
   // Schema version 5: onboarding tracking (Hive field 23).
   bool onboardingComplete; // whether the user has seen the onboarding flow
   // Schema version 5: free-games allowance (Hive fields 24–26).
@@ -46,7 +49,8 @@ class PlayerProgress {
   DateTime? dailyXPDate; // the calendar day dailyXP was last updated
   Map<String, int> levelXP; // best XP earned per level (keyed by levelId)
   Map<String, int> levelBestTime; // best completion time in seconds per level
-  Map<String, String> levelBestDifficulty; // best difficulty tier name per level
+  Map<String, String>
+  levelBestDifficulty; // best difficulty tier name per level
   // Schema version 7: theme mode override (Hive field 32).
   // null = follow system; 0 = ThemeMode.system; 1 = light; 2 = dark.
   int? themeModeOverride;
@@ -96,8 +100,9 @@ class PlayerProgress {
   void recordLevelResult(int stars) {
     assert(stars >= 0 && stars <= 5);
     final updated = List<int>.from(adaptiveHistory)..add(stars);
-    adaptiveHistory =
-        updated.length > 20 ? updated.sublist(updated.length - 20) : updated;
+    adaptiveHistory = updated.length > 20
+        ? updated.sublist(updated.length - 20)
+        : updated;
     adaptiveVersion = 2;
   }
 
@@ -243,8 +248,9 @@ class PlayerProgress {
     }
     if (!ProgressionEngine.shouldRefuelByTime(heartRefuelAt, now)) return false;
     hearts++;
-    heartRefuelAt =
-        hearts < 5 ? ProgressionEngine.computeNextRefuelTime(now) : null;
+    heartRefuelAt = hearts < 5
+        ? ProgressionEngine.computeNextRefuelTime(now)
+        : null;
     return true;
   }
 
@@ -368,10 +374,12 @@ class PlayerProgress {
   /// Records [date] in play history (one entry per calendar day, max 365).
   void recordPlayDate(DateTime date) {
     final dateOnly = DateTime(date.year, date.month, date.day);
-    final isDuplicate = playHistory.any((d) =>
-        d.year == dateOnly.year &&
-        d.month == dateOnly.month &&
-        d.day == dateOnly.day);
+    final isDuplicate = playHistory.any(
+      (d) =>
+          d.year == dateOnly.year &&
+          d.month == dateOnly.month &&
+          d.day == dateOnly.day,
+    );
     if (isDuplicate) return;
     final updated = List<DateTime>.from(playHistory)..add(dateOnly);
     playHistory = updated.length > 365
@@ -401,13 +409,16 @@ class PlayerProgress {
   /// "Best" is ordered: challenge > hard > medium > easy.
   void recordLevelDifficulty(String levelId, String tierName) {
     const order = ['easy', 'medium', 'hard', 'challenge'];
-    assert(order.contains(tierName), 'recordLevelDifficulty: unknown tier "$tierName"');
+    assert(
+      order.contains(tierName),
+      'recordLevelDifficulty: unknown tier "$tierName"',
+    );
     final current = levelBestDifficulty[levelId];
     final currentRank = current != null ? order.indexOf(current) : -1;
     final newRank = order.indexOf(tierName);
     if (newRank > currentRank) {
-      levelBestDifficulty =
-          Map<String, String>.from(levelBestDifficulty)..[levelId] = tierName;
+      levelBestDifficulty = Map<String, String>.from(levelBestDifficulty)
+        ..[levelId] = tierName;
     }
   }
 
@@ -604,7 +615,8 @@ enum CurrencyTier {
 
   /// Returns the highest tier that [totalCoins] qualifies for.
   static CurrencyTier tierForCoins(int totalCoins) {
-    if (totalCoins >= CurrencyTier.diamond.minCoins) return CurrencyTier.diamond;
+    if (totalCoins >= CurrencyTier.diamond.minCoins)
+      return CurrencyTier.diamond;
     if (totalCoins >= CurrencyTier.gold.minCoins) return CurrencyTier.gold;
     return CurrencyTier.silver;
   }

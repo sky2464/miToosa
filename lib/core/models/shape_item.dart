@@ -19,11 +19,7 @@ enum ShapeColor {
 }
 
 /// Fill style for shapes.
-enum ShapeFill {
-  filled,
-  outlined,
-  striped;
-}
+enum ShapeFill { filled, outlined, striped }
 
 /// A single shape element with shape type, color, and fill.
 class ShapeItem extends Equatable {
@@ -37,11 +33,7 @@ class ShapeItem extends Equatable {
     this.fill = ShapeFill.filled,
   });
 
-  ShapeItem copyWith({
-    Shape? shape,
-    ShapeColor? color,
-    ShapeFill? fill,
-  }) {
+  ShapeItem copyWith({Shape? shape, ShapeColor? color, ShapeFill? fill}) {
     return ShapeItem(
       shape: shape ?? this.shape,
       color: color ?? this.color,

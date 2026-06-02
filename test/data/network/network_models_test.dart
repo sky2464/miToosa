@@ -183,10 +183,7 @@ void main() {
     });
 
     test('NetworkMessage.fromJson throws on unknown type', () {
-      const unknownJson = {
-        'type': 'unknown_message_type',
-        'data': 'some data',
-      };
+      const unknownJson = {'type': 'unknown_message_type', 'data': 'some data'};
 
       expect(
         () => NetworkMessage.fromJson(unknownJson),
@@ -205,9 +202,7 @@ void main() {
         createdAt: now,
       );
 
-      final updated = session.copyWith(
-        guestPlayerId: 'guest-456',
-      );
+      final updated = session.copyWith(guestPlayerId: 'guest-456');
 
       expect(updated.hostPlayerId, 'host-123');
       expect(updated.guestPlayerId, 'guest-456');
@@ -260,10 +255,7 @@ void main() {
         moveHistory: [3, 2, 4],
       );
 
-      final updated = score.copyWith(
-        xpGained: 150,
-        coinsGained: 15,
-      );
+      final updated = score.copyWith(xpGained: 150, coinsGained: 15);
 
       expect(updated.playerId, 'player-1');
       expect(updated.xpGained, 150);

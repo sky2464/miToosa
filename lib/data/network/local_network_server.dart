@@ -7,12 +7,13 @@ import 'package:flutter/foundation.dart';
 import '../../data/network/network_exceptions.dart';
 import '../../data/network/network_models.dart';
 
-typedef OnMessageReceived = void Function(NetworkMessage message, String clientId);
+typedef OnMessageReceived =
+    void Function(NetworkMessage message, String clientId);
 typedef OnClientConnected = void Function(String clientId);
 typedef OnClientDisconnected = void Function(String clientId);
 
 /// WebSocket server for host device managing multiplayer session connections.
-/// 
+///
 /// Responsibilities:
 /// - Accept client connections on a specified port
 /// - Validate clients via handshake (join_session message with matching sessionId)
@@ -52,15 +53,17 @@ class LocalNetworkServer {
       _server = await HttpServer.bind('0.0.0.0', port);
       _isRunning = true;
 
-      _server!.transform(WebSocketTransformer()).listen(
-        _handleNewConnection,
-        onError: (error) {
-          if (_isRunning) {
-            debugPrint('WebSocket server error: $error');
-          }
-        },
-        cancelOnError: false,
-      );
+      _server!
+          .transform(WebSocketTransformer())
+          .listen(
+            _handleNewConnection,
+            onError: (error) {
+              if (_isRunning) {
+                debugPrint('WebSocket server error: $error');
+              }
+            },
+            cancelOnError: false,
+          );
 
       return _server!.port;
     } catch (e) {
@@ -118,7 +121,8 @@ class LocalNetworkServer {
   List<String> getConnectedClientIds() => List.from(_validatedClients);
 
   /// Check if a client is connected and validated.
-  bool isClientConnected(String clientId) => _validatedClients.contains(clientId);
+  bool isClientConnected(String clientId) =>
+      _validatedClients.contains(clientId);
 
   /// Stop the server and close all connections.
   Future<void> stop() async {
@@ -188,7 +192,11 @@ class LocalNetworkServer {
   }
 
   /// Handle a message received from a client.
-  void _handleMessage(String clientId, String rawMessage, Timer handshakeTimer) {
+  void _handleMessage(
+    String clientId,
+    String rawMessage,
+    Timer handshakeTimer,
+  ) {
     try {
       final json = jsonDecode(rawMessage);
       if (json is! Map<String, dynamic>) {

@@ -32,16 +32,19 @@ class _QRScannerScreenState extends ConsumerState<QRScannerScreen> {
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
     final url = _urlController.text.trim();
-    final name = _nameController.text.trim().isEmpty ? 'Guest' : _nameController.text.trim();
+    final name = _nameController.text.trim().isEmpty
+        ? 'Guest'
+        : _nameController.text.trim();
 
-    final playerId = ref.read(authProvider).maybeWhen(
-      data: (id) => id,
-      orElse: () => null,
-    );
+    final playerId = ref
+        .read(authProvider)
+        .maybeWhen(data: (id) => id, orElse: () => null);
 
     if (playerId == null) return;
 
-    await ref.read(localSessionProvider.notifier).joinSession(url, playerId, name);
+    await ref
+        .read(localSessionProvider.notifier)
+        .joinSession(url, playerId, name);
   }
 
   void _resetError() {
@@ -53,9 +56,7 @@ class _QRScannerScreenState extends ConsumerState<QRScannerScreen> {
     final state = ref.watch(localSessionProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Join Game'),
-      ),
+      appBar: AppBar(title: const Text('Join Game')),
       body: _buildBody(context, state),
     );
   }
@@ -132,7 +133,8 @@ class _QRScannerScreenState extends ConsumerState<QRScannerScreen> {
                   return 'Please enter the session URL';
                 }
                 final trimmed = value.trim();
-                if (!trimmed.startsWith('ws://') && !trimmed.startsWith('wss://')) {
+                if (!trimmed.startsWith('ws://') &&
+                    !trimmed.startsWith('wss://')) {
                   return 'URL must start with ws:// or wss://';
                 }
                 return null;

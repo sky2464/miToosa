@@ -43,10 +43,7 @@ class FeaturedTrack extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  track.name,
-                  style: AethericPulseDark.headlineLg(),
-                ),
+                Text(track.name, style: AethericPulseDark.headlineLg()),
                 const SizedBox(height: 4),
                 Text(
                   track.subtitle,
@@ -60,7 +57,8 @@ class FeaturedTrack extends StatelessWidget {
                 Text(
                   '$completed / $total levels',
                   style: AethericPulseDark.label(
-                      color: AethericPulseDark.onSurfaceMuted),
+                    color: AethericPulseDark.onSurfaceMuted,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 PrimaryButton(

@@ -24,10 +24,14 @@ class SettingsScreen extends ConsumerWidget {
     return KineticBackground(
       child: progressAsync.when(
         loading: () => const Center(
-            child: CircularProgressIndicator(color: AethericPulseDark.brandBlue)),
+          child: CircularProgressIndicator(color: AethericPulseDark.brandBlue),
+        ),
         error: (e, _) => Center(
-            child: Text('Could not load settings.',
-                style: Theme.of(context).textTheme.bodyMedium)),
+          child: Text(
+            'Could not load settings.',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ),
         data: (progress) => _SettingsBody(progress: progress),
       ),
     );
@@ -54,7 +58,8 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
   @override
   Widget build(BuildContext context) {
     final tier = ProgressionEngine.computeMasteryTier(
-        widget.progress.adaptiveHistory);
+      widget.progress.adaptiveHistory,
+    );
     final level = (widget.progress.totalXP ~/ 1000) + 1;
 
     return ListView(
@@ -65,10 +70,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
         AethericPulseDark.spaceXl + 80,
       ),
       children: [
-        Text(
-          'Settings',
-          style: AethericPulseDark.headlineLg(),
-        ),
+        Text('Settings', style: AethericPulseDark.headlineLg()),
         const SizedBox(height: AethericPulseDark.spaceMd),
 
         // Profile card
@@ -83,7 +85,9 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                      color: AethericPulseDark.brandBlue, width: 1),
+                    color: AethericPulseDark.brandBlue,
+                    width: 1,
+                  ),
                   boxShadow: AethericPulseDark.blueGlow,
                   image: const DecorationImage(
                     image: AssetImage('assets/images/avatars/avatar_4.png'),
@@ -97,24 +101,32 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Semantics(
-                      label: 'Anonymous pilot ID PILOT_042. Your progress is stored only on this device.',
+                      label:
+                          'Anonymous pilot ID PILOT_042. Your progress is stored only on this device.',
                       child: ExcludeSemantics(
                         child: Text(
                           'PILOT_042',
-                          style: AethericPulseDark.bodyMd(color: AethericPulseDark.onSurface),
+                          style: AethericPulseDark.bodyMd(
+                            color: AethericPulseDark.onSurface,
+                          ),
                         ),
                       ),
                     ),
                     const SizedBox(height: 2),
                     Text(
                       'Level $level · ${widget.progress.diamonds} CR',
-                      style: AethericPulseDark.label(color: AethericPulseDark.onSurfaceMuted),
+                      style: AethericPulseDark.label(
+                        color: AethericPulseDark.onSurfaceMuted,
+                      ),
                     ),
                   ],
                 ),
               ),
-              const Icon(Icons.chevron_right,
-                  size: 22, color: AethericPulseDark.onSurfaceMuted),
+              const Icon(
+                Icons.chevron_right,
+                size: 22,
+                color: AethericPulseDark.onSurfaceMuted,
+              ),
             ],
           ),
         ),
@@ -124,8 +136,9 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
         const _SectionLabel('Your Mastery'),
         const SizedBox(height: 8),
         _MasteryCard(
-            tier: tier,
-            levelCount: widget.progress.adaptiveHistory.length),
+          tier: tier,
+          levelCount: widget.progress.adaptiveHistory.length,
+        ),
         const SizedBox(height: 16),
 
         // Account
@@ -134,7 +147,9 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
         const GlassCard(
           borderRadius: AethericPulseDark.radiusCard,
           padding: EdgeInsets.symmetric(
-              vertical: 2, horizontal: AethericPulseDark.spaceMd),
+            vertical: 2,
+            horizontal: AethericPulseDark.spaceMd,
+          ),
           child: Column(
             children: [
               // BL-08 Economy Messaging Clarity: subtitles spell out the
@@ -144,14 +159,18 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                 icon: Icon(Icons.share_outlined),
                 title: 'Share miToosa',
                 subtitle: 'Earn +40 bonus sessions per share (once per day)',
-                trailing: Icon(Icons.chevron_right,
-                    size: 22, color: AethericPulseDark.onSurfaceMuted),
+                trailing: Icon(
+                  Icons.chevron_right,
+                  size: 22,
+                  color: AethericPulseDark.onSurfaceMuted,
+                ),
               ),
               Divider(height: 1, color: AethericPulseDark.glassBorder),
               SettingsRow(
                 icon: Icon(Icons.workspace_premium_outlined),
                 title: 'Go VIP',
-                subtitle: 'Ad-free play, +10 bonus sessions daily, streak shield',
+                subtitle:
+                    'Ad-free play, +10 bonus sessions daily, streak shield',
                 trailing: _PurpleChip(label: 'Upgrade'),
               ),
             ],
@@ -165,7 +184,9 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
         GlassCard(
           borderRadius: AethericPulseDark.radiusCard,
           padding: const EdgeInsets.symmetric(
-              vertical: 2, horizontal: AethericPulseDark.spaceMd),
+            vertical: 2,
+            horizontal: AethericPulseDark.spaceMd,
+          ),
           child: Column(
             children: [
               SettingsRow(
@@ -197,10 +218,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                 icon: const Icon(Icons.notifications_outlined),
                 title: 'Daily reminder',
                 subtitle: 'Nudges if your streak is at risk',
-                trailing: ToggleSwitch(
-                  value: true,
-                  onChanged: (_) {},
-                ),
+                trailing: ToggleSwitch(value: true, onChanged: (_) {}),
               ),
               const Divider(height: 1, color: AethericPulseDark.glassBorder),
               SettingsRow(
@@ -220,8 +238,8 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                 title: 'Adaptive Difficulty',
                 subtitle: 'Adjusts puzzles to your skill level',
                 trailing: ToggleSwitch(
-                  value: widget.progress.difficultyMode ==
-                      DifficultyMode.adaptive,
+                  value:
+                      widget.progress.difficultyMode == DifficultyMode.adaptive,
                   onChanged: (enabled) async {
                     widget.progress.difficultyMode = enabled
                         ? DifficultyMode.adaptive
@@ -258,13 +276,18 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
         const GlassCard(
           borderRadius: AethericPulseDark.radiusCard,
           padding: EdgeInsets.symmetric(
-              vertical: 2, horizontal: AethericPulseDark.spaceMd),
+            vertical: 2,
+            horizontal: AethericPulseDark.spaceMd,
+          ),
           child: SettingsRow(
             icon: Icon(Icons.restart_alt_outlined),
             title: 'Reset progress',
             subtitle: 'Clear all credits and stats',
-            trailing: Icon(Icons.chevron_right,
-                size: 22, color: AethericPulseDark.onSurfaceMuted),
+            trailing: Icon(
+              Icons.chevron_right,
+              size: 22,
+              color: AethericPulseDark.onSurfaceMuted,
+            ),
           ),
         ),
         const SizedBox(height: AethericPulseDark.spaceMd),
@@ -272,7 +295,9 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
         Center(
           child: Text(
             'MITOOSA · V1.4.0',
-            style: AethericPulseDark.label(color: AethericPulseDark.onSurfaceMuted),
+            style: AethericPulseDark.label(
+              color: AethericPulseDark.onSurfaceMuted,
+            ),
           ),
         ),
       ],
@@ -311,8 +336,9 @@ class _PurpleChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: AethericPulseDark.brandPurple.withValues(alpha: 0.18),
         border: Border.all(
-            color: AethericPulseDark.brandPurple.withValues(alpha: 0.40),
-            width: 1),
+          color: AethericPulseDark.brandPurple.withValues(alpha: 0.40),
+          width: 1,
+        ),
         borderRadius: BorderRadius.circular(AethericPulseDark.radiusPill),
       ),
       child: Text(
@@ -361,14 +387,17 @@ class _ThemeModeSelector extends StatelessWidget {
                       : AethericPulseDark.glassBorder,
                   width: 1,
                 ),
-                borderRadius:
-                    BorderRadius.circular(AethericPulseDark.radiusChip),
+                borderRadius: BorderRadius.circular(
+                  AethericPulseDark.radiusChip,
+                ),
               ),
-              child: Icon(icon,
-                  size: 16,
-                  color: selected
-                      ? AethericPulseDark.brandBlue
-                      : AethericPulseDark.onSurfaceMuted),
+              child: Icon(
+                icon,
+                size: 16,
+                color: selected
+                    ? AethericPulseDark.brandBlue
+                    : AethericPulseDark.onSurfaceMuted,
+              ),
             ),
           ),
         ),
@@ -399,12 +428,21 @@ class _MasteryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (label, color, img) = switch (tier) {
-      MasteryTier.gold =>
-        ('Gold Mastery', const Color(0xFFFFD700), 'assets/images/badges/logic_legend.png'),
-      MasteryTier.silver =>
-        ('Silver Mastery', const Color(0xFFC0C0C0), 'assets/images/badges/memory_marvel.png'),
-      MasteryTier.bronze =>
-        ('Bronze Mastery', const Color(0xFFCD7F32), 'assets/images/badges/novice_mind.png'),
+      MasteryTier.gold => (
+        'Gold Mastery',
+        const Color(0xFFFFD700),
+        'assets/images/badges/logic_legend.png',
+      ),
+      MasteryTier.silver => (
+        'Silver Mastery',
+        const Color(0xFFC0C0C0),
+        'assets/images/badges/memory_marvel.png',
+      ),
+      MasteryTier.bronze => (
+        'Bronze Mastery',
+        const Color(0xFFCD7F32),
+        'assets/images/badges/novice_mind.png',
+      ),
     };
 
     return GlassCard(
@@ -418,10 +456,7 @@ class _MasteryCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  label,
-                  style: AethericPulseDark.headlineMd(color: color),
-                ),
+                Text(label, style: AethericPulseDark.headlineMd(color: color)),
                 const SizedBox(height: 4),
                 Text(
                   levelCount == 0

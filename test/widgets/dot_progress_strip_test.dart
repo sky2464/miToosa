@@ -7,9 +7,9 @@ import 'package:mitoosa/theme/design_tokens.dart';
 import 'package:mitoosa/widgets/dot_progress_strip.dart';
 
 Widget _wrap(Widget child) => MaterialApp(
-      theme: ThemeData.dark(),
-      home: Scaffold(body: Center(child: child)),
-    );
+  theme: ThemeData.dark(),
+  home: Scaffold(body: Center(child: child)),
+);
 
 void main() {
   group('DotProgressStrip', () {
@@ -21,32 +21,39 @@ void main() {
       expect(containers, findsAtLeastNWidgets(5));
     });
 
-    testWidgets('progress = 0.0 leaves all dots unfilled (no gradient)',
-        (tester) async {
+    testWidgets('progress = 0.0 leaves all dots unfilled (no gradient)', (
+      tester,
+    ) async {
       await tester.pumpWidget(_wrap(const DotProgressStrip(progress: 0.0)));
       final containers = tester
           .widgetList<Container>(find.byType(Container))
           .where((c) {
-        final dec = c.decoration;
-        return dec is BoxDecoration && dec.borderRadius != null;
-      });
+            final dec = c.decoration;
+            return dec is BoxDecoration && dec.borderRadius != null;
+          });
       // None of the dot Containers should carry the primary gradient.
       for (final c in containers) {
         final dec = c.decoration as BoxDecoration;
-        expect(dec.gradient, isNull,
-            reason: 'progress=0 should leave dots unfilled');
+        expect(
+          dec.gradient,
+          isNull,
+          reason: 'progress=0 should leave dots unfilled',
+        );
       }
     });
 
-    testWidgets('progress = 1.0 fills every dot with AP.gradPrimary',
-        (tester) async {
+    testWidgets('progress = 1.0 fills every dot with AP.gradPrimary', (
+      tester,
+    ) async {
       await tester.pumpWidget(_wrap(const DotProgressStrip(progress: 1.0)));
       // Filter to dot containers (those with explicit 8px height).
       final dotContainers = tester
           .widgetList<Container>(find.byType(Container))
-          .where((c) =>
-              c.decoration is BoxDecoration &&
-              (c.decoration as BoxDecoration).borderRadius != null);
+          .where(
+            (c) =>
+                c.decoration is BoxDecoration &&
+                (c.decoration as BoxDecoration).borderRadius != null,
+          );
       var filled = 0;
       for (final c in dotContainers) {
         final dec = c.decoration as BoxDecoration;
@@ -55,14 +62,17 @@ void main() {
       expect(filled, 5, reason: 'progress=1.0 should fill 5 dots');
     });
 
-    testWidgets('progress = 0.5 fills approximately half the dots',
-        (tester) async {
+    testWidgets('progress = 0.5 fills approximately half the dots', (
+      tester,
+    ) async {
       await tester.pumpWidget(_wrap(const DotProgressStrip(progress: 0.5)));
       final dotContainers = tester
           .widgetList<Container>(find.byType(Container))
-          .where((c) =>
-              c.decoration is BoxDecoration &&
-              (c.decoration as BoxDecoration).borderRadius != null);
+          .where(
+            (c) =>
+                c.decoration is BoxDecoration &&
+                (c.decoration as BoxDecoration).borderRadius != null,
+          );
       var filled = 0;
       for (final c in dotContainers) {
         final dec = c.decoration as BoxDecoration;
@@ -78,14 +88,16 @@ void main() {
     });
 
     testWidgets('totalDots is configurable', (tester) async {
-      await tester.pumpWidget(_wrap(
-        const DotProgressStrip(progress: 1.0, totalDots: 3),
-      ));
+      await tester.pumpWidget(
+        _wrap(const DotProgressStrip(progress: 1.0, totalDots: 3)),
+      );
       final dotContainers = tester
           .widgetList<Container>(find.byType(Container))
-          .where((c) =>
-              c.decoration is BoxDecoration &&
-              (c.decoration as BoxDecoration).borderRadius != null);
+          .where(
+            (c) =>
+                c.decoration is BoxDecoration &&
+                (c.decoration as BoxDecoration).borderRadius != null,
+          );
       var filled = 0;
       for (final c in dotContainers) {
         final dec = c.decoration as BoxDecoration;

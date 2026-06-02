@@ -28,10 +28,12 @@ class KineticObsidian {
   static const Color outlineVariant = Color(0xFF3B494B);
 
   // ── Brand accents ──────────────────────────────────────────────────────
-  static const Color electricCyan = Color(0xFF00F0FF);   // primary action
-  static const Color protonPurple = Color(0xFF7000FF);   // secondary
-  static const Color primarySoft = Color(0xFFDBFCFF);    // cyan-tinted on-dark text
-  static const Color secondarySoft = Color(0xFFD1BCFF);  // lilac
+  static const Color electricCyan = Color(0xFF00F0FF); // primary action
+  static const Color protonPurple = Color(0xFF7000FF); // secondary
+  static const Color primarySoft = Color(
+    0xFFDBFCFF,
+  ); // cyan-tinted on-dark text
+  static const Color secondarySoft = Color(0xFFD1BCFF); // lilac
   static const Color primaryFixed = Color(0xFF7DF4FF);
   static const Color primaryFixedDim = Color(0xFF00DBE9);
   static const Color secondaryFixed = Color(0xFFE9DDFF);
@@ -62,8 +64,12 @@ class KineticObsidian {
 
   // ── Glass card recipe ─────────────────────────────────────────────────
   static Color get glassFill => surfaceContainer.withValues(alpha: 0.50);
-  static const Color glassBorderBright = Color(0x1AFFFFFF); // top/left 0.10 alpha
-  static const Color glassBorderDim = Color(0x08FFFFFF);    // right/bottom 0.03 alpha
+  static const Color glassBorderBright = Color(
+    0x1AFFFFFF,
+  ); // top/left 0.10 alpha
+  static const Color glassBorderDim = Color(
+    0x08FFFFFF,
+  ); // right/bottom 0.03 alpha
 
   // ── Neon shadows ──────────────────────────────────────────────────────
   static const List<BoxShadow> shadowNeonSoft = [
@@ -139,40 +145,105 @@ class KineticObsidian {
   ];
 
   // ── Typography ─────────────────────────────────────────────────────────
-  static TextTheme buildTextTheme({Color? onSurfaceColor, Color? onSurfaceVariantColor, Color? primarySoftColor}) {
+  static TextTheme buildTextTheme({
+    Color? onSurfaceColor,
+    Color? onSurfaceVariantColor,
+    Color? primarySoftColor,
+  }) {
     final onSurf = onSurfaceColor ?? onSurface;
     final onSurfVar = onSurfaceVariantColor ?? onSurfaceVariant;
     final primarySoft = primarySoftColor ?? KineticObsidian.primarySoft;
-    TextStyle display(double size, {double letter = 2.0, FontWeight weight = FontWeight.w600, double height = 1.1, Color? color}) {
+    TextStyle display(
+      double size, {
+      double letter = 2.0,
+      FontWeight weight = FontWeight.w600,
+      double height = 1.1,
+      Color? color,
+    }) {
       return TextStyle(
         fontFamily: fontDisplay,
         fontFamilyFallback: fontFallback,
-        fontSize: size, fontWeight: weight, height: height,
-        letterSpacing: letter, color: color ?? primarySoft,
+        fontSize: size,
+        fontWeight: weight,
+        height: height,
+        letterSpacing: letter,
+        color: color ?? primarySoft,
       );
     }
-    TextStyle body(double size, {double letter = 0.3, FontWeight weight = FontWeight.w300, double height = 1.5, Color? color}) {
+
+    TextStyle body(
+      double size, {
+      double letter = 0.3,
+      FontWeight weight = FontWeight.w300,
+      double height = 1.5,
+      Color? color,
+    }) {
       return TextStyle(
         fontFamily: fontBody,
         fontFamilyFallback: fontFallback,
-        fontSize: size, fontWeight: weight, height: height,
-        letterSpacing: letter, color: color ?? onSurfVar,
+        fontSize: size,
+        fontWeight: weight,
+        height: height,
+        letterSpacing: letter,
+        color: color ?? onSurfVar,
       );
     }
 
     return TextTheme(
       displayLarge: display(48, letter: 2.4),
       displayMedium: display(40, letter: 2.0),
-      headlineLarge: display(32, letter: 1.28, weight: FontWeight.w500, height: 1.2, color: onSurf),
-      headlineMedium: display(24, letter: 0.72, weight: FontWeight.w500, height: 1.3, color: onSurf),
-      headlineSmall: display(20, letter: 0.6, weight: FontWeight.w500, height: 1.3, color: onSurf),
-      titleLarge: body(18, letter: 0.36, weight: FontWeight.w500, height: 1.4, color: onSurf),
-      titleMedium: body(16, letter: 0.32, weight: FontWeight.w500, height: 1.4, color: onSurf),
-      titleSmall: body(14, letter: 0.84, weight: FontWeight.w500, height: 1.2, color: onSurf),
+      headlineLarge: display(
+        32,
+        letter: 1.28,
+        weight: FontWeight.w500,
+        height: 1.2,
+        color: onSurf,
+      ),
+      headlineMedium: display(
+        24,
+        letter: 0.72,
+        weight: FontWeight.w500,
+        height: 1.3,
+        color: onSurf,
+      ),
+      headlineSmall: display(
+        20,
+        letter: 0.6,
+        weight: FontWeight.w500,
+        height: 1.3,
+        color: onSurf,
+      ),
+      titleLarge: body(
+        18,
+        letter: 0.36,
+        weight: FontWeight.w500,
+        height: 1.4,
+        color: onSurf,
+      ),
+      titleMedium: body(
+        16,
+        letter: 0.32,
+        weight: FontWeight.w500,
+        height: 1.4,
+        color: onSurf,
+      ),
+      titleSmall: body(
+        14,
+        letter: 0.84,
+        weight: FontWeight.w500,
+        height: 1.2,
+        color: onSurf,
+      ),
       bodyLarge: body(18, letter: 0.36, height: 1.6),
       bodyMedium: body(16, letter: 0.32),
       bodySmall: body(13, letter: 0.26),
-      labelLarge: body(14, letter: 0.84, weight: FontWeight.w500, height: 1.2, color: onSurf),
+      labelLarge: body(
+        14,
+        letter: 0.84,
+        weight: FontWeight.w500,
+        height: 1.2,
+        color: onSurf,
+      ),
       labelMedium: body(12, letter: 0.48, weight: FontWeight.w400, height: 1.2),
       labelSmall: body(10, letter: 0.80, weight: FontWeight.w400, height: 1.2),
     );
@@ -209,8 +280,10 @@ class KineticObsidian {
         iconTheme: IconThemeData(color: electricCyan),
         titleTextStyle: TextStyle(
           fontFamily: fontDisplay,
-          fontSize: 18, fontWeight: FontWeight.w900,
-          letterSpacing: 0.9, color: electricCyan,
+          fontSize: 18,
+          fontWeight: FontWeight.w900,
+          letterSpacing: 0.9,
+          color: electricCyan,
         ),
       ),
       cardTheme: CardThemeData(
@@ -231,7 +304,8 @@ class KineticObsidian {
           ),
           textStyle: const TextStyle(
             fontFamily: fontBody,
-            fontSize: 14, fontWeight: FontWeight.w700,
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
             letterSpacing: 0.84,
           ),
         ),
@@ -246,18 +320,22 @@ class KineticObsidian {
           ),
           textStyle: const TextStyle(
             fontFamily: fontBody,
-            fontSize: 14, fontWeight: FontWeight.w500,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
             letterSpacing: 0.84,
           ),
         ),
       ),
       switchTheme: SwitchThemeData(
-        thumbColor: WidgetStateProperty.resolveWith((states) =>
-            states.contains(WidgetState.selected) ? electricCyan : onSurface),
-        trackColor: WidgetStateProperty.resolveWith((states) =>
-            states.contains(WidgetState.selected)
-                ? electricCyan.withValues(alpha: 0.35)
-                : surfaceContainerHigh),
+        thumbColor: WidgetStateProperty.resolveWith(
+          (states) =>
+              states.contains(WidgetState.selected) ? electricCyan : onSurface,
+        ),
+        trackColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? electricCyan.withValues(alpha: 0.35)
+              : surfaceContainerHigh,
+        ),
       ),
       dividerTheme: const DividerThemeData(
         color: Color(0x0AFFFFFF),
@@ -270,16 +348,21 @@ class KineticObsidian {
         indicatorColor: electricCyan.withValues(alpha: 0.12),
         iconTheme: WidgetStateProperty.resolveWith(
           (states) => IconThemeData(
-            color: states.contains(WidgetState.selected) ? electricCyan : outline,
+            color: states.contains(WidgetState.selected)
+                ? electricCyan
+                : outline,
             size: 22,
           ),
         ),
         labelTextStyle: WidgetStateProperty.resolveWith(
           (states) => TextStyle(
             fontFamily: fontBody,
-            fontSize: 10, fontWeight: FontWeight.w700,
+            fontSize: 10,
+            fontWeight: FontWeight.w700,
             letterSpacing: 1.0,
-            color: states.contains(WidgetState.selected) ? electricCyan : outline,
+            color: states.contains(WidgetState.selected)
+                ? electricCyan
+                : outline,
           ),
         ),
       ),
@@ -289,8 +372,8 @@ class KineticObsidian {
 
 // ── Semantic color aliases (referenced by gameplay/track screens) ────────────
 extension KineticObsidianSemantics on KineticObsidian {
-  static const Color success = Color(0xFF4ADE80);   // green — correct answer
-  static const Color warning = Color(0xFFFACC15);   // amber — low time
+  static const Color success = Color(0xFF4ADE80); // green — correct answer
+  static const Color warning = Color(0xFFFACC15); // amber — low time
 }
 
 // ── Alias so old code using MiToosaTheme compiles unchanged ──────────────────

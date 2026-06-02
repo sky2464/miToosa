@@ -17,9 +17,13 @@ GameplayLevel _level({required int perfectScore, double multiplier = 1.0}) {
       targetItems: [ShapeItem(shape: Shape.circle)],
       options: [
         PuzzleOption(
-            id: 'c', items: [ShapeItem(shape: Shape.circle)]),
+          id: 'c',
+          items: [ShapeItem(shape: Shape.circle)],
+        ),
         PuzzleOption(
-            id: 'w', items: [ShapeItem(shape: Shape.square)]),
+          id: 'w',
+          items: [ShapeItem(shape: Shape.square)],
+        ),
       ],
       correctOptionId: 'c',
     ),
@@ -40,9 +44,12 @@ void main() {
       expect(_level(perfectScore: 100, multiplier: 0.75).score(0), 75);
     });
 
-    test('penalty deducted from scaled score (multiplier=1.5, 2 incorrect → 110)', () {
-      expect(_level(perfectScore: 100, multiplier: 1.5).score(2), 110);
-    });
+    test(
+      'penalty deducted from scaled score (multiplier=1.5, 2 incorrect → 110)',
+      () {
+        expect(_level(perfectScore: 100, multiplier: 1.5).score(2), 110);
+      },
+    );
 
     test('score never goes below 10 even with large incorrect count', () {
       expect(_level(perfectScore: 100).score(50), 10);
@@ -60,13 +67,18 @@ void main() {
     // ── Bug regression: clamp(10, scaled) throws when scaled < 10 ──────────
     test('perfectScore=12 multiplier=0.75 (scaled=9) never throws', () {
       // scaled = (12 * 0.75).round() = 9 — previously threw ArgumentError
-      expect(() => _level(perfectScore: 12, multiplier: 0.75).score(0),
-          returnsNormally);
+      expect(
+        () => _level(perfectScore: 12, multiplier: 0.75).score(0),
+        returnsNormally,
+      );
     });
 
-    test('perfectScore=12 multiplier=0.75 floors to scaled value (9), not 10', () {
-      // scaled = (12 * 0.75).round() = 9 — floor is scaled itself, not 10
-      expect(_level(perfectScore: 12, multiplier: 0.75).score(0), 9);
-    });
+    test(
+      'perfectScore=12 multiplier=0.75 floors to scaled value (9), not 10',
+      () {
+        // scaled = (12 * 0.75).round() = 9 — floor is scaled itself, not 10
+        expect(_level(perfectScore: 12, multiplier: 0.75).score(0), 9);
+      },
+    );
   });
 }

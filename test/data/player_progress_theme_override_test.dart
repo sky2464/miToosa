@@ -25,25 +25,27 @@ void main() {
     expect(loaded!.themeModeOverride, 2);
   });
 
-  test('pre-v7 save (no themeModeOverride field) loads with null override',
-      () async {
-    // Simulate a legacy v6 binary payload with 32 fields (no field 32).
-    // The adapter reads `fields[32] as int?` which is null when absent.
-    final p = PlayerProgress(playerId: 'legacy-user');
-    // Ensure the default is null-safe even before any migration.
-    expect(p.themeModeOverride, isNull);
+  test(
+    'pre-v7 save (no themeModeOverride field) loads with null override',
+    () async {
+      // Simulate a legacy v6 binary payload with 32 fields (no field 32).
+      // The adapter reads `fields[32] as int?` which is null when absent.
+      final p = PlayerProgress(playerId: 'legacy-user');
+      // Ensure the default is null-safe even before any migration.
+      expect(p.themeModeOverride, isNull);
 
-    // Round-trip with null override.
-    final box = await Hive.openBox<PlayerProgress>('pp_legacy_rt');
-    await box.put('legacy-user', p);
-    final loaded = box.get('legacy-user');
-    expect(loaded, isNotNull);
-    expect(loaded!.themeModeOverride, isNull);
-    // Unrelated fields stay intact.
-    expect(loaded.difficultyMode, DifficultyMode.standard);
-    expect(loaded.hearts, 5);
-    await box.close();
-  });
+      // Round-trip with null override.
+      final box = await Hive.openBox<PlayerProgress>('pp_legacy_rt');
+      await box.put('legacy-user', p);
+      final loaded = box.get('legacy-user');
+      expect(loaded, isNotNull);
+      expect(loaded!.themeModeOverride, isNull);
+      // Unrelated fields stay intact.
+      expect(loaded.difficultyMode, DifficultyMode.standard);
+      expect(loaded.hearts, 5);
+      await box.close();
+    },
+  );
 
   // Keep typed_data import used (Uint8List guards against lint pruning in
   // case future extensions touch raw binary assertions).

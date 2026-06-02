@@ -37,16 +37,15 @@ PlayerProgress _freshProgress() =>
 final _noOpController = TelemetrySessionController(_NoOpTelemetryRepository());
 
 Widget _wrap(PlayerProgress progress) => ProviderScope(
-      overrides: [
-        playerProgressProvider.overrideWith((ref) async => progress),
-        telemetrySessionControllerProvider
-            .overrideWithValue(_noOpController),
-      ],
-      child: MaterialApp(
-        theme: AethericPulseDark.themeData,
-        home: const MainAppShell(),
-      ),
-    );
+  overrides: [
+    playerProgressProvider.overrideWith((ref) async => progress),
+    telemetrySessionControllerProvider.overrideWithValue(_noOpController),
+  ],
+  child: MaterialApp(
+    theme: AethericPulseDark.themeData,
+    home: const MainAppShell(),
+  ),
+);
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
 
@@ -84,8 +83,9 @@ void main() {
   });
 
   group('MainAppShell — tab switching (AC-008, T-007)', () {
-    testWidgets('tapping Progress tab switches screen without crash',
-        (tester) async {
+    testWidgets('tapping Progress tab switches screen without crash', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(600, 932);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() {
@@ -101,8 +101,9 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('tapping Settings tab switches screen without crash',
-        (tester) async {
+    testWidgets('tapping Settings tab switches screen without crash', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(600, 932);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() {

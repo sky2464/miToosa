@@ -47,7 +47,10 @@ class GameplayState {
   final int puzzleTimeRemaining;
   final bool puzzleTimerPaused;
 
-  int get score => switch (phase) { PhaseCompleted(:final score) => score, _ => 0 };
+  int get score => switch (phase) {
+    PhaseCompleted(:final score) => score,
+    _ => 0,
+  };
 
   const GameplayState({
     required this.level,

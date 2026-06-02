@@ -20,10 +20,14 @@ class WorldMapPathScreen extends ConsumerWidget {
     final tracks = ContentProvider().tracks;
     return progressAsync.when(
       loading: () => const Center(
-          child: CircularProgressIndicator(color: AethericPulseDark.brandBlue)),
+        child: CircularProgressIndicator(color: AethericPulseDark.brandBlue),
+      ),
       error: (e, _) => Center(
-          child: Text('Error loading path',
-              style: Theme.of(context).textTheme.bodyMedium)),
+        child: Text(
+          'Error loading path',
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+      ),
       data: (progress) => _PathView(progress: progress, tracks: tracks),
     );
   }
@@ -78,8 +82,8 @@ class _PathViewState extends State<_PathView> {
           state: (widget.progress.levelStars['${track.id}_$i'] ?? 0) > 0
               ? PathNodeState.done
               : i == currentIdx
-                  ? PathNodeState.current
-                  : PathNodeState.locked,
+              ? PathNodeState.current
+              : PathNodeState.locked,
           type: (i + 1) % 5 == 0 ? PathNodeType.boss : PathNodeType.regular,
         ),
     ];
@@ -109,8 +113,9 @@ class _PathViewState extends State<_PathView> {
   Widget build(BuildContext context) {
     final tracks = widget.tracks.take(6).toList();
     final selectedTrack = _selectedTrack;
-    final levels =
-        selectedTrack != null ? _buildLevels(selectedTrack) : <PathLevel>[];
+    final levels = selectedTrack != null
+        ? _buildLevels(selectedTrack)
+        : <PathLevel>[];
 
     return Column(
       children: [
@@ -121,8 +126,9 @@ class _PathViewState extends State<_PathView> {
             selectedIndex: _selectedTrackIndex,
             onSelect: (i) {
               setState(() => _selectedTrackIndex = i);
-              WidgetsBinding.instance
-                  .addPostFrameCallback((_) => _scrollToCurrentNode());
+              WidgetsBinding.instance.addPostFrameCallback(
+                (_) => _scrollToCurrentNode(),
+              );
             },
           ),
         // PathConstellation in a scrollable view.
@@ -141,12 +147,12 @@ class _PathViewState extends State<_PathView> {
                     levels: levels,
                     onTapLevel: selectedTrack != null
                         ? (_) => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    TrackDetailScreen(track: selectedTrack),
-                              ),
-                            )
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  TrackDetailScreen(track: selectedTrack),
+                            ),
+                          )
                         : null,
                   ),
                 ),
@@ -188,4 +194,3 @@ class _TrackChips extends StatelessWidget {
     );
   }
 }
-

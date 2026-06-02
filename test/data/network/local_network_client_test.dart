@@ -10,7 +10,8 @@ void main() {
     late String testSessionId;
 
     setUp(() {
-      testWsUrl = 'ws://192.168.1.100:8765?session=sess-123&playerId=player-456';
+      testWsUrl =
+          'ws://192.168.1.100:8765?session=sess-123&playerId=player-456';
       testPlayerId = 'player-456';
       testSessionId = 'sess-123';
     });
@@ -62,10 +63,7 @@ void main() {
         timestamp: DateTime.now().millisecondsSinceEpoch,
       );
 
-      expect(
-        () => client.sendMessage(message),
-        throwsA(isA<StateError>()),
-      );
+      expect(() => client.sendMessage(message), throwsA(isA<StateError>()));
     });
 
     test('Client state transitions are tracked', () {
@@ -178,7 +176,8 @@ void main() {
     });
 
     test('parseQrUrl extracts correct parameters from valid URL', () {
-      const qrUrl = 'ws://192.168.1.100:8765?session=sess-123&playerId=player-456';
+      const qrUrl =
+          'ws://192.168.1.100:8765?session=sess-123&playerId=player-456';
       final result = LocalNetworkClient.parseQrUrl(qrUrl);
 
       expect(result, isNotNull);

@@ -7,11 +7,7 @@ void main() {
   group('QRScannerScreen', () {
     testWidgets('Widget renders without crashing', (WidgetTester tester) async {
       await tester.pumpWidget(
-        const ProviderScope(
-          child: MaterialApp(
-            home: QRScannerScreen(),
-          ),
-        ),
+        const ProviderScope(child: MaterialApp(home: QRScannerScreen())),
       );
 
       expect(find.byType(QRScannerScreen), findsOneWidget);
@@ -19,13 +15,11 @@ void main() {
       expect(find.text('Join a Local Game'), findsOneWidget);
     });
 
-    testWidgets('Shows session URL and name fields', (WidgetTester tester) async {
+    testWidgets('Shows session URL and name fields', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
-        const ProviderScope(
-          child: MaterialApp(
-            home: QRScannerScreen(),
-          ),
-        ),
+        const ProviderScope(child: MaterialApp(home: QRScannerScreen())),
       );
 
       expect(find.text('Your Name'), findsOneWidget);
@@ -35,11 +29,7 @@ void main() {
 
     testWidgets('Validates empty URL field', (WidgetTester tester) async {
       await tester.pumpWidget(
-        const ProviderScope(
-          child: MaterialApp(
-            home: QRScannerScreen(),
-          ),
-        ),
+        const ProviderScope(child: MaterialApp(home: QRScannerScreen())),
       );
 
       // Clear the name field so it triggers validation too
@@ -50,13 +40,11 @@ void main() {
       expect(find.text('Please enter the session URL'), findsOneWidget);
     });
 
-    testWidgets('Validates URL must start with ws://', (WidgetTester tester) async {
+    testWidgets('Validates URL must start with ws://', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
-        const ProviderScope(
-          child: MaterialApp(
-            home: QRScannerScreen(),
-          ),
-        ),
+        const ProviderScope(child: MaterialApp(home: QRScannerScreen())),
       );
 
       await tester.enterText(

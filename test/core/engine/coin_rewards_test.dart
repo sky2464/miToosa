@@ -5,27 +5,45 @@ import 'package:mitoosa/data/player_progress.dart';
 void main() {
   group('ProgressionEngine — computeCoinReward', () {
     test('0 stars → base 10 coins only', () {
-      expect(ProgressionEngine.computeCoinReward(stars: 0, isFirstClear: false), 10);
+      expect(
+        ProgressionEngine.computeCoinReward(stars: 0, isFirstClear: false),
+        10,
+      );
     });
 
     test('3 stars → base 10 + 3×5 = 25 coins', () {
-      expect(ProgressionEngine.computeCoinReward(stars: 3, isFirstClear: false), 25);
+      expect(
+        ProgressionEngine.computeCoinReward(stars: 3, isFirstClear: false),
+        25,
+      );
     });
 
     test('5 stars → base 10 + 5×5 = 35 coins', () {
-      expect(ProgressionEngine.computeCoinReward(stars: 5, isFirstClear: false), 35);
+      expect(
+        ProgressionEngine.computeCoinReward(stars: 5, isFirstClear: false),
+        35,
+      );
     });
 
     test('first clear bonus adds 20 coins', () {
-      expect(ProgressionEngine.computeCoinReward(stars: 5, isFirstClear: true), 55);
+      expect(
+        ProgressionEngine.computeCoinReward(stars: 5, isFirstClear: true),
+        55,
+      );
     });
 
     test('first clear with 0 stars → 10 + 0 + 20 = 30 coins', () {
-      expect(ProgressionEngine.computeCoinReward(stars: 0, isFirstClear: true), 30);
+      expect(
+        ProgressionEngine.computeCoinReward(stars: 0, isFirstClear: true),
+        30,
+      );
     });
 
     test('1 star replay → 10 + 5 = 15 coins', () {
-      expect(ProgressionEngine.computeCoinReward(stars: 1, isFirstClear: false), 15);
+      expect(
+        ProgressionEngine.computeCoinReward(stars: 1, isFirstClear: false),
+        15,
+      );
     });
   });
 

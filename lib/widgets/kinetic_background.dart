@@ -13,8 +13,9 @@ class KineticBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final surface =
-        isDark ? AethericPulseDark.surface : AethericPulseLight.lightSurface;
+    final surface = isDark
+        ? AethericPulseDark.surface
+        : AethericPulseLight.lightSurface;
     final glow = isDark ? AethericPulseDark.heroGlow : _lightHeroGlow;
 
     return Stack(

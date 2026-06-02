@@ -69,8 +69,11 @@ class HintButton extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.favorite_rounded,
-                      size: 9, color: Colors.white),
+                  const Icon(
+                    Icons.favorite_rounded,
+                    size: 9,
+                    color: Colors.white,
+                  ),
                   const SizedBox(width: 1),
                   Text(
                     '-1',

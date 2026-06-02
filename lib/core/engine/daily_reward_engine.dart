@@ -32,10 +32,7 @@ class DailyRewardEngine {
   };
 
   /// Whether the player can claim today's reward.
-  static bool canClaim({
-    required DateTime? lastClaim,
-    required DateTime now,
-  }) {
+  static bool canClaim({required DateTime? lastClaim, required DateTime now}) {
     if (lastClaim == null) return true;
     return !_isSameCalendarDay(lastClaim, now);
   }
@@ -49,19 +46,12 @@ class DailyRewardEngine {
   /// Returns the reward for a given [day] (1–7). Day 0 returns zero.
   static DailyReward rewardForDay(int day) {
     final coins = _rewards[day] ?? 0;
-    return DailyReward(
-      day: day,
-      coins: coins,
-      isBonusDay: day == _cycleLength,
-    );
+    return DailyReward(day: day, coins: coins, isBonusDay: day == _cycleLength);
   }
 
   /// Returns all 7 days of the reward cycle in order.
   static List<DailyReward> fullCycleRewards() {
-    return List.generate(
-      _cycleLength,
-      (i) => rewardForDay(i + 1),
-    );
+    return List.generate(_cycleLength, (i) => rewardForDay(i + 1));
   }
 
   static bool _isSameCalendarDay(DateTime a, DateTime b) {

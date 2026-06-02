@@ -7,7 +7,11 @@ class SkillScore {
   final String name;
   final double value; // 0-100
   final Color color;
-  const SkillScore({required this.name, required this.value, required this.color});
+  const SkillScore({
+    required this.name,
+    required this.value,
+    required this.color,
+  });
 }
 
 /// Hexagonal cognitive radar — concentric ring guides + filled polygon + vertex dots.

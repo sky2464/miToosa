@@ -14,9 +14,7 @@ class ShapeRenderer extends StatelessWidget {
     return SizedBox(
       width: size,
       height: size,
-      child: CustomPaint(
-        painter: _ShapePainter(item: item),
-      ),
+      child: CustomPaint(painter: _ShapePainter(item: item)),
     );
   }
 }
@@ -50,7 +48,11 @@ class _ShapePainter extends CustomPainter {
 
       case Shape.square:
         final rr = RRect.fromRectAndRadius(
-          Rect.fromCenter(center: Offset(cx, cy), width: r * 1.8, height: r * 1.8),
+          Rect.fromCenter(
+            center: Offset(cx, cy),
+            width: r * 1.8,
+            height: r * 1.8,
+          ),
           Radius.circular(r * 0.2),
         );
         canvas.drawRRect(rr, paint);

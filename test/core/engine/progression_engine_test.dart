@@ -84,39 +84,63 @@ void main() {
     });
 
     test('all 1-star → bronze (avg 1.0 < 2.5)', () {
-      expect(ProgressionEngine.computeMasteryTier([1, 1, 1, 1, 1]), MasteryTier.bronze);
+      expect(
+        ProgressionEngine.computeMasteryTier([1, 1, 1, 1, 1]),
+        MasteryTier.bronze,
+      );
     });
 
     test('avg 2.0 → bronze (below silver threshold 2.5)', () {
-      expect(ProgressionEngine.computeMasteryTier([2, 2, 2, 2, 2]), MasteryTier.bronze);
+      expect(
+        ProgressionEngine.computeMasteryTier([2, 2, 2, 2, 2]),
+        MasteryTier.bronze,
+      );
     });
 
     test('all 3-star → silver (avg 3.0, between 2.5 and 4.0)', () {
-      expect(ProgressionEngine.computeMasteryTier([3, 3, 3, 3, 3]), MasteryTier.silver);
+      expect(
+        ProgressionEngine.computeMasteryTier([3, 3, 3, 3, 3]),
+        MasteryTier.silver,
+      );
     });
 
     test('borderline silver: avg exactly 2.5 → silver', () {
       // [2, 3, 2, 3, 3] avg = 13/5 = 2.6 → silver
-      expect(ProgressionEngine.computeMasteryTier([2, 3, 2, 3, 3]), MasteryTier.silver);
+      expect(
+        ProgressionEngine.computeMasteryTier([2, 3, 2, 3, 3]),
+        MasteryTier.silver,
+      );
     });
 
     test('avg below 2.5 → bronze', () {
       // [1, 2, 2, 2, 2] avg = 9/5 = 1.8 → bronze
-      expect(ProgressionEngine.computeMasteryTier([1, 2, 2, 2, 2]), MasteryTier.bronze);
+      expect(
+        ProgressionEngine.computeMasteryTier([1, 2, 2, 2, 2]),
+        MasteryTier.bronze,
+      );
     });
 
     test('all 5-star → gold (avg 5.0 ≥ 4.0)', () {
-      expect(ProgressionEngine.computeMasteryTier([5, 5, 5, 5, 5]), MasteryTier.gold);
+      expect(
+        ProgressionEngine.computeMasteryTier([5, 5, 5, 5, 5]),
+        MasteryTier.gold,
+      );
     });
 
     test('borderline gold: avg exactly 4.0 → gold', () {
       // [4, 4, 4, 4, 4] avg = 4.0 → gold
-      expect(ProgressionEngine.computeMasteryTier([4, 4, 4, 4, 4]), MasteryTier.gold);
+      expect(
+        ProgressionEngine.computeMasteryTier([4, 4, 4, 4, 4]),
+        MasteryTier.gold,
+      );
     });
 
     test('avg 3.9 → silver (just below gold threshold)', () {
       // [4, 4, 4, 4, 3] avg = 19/5 = 3.8 → silver
-      expect(ProgressionEngine.computeMasteryTier([4, 4, 4, 4, 3]), MasteryTier.silver);
+      expect(
+        ProgressionEngine.computeMasteryTier([4, 4, 4, 4, 3]),
+        MasteryTier.silver,
+      );
     });
   });
 
@@ -124,73 +148,118 @@ void main() {
     const base = 1.0;
 
     test('fewer than 5 entries → returns current unchanged', () {
-      expect(ProgressionEngine.computeAdaptiveMultiplier([5, 5, 5], base), base);
-    });
-
-    test('exactly 5 entries with odd total count → no adjustment (smooth guardrail)', () {
-      // history.length == 5 → isOdd → skip adjustment
-      expect(ProgressionEngine.computeAdaptiveMultiplier([5, 5, 5, 5, 5], base), base);
-    });
-
-    test('6 entries (even), all 5-star → increases multiplier (avg 5.0 ≥ 4.0)', () {
-      final result = ProgressionEngine.computeAdaptiveMultiplier(
-        [5, 5, 5, 5, 5, 5],
+      expect(
+        ProgressionEngine.computeAdaptiveMultiplier([5, 5, 5], base),
         base,
       );
-      expect(result, closeTo(base + kMultiplierStep, 1e-9));
     });
 
-    test('6 entries (even), all 1-star → decreases multiplier (avg 1.0 < 2.0)', () {
-      final result = ProgressionEngine.computeAdaptiveMultiplier(
-        [1, 1, 1, 1, 1, 1],
-        base,
-      );
-      expect(result, closeTo(base - kMultiplierStep, 1e-9));
-    });
+    test(
+      'exactly 5 entries with odd total count → no adjustment (smooth guardrail)',
+      () {
+        // history.length == 5 → isOdd → skip adjustment
+        expect(
+          ProgressionEngine.computeAdaptiveMultiplier([5, 5, 5, 5, 5], base),
+          base,
+        );
+      },
+    );
 
-    test('6 entries (even), all 3-star → no change (avg 3.0, neutral zone 2.0–4.0)', () {
-      final result = ProgressionEngine.computeAdaptiveMultiplier(
-        [3, 3, 3, 3, 3, 3],
-        base,
-      );
-      expect(result, base);
-    });
+    test(
+      '6 entries (even), all 5-star → increases multiplier (avg 5.0 ≥ 4.0)',
+      () {
+        final result = ProgressionEngine.computeAdaptiveMultiplier([
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+        ], base);
+        expect(result, closeTo(base + kMultiplierStep, 1e-9));
+      },
+    );
 
-    test('6 entries (even), avg exactly 2.0 → no change (boundary, not < 2.0)', () {
-      final result = ProgressionEngine.computeAdaptiveMultiplier(
-        [2, 2, 2, 2, 2, 2],
-        base,
-      );
-      expect(result, base);
-    });
+    test(
+      '6 entries (even), all 1-star → decreases multiplier (avg 1.0 < 2.0)',
+      () {
+        final result = ProgressionEngine.computeAdaptiveMultiplier([
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+        ], base);
+        expect(result, closeTo(base - kMultiplierStep, 1e-9));
+      },
+    );
+
+    test(
+      '6 entries (even), all 3-star → no change (avg 3.0, neutral zone 2.0–4.0)',
+      () {
+        final result = ProgressionEngine.computeAdaptiveMultiplier([
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+        ], base);
+        expect(result, base);
+      },
+    );
+
+    test(
+      '6 entries (even), avg exactly 2.0 → no change (boundary, not < 2.0)',
+      () {
+        final result = ProgressionEngine.computeAdaptiveMultiplier([
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+        ], base);
+        expect(result, base);
+      },
+    );
 
     test('upper bound clamp: multiplier cannot exceed kMultiplierMax', () {
-      final result = ProgressionEngine.computeAdaptiveMultiplier(
-        [5, 5, 5, 5, 5, 5],
-        kMultiplierMax,
-      );
+      final result = ProgressionEngine.computeAdaptiveMultiplier([
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+      ], kMultiplierMax);
       expect(result, kMultiplierMax);
     });
 
     test('lower bound clamp: multiplier cannot go below kMultiplierMin', () {
-      final result = ProgressionEngine.computeAdaptiveMultiplier(
-        [1, 1, 1, 1, 1, 1],
-        kMultiplierMin,
-      );
+      final result = ProgressionEngine.computeAdaptiveMultiplier([
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+      ], kMultiplierMin);
       expect(result, kMultiplierMin);
     });
 
     test('sliding window uses only last 5 of a longer history', () {
       // 10 poor + 5 perfect (odd total → no adjustment)
       final history = [...List.filled(10, 1), ...List.filled(5, 5)];
-      expect(
-        ProgressionEngine.computeAdaptiveMultiplier(history, base),
-        base,
-      );
+      expect(ProgressionEngine.computeAdaptiveMultiplier(history, base), base);
 
       // Add one more to make it even (16 entries).
       final history16 = [...history, 5];
-      final result = ProgressionEngine.computeAdaptiveMultiplier(history16, base);
+      final result = ProgressionEngine.computeAdaptiveMultiplier(
+        history16,
+        base,
+      );
       // Window = last 5 of 16 = [5, 5, 5, 5, 5] → avg 5.0 ≥ 4.0 → increase.
       expect(result, closeTo(base + kMultiplierStep, 1e-9));
     });

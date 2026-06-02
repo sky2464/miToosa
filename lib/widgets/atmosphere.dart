@@ -15,8 +15,7 @@ class Atmosphere extends StatefulWidget {
   State<Atmosphere> createState() => _AtmosphereState();
 }
 
-class _AtmosphereState extends State<Atmosphere>
-    with TickerProviderStateMixin {
+class _AtmosphereState extends State<Atmosphere> with TickerProviderStateMixin {
   late final AnimationController _ctrl;
 
   @override
@@ -122,10 +121,7 @@ class _AtmosphereState extends State<Atmosphere>
                   ),
                 ),
                 // Star field
-                CustomPaint(
-                  size: Size.infinite,
-                  painter: _StarFieldPainter(),
-                ),
+                CustomPaint(size: Size.infinite, painter: _StarFieldPainter()),
               ],
             );
           },

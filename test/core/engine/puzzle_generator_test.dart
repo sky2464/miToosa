@@ -26,10 +26,14 @@ void main() {
           difficulty: baseDifficulty,
         );
 
-        final correctMatches =
-            puzzle.options.where((o) => o.id == puzzle.correctOptionId).length;
-        expect(correctMatches, 1,
-            reason: '$rule should have exactly one correct option');
+        final correctMatches = puzzle.options
+            .where((o) => o.id == puzzle.correctOptionId)
+            .length;
+        expect(
+          correctMatches,
+          1,
+          reason: '$rule should have exactly one correct option',
+        );
       });
 
       test('$rule: correctOptionId exists in options list', () {
@@ -39,8 +43,11 @@ void main() {
         );
 
         final ids = puzzle.options.map((o) => o.id).toSet();
-        expect(ids.contains(puzzle.correctOptionId), isTrue,
-            reason: '$rule correctOptionId must be in options');
+        expect(
+          ids.contains(puzzle.correctOptionId),
+          isTrue,
+          reason: '$rule correctOptionId must be in options',
+        );
       });
 
       test('$rule: all option IDs are unique', () {
@@ -50,62 +57,77 @@ void main() {
         );
 
         final ids = puzzle.options.map((o) => o.id).toList();
-        expect(ids.toSet().length, ids.length,
-            reason: '$rule option IDs must all be unique');
+        expect(
+          ids.toSet().length,
+          ids.length,
+          reason: '$rule option IDs must all be unique',
+        );
       });
     }
 
     // ─── BUG FIX VALIDATION: no visually duplicate options ─────
 
-    test('matchIdentical: no two options are visually identical (stress test)', () {
-      final gen = PuzzleGenerator(Random(123));
-      int duplicateCount = 0;
+    test(
+      'matchIdentical: no two options are visually identical (stress test)',
+      () {
+        final gen = PuzzleGenerator(Random(123));
+        int duplicateCount = 0;
 
-      for (int i = 0; i < 500; i++) {
-        final puzzle = gen.generate(
-          rule: PuzzleRule.matchIdentical,
-          difficulty: const DifficultyParameters(
-            shapeCount: 3,
-            colorCount: 2,
-            choiceCount: 4,
-          ),
-        );
+        for (int i = 0; i < 500; i++) {
+          final puzzle = gen.generate(
+            rule: PuzzleRule.matchIdentical,
+            difficulty: const DifficultyParameters(
+              shapeCount: 3,
+              colorCount: 2,
+              choiceCount: 4,
+            ),
+          );
 
-        for (int a = 0; a < puzzle.options.length; a++) {
-          for (int b = a + 1; b < puzzle.options.length; b++) {
-            if (puzzle.options[a].visuallyEquals(puzzle.options[b])) {
-              duplicateCount++;
+          for (int a = 0; a < puzzle.options.length; a++) {
+            for (int b = a + 1; b < puzzle.options.length; b++) {
+              if (puzzle.options[a].visuallyEquals(puzzle.options[b])) {
+                duplicateCount++;
+              }
             }
           }
         }
-      }
 
-      expect(duplicateCount, 0,
-          reason: 'No two options should be visually identical');
-    });
-
-    test('colorPattern: no two options are visually identical (stress test)', () {
-      final gen = PuzzleGenerator(Random(456));
-      int duplicateCount = 0;
-
-      for (int i = 0; i < 500; i++) {
-        final puzzle = gen.generate(
-          rule: PuzzleRule.colorPattern,
-          difficulty: baseDifficulty,
+        expect(
+          duplicateCount,
+          0,
+          reason: 'No two options should be visually identical',
         );
+      },
+    );
 
-        for (int a = 0; a < puzzle.options.length; a++) {
-          for (int b = a + 1; b < puzzle.options.length; b++) {
-            if (puzzle.options[a].visuallyEquals(puzzle.options[b])) {
-              duplicateCount++;
+    test(
+      'colorPattern: no two options are visually identical (stress test)',
+      () {
+        final gen = PuzzleGenerator(Random(456));
+        int duplicateCount = 0;
+
+        for (int i = 0; i < 500; i++) {
+          final puzzle = gen.generate(
+            rule: PuzzleRule.colorPattern,
+            difficulty: baseDifficulty,
+          );
+
+          for (int a = 0; a < puzzle.options.length; a++) {
+            for (int b = a + 1; b < puzzle.options.length; b++) {
+              if (puzzle.options[a].visuallyEquals(puzzle.options[b])) {
+                duplicateCount++;
+              }
             }
           }
         }
-      }
 
-      expect(duplicateCount, 0,
-          reason: 'colorPattern: no visual duplicates allowed');
-    });
+        expect(
+          duplicateCount,
+          0,
+          reason: 'colorPattern: no visual duplicates allowed',
+        );
+      },
+    );
 
     // ─── countShapes: no zero-count options ────────────────────
 
@@ -118,8 +140,11 @@ void main() {
         );
 
         for (final option in puzzle.options) {
-          expect(option.items.isNotEmpty, isTrue,
-              reason: 'countShapes options must have >= 1 item (seed=$seed)');
+          expect(
+            option.items.isNotEmpty,
+            isTrue,
+            reason: 'countShapes options must have >= 1 item (seed=$seed)',
+          );
         }
       }
     });
@@ -167,8 +192,9 @@ void main() {
         difficulty: baseDifficulty,
       );
 
-      final correct =
-          puzzle.options.firstWhere((o) => o.id == puzzle.correctOptionId);
+      final correct = puzzle.options.firstWhere(
+        (o) => o.id == puzzle.correctOptionId,
+      );
       expect(correct.label, isNotNull);
       final value = int.tryParse(correct.label!);
       expect(value, isNotNull);
@@ -193,8 +219,9 @@ void main() {
         difficulty: baseDifficulty,
       );
 
-      final correct =
-          puzzle.options.firstWhere((o) => o.id == puzzle.correctOptionId);
+      final correct = puzzle.options.firstWhere(
+        (o) => o.id == puzzle.correctOptionId,
+      );
       expect(correct.label, isNotNull);
       final value = int.tryParse(correct.label!);
       expect(value, isNotNull);
@@ -227,8 +254,9 @@ void main() {
         difficulty: baseDifficulty,
       );
 
-      final correct =
-          puzzle.options.firstWhere((o) => o.id == puzzle.correctOptionId);
+      final correct = puzzle.options.firstWhere(
+        (o) => o.id == puzzle.correctOptionId,
+      );
       expect(correct.label, isNotNull);
       expect(correct.label!.isNotEmpty, isTrue);
     });
@@ -303,14 +331,21 @@ void main() {
         for (int seed = 0; seed < 50; seed++) {
           final gen = PuzzleGenerator(Random(seed));
           final puzzle = gen.generate(rule: rule, difficulty: baseDifficulty);
-          final correct =
-              puzzle.options.firstWhere((o) => o.id == puzzle.correctOptionId);
-          expect(correct.label, isNotNull,
-              reason: '$rule correct option must have a label (seed=$seed)');
+          final correct = puzzle.options.firstWhere(
+            (o) => o.id == puzzle.correctOptionId,
+          );
+          expect(
+            correct.label,
+            isNotNull,
+            reason: '$rule correct option must have a label (seed=$seed)',
+          );
           final value = int.tryParse(correct.label!);
-          expect(value, isNotNull,
-              reason:
-                  '$rule correct label must be a parseable int, got "${correct.label}" (seed=$seed)');
+          expect(
+            value,
+            isNotNull,
+            reason:
+                '$rule correct label must be a parseable int, got "${correct.label}" (seed=$seed)',
+          );
         }
       });
     }
@@ -320,18 +355,28 @@ void main() {
     test('mathFraction: correct label matches simplified fraction format', () {
       for (int seed = 0; seed < 50; seed++) {
         final gen = PuzzleGenerator(Random(seed));
-        final puzzle =
-            gen.generate(rule: PuzzleRule.mathFraction, difficulty: baseDifficulty);
-        final correct =
-            puzzle.options.firstWhere((o) => o.id == puzzle.correctOptionId);
-        expect(correct.label, isNotNull,
-            reason: 'mathFraction correct option must have a label');
+        final puzzle = gen.generate(
+          rule: PuzzleRule.mathFraction,
+          difficulty: baseDifficulty,
+        );
+        final correct = puzzle.options.firstWhere(
+          (o) => o.id == puzzle.correctOptionId,
+        );
+        expect(
+          correct.label,
+          isNotNull,
+          reason: 'mathFraction correct option must have a label',
+        );
         // Must match n/d or be a whole number like "1"
-        final isValidFraction =
-            RegExp(r'^\d+(/\d+)?$').hasMatch(correct.label!);
-        expect(isValidFraction, isTrue,
-            reason:
-                'mathFraction label "${correct.label}" must match n/d format (seed=$seed)');
+        final isValidFraction = RegExp(
+          r'^\d+(/\d+)?$',
+        ).hasMatch(correct.label!);
+        expect(
+          isValidFraction,
+          isTrue,
+          reason:
+              'mathFraction label "${correct.label}" must match n/d format (seed=$seed)',
+        );
       }
     });
 
@@ -341,16 +386,25 @@ void main() {
       for (int seed = 0; seed < 50; seed++) {
         final gen = PuzzleGenerator(Random(seed));
         final puzzle = gen.generate(
-            rule: PuzzleRule.geometrySymmetry, difficulty: baseDifficulty);
-        final correct =
-            puzzle.options.firstWhere((o) => o.id == puzzle.correctOptionId);
-        expect(correct.label, isNotNull,
-            reason: 'geometrySymmetry must have a label');
+          rule: PuzzleRule.geometrySymmetry,
+          difficulty: baseDifficulty,
+        );
+        final correct = puzzle.options.firstWhere(
+          (o) => o.id == puzzle.correctOptionId,
+        );
+        expect(
+          correct.label,
+          isNotNull,
+          reason: 'geometrySymmetry must have a label',
+        );
         final isValid =
             correct.label == '∞' || int.tryParse(correct.label!) != null;
-        expect(isValid, isTrue,
-            reason:
-                'geometrySymmetry label "${correct.label}" must be an int or ∞ (seed=$seed)');
+        expect(
+          isValid,
+          isTrue,
+          reason:
+              'geometrySymmetry label "${correct.label}" must be an int or ∞ (seed=$seed)',
+        );
       }
     });
 
@@ -360,10 +414,16 @@ void main() {
       for (int seed = 0; seed < 50; seed++) {
         final gen = PuzzleGenerator(Random(seed));
         final puzzle = gen.generate(
-            rule: PuzzleRule.physicsGravity, difficulty: baseDifficulty);
+          rule: PuzzleRule.physicsGravity,
+          difficulty: baseDifficulty,
+        );
         for (final option in puzzle.options) {
-          expect(option.label, contains('kg'),
-              reason: 'physicsGravity options must show weight in kg (seed=$seed)');
+          expect(
+            option.label,
+            contains('kg'),
+            reason:
+                'physicsGravity options must show weight in kg (seed=$seed)',
+          );
         }
       }
     });
@@ -375,33 +435,51 @@ void main() {
       for (int seed = 0; seed < 50; seed++) {
         final gen = PuzzleGenerator(Random(seed));
         final puzzle = gen.generate(
-            rule: PuzzleRule.physicsMomentum, difficulty: baseDifficulty);
-        final correct =
-            puzzle.options.firstWhere((o) => o.id == puzzle.correctOptionId);
-        expect(validLabels.contains(correct.label), isTrue,
-            reason:
-                'physicsMomentum label "${correct.label}" must be one of $validLabels (seed=$seed)');
+          rule: PuzzleRule.physicsMomentum,
+          difficulty: baseDifficulty,
+        );
+        final correct = puzzle.options.firstWhere(
+          (o) => o.id == puzzle.correctOptionId,
+        );
+        expect(
+          validLabels.contains(correct.label),
+          isTrue,
+          reason:
+              'physicsMomentum label "${correct.label}" must be one of $validLabels (seed=$seed)',
+        );
       }
     });
 
     // ─── countShapes: correct label matches item count ───────────
 
-    test('countShapes: correct label matches the count of items in that option', () {
-      for (int seed = 0; seed < 50; seed++) {
-        final gen = PuzzleGenerator(Random(seed));
-        final puzzle =
-            gen.generate(rule: PuzzleRule.countShapes, difficulty: baseDifficulty);
-        final correct =
-            puzzle.options.firstWhere((o) => o.id == puzzle.correctOptionId);
-        expect(correct.label, isNotNull);
-        final labelCount = int.tryParse(correct.label!);
-        expect(labelCount, isNotNull,
-            reason: 'countShapes label must be an int (seed=$seed)');
-        expect(labelCount, equals(correct.items.length),
+    test(
+      'countShapes: correct label matches the count of items in that option',
+      () {
+        for (int seed = 0; seed < 50; seed++) {
+          final gen = PuzzleGenerator(Random(seed));
+          final puzzle = gen.generate(
+            rule: PuzzleRule.countShapes,
+            difficulty: baseDifficulty,
+          );
+          final correct = puzzle.options.firstWhere(
+            (o) => o.id == puzzle.correctOptionId,
+          );
+          expect(correct.label, isNotNull);
+          final labelCount = int.tryParse(correct.label!);
+          expect(
+            labelCount,
+            isNotNull,
+            reason: 'countShapes label must be an int (seed=$seed)',
+          );
+          expect(
+            labelCount,
+            equals(correct.items.length),
             reason:
-                'countShapes label ($labelCount) must match items.length (${correct.items.length}) (seed=$seed)');
-      }
-    });
+                'countShapes label ($labelCount) must match items.length (${correct.items.length}) (seed=$seed)',
+          );
+        }
+      },
+    );
 
     // ─── Stress: all label-based rules produce unique option labels ─
 
@@ -423,8 +501,11 @@ void main() {
             duplicateLabelCount++;
           }
         }
-        expect(duplicateLabelCount, 0,
-            reason: '$rule must not produce duplicate option labels');
+        expect(
+          duplicateLabelCount,
+          0,
+          reason: '$rule must not produce duplicate option labels',
+        );
       });
     }
   });

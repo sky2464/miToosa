@@ -53,8 +53,12 @@ class _CountdownTimerWidgetState extends State<CountdownTimerWidget>
     final progress = widget.totalSeconds > 0
         ? widget.remainingSeconds / widget.totalSeconds
         : 0.0;
-    final ringColor = _isUrgent ? AP.pink : Theme.of(context).colorScheme.primary;
-    final textColor = _isUrgent ? AP.pink : Theme.of(context).colorScheme.onSurface;
+    final ringColor = _isUrgent
+        ? AP.pink
+        : Theme.of(context).colorScheme.primary;
+    final textColor = _isUrgent
+        ? AP.pink
+        : Theme.of(context).colorScheme.onSurface;
 
     final core = SizedBox(
       width: widget.size,

@@ -67,10 +67,9 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final coins = ref.watch(playerProgressProvider).maybeWhen(
-      data: (p) => p.coins,
-      orElse: () => 0,
-    );
+    final coins = ref
+        .watch(playerProgressProvider)
+        .maybeWhen(data: (p) => p.coins, orElse: () => 0);
     return Scaffold(
       backgroundColor: isDark
           ? AethericPulseDark.surface
@@ -83,15 +82,14 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
           if (isDark)
             const Positioned.fill(child: Atmosphere(accent: 'blue'))
           else
-            const Positioned.fill(child: KineticBackground(child: SizedBox.expand())),
+            const Positioned.fill(
+              child: KineticBackground(child: SizedBox.expand()),
+            ),
           Column(
             children: [
               _SafeAppHeader(coins: coins),
               Expanded(
-                child: IndexedStack(
-                  index: _selectedIndex,
-                  children: _pages,
-                ),
+                child: IndexedStack(index: _selectedIndex, children: _pages),
               ),
             ],
           ),
@@ -127,17 +125,30 @@ class _FloatingGlassNav extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int> onTap;
 
-  const _FloatingGlassNav({
-    required this.selectedIndex,
-    required this.onTap,
-  });
+  const _FloatingGlassNav({required this.selectedIndex, required this.onTap});
 
   static const _items = [
-    (icon: Icons.dashboard_outlined, activeIcon: Icons.dashboard, label: 'Tracks'),
+    (
+      icon: Icons.dashboard_outlined,
+      activeIcon: Icons.dashboard,
+      label: 'Tracks',
+    ),
     (icon: Icons.route_outlined, activeIcon: Icons.route, label: 'Path'),
-    (icon: Icons.insights_outlined, activeIcon: Icons.insights, label: 'Progress'),
-    (icon: Icons.leaderboard_outlined, activeIcon: Icons.leaderboard, label: 'Leaders'),
-    (icon: Icons.settings_outlined, activeIcon: Icons.settings_rounded, label: 'Settings'),
+    (
+      icon: Icons.insights_outlined,
+      activeIcon: Icons.insights,
+      label: 'Progress',
+    ),
+    (
+      icon: Icons.leaderboard_outlined,
+      activeIcon: Icons.leaderboard,
+      label: 'Leaders',
+    ),
+    (
+      icon: Icons.settings_outlined,
+      activeIcon: Icons.settings_rounded,
+      label: 'Settings',
+    ),
   ];
 
   @override
@@ -145,8 +156,9 @@ class _FloatingGlassNav extends StatelessWidget {
     final bottomInset = MediaQuery.of(context).padding.bottom;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final navFill = isDark ? const Color(0xCC0A0D17) : const Color(0xCCFBFAFF);
-    final navBorder =
-        isDark ? const Color(0x26FFFFFF) : const Color(0x2A1A1B2B);
+    final navBorder = isDark
+        ? const Color(0x26FFFFFF)
+        : const Color(0x2A1A1B2B);
     return Padding(
       padding: EdgeInsets.fromLTRB(
         16,
@@ -155,8 +167,7 @@ class _FloatingGlassNav extends StatelessWidget {
         bottomInset > 0 ? bottomInset + 6 : 14,
       ),
       child: ClipRRect(
-        borderRadius:
-            BorderRadius.circular(AethericPulseDark.radiusCard),
+        borderRadius: BorderRadius.circular(AethericPulseDark.radiusCard),
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
           child: Container(
@@ -164,8 +175,7 @@ class _FloatingGlassNav extends StatelessWidget {
             decoration: BoxDecoration(
               color: navFill,
               border: Border.all(color: navBorder, width: 1),
-              borderRadius:
-                  BorderRadius.circular(AethericPulseDark.radiusCard),
+              borderRadius: BorderRadius.circular(AethericPulseDark.radiusCard),
               boxShadow: isDark
                   ? AethericPulseDark.cardOuter
                   : AethericPulseLight.shadowSoftBlue,
@@ -264,37 +274,39 @@ class _NavItem extends StatelessWidget {
                   horizontal: isActive ? 14 : 10,
                   vertical: 8,
                 ),
-            decoration: BoxDecoration(
-              color: isActive ? activeFill : Colors.transparent,
-              border: Border.all(
-                color: isActive ? activeBorder : Colors.transparent,
-                width: 1,
-              ),
-              borderRadius:
-                  BorderRadius.circular(AethericPulseDark.radiusCard),
-              boxShadow:
-                  isActive ? (isDark ? AethericPulseDark.blueGlow : null) : null,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  isActive ? activeIcon : icon,
-                  size: 22,
-                  color: isActive ? activeColor : inactiveColor,
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  label,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 1.0,
-                    color: isActive ? activeColor : inactiveColor,
+                decoration: BoxDecoration(
+                  color: isActive ? activeFill : Colors.transparent,
+                  border: Border.all(
+                    color: isActive ? activeBorder : Colors.transparent,
+                    width: 1,
                   ),
+                  borderRadius: BorderRadius.circular(
+                    AethericPulseDark.radiusCard,
+                  ),
+                  boxShadow: isActive
+                      ? (isDark ? AethericPulseDark.blueGlow : null)
+                      : null,
                 ),
-              ],
-            ),
-          ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      isActive ? activeIcon : icon,
+                      size: 22,
+                      color: isActive ? activeColor : inactiveColor,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      label,
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1.0,
+                        color: isActive ? activeColor : inactiveColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

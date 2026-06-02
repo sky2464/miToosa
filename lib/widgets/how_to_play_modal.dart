@@ -9,14 +9,11 @@ import '../core/content_provider.dart';
 /// world as seen (via [onStart]) and navigating to gameplay.
 class HowToPlayModal extends StatelessWidget {
   final TrackDefinition track;
+
   /// Called when the player taps the CTA. Dismiss and navigate from here.
   final VoidCallback onStart;
 
-  const HowToPlayModal({
-    super.key,
-    required this.track,
-    required this.onStart,
-  });
+  const HowToPlayModal({super.key, required this.track, required this.onStart});
 
   /// Shows this modal over the given [context] as a full-screen dialog.
   /// Returns after the modal is dismissed.
@@ -59,10 +56,7 @@ class HowToPlayModal extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Center(
-                child: Text(
-                  track.icon,
-                  style: const TextStyle(fontSize: 40),
-                ),
+                child: Text(track.icon, style: const TextStyle(fontSize: 40)),
               ),
             ),
             const SizedBox(height: MiToosaTheme.spacingMd),
@@ -98,8 +92,7 @@ class HowToPlayModal extends StatelessWidget {
                     vertical: MiToosaTheme.spacingMd,
                   ),
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(MiToosaTheme.radiusMd),
+                    borderRadius: BorderRadius.circular(MiToosaTheme.radiusMd),
                   ),
                 ),
                 child: Text(

@@ -35,7 +35,8 @@ class LocalSessionScreen extends ConsumerWidget {
           actions: [
             if (state.phase == LocalSessionPhase.playing)
               IconButton(
-                onPressed: () => ref.read(localSessionProvider.notifier).endSession(),
+                onPressed: () =>
+                    ref.read(localSessionProvider.notifier).endSession(),
                 icon: const Icon(Icons.close_rounded),
                 tooltip: 'End Session',
               ),
@@ -67,7 +68,11 @@ class LocalSessionScreen extends ConsumerWidget {
     return result ?? false;
   }
 
-  Widget _buildBody(BuildContext context, WidgetRef ref, LocalSessionState state) {
+  Widget _buildBody(
+    BuildContext context,
+    WidgetRef ref,
+    LocalSessionState state,
+  ) {
     switch (state.phase) {
       case LocalSessionPhase.playing:
         return _buildPlayingState(context, ref, state);
@@ -80,7 +85,11 @@ class LocalSessionScreen extends ConsumerWidget {
     }
   }
 
-  Widget _buildPlayingState(BuildContext context, WidgetRef ref, LocalSessionState state) {
+  Widget _buildPlayingState(
+    BuildContext context,
+    WidgetRef ref,
+    LocalSessionState state,
+  ) {
     final players = state.players.values.toList();
     final currentPlayerId = state.currentPlayerId;
 
@@ -117,7 +126,9 @@ class LocalSessionScreen extends ConsumerWidget {
                 Icon(
                   Icons.sports_esports_rounded,
                   size: 64,
-                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.4),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.primary.withValues(alpha: 0.4),
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -137,7 +148,8 @@ class LocalSessionScreen extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.all(16),
           child: OutlinedButton.icon(
-            onPressed: () => ref.read(localSessionProvider.notifier).endSession(),
+            onPressed: () =>
+                ref.read(localSessionProvider.notifier).endSession(),
             icon: const Icon(Icons.stop_circle_outlined),
             label: const Text('End Session'),
             style: OutlinedButton.styleFrom(
@@ -206,9 +218,9 @@ class LocalSessionScreen extends ConsumerWidget {
             const SizedBox(height: 4),
             Text(
               '${player.xp} XP',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 2),
             Text(
@@ -221,7 +233,11 @@ class LocalSessionScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildEndedState(BuildContext context, WidgetRef ref, LocalSessionState state) {
+  Widget _buildEndedState(
+    BuildContext context,
+    WidgetRef ref,
+    LocalSessionState state,
+  ) {
     final players = state.players.values.toList()
       ..sort((a, b) => b.xp.compareTo(a.xp)); // sort by XP descending
 
@@ -239,18 +255,13 @@ class LocalSessionScreen extends ConsumerWidget {
             const SizedBox(height: 24),
             // Results table
             if (players.isNotEmpty) ...[
-              Text(
-                'Results',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
+              Text('Results', style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 12),
               ...players.asMap().entries.map((entry) {
                 final rank = entry.key + 1;
                 final player = entry.value;
                 return ListTile(
-                  leading: CircleAvatar(
-                    child: Text('$rank'),
-                  ),
+                  leading: CircleAvatar(child: Text('$rank')),
                   title: Text(player.name),
                   trailing: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -270,7 +281,8 @@ class LocalSessionScreen extends ConsumerWidget {
               const SizedBox(height: 16),
             ],
             ElevatedButton(
-              onPressed: () => ref.read(localSessionProvider.notifier).resetError(),
+              onPressed: () =>
+                  ref.read(localSessionProvider.notifier).resetError(),
               child: const Text('Return to Menu'),
             ),
           ],
@@ -279,7 +291,11 @@ class LocalSessionScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildErrorState(BuildContext context, WidgetRef ref, LocalSessionState state) {
+  Widget _buildErrorState(
+    BuildContext context,
+    WidgetRef ref,
+    LocalSessionState state,
+  ) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -299,7 +315,8 @@ class LocalSessionScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
-              onPressed: () => ref.read(localSessionProvider.notifier).resetError(),
+              onPressed: () =>
+                  ref.read(localSessionProvider.notifier).resetError(),
               icon: const Icon(Icons.refresh_rounded),
               label: const Text('Dismiss'),
             ),
@@ -310,9 +327,7 @@ class LocalSessionScreen extends ConsumerWidget {
   }
 
   Widget _buildIdleState(BuildContext context) {
-    return const Center(
-      child: Text('No active session'),
-    );
+    return const Center(child: Text('No active session'));
   }
 
   String _shortSessionId(String? sessionId) {

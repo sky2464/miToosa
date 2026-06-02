@@ -10,9 +10,7 @@ PlayerProgress _freshProgress() => PlayerProgress(playerId: 'test');
 Widget _wrap({PlayerProgress? progress}) {
   final p = progress ?? _freshProgress();
   return ProviderScope(
-    overrides: [
-      playerProgressProvider.overrideWith((_) => Future.value(p)),
-    ],
+    overrides: [playerProgressProvider.overrideWith((_) => Future.value(p))],
     child: const MaterialApp(home: SettingsScreen()),
   );
 }

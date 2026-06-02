@@ -6,10 +6,7 @@ void main() {
     final event = TelemetryEvent(
       name: 'session_start',
       timestamp: DateTime.utc(2026, 4, 17, 12, 30),
-      properties: const {
-        'session_id': 'abc-123',
-        'source': 'main_app_shell',
-      },
+      properties: const {'session_id': 'abc-123', 'source': 'main_app_shell'},
     );
 
     final encoded = event.toJson();

@@ -29,9 +29,11 @@ import 'gameplay_view_model.dart';
 class GameplayScreen extends ConsumerStatefulWidget {
   final TrackDefinition track;
   final int levelIndex;
+
   /// When true the screen starts a timed run covering [runTotalLevels] levels.
   final bool isRunMode;
   final int runTotalLevels;
+
   /// Optional difficulty tier selected by the user before entering gameplay.
   final DifficultyTier? initialDifficulty;
 
@@ -48,6 +50,7 @@ class GameplayScreen extends ConsumerStatefulWidget {
 
   /// -1 means free-play (no session). ≥0 is the level index where the session started.
   final int sessionStartLevelIndex;
+
   /// Accumulated XP from earlier puzzles in the current session.
   final int sessionXP;
 
@@ -89,7 +92,10 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
   @override
   void initState() {
     super.initState();
-    level = ContentProvider().buildLevelForTrack(widget.track, widget.levelIndex);
+    level = ContentProvider().buildLevelForTrack(
+      widget.track,
+      widget.levelIndex,
+    );
 
     _entryController = AnimationController(
       vsync: this,
@@ -252,7 +258,10 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     super.dispose();
   }
 
-  Future<void> _handleOptionTap(PuzzleOption option, GameplayLevel level) async {
+  Future<void> _handleOptionTap(
+    PuzzleOption option,
+    GameplayLevel level,
+  ) async {
     final state = ref.read(gameplayViewModelProvider(level));
     if (state.phase.isCompleted || _animatingTransition) return;
 
@@ -288,8 +297,14 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
 
       // Compute XP earned this puzzle for session accumulation
       final state2 = ref.read(gameplayViewModelProvider(level));
-      final stars = level.stars(state2.incorrectAttempts, hintUsed: state2.hintUsed);
-      final earnedXP = ProgressionEngine.computeXP(stars, hintUsed: state2.hintUsed);
+      final stars = level.stars(
+        state2.incorrectAttempts,
+        hintUsed: state2.hintUsed,
+      );
+      final earnedXP = ProgressionEngine.computeXP(
+        stars,
+        hintUsed: state2.hintUsed,
+      );
       final newSessionXP = widget.sessionXP + earnedXP;
 
       Future.delayed(const Duration(milliseconds: 1200), () {
@@ -310,16 +325,15 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-            pageBuilder: (c, a1, a2) =>
-                GameplayScreen(
-                  track: widget.track,
-                  levelIndex: widget.levelIndex + 1,
-                  isRunMode: widget.isRunMode,
-                  runTotalLevels: widget.runTotalLevels,
-                  initialDifficulty: widget.initialDifficulty,
-                  sessionStartLevelIndex: widget.sessionStartLevelIndex,
-                  sessionXP: newSessionXP,
-                ),
+            pageBuilder: (c, a1, a2) => GameplayScreen(
+              track: widget.track,
+              levelIndex: widget.levelIndex + 1,
+              isRunMode: widget.isRunMode,
+              runTotalLevels: widget.runTotalLevels,
+              initialDifficulty: widget.initialDifficulty,
+              sessionStartLevelIndex: widget.sessionStartLevelIndex,
+              sessionXP: newSessionXP,
+            ),
             transitionsBuilder: (c, anim, a2, child) =>
                 FadeTransition(opacity: anim, child: child),
             transitionDuration: const Duration(milliseconds: 400),
@@ -357,15 +371,22 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(children: [
-              const Icon(Icons.lightbulb_rounded,
-                  color: MiToosaTheme.warning, size: 22),
-              const SizedBox(width: 8),
-              Text('Hint',
-                  style: Theme.of(context).textTheme.headlineMedium),
-            ]),
+            Row(
+              children: [
+                const Icon(
+                  Icons.lightbulb_rounded,
+                  color: MiToosaTheme.warning,
+                  size: 22,
+                ),
+                const SizedBox(width: 8),
+                Text('Hint', style: Theme.of(context).textTheme.headlineMedium),
+              ],
+            ),
             const SizedBox(height: MiToosaTheme.spacingMd),
-            Text(level.hint ?? '', style: Theme.of(context).textTheme.bodyLarge),
+            Text(
+              level.hint ?? '',
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
             const SizedBox(height: MiToosaTheme.spacingLg),
           ],
         ),
@@ -379,7 +400,10 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     final persistence = ref.read(persistenceProvider);
     final levelId = '${widget.track.id}_${widget.levelIndex}';
     final state = ref.read(gameplayViewModelProvider(level));
-    final stars = level.stars(state.incorrectAttempts, hintUsed: state.hintUsed);
+    final stars = level.stars(
+      state.incorrectAttempts,
+      hintUsed: state.hintUsed,
+    );
 
     // Load progress BEFORE updating level star to detect first-clear
     final progress = await persistence.loadProgress(playerId);
@@ -389,13 +413,18 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     await persistence.updateLevelStar(playerId, levelId, stars);
 
     // Update XP using stars-based formula (max 10 XP per level)
-    final gainedXP = ProgressionEngine.computeXP(stars, hintUsed: state.hintUsed);
+    final gainedXP = ProgressionEngine.computeXP(
+      stars,
+      hintUsed: state.hintUsed,
+    );
     progress.totalXP = progress.totalXP + gainedXP;
 
     // v6: record per-level bests
     progress.recordLevelXP(levelId, gainedXP);
     progress.recordLevelTime(
-        levelId, DateTime.now().difference(_levelStartTime).inSeconds);
+      levelId,
+      DateTime.now().difference(_levelStartTime).inSeconds,
+    );
     if (widget.initialDifficulty != null) {
       progress.recordLevelDifficulty(levelId, widget.initialDifficulty!.name);
     }
@@ -428,14 +457,19 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     ref.listen(gameplayViewModelProvider(level), (prev, next) {
       final wasCompleted = prev?.phase.isCompleted ?? false;
       if (!wasCompleted && next.phase.isCompleted) {
-        final stars = level.stars(next.incorrectAttempts, hintUsed: next.hintUsed);
-        final earnedXP =
-            ProgressionEngine.computeXP(stars, hintUsed: next.hintUsed);
+        final stars = level.stars(
+          next.incorrectAttempts,
+          hintUsed: next.hintUsed,
+        );
+        final earnedXP = ProgressionEngine.computeXP(
+          stars,
+          hintUsed: next.hintUsed,
+        );
         final headline = stars >= 4
             ? 'IQ +1!'
             : stars >= 2
-                ? 'Nice!'
-                : 'Got it';
+            ? 'Nice!'
+            : 'Got it';
         FeedbackToast.show(
           context,
           headline: headline,
@@ -564,22 +598,31 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     );
   }
 
-  Widget _buildHeader(BuildContext context, GameplayLevel level, GameplayState eng) {
+  Widget _buildHeader(
+    BuildContext context,
+    GameplayLevel level,
+    GameplayState eng,
+  ) {
     final theme = Theme.of(context);
     final maxLevels = widget.track.targetLevelCount;
     final progress = (widget.levelIndex + 1) / maxLevels;
 
     // Live XP potential (decreases with wrong answers / hint)
-    final liveStars =
-        level.stars(eng.incorrectAttempts, hintUsed: eng.hintUsed);
-    final liveXP =
-        ProgressionEngine.computeXP(liveStars, hintUsed: eng.hintUsed)
-            .clamp(1, 10);
+    final liveStars = level.stars(
+      eng.incorrectAttempts,
+      hintUsed: eng.hintUsed,
+    );
+    final liveXP = ProgressionEngine.computeXP(
+      liveStars,
+      hintUsed: eng.hintUsed,
+    ).clamp(1, 10);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(
-        MiToosaTheme.spacingSm, MiToosaTheme.spacingSm,
-        MiToosaTheme.spacingMd, 0,
+        MiToosaTheme.spacingSm,
+        MiToosaTheme.spacingSm,
+        MiToosaTheme.spacingMd,
+        0,
       ),
       child: Column(
         children: [
@@ -600,8 +643,11 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
                       color: Colors.white.withValues(alpha: 0.04),
                       border: Border.all(color: AP.glassBorder, width: 1),
                     ),
-                    child: const Icon(Icons.arrow_back_ios_new_rounded,
-                        color: AP.fgSecondary, size: 16),
+                    child: const Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      color: AP.fgSecondary,
+                      size: 16,
+                    ),
                   ),
                 ),
               ),
@@ -653,10 +699,11 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
                       color: liveXP >= 8
                           ? MiToosaTheme.success.withValues(alpha: 0.12)
                           : liveXP >= 5
-                              ? MiToosaTheme.warning.withValues(alpha: 0.12)
-                              : MiToosaTheme.error.withValues(alpha: 0.12),
-                      borderRadius:
-                          BorderRadius.circular(MiToosaTheme.radiusSm),
+                          ? MiToosaTheme.warning.withValues(alpha: 0.12)
+                          : MiToosaTheme.error.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(
+                        MiToosaTheme.radiusSm,
+                      ),
                     ),
                     child: Text(
                       '$liveXP XP',
@@ -665,15 +712,18 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
                         color: liveXP >= 8
                             ? MiToosaTheme.success
                             : liveXP >= 5
-                                ? MiToosaTheme.warning
-                                : MiToosaTheme.error,
+                            ? MiToosaTheme.warning
+                            : MiToosaTheme.error,
                       ),
                     ),
                   ),
                 ),
               // Score badge
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: theme.colorScheme.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(MiToosaTheme.radiusSm),
@@ -681,7 +731,11 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.bolt, size: 18, color: theme.colorScheme.secondary),
+                    Icon(
+                      Icons.bolt,
+                      size: 18,
+                      color: theme.colorScheme.secondary,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       '${eng.score}',
@@ -701,9 +755,11 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
                   track: widget.track,
                   onStart: () => Navigator.of(context).pop(),
                 ),
-                icon: Icon(Icons.help_outline_rounded,
-                    color: theme.colorScheme.primary.withValues(alpha: 0.6),
-                    size: 22),
+                icon: Icon(
+                  Icons.help_outline_rounded,
+                  color: theme.colorScheme.primary.withValues(alpha: 0.6),
+                  size: 22,
+                ),
                 tooltip: 'How to play',
               ),
             ],
@@ -723,10 +779,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
       builder: (context, child) {
         return Transform.scale(
           scale: 0.8 + (0.2 * _entryController.value),
-          child: Opacity(
-            opacity: _entryController.value,
-            child: child,
-          ),
+          child: Opacity(opacity: _entryController.value, child: child),
         );
       },
       child: Container(
@@ -780,7 +833,9 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
               eng.feedback!.message,
               textAlign: TextAlign.center,
               style: theme.textTheme.titleLarge?.copyWith(
-                color: isCompleted ? MiToosaTheme.success : MiToosaTheme.warning,
+                color: isCompleted
+                    ? MiToosaTheme.success
+                    : MiToosaTheme.warning,
                 fontWeight: FontWeight.w800,
               ),
             ),
@@ -791,7 +846,10 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
   }
 
   Widget _buildOptions(
-    BuildContext context, GameplayLevel level, GameplayState eng, double screenWidth,
+    BuildContext context,
+    GameplayLevel level,
+    GameplayState eng,
+    double screenWidth,
   ) {
     final options = level.puzzle.options;
     final isTextBased = options.any((o) => o.label != null);
@@ -807,13 +865,23 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
       children: options.asMap().entries.map((entry) {
         final index = entry.key;
         final option = entry.value;
-        return _buildOptionCard(context, option, level, eng, index, screenWidth);
+        return _buildOptionCard(
+          context,
+          option,
+          level,
+          eng,
+          index,
+          screenWidth,
+        );
       }).toList(),
     );
   }
 
   Widget _buildTextOptions(
-    BuildContext context, GameplayLevel level, GameplayState eng, List<PuzzleOption> options,
+    BuildContext context,
+    GameplayLevel level,
+    GameplayState eng,
+    List<PuzzleOption> options,
   ) {
     final theme = Theme.of(context);
     return Column(
@@ -848,7 +916,9 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
             label: option.label ?? '',
             hint: hint,
             child: GestureDetector(
-              onTap: isCompleted ? null : () => setState(() => _pendingOption = option),
+              onTap: isCompleted
+                  ? null
+                  : () => setState(() => _pendingOption = option),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
                 width: double.infinity,
@@ -906,7 +976,8 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
       borderColor = theme.colorScheme.primary;
     }
 
-    final cardWidth = (screenWidth - MiToosaTheme.spacingLg * 2 - MiToosaTheme.spacingMd) / 2;
+    final cardWidth =
+        (screenWidth - MiToosaTheme.spacingLg * 2 - MiToosaTheme.spacingMd) / 2;
     final cardHint = isCompleted
         ? (isCorrect ? 'Correct answer' : 'Incorrect answer')
         : null;
@@ -922,61 +993,73 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
       label: 'Option ${index + 1}',
       hint: cardHint,
       child: GestureDetector(
-      onTap: isCompleted ? null : () => setState(() => _pendingOption = option),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeOut,
-        width: cardWidth.clamp(120.0, 200.0),
-        transform: Matrix4.diagonal3Values(
-          preCompletionSelected ? 1.02 : 1.0,
-          preCompletionSelected ? 1.02 : 1.0,
-          1.0,
-        ),
-        padding: const EdgeInsets.all(MiToosaTheme.spacingMd),
-        decoration: BoxDecoration(
-          color: preCompletionSelected ? AP.glassFill : bgColor,
-          borderRadius: BorderRadius.circular(MiToosaTheme.radiusLg),
-          border: Border.all(color: borderColor, width: 3),
-          boxShadow: [
-            if (preCompletionSelected)
-              BoxShadow(
-                color: AP.cyan.withValues(alpha: 0.45),
-                blurRadius: 20,
-                offset: const Offset(0, 4),
-              )
-            else if (borderColor != theme.colorScheme.primary.withValues(alpha: 0.08))
-              BoxShadow(
-                color: borderColor.withValues(alpha: 0.25),
-                blurRadius: 16,
-                offset: const Offset(0, 4),
-              )
-            else
-              ...MiToosaTheme.shadowCard,
-          ],
-        ),
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          spacing: 6,
-          runSpacing: 6,
-          children: option.items
-              .map((item) => ShapeRenderer(item: item, size: 28))
-              .toList(),
+        onTap: isCompleted
+            ? null
+            : () => setState(() => _pendingOption = option),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+          width: cardWidth.clamp(120.0, 200.0),
+          transform: Matrix4.diagonal3Values(
+            preCompletionSelected ? 1.02 : 1.0,
+            preCompletionSelected ? 1.02 : 1.0,
+            1.0,
+          ),
+          padding: const EdgeInsets.all(MiToosaTheme.spacingMd),
+          decoration: BoxDecoration(
+            color: preCompletionSelected ? AP.glassFill : bgColor,
+            borderRadius: BorderRadius.circular(MiToosaTheme.radiusLg),
+            border: Border.all(color: borderColor, width: 3),
+            boxShadow: [
+              if (preCompletionSelected)
+                BoxShadow(
+                  color: AP.cyan.withValues(alpha: 0.45),
+                  blurRadius: 20,
+                  offset: const Offset(0, 4),
+                )
+              else if (borderColor !=
+                  theme.colorScheme.primary.withValues(alpha: 0.08))
+                BoxShadow(
+                  color: borderColor.withValues(alpha: 0.25),
+                  blurRadius: 16,
+                  offset: const Offset(0, 4),
+                )
+              else
+                ...MiToosaTheme.shadowCard,
+            ],
+          ),
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 6,
+            runSpacing: 6,
+            children: option.items
+                .map((item) => ShapeRenderer(item: item, size: 28))
+                .toList(),
+          ),
         ),
       ),
-    ),
     );
   }
 
-  Widget _buildBottomCta(BuildContext context, GameplayLevel level, GameplayState eng) {
+  Widget _buildBottomCta(
+    BuildContext context,
+    GameplayLevel level,
+    GameplayState eng,
+  ) {
     final progressAsync = ref.watch(playerProgressProvider);
-    final hearts = progressAsync.maybeWhen(data: (p) => p.hearts, orElse: () => 5);
+    final hearts = progressAsync.maybeWhen(
+      data: (p) => p.hearts,
+      orElse: () => 5,
+    );
     final hintAvailable = level.hint != null && !eng.hintUsed && hearts > 0;
     final canSubmit = _pendingOption != null && !_animatingTransition;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(
-        MiToosaTheme.spacingLg, 0,
-        MiToosaTheme.spacingLg, MiToosaTheme.spacingMd,
+        MiToosaTheme.spacingLg,
+        0,
+        MiToosaTheme.spacingLg,
+        MiToosaTheme.spacingMd,
       ),
       child: Row(
         children: [
@@ -1003,9 +1086,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
                 Icon(
                   Icons.lightbulb_outline_rounded,
                   size: 16,
-                  color: hintAvailable
-                      ? null
-                      : const Color(0xFF6B7280),
+                  color: hintAvailable ? null : const Color(0xFF6B7280),
                 ),
                 const SizedBox(width: 6),
                 const Text('Hint'),
@@ -1033,12 +1114,17 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     final theme = Theme.of(context);
     if (!eng.phase.isCompleted) return const SizedBox.shrink();
 
-    final stars = eng.level.stars(eng.incorrectAttempts, hintUsed: eng.hintUsed);
+    final stars = eng.level.stars(
+      eng.incorrectAttempts,
+      hintUsed: eng.hintUsed,
+    );
 
     return Container(
       padding: const EdgeInsets.fromLTRB(
-        MiToosaTheme.spacingLg, MiToosaTheme.spacingMd,
-        MiToosaTheme.spacingLg, MiToosaTheme.spacingLg,
+        MiToosaTheme.spacingLg,
+        MiToosaTheme.spacingMd,
+        MiToosaTheme.spacingLg,
+        MiToosaTheme.spacingLg,
       ),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
@@ -1054,7 +1140,9 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
             children: List.generate(5, (i) {
               return Icon(
                 i < stars ? Icons.star_rounded : Icons.star_outline_rounded,
-                color: i < stars ? MiToosaTheme.warning : theme.colorScheme.primary.withValues(alpha: 0.2),
+                color: i < stars
+                    ? MiToosaTheme.warning
+                    : theme.colorScheme.primary.withValues(alpha: 0.2),
                 size: 32,
               );
             }),
@@ -1073,4 +1161,3 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
     );
   }
 }
-

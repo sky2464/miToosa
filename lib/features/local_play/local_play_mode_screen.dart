@@ -21,9 +21,7 @@ class LocalPlayModeScreen extends ConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Play Locally'),
-      ),
+      appBar: AppBar(title: const Text('Play Locally')),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -62,10 +60,9 @@ class LocalPlayModeScreen extends ConsumerWidget {
   }
 
   Future<void> _startHosting(BuildContext context, WidgetRef ref) async {
-    final playerId = ref.read(authProvider).maybeWhen(
-      data: (id) => id,
-      orElse: () => null,
-    );
+    final playerId = ref
+        .read(authProvider)
+        .maybeWhen(data: (id) => id, orElse: () => null);
     if (playerId == null || !context.mounted) return;
 
     await ref
@@ -73,16 +70,16 @@ class LocalPlayModeScreen extends ConsumerWidget {
         .startHosting(playerId, 'Host');
 
     if (context.mounted) {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const QRHostScreen()),
-      );
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => const QRHostScreen()));
     }
   }
 
   void _navigateToScanner(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const QRScannerScreen()),
-    );
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const QRScannerScreen()));
   }
 }
 

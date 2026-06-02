@@ -5,7 +5,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import '../local_session/local_session_provider.dart';
 
 /// QR code host screen for local multiplayer sessions.
-/// 
+///
 /// Displays:
 /// - Large scannable QR code
 /// - Session ID
@@ -18,7 +18,8 @@ class QRHostScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sessionState = ref.watch(localSessionProvider);
-    final isActive = sessionState.phase == LocalSessionPhase.hosting ||
+    final isActive =
+        sessionState.phase == LocalSessionPhase.hosting ||
         sessionState.phase == LocalSessionPhase.playing;
 
     return PopScope(
@@ -71,7 +72,11 @@ class QRHostScreen extends ConsumerWidget {
     return result ?? false;
   }
 
-  Widget _buildBody(BuildContext context, WidgetRef ref, LocalSessionState state) {
+  Widget _buildBody(
+    BuildContext context,
+    WidgetRef ref,
+    LocalSessionState state,
+  ) {
     switch (state.phase) {
       case LocalSessionPhase.idle:
         return _buildIdleState(context);
@@ -102,7 +107,11 @@ class QRHostScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildHostingState(BuildContext context, WidgetRef ref, LocalSessionState state) {
+  Widget _buildHostingState(
+    BuildContext context,
+    WidgetRef ref,
+    LocalSessionState state,
+  ) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -123,7 +132,9 @@ class QRHostScreen extends ConsumerWidget {
                         data: state.qrUrl!,
                         version: QrVersions.auto,
                         size: 240,
-                        embeddedImage: const AssetImage('assets/images/app_icon.png'),
+                        embeddedImage: const AssetImage(
+                          'assets/images/app_icon.png',
+                        ),
                         errorCorrectionLevel: QrErrorCorrectLevel.H,
                       )
                     else
@@ -134,9 +145,7 @@ class QRHostScreen extends ConsumerWidget {
                           color: Colors.grey[200],
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Center(
-                          child: CircularProgressIndicator(),
-                        ),
+                        child: const Center(child: CircularProgressIndicator()),
                       ),
                     const SizedBox(height: 16),
                     if (state.sessionId != null)
@@ -144,10 +153,7 @@ class QRHostScreen extends ConsumerWidget {
                         children: [
                           const Text(
                             'Session ID',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
                           ),
                           const SizedBox(height: 8),
                           SelectableText(
@@ -202,10 +208,7 @@ class QRHostScreen extends ConsumerWidget {
                           SizedBox(height: 12),
                           Text(
                             'Waiting for players to scan QR code...',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
+                            style: TextStyle(fontSize: 14, color: Colors.grey),
                           ),
                         ],
                       )
@@ -226,7 +229,8 @@ class QRHostScreen extends ConsumerWidget {
                                   const SizedBox(width: 12),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           player.name,
@@ -309,7 +313,11 @@ class QRHostScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildErrorState(BuildContext context, WidgetRef ref, LocalSessionState state) {
+  Widget _buildErrorState(
+    BuildContext context,
+    WidgetRef ref,
+    LocalSessionState state,
+  ) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

@@ -113,10 +113,7 @@ class _TrackDetailScreenState extends ConsumerState<TrackDetailScreen>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        track.icon,
-                        style: const TextStyle(fontSize: 64),
-                      ),
+                      Text(track.icon, style: const TextStyle(fontSize: 64)),
                       const SizedBox(height: MiToosaTheme.spacingMd),
                       Text(
                         track.name,
@@ -129,19 +126,25 @@ class _TrackDetailScreenState extends ConsumerState<TrackDetailScreen>
                       Text(
                         track.subtitle,
                         style: theme.textTheme.bodyLarge?.copyWith(
-                          color: theme.colorScheme.primary.withValues(alpha: 0.6),
+                          color: theme.colorScheme.primary.withValues(
+                            alpha: 0.6,
+                          ),
                         ),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: MiToosaTheme.spacingMd),
                       // Progress bar
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(MiToosaTheme.radiusSm),
+                        borderRadius: BorderRadius.circular(
+                          MiToosaTheme.radiusSm,
+                        ),
                         child: LinearProgressIndicator(
                           value: completed / track.targetLevelCount,
                           minHeight: 8,
                           backgroundColor: theme.colorScheme.surface,
-                          valueColor: AlwaysStoppedAnimation(theme.colorScheme.primary),
+                          valueColor: AlwaysStoppedAnimation(
+                            theme.colorScheme.primary,
+                          ),
                         ),
                       ),
                       const SizedBox(height: MiToosaTheme.spacingSm),
@@ -165,141 +168,151 @@ class _TrackDetailScreenState extends ConsumerState<TrackDetailScreen>
                     mainAxisSpacing: MiToosaTheme.spacingSm,
                     crossAxisSpacing: MiToosaTheme.spacingSm,
                   ),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final levelKey = '${track.id}_$index';
-                      final stars = progress.levelStars[levelKey] ?? 0;
-                      final isComplete = progress.levelStars.containsKey(levelKey);
-                      final playable = _isPlayable(index, progress);
-                      final isCurrent = playable && !isComplete;
-                      final isLocked = !playable && !isComplete;
-                      final bestDifficulty = progress.levelBestDifficulty[levelKey];
-                      final levelXP = progress.levelXP[levelKey] ?? 0;
-                      final dotColor = _difficultyColor(bestDifficulty);
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    final levelKey = '${track.id}_$index';
+                    final stars = progress.levelStars[levelKey] ?? 0;
+                    final isComplete = progress.levelStars.containsKey(
+                      levelKey,
+                    );
+                    final playable = _isPlayable(index, progress);
+                    final isCurrent = playable && !isComplete;
+                    final isLocked = !playable && !isComplete;
+                    final bestDifficulty =
+                        progress.levelBestDifficulty[levelKey];
+                    final levelXP = progress.levelXP[levelKey] ?? 0;
+                    final dotColor = _difficultyColor(bestDifficulty);
 
-                      Widget tile = Container(
-                        decoration: BoxDecoration(
-                          color: isComplete
-                              ? theme.colorScheme.primary.withValues(alpha: 0.1)
-                              : isCurrent
-                                  ? theme.colorScheme.primary.withValues(alpha: 0.05)
-                                  : theme.colorScheme.surface,
-                          borderRadius: BorderRadius.circular(MiToosaTheme.radiusMd),
-                          border: Border.all(
-                            color: isCurrent
-                                ? theme.colorScheme.primary
-                                : isComplete
-                                    ? theme.colorScheme.primary.withValues(alpha: 0.3)
-                                    : theme.colorScheme.primary.withValues(alpha: 0.1),
-                            width: isCurrent ? 2 : 1,
-                          ),
-                          boxShadow: (isComplete || isCurrent) ? MiToosaTheme.shadowCard : null,
+                    Widget tile = Container(
+                      decoration: BoxDecoration(
+                        color: isComplete
+                            ? theme.colorScheme.primary.withValues(alpha: 0.1)
+                            : isCurrent
+                            ? theme.colorScheme.primary.withValues(alpha: 0.05)
+                            : theme.colorScheme.surface,
+                        borderRadius: BorderRadius.circular(
+                          MiToosaTheme.radiusMd,
                         ),
-                        child: Stack(
-                          children: [
-                            // Main content: level number + stars or lock
-                            Positioned.fill(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  if (isLocked)
-                                    Icon(
-                                      Icons.lock_rounded,
-                                      size: 18,
-                                      color: theme.colorScheme.primary.withValues(alpha: 0.25),
-                                    )
-                                  else ...[
-                                    Text(
-                                      '${index + 1}',
-                                      style: theme.textTheme.labelLarge?.copyWith(
-                                        fontWeight: FontWeight.w900,
-                                        color: isCurrent
-                                            ? theme.colorScheme.primary
-                                            : theme.colorScheme.primary.withValues(alpha: 0.85),
-                                      ),
+                        border: Border.all(
+                          color: isCurrent
+                              ? theme.colorScheme.primary
+                              : isComplete
+                              ? theme.colorScheme.primary.withValues(alpha: 0.3)
+                              : theme.colorScheme.primary.withValues(
+                                  alpha: 0.1,
+                                ),
+                          width: isCurrent ? 2 : 1,
+                        ),
+                        boxShadow: (isComplete || isCurrent)
+                            ? MiToosaTheme.shadowCard
+                            : null,
+                      ),
+                      child: Stack(
+                        children: [
+                          // Main content: level number + stars or lock
+                          Positioned.fill(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                if (isLocked)
+                                  Icon(
+                                    Icons.lock_rounded,
+                                    size: 18,
+                                    color: theme.colorScheme.primary.withValues(
+                                      alpha: 0.25,
                                     ),
-                                    if (isComplete)
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 2),
-                                        child: Text(
-                                          '$stars★',
-                                          style: TextStyle(
-                                            fontSize: 9,
-                                            fontWeight: FontWeight.w700,
-                                            color: theme.colorScheme.primary.withValues(alpha: 0.7),
-                                          ),
+                                  )
+                                else ...[
+                                  Text(
+                                    '${index + 1}',
+                                    style: theme.textTheme.labelLarge?.copyWith(
+                                      fontWeight: FontWeight.w900,
+                                      color: isCurrent
+                                          ? theme.colorScheme.primary
+                                          : theme.colorScheme.primary
+                                                .withValues(alpha: 0.85),
+                                    ),
+                                  ),
+                                  if (isComplete)
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 2),
+                                      child: Text(
+                                        '$stars★',
+                                        style: TextStyle(
+                                          fontSize: 9,
+                                          fontWeight: FontWeight.w700,
+                                          color: theme.colorScheme.primary
+                                              .withValues(alpha: 0.7),
                                         ),
                                       ),
-                                  ],
+                                    ),
                                 ],
+                              ],
+                            ),
+                          ),
+                          // Difficulty dot: bottom-left (completed levels only)
+                          if (isComplete && bestDifficulty != null)
+                            Positioned(
+                              left: 5,
+                              bottom: 5,
+                              child: Container(
+                                width: 7,
+                                height: 7,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: dotColor,
+                                ),
                               ),
                             ),
-                            // Difficulty dot: bottom-left (completed levels only)
-                            if (isComplete && bestDifficulty != null)
-                              Positioned(
-                                left: 5,
-                                bottom: 5,
-                                child: Container(
-                                  width: 7,
-                                  height: 7,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: dotColor,
-                                  ),
+                          // XP badge: bottom-right (completed levels only)
+                          if (isComplete && levelXP > 0)
+                            Positioned(
+                              right: 3,
+                              bottom: 4,
+                              child: Text(
+                                '${levelXP}xp',
+                                style: TextStyle(
+                                  fontSize: 8,
+                                  fontWeight: FontWeight.w700,
+                                  color: theme.colorScheme.secondary,
                                 ),
                               ),
-                            // XP badge: bottom-right (completed levels only)
-                            if (isComplete && levelXP > 0)
-                              Positioned(
-                                right: 3,
-                                bottom: 4,
-                                child: Text(
-                                  '${levelXP}xp',
-                                  style: TextStyle(
-                                    fontSize: 8,
-                                    fontWeight: FontWeight.w700,
-                                    color: theme.colorScheme.secondary,
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      );
+                            ),
+                        ],
+                      ),
+                    );
 
-                      if (isCurrent) {
-                        tile = AnimatedBuilder(
-                          animation: _pulseAnim,
-                          builder: (context, child) => Transform.scale(
-                            scale: _pulseAnim.value,
-                            child: child,
-                          ),
-                          child: tile,
-                        );
-                      }
-
-                      final semanticLabel = isComplete
-                          ? 'Level ${index + 1}, completed with $stars stars'
-                          : isCurrent
-                              ? 'Level ${index + 1}, current level'
-                              : 'Level ${index + 1}, locked';
-                      return Semantics(
-                        button: isComplete || isCurrent,
-                        enabled: isComplete || isCurrent,
-                        label: semanticLabel,
-                        child: GestureDetector(
-                          onTap: isComplete || isCurrent
-                              ? () => _showDifficultySheet(
-                                    context,
-                                    track: track,
-                                    levelIndex: index,
-                                  )
-                              : null,
-                          child: tile,
+                    if (isCurrent) {
+                      tile = AnimatedBuilder(
+                        animation: _pulseAnim,
+                        builder: (context, child) => Transform.scale(
+                          scale: _pulseAnim.value,
+                          child: child,
                         ),
+                        child: tile,
                       );
-                    },
-                    childCount: track.targetLevelCount,
-                  ),
+                    }
+
+                    final semanticLabel = isComplete
+                        ? 'Level ${index + 1}, completed with $stars stars'
+                        : isCurrent
+                        ? 'Level ${index + 1}, current level'
+                        : 'Level ${index + 1}, locked';
+                    return Semantics(
+                      button: isComplete || isCurrent,
+                      enabled: isComplete || isCurrent,
+                      label: semanticLabel,
+                      child: GestureDetector(
+                        onTap: isComplete || isCurrent
+                            ? () => _showDifficultySheet(
+                                context,
+                                track: track,
+                                levelIndex: index,
+                              )
+                            : null,
+                        child: tile,
+                      ),
+                    );
+                  }, childCount: track.targetLevelCount),
                 ),
               ),
               // CTA buttons
@@ -316,10 +329,10 @@ class _TrackDetailScreenState extends ConsumerState<TrackDetailScreen>
                           FilledButton(
                             onPressed: completed < track.targetLevelCount
                                 ? () => _showDifficultySheet(
-                                      context,
-                                      track: track,
-                                      levelIndex: firstIncomplete,
-                                    )
+                                    context,
+                                    track: track,
+                                    levelIndex: firstIncomplete,
+                                  )
                                 : null,
                             child: const Text('Continue'),
                           ),
@@ -381,7 +394,12 @@ class DifficultySelectionSheet extends StatelessWidget {
     (tier: DifficultyTier.easy, emoji: '🟢', label: 'Easy', sub: '30 sec'),
     (tier: DifficultyTier.medium, emoji: '🟡', label: 'Medium', sub: '15 sec'),
     (tier: DifficultyTier.hard, emoji: '🟠', label: 'Hard', sub: '7 sec'),
-    (tier: DifficultyTier.challenge, emoji: '🔴', label: 'Challenge', sub: '4 sec'),
+    (
+      tier: DifficultyTier.challenge,
+      emoji: '🔴',
+      label: 'Challenge',
+      sub: '4 sec',
+    ),
   ];
 
   @override
@@ -424,12 +442,14 @@ class DifficultySelectionSheet extends StatelessWidget {
               ),
             ),
             const SizedBox(height: MiToosaTheme.spacingLg),
-            ...(_tiers.map((t) => _TierTile(
-                  emoji: t.emoji,
-                  label: t.label,
-                  sub: t.sub,
-                  onTap: () => onSelect(t.tier),
-                ))),
+            ...(_tiers.map(
+              (t) => _TierTile(
+                emoji: t.emoji,
+                label: t.label,
+                sub: t.sub,
+                onTap: () => onSelect(t.tier),
+              ),
+            )),
           ],
         ),
       ),
@@ -462,51 +482,53 @@ class _TierTile extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(MiToosaTheme.radiusMd),
           child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: MiToosaTheme.spacingLg,
-            vertical: MiToosaTheme.spacingMd,
-          ),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
-            borderRadius: BorderRadius.circular(MiToosaTheme.radiusMd),
-            border: Border.all(
-              color: theme.colorScheme.primary.withValues(alpha: 0.12),
+            padding: const EdgeInsets.symmetric(
+              horizontal: MiToosaTheme.spacingLg,
+              vertical: MiToosaTheme.spacingMd,
             ),
-            boxShadow: MiToosaTheme.shadowCard,
-          ),
-          child: Row(
-            children: [
-              Text(emoji, style: const TextStyle(fontSize: 28)),
-              const SizedBox(width: MiToosaTheme.spacingMd),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      label,
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w800,
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface,
+              borderRadius: BorderRadius.circular(MiToosaTheme.radiusMd),
+              border: Border.all(
+                color: theme.colorScheme.primary.withValues(alpha: 0.12),
+              ),
+              boxShadow: MiToosaTheme.shadowCard,
+            ),
+            child: Row(
+              children: [
+                Text(emoji, style: const TextStyle(fontSize: 28)),
+                const SizedBox(width: MiToosaTheme.spacingMd),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        label,
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
-                    ),
-                    Text(
-                      sub,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.primary.withValues(alpha: 0.6),
+                      Text(
+                        sub,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.primary.withValues(
+                            alpha: 0.6,
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 16,
-                color: theme.colorScheme.primary.withValues(alpha: 0.4),
-              ),
-            ],
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 16,
+                  color: theme.colorScheme.primary.withValues(alpha: 0.4),
+                ),
+              ],
+            ),
           ),
         ),
       ),
-    ),
-  );
+    );
   }
 }

@@ -9,10 +9,8 @@ part 'auth_provider.g.dart';
 /// Convenience extension to extract the current player ID.
 extension AuthPlayerIdX on WidgetRef {
   /// Returns the current player ID, or `null` if auth is still loading/errored.
-  String? get playerId => read(authProvider).maybeWhen(
-        data: (v) => v,
-        orElse: () => null,
-      );
+  String? get playerId =>
+      read(authProvider).maybeWhen(data: (v) => v, orElse: () => null);
 }
 
 @riverpod

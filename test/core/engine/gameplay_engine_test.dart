@@ -6,7 +6,7 @@ void main() {
   group('GameplayEngine domain parity tests', () {
     late GameplayLevel sampleLevel;
     late GameplayState initialState;
-    
+
     setUp(() {
       sampleLevel = GameplayLevel.starterLevel();
       initialState = GameplayState(level: sampleLevel);
@@ -14,7 +14,7 @@ void main() {
 
     test('Engine transitions phase from ready to playing correctly', () {
       expect(initialState.phase.isReady, true);
-      
+
       final nextState = GameplayEngine.start(initialState);
       expect(nextState.phase.isPlaying, true);
     });
@@ -33,7 +33,7 @@ void main() {
       var state = GameplayEngine.start(initialState);
 
       final wrongOption = sampleLevel.puzzle.options.firstWhere(
-            (o) => o.id != sampleLevel.puzzle.correctOptionId,
+        (o) => o.id != sampleLevel.puzzle.correctOptionId,
       );
 
       state = GameplayEngine.selectOption(state, wrongOption.id);
@@ -46,7 +46,7 @@ void main() {
       var state = GameplayEngine.start(initialState);
 
       final wrongOption = sampleLevel.puzzle.options.firstWhere(
-            (o) => o.id != sampleLevel.puzzle.correctOptionId,
+        (o) => o.id != sampleLevel.puzzle.correctOptionId,
       );
 
       state = GameplayEngine.selectOption(state, wrongOption.id);
@@ -77,14 +77,17 @@ void main() {
       level = GameplayLevel.starterLevel();
     });
 
-    test('defaults: hintUsed=false, isRunActive=false, runTimeRemaining=zero, levelsInRun=0, levelsCompleted=0', () {
-      final state = GameplayState(level: level);
-      expect(state.hintUsed, false);
-      expect(state.isRunActive, false);
-      expect(state.runTimeRemaining, Duration.zero);
-      expect(state.levelsInRun, 0);
-      expect(state.levelsCompleted, 0);
-    });
+    test(
+      'defaults: hintUsed=false, isRunActive=false, runTimeRemaining=zero, levelsInRun=0, levelsCompleted=0',
+      () {
+        final state = GameplayState(level: level);
+        expect(state.hintUsed, false);
+        expect(state.isRunActive, false);
+        expect(state.runTimeRemaining, Duration.zero);
+        expect(state.levelsInRun, 0);
+        expect(state.levelsCompleted, 0);
+      },
+    );
 
     test('copyWith sets hintUsed independently', () {
       final state = GameplayState(level: level);

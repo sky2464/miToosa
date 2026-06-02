@@ -42,7 +42,10 @@ class StreakEngine {
     if (lastLoginDate == null) return StreakResult.continued;
 
     final lastDay = DateTime(
-        lastLoginDate.year, lastLoginDate.month, lastLoginDate.day);
+      lastLoginDate.year,
+      lastLoginDate.month,
+      lastLoginDate.day,
+    );
     final today = DateTime(now.year, now.month, now.day);
     final gap = today.difference(lastDay).inDays;
 

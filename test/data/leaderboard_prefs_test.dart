@@ -59,8 +59,11 @@ void main() {
       // Round 2: reopen and read.
       box = await openLeaderboardPrefsBox();
       prefs = LeaderboardPrefs(box);
-      expect(prefs.optedOut, isTrue,
-          reason: 'Opt-out preference must survive a box reopen');
+      expect(
+        prefs.optedOut,
+        isTrue,
+        reason: 'Opt-out preference must survive a box reopen',
+      );
     });
 
     test('setOptedOut(false) overrides a prior true', () async {
@@ -96,19 +99,24 @@ void main() {
       // Same underlying box — write through first, read through second.
       await LeaderboardPrefs(first).setOptedOut(true);
       expect(LeaderboardPrefs(second).optedOut, isTrue);
-      expect(identical(first, second), isTrue,
-          reason: 'second call must return the same box instance');
+      expect(
+        identical(first, second),
+        isTrue,
+        reason: 'second call must return the same box instance',
+      );
     });
 
-    test('multiple LeaderboardPrefs instances see the same box state',
-        () async {
-      final box = await openLeaderboardPrefsBox();
-      final a = LeaderboardPrefs(box);
-      final b = LeaderboardPrefs(box);
-      await a.setOptedOut(true);
-      expect(b.optedOut, isTrue);
-      await b.setOptedOut(false);
-      expect(a.optedOut, isFalse);
-    });
+    test(
+      'multiple LeaderboardPrefs instances see the same box state',
+      () async {
+        final box = await openLeaderboardPrefsBox();
+        final a = LeaderboardPrefs(box);
+        final b = LeaderboardPrefs(box);
+        await a.setOptedOut(true);
+        expect(b.optedOut, isTrue);
+        await b.setOptedOut(false);
+        expect(a.optedOut, isFalse);
+      },
+    );
   });
 }

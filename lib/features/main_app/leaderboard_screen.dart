@@ -27,21 +27,33 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final playerXP = ref.watch(playerProgressProvider).maybeWhen(
-          data: (p) => p.totalXP,
-          orElse: () => 0,
-        );
-    final you = _Person(rank: 4, name: 'Pilot_042', xp: playerXP, avatar: 4, isYou: true);
-    final all = [..._demo.where((p) => p.rank < 4), you, ..._demo.where((p) => p.rank >= 4)];
-    final podium = all.where((p) => p.rank <= 3).toList()..sort((a, b) => a.rank - b.rank);
-    final xpToTop3 = (_demo.firstWhere((p) => p.rank == 3).xp - playerXP).clamp(0, 999999);
+    final playerXP = ref
+        .watch(playerProgressProvider)
+        .maybeWhen(data: (p) => p.totalXP, orElse: () => 0);
+    final you = _Person(
+      rank: 4,
+      name: 'Pilot_042',
+      xp: playerXP,
+      avatar: 4,
+      isYou: true,
+    );
+    final all = [
+      ..._demo.where((p) => p.rank < 4),
+      you,
+      ..._demo.where((p) => p.rank >= 4),
+    ];
+    final podium = all.where((p) => p.rank <= 3).toList()
+      ..sort((a, b) => a.rank - b.rank);
+    final xpToTop3 = (_demo.firstWhere((p) => p.rank == 3).xp - playerXP).clamp(
+      0,
+      999999,
+    );
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 140),
       children: [
         // Header
-        Text('WEEKLY · RESETS SUN 23:59',
-            style: AP.eyebrow(color: AP.purple)),
+        Text('WEEKLY · RESETS SUN 23:59', style: AP.eyebrow(color: AP.purple)),
         const SizedBox(height: 4),
         ShaderMask(
           shaderCallback: (r) => const LinearGradient(
@@ -49,7 +61,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
           ).createShader(r),
           child: Text(
             'Leaderboard',
-            style: AP.display(color: Colors.white).copyWith(fontSize: 32, height: 1.0),
+            style: AP
+                .display(color: Colors.white)
+                .copyWith(fontSize: 32, height: 1.0),
           ),
         ),
         const SizedBox(height: 6),
@@ -159,7 +173,12 @@ class _SegmentedControl extends StatelessWidget {
                   gradient: active ? AP.gradPrimary : null,
                   borderRadius: BorderRadius.circular(AP.radiusPill),
                   boxShadow: active
-                      ? [BoxShadow(color: AP.blue.withValues(alpha: 0.4), blurRadius: 14)]
+                      ? [
+                          BoxShadow(
+                            color: AP.blue.withValues(alpha: 0.4),
+                            blurRadius: 14,
+                          ),
+                        ]
                       : null,
                 ),
                 child: Center(
@@ -216,8 +235,11 @@ class _Podium extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 if (isFirst)
-                  const Icon(Icons.workspace_premium,
-                      color: AP.amber, size: 22),
+                  const Icon(
+                    Icons.workspace_premium,
+                    color: AP.amber,
+                    size: 22,
+                  ),
                 if (isFirst) const SizedBox(height: 2),
                 Container(
                   width: isFirst ? 64 : 52,
@@ -274,9 +296,7 @@ class _Podium extends StatelessWidget {
                       bottomLeft: Radius.circular(4),
                       bottomRight: Radius.circular(4),
                     ),
-                    boxShadow: [
-                      BoxShadow(color: fills[i], blurRadius: 18),
-                    ],
+                    boxShadow: [BoxShadow(color: fills[i], blurRadius: 18)],
                   ),
                   child: Center(
                     child: Text(
@@ -315,13 +335,16 @@ class _LeaderRow extends StatelessWidget {
             : Colors.white.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(18),
         border: Border.all(
-          color: isYou
-              ? AP.blueLight.withValues(alpha: 0.45)
-              : AP.glassBorder,
+          color: isYou ? AP.blueLight.withValues(alpha: 0.45) : AP.glassBorder,
           width: 1,
         ),
         boxShadow: isYou
-            ? [BoxShadow(color: AP.blueLight.withValues(alpha: 0.25), blurRadius: 18)]
+            ? [
+                BoxShadow(
+                  color: AP.blueLight.withValues(alpha: 0.25),
+                  blurRadius: 18,
+                ),
+              ]
             : null,
       ),
       child: Row(
@@ -382,7 +405,10 @@ class _LeaderRow extends StatelessWidget {
                     if (isYou) ...[
                       const SizedBox(width: 6),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
                           color: AP.blueLight.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(6),

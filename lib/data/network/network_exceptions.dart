@@ -3,21 +3,16 @@ abstract class NetworkException implements Exception {
   final String message;
   final dynamic originalError;
 
-  NetworkException({
-    required this.message,
-    this.originalError,
-  });
+  NetworkException({required this.message, this.originalError});
 
   @override
-  String toString() => 'NetworkException: $message${originalError != null ? '\nCause: $originalError' : ''}';
+  String toString() =>
+      'NetworkException: $message${originalError != null ? '\nCause: $originalError' : ''}';
 }
 
 /// Connection to WebSocket server failed.
 class ConnectionFailedException extends NetworkException {
-  ConnectionFailedException({
-    required super.message,
-    super.originalError,
-  });
+  ConnectionFailedException({required super.message, super.originalError});
 }
 
 /// Session ID or connection info invalid or expired.
@@ -51,9 +46,7 @@ class SessionExpiredException extends NetworkException {
     required this.sessionId,
     required this.expirationTime,
     super.originalError,
-  }) : super(
-          message: 'Session $sessionId expired at $expirationTime',
-        );
+  }) : super(message: 'Session $sessionId expired at $expirationTime');
 }
 
 /// Network request timed out (no response within threshold).
@@ -88,8 +81,9 @@ class MaxReconnectAttemptsExceededException extends NetworkException {
     required this.maxBackoff,
     super.originalError,
   }) : super(
-          message: 'Max reconnection attempts ($attempts) exceeded after backoff of $maxBackoff',
-        );
+         message:
+             'Max reconnection attempts ($attempts) exceeded after backoff of $maxBackoff',
+       );
 }
 
 /// Message could not be deserialized (malformed JSON or unknown type).

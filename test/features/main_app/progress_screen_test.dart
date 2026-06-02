@@ -24,14 +24,12 @@ PlayerProgress _progressWith({int xp = 80, int streak = 0, int hearts = 5}) {
 }
 
 Widget _wrap(PlayerProgress progress) => ProviderScope(
-      overrides: [
-        playerProgressProvider.overrideWith((ref) async => progress),
-      ],
-      child: MaterialApp(
-        theme: AethericPulseDark.themeData,
-        home: const Scaffold(body: ProgressScreen()),
-      ),
-    );
+  overrides: [playerProgressProvider.overrideWith((ref) async => progress)],
+  child: MaterialApp(
+    theme: AethericPulseDark.themeData,
+    home: const Scaffold(body: ProgressScreen()),
+  ),
+);
 
 void main() {
   group('ProgressScreen — structure', () {

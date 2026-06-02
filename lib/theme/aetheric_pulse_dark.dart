@@ -12,7 +12,9 @@ class AethericPulseDark {
   // ── Brand ─────────────────────────────────────────────────────────────────
   static const Color brandBlue = Color(0xFF3B82F6);
   static const Color brandPurple = Color(0xFFA855F7);
-  static const Color brandBlueLight = Color(0xFF60A5FA); // blue-400 for atmosphere
+  static const Color brandBlueLight = Color(
+    0xFF60A5FA,
+  ); // blue-400 for atmosphere
 
   // ── Foreground ────────────────────────────────────────────────────────────
   static const Color onSurface = Color(0xFFFFFFFF);
@@ -28,13 +30,17 @@ class AethericPulseDark {
   static const Color accentEmerald = Color(0xFF34D399);
 
   // ── Glass recipe ──────────────────────────────────────────────────────────
-  static const Color glassFill = Color(0x14FFFFFF);          // rgba(255,255,255,0.08)
-  static const Color glassBorder = Color(0x1FFFFFFF);        // rgba(255,255,255,0.12)
-  static const Color glassBorderStrong = Color(0x2EFFFFFF);  // rgba(255,255,255,0.18)
-  static const Color glassHoverBorder = Color(0x2EFFFFFF);   // alias for glassBorderStrong
-  static const Color activeBorder = Color(0x8C3B82F6);       // rgba(59,130,246,0.55)
-  static const Color nestedWell = Color(0x0DFFFFFF);         // rgba(255,255,255,0.05)
-  static const Color primaryGlow = Color(0x663B82F6);        // rgba(59,130,246,0.40)
+  static const Color glassFill = Color(0x14FFFFFF); // rgba(255,255,255,0.08)
+  static const Color glassBorder = Color(0x1FFFFFFF); // rgba(255,255,255,0.12)
+  static const Color glassBorderStrong = Color(
+    0x2EFFFFFF,
+  ); // rgba(255,255,255,0.18)
+  static const Color glassHoverBorder = Color(
+    0x2EFFFFFF,
+  ); // alias for glassBorderStrong
+  static const Color activeBorder = Color(0x8C3B82F6); // rgba(59,130,246,0.55)
+  static const Color nestedWell = Color(0x0DFFFFFF); // rgba(255,255,255,0.05)
+  static const Color primaryGlow = Color(0x663B82F6); // rgba(59,130,246,0.40)
 
   // ── Gradients ─────────────────────────────────────────────────────────────
   /// Blue → purple 135°. Used for primary buttons, progress fills, nav indicator.
@@ -252,12 +258,16 @@ class AethericPulseDark {
         ),
       ),
       switchTheme: SwitchThemeData(
-        thumbColor: WidgetStateProperty.resolveWith((states) =>
-            states.contains(WidgetState.selected) ? brandBlue : onSurfaceMuted),
-        trackColor: WidgetStateProperty.resolveWith((states) =>
-            states.contains(WidgetState.selected)
-                ? brandBlue.withValues(alpha: 0.4)
-                : onSurfaceMuted.withValues(alpha: 0.3)),
+        thumbColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? brandBlue
+              : onSurfaceMuted,
+        ),
+        trackColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? brandBlue.withValues(alpha: 0.4)
+              : onSurfaceMuted.withValues(alpha: 0.3),
+        ),
       ),
       dividerTheme: const DividerThemeData(
         color: glassBorder,
