@@ -173,7 +173,9 @@ bash scripts/regenerate_skills.sh            # check which skills are stale
 bash scripts/regenerate_skills.sh --write    # create/update stale skill files
 ```
 
-CI runs weekly via `.github/workflows/dependency-maintenance.yml` (Monday 06:00 UTC) and on `workflow_dispatch`.
+**PR Validation** (`.github/workflows/pr-validation.yml`): runs on every pull request targeting `main` — cached Flutter setup, `dart format`, `dart analyze`, `flutter test`, path-filtered `verify_docs_archival.sh` and `check_prompt_injection.sh`. No scheduled CI jobs (see [docs/decisions/remove-expensive-ci-cd.md](../docs/decisions/remove-expensive-ci-cd.md)).
+
+**Dependency maintenance (manual):** run the scripts above locally before upgrading; follow [docs/OPERATIONS-dependency-maintenance.md](../docs/OPERATIONS-dependency-maintenance.md) (workflow removed in BL-21).
 
 
 # AgToosa — GitHub Copilot Instructions

@@ -2,6 +2,10 @@
 
 Thank you for helping improve miToosa! This file contains a short, practical guide to make contributing smooth and consistent.
 
+## Repository paths
+
+Documentation and AgToosa workflow files live under the lowercase **`docs/`** directory (not `Docs/`). Use `docs/` in scripts and agent prompts so paths work on case-sensitive filesystems (Linux CI).
+
 ## Quick start
 
 Clone the canonical repository and create a short-lived branch:
@@ -22,18 +26,27 @@ Use branch prefixes to make intent clear:
 
 ## Pre-PR checklist
 
-Before opening a PR, run these steps locally (CI will also run checks):
+Before opening a PR, run the same gates as CI (recommended):
+
+```bash
+bash scripts/verify-pr.sh
+```
+
+`verify-pr.sh` mirrors [`.github/workflows/pr-validation.yml`](.github/workflows/pr-validation.yml): `flutter pub get`, formatting check, `dart analyze`, `flutter test`, and path-filtered guards (docs archival, design-doc prompt injection). Pass an explicit base ref if needed, e.g. `bash scripts/verify-pr.sh origin/main`.
+
+Manual equivalent (same order as CI):
 
 ```bash
 flutter pub get
-# If your change touches `lib/` or `pubspec.yaml` run codegen:
-dart pub run build_runner build --delete-conflicting-outputs
+dart format --output=none --set-exit-if-changed .
 dart analyze
 flutter test
+# If your change touches `lib/` or `pubspec.yaml`:
+dart pub run build_runner build --delete-conflicting-outputs
 ```
 
 - Ensure any new assets are added to `pubspec.yaml`.
-- Avoid `path:` or `git:` dependencies — CI (`.github/workflows/check-pub.yml`) rejects those.
+- Avoid `path:` or `git:` dependencies in `pubspec.yaml` — they complicate reproducible CI and releases; prefer published versions from pub.dev.
 
 If code generation fails with conflicting outputs, try:
 

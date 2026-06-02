@@ -42,6 +42,7 @@ Every feature and release must pass through these gates in order. Skipping gates
 - Code review covers: correctness, readability, architecture, security, performance.
 - No PR merges without at least one review pass.
 - Output lives in: PR review comments.
+- **CI:** GitHub Actions runs PR Validation only (`.github/workflows/pr-validation.yml` on pull requests to `main`). There is no scheduled health cron — run `dart analyze` and `flutter test` locally before you push.
 
 ### Gate 5: `/qa` on Staging
 

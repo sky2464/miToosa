@@ -1,6 +1,6 @@
 # Tech Stack
 
-<!-- Last updated: 2026-05-04 — /agtoosa-init -->
+<!-- Last updated: 2026-06-01 — BL-21 DX expansion -->
 
 ## Language
 language: "Dart 3.x"
@@ -40,7 +40,7 @@ test_patterns:
   - "ProviderContainer for Riverpod provider isolation tests"
   - "Real Hive boxes in temp directory for integration tests (no mocking)"
   - "Reference test: test/core/engine/gameplay_engine_test.dart"
-current_test_count: "637 passing (as of v1.5.0, 2026-04-24)"
+current_test_count: "870 passing (as of BL-21, 2026-05-22)"
 
 ## Browser / Device Matrix
 browser_matrix:
@@ -55,10 +55,14 @@ iac_tool: "N/A — no cloud infrastructure in v1"
 ## CI/CD
 ci_platform: "GitHub Actions"
 workflows:
-  - ".github/workflows/pr-validation.yml — triggered on all PRs targeting main; runs cached static analysis, unit/widget tests, conditional prompt injection guard, and conditional docs archival check"
+  - ".github/workflows/pr-validation.yml — PRs to main + workflow_dispatch; cached Flutter; dart format, dart analyze, flutter test; conditional build_runner, docs archival, prompt injection guard"
+local_ci_mirror: "scripts/verify-pr.sh — same gates locally (diff vs origin/main by default)"
+weekly_health: ".github/workflows/weekly-health.yml — Mondays 06:00 UTC, flutter test on main (workflow_dispatch supported)"
+dependency_health_local: "scripts/dependency_health.sh — on-demand replacement for deleted dependency-maintenance.yml (see docs/OPERATIONS-dependency-maintenance.md)"
 
 ## Notes
+<!-- Agent configs may say Docs/ — on-disk path is lowercase docs/ -->
 <!-- CRITICAL: share_plus is PINNED at ^12.0.2 — do NOT upgrade to 13.0.0+ without checking flutter_secure_storage compatibility -->
-<!-- Verification gates (run before every commit): dart analyze && flutter test -->
+<!-- Verification gates (run before every PR): bash scripts/verify-pr.sh -->
 <!-- Code gen (run after adding Riverpod providers or Hive models): dart pub run build_runner build --delete-conflicting-outputs -->
 <!-- Linter: dart analyze with analysis_options.yaml -->

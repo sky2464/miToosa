@@ -228,17 +228,15 @@ test('player progress persists and loads', () async {
 - **`--no-tree-shake-icons`**: Some `flutter run` invocations require this flag to prevent Flutter's font subsetting from breaking icon fonts. Documented in [docs/BUILD.md](docs/BUILD.md).
 
 ### CI/CD & Automated Maintenance
-- **Weekly Dependency Scan** ([.github/workflows/dependency-maintenance.yml](.github/workflows/dependency-maintenance.yml)):
-  - Runs every Monday at 06:00 UTC.
-  - Queries pub.dev for safe patch/minor upgrades.
-  - Runs `dart analyze` and `flutter test` gates.
-  - Scans for pub.dev security advisories.
-  - Auto-regenerates skill files.
-  - Creates PR if all gates pass.
+- **PR Validation** ([.github/workflows/pr-validation.yml](.github/workflows/pr-validation.yml)):
+  - Runs on pull requests targeting `main` and via `workflow_dispatch`.
+  - Cached Flutter setup; `dart format`, `dart analyze`, `flutter test` (`--reporter=github` on CI).
+  - PR `concurrency` cancels superseded runs on rapid pushes.
+  - Path-filtered guards: `scripts/verify_docs_archival.sh` when `docs/**/*.md` changes; `scripts/check_prompt_injection.sh` when `docs/mitoosa-design-system-2/**` changes.
 
-- **Docs Archival Check** ([.github/workflows/docs-archival-check.yml](.github/workflows/docs-archival-check.yml)):
-  - Triggered on changes to `docs/`.
-  - Verifies completed specs are moved to `docs/archived/`.
+- **Dependency maintenance (manual / on-demand):**
+  - Weekly automated dependency scan was removed with BL-21 to reduce Actions cost (see [docs/decisions/remove-expensive-ci-cd.md](docs/decisions/remove-expensive-ci-cd.md)).
+  - Follow [docs/OPERATIONS-dependency-maintenance.md](docs/OPERATIONS-dependency-maintenance.md) before upgrades.
 
 ---
 

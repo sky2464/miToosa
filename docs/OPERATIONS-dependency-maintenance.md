@@ -1,8 +1,12 @@
 # Dependency Maintenance Operations Guide
 
+> **Superseded (BL-21, 2026-05-22):** The weekly `.github/workflows/dependency-maintenance.yml` job was removed to reduce Actions cost. Use this doc as a **manual runbook** only: run `dart pub outdated`, pub.dev advisory checks, `dart analyze`, and `flutter test` locally before upgrading. Automated PR checks live in `.github/workflows/pr-validation.yml`.
+>
+> **Cadence (solo maintainer):** Run `bash scripts/dependency_health.sh --full` at least monthly (e.g. during `/agtoosa-ship retro`) or before any `pubspec.yaml` change. Quality on `main` is enforced by PR validation and local gates before push (see [docs/RELEASE-GATES.md](RELEASE-GATES.md)).
+
 **Date:** 2026-04-15  
-**Status:** Live  
-**Maintainer:** GitHub Actions + Flutter team
+**Status:** Manual runbook (automated workflow removed)  
+**Maintainer:** Flutter team
 
 ---
 

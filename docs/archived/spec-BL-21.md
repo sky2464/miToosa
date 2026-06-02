@@ -73,7 +73,7 @@ We are consolidating all CI behaviors into a single, path-filtered PR validation
 - **Unified `pr-validation.yml`**:
   - Triggers only on Pull Requests targeting `main`.
   - Sets up Flutter via `subosito/flutter-action@v2` with `cache: true`.
-  - Runs `flutter pub get` and checks formatting/analyzes code.
+  - Runs `flutter pub get`, `dart format --set-exit-if-changed`, `dart analyze`, and `flutter test`.
   - Runs full test suite `flutter test`.
   - Performs path-based checks:
     - Runs `scripts/verify_docs_archival.sh` only if `docs/**.md` changes.
@@ -104,7 +104,7 @@ We are consolidating all CI behaviors into a single, path-filtered PR validation
   - [x] 2.2 Delete expensive cron & redundant check workflows (`daily-health-check.yml`, `dependency-maintenance.yml`, `docs-archival-check.yml`, `prompt-injection-guard.yml`, `web-build.yml`). — _Requirements: AC-004_
 - [x] **3.** Unified Validation Workflow
   - [x] 3.1 Create `.github/workflows/pr-validation.yml` triggering only on Pull Requests targeting `main`. — _Requirements: AC-001_
-  - [x] 3.2 Configure `pr-validation.yml` to run standard Flutter setup, cache dependencies, run `dart analyze`, and `flutter test`. — _Requirements: AC-001, AC-006_
+  - [x] 3.2 Configure `pr-validation.yml` to run standard Flutter setup, cache dependencies, `dart format`, `dart analyze`, and `flutter test`. — _Requirements: AC-001, AC-006_
   - [x] 3.3 Integrate conditional/path-filtered execution of local guards (`check_prompt_injection.sh` if design system changes, `verify_docs_archival.sh` if documentation changes). — _Requirements: AC-002, AC-003_
 - [x] **4.** Finishing & Verification
   - [x] 4.1 Update ADR `docs/decisions/remove-expensive-ci-cd.md` to `Accepted` status. — _Requirements: AC-004_
@@ -112,6 +112,11 @@ We are consolidating all CI behaviors into a single, path-filtered PR validation
   - [x] 4.3 Verify `scripts/deploy-staging.sh` runs successfully. `[manual-done]` — _Requirements: AC-005_
   - [x] 4.4 Verify local testing frameworks are fully operational and all tests pass (870/870 tests passing). — _Requirements: AC-005_
   - [x] 4.5 Re-reconcile `docs/Master-Plan.md` tables and Update Log. — _Requirements: All ACs_
+- [x] **5.** Post–eng-review / DX expansion (`/plan-eng-review`, `/plan-devex-review` 2026-06-01)
+  - [x] 5.1 Update `.github/workflows/pr-validation.yml`: `dart format` step, hoisted `git fetch`, PR `concurrency`, `workflow_dispatch`, conditional `build_runner`. — _Requirements: AC-001_
+  - [x] 5.2 Sync [CLAUDE.md](../../CLAUDE.md) CI section; add `scripts/verify-pr.sh`, `weekly-health.yml`. — _Requirements: AC-001_
+  - [x] 5.3 Repo-wide `dart format` applied so format gate passes CI. — _Requirements: AC-001_
+  - [ ] 5.4 Land staged BL-21 via PR; align Master-Plan “shipped” with merge date. — _Process_
 
 ### 3.2 Test Plan
 
