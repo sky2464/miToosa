@@ -5,7 +5,7 @@ import '../../data/network/network_exceptions.dart';
 /// Utilities for local network discovery and port management.
 class LocalNetworkInfo {
   /// Detects the device's local IP address on the home network.
-  /// 
+  ///
   /// Returns an IPv4 address like "192.168.1.100" if available,
   /// otherwise falls back to "127.0.0.1" (localhost) for testing.
   static Future<String> getLocalIP() async {
@@ -25,7 +25,7 @@ class LocalNetworkInfo {
     } catch (e) {
       // Fallback: use localhost for testing or if WiFi is unavailable
     }
-    
+
     // Fallback: return localhost
     return '127.0.0.1';
   }
@@ -48,13 +48,16 @@ class LocalNetworkInfo {
   }
 
   /// Checks if a specific port is available (not in use).
-  /// 
+  ///
   /// Attempts to bind to the port; if successful, port is available.
   /// This is a best-effort check; there's still a race condition
   /// between check and actual bind.
   static Future<bool> isPortAvailable(int port) async {
     try {
-      final server = await ServerSocket.bind(InternetAddress.loopbackIPv4, port);
+      final server = await ServerSocket.bind(
+        InternetAddress.loopbackIPv4,
+        port,
+      );
       await server.close();
       return true;
     } catch (e) {
@@ -75,7 +78,7 @@ class LocalNetworkInfo {
         return port;
       }
     }
-    
+
     throw PortBindingException(
       port: startPort,
       message: 'No available port found in range $startPort-$endPort',
@@ -83,7 +86,7 @@ class LocalNetworkInfo {
   }
 
   /// Returns the URL for a WebSocket server on the local network.
-  /// 
+  ///
   /// Format: `ws://192.168.1.100:8765?session=<sessionId>&playerId=<playerId>`
   static Future<String> generateWebSocketURL({
     required int port,

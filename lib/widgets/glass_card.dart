@@ -25,7 +25,8 @@ class GlassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final shadows = boxShadow ??
+    final shadows =
+        boxShadow ??
         (neonGlow
             ? AethericPulseDark.blueGlow
             : [...AethericPulseDark.cardOuter, ...AethericPulseDark.cardInner]);

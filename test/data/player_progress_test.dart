@@ -88,13 +88,16 @@ void main() {
   });
 
   group('PlayerProgress — schema v2 new fields', () {
-    test('fresh() defaults: hearts=5, diamonds=0, heartRefuelAt=null, seenTutorialWorlds=[]', () {
-      final p = PlayerProgress.fresh(playerId: 'v2-player');
-      expect(p.hearts, 5);
-      expect(p.diamonds, 0);
-      expect(p.heartRefuelAt, isNull);
-      expect(p.seenTutorialWorlds, isEmpty);
-    });
+    test(
+      'fresh() defaults: hearts=5, diamonds=0, heartRefuelAt=null, seenTutorialWorlds=[]',
+      () {
+        final p = PlayerProgress.fresh(playerId: 'v2-player');
+        expect(p.hearts, 5);
+        expect(p.diamonds, 0);
+        expect(p.heartRefuelAt, isNull);
+        expect(p.seenTutorialWorlds, isEmpty);
+      },
+    );
 
     test('constructor with explicit new field values', () {
       final now = DateTime(2026, 4, 14, 10, 0);
@@ -323,7 +326,11 @@ void main() {
 
     test('grants heart on a new calendar day even if shared yesterday', () {
       final yesterday = DateTime(2026, 4, 13);
-      final p = PlayerProgress(playerId: 'u', hearts: 2, lastShareDate: yesterday);
+      final p = PlayerProgress(
+        playerId: 'u',
+        hearts: 2,
+        lastShareDate: yesterday,
+      );
       final granted = p.shareAndRefuel(today);
       expect(granted, isTrue);
       expect(p.hearts, 3);
@@ -348,18 +355,25 @@ void main() {
     test('does NOT grant heart same calendar day at a later hour', () {
       final morning = DateTime(2026, 4, 14, 7, 0);
       final evening = DateTime(2026, 4, 14, 22, 0);
-      final p = PlayerProgress(playerId: 'u', hearts: 3, lastShareDate: morning);
+      final p = PlayerProgress(
+        playerId: 'u',
+        hearts: 3,
+        lastShareDate: morning,
+      );
       expect(p.shareAndRefuel(evening), isFalse);
       expect(p.hearts, 3);
     });
 
-    test('lastShareDate is updated to the new date after a successful grant', () {
-      final apr1 = DateTime(2026, 4, 1);
-      final apr2 = DateTime(2026, 4, 2);
-      final p = PlayerProgress(playerId: 'u', hearts: 2, lastShareDate: apr1);
-      p.shareAndRefuel(apr2);
-      expect(p.lastShareDate, apr2);
-    });
+    test(
+      'lastShareDate is updated to the new date after a successful grant',
+      () {
+        final apr1 = DateTime(2026, 4, 1);
+        final apr2 = DateTime(2026, 4, 2);
+        final p = PlayerProgress(playerId: 'u', hearts: 2, lastShareDate: apr1);
+        p.shareAndRefuel(apr2);
+        expect(p.lastShareDate, apr2);
+      },
+    );
   });
 
   group('PlayerProgress — checkAndRefuelHeart time precision', () {
@@ -397,19 +411,25 @@ void main() {
   // ─── Schema v4: engagement fields 17–22 ─────────────────────────────────
 
   group('PlayerProgress — schema v4 new field defaults', () {
-    test('fresh() defaults: streakFreezeCount=0, streakMilestones=[], achievementProgress={}', () {
-      final p = PlayerProgress.fresh(playerId: 'v4-player');
-      expect(p.streakFreezeCount, 0);
-      expect(p.streakMilestones, isEmpty);
-      expect(p.achievementProgress, isEmpty);
-    });
+    test(
+      'fresh() defaults: streakFreezeCount=0, streakMilestones=[], achievementProgress={}',
+      () {
+        final p = PlayerProgress.fresh(playerId: 'v4-player');
+        expect(p.streakFreezeCount, 0);
+        expect(p.streakMilestones, isEmpty);
+        expect(p.achievementProgress, isEmpty);
+      },
+    );
 
-    test('fresh() defaults: dailyRewardDay=0, lastDailyRewardClaim=null, playHistory=[]', () {
-      final p = PlayerProgress.fresh(playerId: 'v4-player');
-      expect(p.dailyRewardDay, 0);
-      expect(p.lastDailyRewardClaim, isNull);
-      expect(p.playHistory, isEmpty);
-    });
+    test(
+      'fresh() defaults: dailyRewardDay=0, lastDailyRewardClaim=null, playHistory=[]',
+      () {
+        final p = PlayerProgress.fresh(playerId: 'v4-player');
+        expect(p.dailyRewardDay, 0);
+        expect(p.lastDailyRewardClaim, isNull);
+        expect(p.playHistory, isEmpty);
+      },
+    );
 
     test('constructor with explicit v4 field values', () {
       final claimDate = DateTime(2026, 4, 18, 9, 0);

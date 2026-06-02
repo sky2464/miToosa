@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mitoosa/widgets/kinetic_progress_bar.dart';
 
 Widget _wrap(Widget child) => MaterialApp(
-      home: Scaffold(body: SizedBox(width: 300, child: child)),
-    );
+  home: Scaffold(body: SizedBox(width: 300, child: child)),
+);
 
 /// Returns the fill Container inside the Stack, if present.
 /// The fill Container is the one that has a [gradient] decoration.
@@ -21,8 +21,9 @@ Container? _findFillContainer(WidgetTester tester) {
 
 void main() {
   group('KineticProgressBar', () {
-    testWidgets('value=0.0 → fill container is absent (Stack is empty)',
-        (tester) async {
+    testWidgets('value=0.0 → fill container is absent (Stack is empty)', (
+      tester,
+    ) async {
       await tester.pumpWidget(_wrap(const KineticProgressBar(value: 0.0)));
       expect(_findFillContainer(tester), isNull);
     });
@@ -32,15 +33,17 @@ void main() {
       expect(_findFillContainer(tester), isNotNull);
     });
 
-    testWidgets('value=1.5 → clamped, no crash, fill is present',
-        (tester) async {
+    testWidgets('value=1.5 → clamped, no crash, fill is present', (
+      tester,
+    ) async {
       await tester.pumpWidget(_wrap(const KineticProgressBar(value: 1.5)));
       expect(tester.takeException(), isNull);
       expect(_findFillContainer(tester), isNotNull);
     });
 
-    testWidgets('value=-0.5 → clamped, no crash, fill is absent',
-        (tester) async {
+    testWidgets('value=-0.5 → clamped, no crash, fill is absent', (
+      tester,
+    ) async {
       await tester.pumpWidget(_wrap(const KineticProgressBar(value: -0.5)));
       expect(tester.takeException(), isNull);
       expect(_findFillContainer(tester), isNull);
@@ -58,10 +61,11 @@ void main() {
       bool found = false;
       for (final c in containers) {
         final deco = c.decoration;
-        if (deco is BoxDecoration && deco.gradient == null && deco.color != null) {
+        if (deco is BoxDecoration &&
+            deco.gradient == null &&
+            deco.color != null) {
           // Verify the rendered size
-          final renderBox =
-              tester.renderObject<RenderBox>(find.byWidget(c));
+          final renderBox = tester.renderObject<RenderBox>(find.byWidget(c));
           expect(renderBox.size.height, closeTo(customHeight, 0.1));
           found = true;
           break;
@@ -77,9 +81,10 @@ void main() {
       bool found = false;
       for (final c in containers) {
         final deco = c.decoration;
-        if (deco is BoxDecoration && deco.gradient == null && deco.color != null) {
-          final renderBox =
-              tester.renderObject<RenderBox>(find.byWidget(c));
+        if (deco is BoxDecoration &&
+            deco.gradient == null &&
+            deco.color != null) {
+          final renderBox = tester.renderObject<RenderBox>(find.byWidget(c));
           expect(renderBox.size.height, closeTo(4.0, 0.1));
           found = true;
           break;

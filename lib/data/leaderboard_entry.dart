@@ -47,7 +47,9 @@ final RegExp kPermissiveDisplayNamePattern = RegExp(r'^[A-Za-z0-9_]{1,16}$');
 /// Regex matching the ISO-week bucket key `YYYY-Www`
 /// (year 1900–2999, week 01–53). Week 53 is permitted because the ISO
 /// 8601 long-year cycle (e.g. 2026 itself is a long year with 53 weeks).
-final RegExp kIsoWeekPattern = RegExp(r'^(19|20|21|22|23|24|25|26|27|28|29)\d{2}-W(0[1-9]|[1-4]\d|5[0-3])$');
+final RegExp kIsoWeekPattern = RegExp(
+  r'^(19|20|21|22|23|24|25|26|27|28|29)\d{2}-W(0[1-9]|[1-4]\d|5[0-3])$',
+);
 
 /// Regex for a SHA-256 hex digest (64 lowercase hex chars).
 final RegExp kSha256HexPattern = RegExp(r'^[0-9a-f]{64}$');
@@ -133,7 +135,8 @@ class LeaderboardEntry {
     }
     if (displayName is! String) {
       throw const FormatException(
-          'LeaderboardEntry.displayName must be a string');
+        'LeaderboardEntry.displayName must be a string',
+      );
     }
     if (score is! int) {
       throw const FormatException('LeaderboardEntry.score must be an int');
@@ -143,11 +146,13 @@ class LeaderboardEntry {
     }
     if (updatedAt is! int) {
       throw const FormatException(
-          'LeaderboardEntry.updatedAt must be an int (millis since epoch)');
+        'LeaderboardEntry.updatedAt must be an int (millis since epoch)',
+      );
     }
     if (hashedId != null && hashedId is! String) {
       throw const FormatException(
-          'LeaderboardEntry.hashedId must be a string when present');
+        'LeaderboardEntry.hashedId must be a string when present',
+      );
     }
 
     return LeaderboardEntry(
@@ -155,8 +160,7 @@ class LeaderboardEntry {
       displayName: displayName,
       score: score,
       week: week,
-      updatedAt:
-          DateTime.fromMillisecondsSinceEpoch(updatedAt, isUtc: true),
+      updatedAt: DateTime.fromMillisecondsSinceEpoch(updatedAt, isUtc: true),
       hashedId: hashedId as String?,
     );
   }
@@ -194,33 +198,40 @@ class LeaderboardEntry {
   /// received entry.
   static LeaderboardValidationError? validate(LeaderboardEntry e) {
     if (e.playerId.isEmpty) {
-      return const LeaderboardValidationError(
-          'playerId', 'must be non-empty');
+      return const LeaderboardValidationError('playerId', 'must be non-empty');
     }
     if (e.playerId.length > 64) {
       return const LeaderboardValidationError(
-          'playerId', 'must be ≤ 64 chars (Firebase UIDs are 28)');
+        'playerId',
+        'must be ≤ 64 chars (Firebase UIDs are 28)',
+      );
     }
     if (!kPermissiveDisplayNamePattern.hasMatch(e.displayName)) {
       return const LeaderboardValidationError(
-          'displayName',
-          'must match [A-Za-z0-9_]{1,16}; v1 mints Pilot_NNNN');
+        'displayName',
+        'must match [A-Za-z0-9_]{1,16}; v1 mints Pilot_NNNN',
+      );
     }
     if (e.score < 0) {
-      return const LeaderboardValidationError(
-          'score', 'must be ≥ 0');
+      return const LeaderboardValidationError('score', 'must be ≥ 0');
     }
     if (e.score > kMaxLeaderboardScore) {
       return const LeaderboardValidationError(
-          'score', 'exceeds hard ceiling of $kMaxLeaderboardScore');
+        'score',
+        'exceeds hard ceiling of $kMaxLeaderboardScore',
+      );
     }
     if (!kIsoWeekPattern.hasMatch(e.week)) {
       return const LeaderboardValidationError(
-          'week', 'must match ISO-week pattern YYYY-Www (e.g. 2026-W20)');
+        'week',
+        'must match ISO-week pattern YYYY-Www (e.g. 2026-W20)',
+      );
     }
     if (e.hashedId != null && !kSha256HexPattern.hasMatch(e.hashedId!)) {
       return const LeaderboardValidationError(
-          'hashedId', 'must be a 64-char lowercase hex SHA-256 digest');
+        'hashedId',
+        'must be a 64-char lowercase hex SHA-256 digest',
+      );
     }
     return null;
   }
@@ -243,10 +254,7 @@ class LeaderboardEntry {
   static String isoWeekOf(DateTime instant) {
     final utc = instant.toUtc();
     // Day-of-year (1..366).
-    final ordinal = utc
-            .difference(DateTime.utc(utc.year, 1, 1))
-            .inDays +
-        1;
+    final ordinal = utc.difference(DateTime.utc(utc.year, 1, 1)).inDays + 1;
     // weekday: Mon=1..Sun=7 (DateTime.weekday already returns this).
     final weekday = utc.weekday;
     var weekNum = ((ordinal - weekday + 10) ~/ 7);
@@ -292,13 +300,13 @@ class LeaderboardEntry {
 
   @override
   int get hashCode => Object.hash(
-        playerId,
-        displayName,
-        score,
-        week,
-        updatedAt.toUtc(),
-        hashedId,
-      );
+    playerId,
+    displayName,
+    score,
+    week,
+    updatedAt.toUtc(),
+    hashedId,
+  );
 
   @override
   String toString() =>

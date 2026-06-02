@@ -114,14 +114,14 @@ class AP {
 
   /// Eyebrow — small uppercase metadata label with tracking.
   static TextStyle eyebrow({Color? color}) => TextStyle(
-        fontFamily: AethericPulseDark.fontBody,
-        fontFamilyFallback: AethericPulseDark.fontFallback,
-        fontSize: 10,
-        fontWeight: FontWeight.w700,
-        letterSpacing: 1.6, // 0.16em × 10
-        color: color ?? AethericPulseDark.onSurfaceMeta,
-        height: 1.2,
-      );
+    fontFamily: AethericPulseDark.fontBody,
+    fontFamilyFallback: AethericPulseDark.fontFallback,
+    fontSize: 10,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 1.6, // 0.16em × 10
+    color: color ?? AethericPulseDark.onSurfaceMeta,
+    height: 1.2,
+  );
 
   // Asset path helpers
   static const String iconDir = 'assets/images/icons';

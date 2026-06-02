@@ -40,8 +40,13 @@ class HivePersistenceProvider implements IPersistenceProvider {
           );
         }
       } catch (e, st) {
-        developer.log('Failed to open plaintext Hive box: $e',
-            level: 900, name: 'security.hive_persistence', error: e, stackTrace: st);
+        developer.log(
+          'Failed to open plaintext Hive box: $e',
+          level: 900,
+          name: 'security.hive_persistence',
+          error: e,
+          stackTrace: st,
+        );
       }
 
       if (plaintextBox != null && plaintextBox.isOpen) {
@@ -56,8 +61,13 @@ class HivePersistenceProvider implements IPersistenceProvider {
         // the encrypted box with the same name.
         await Hive.deleteBoxFromDisk(_boxName);
       } catch (e, st) {
-        developer.log('Failed to delete plaintext Hive box files: $e',
-            level: 900, name: 'security.hive_persistence', error: e, stackTrace: st);
+        developer.log(
+          'Failed to delete plaintext Hive box files: $e',
+          level: 900,
+          name: 'security.hive_persistence',
+          error: e,
+          stackTrace: st,
+        );
       }
 
       // Open the (now encrypted) box and write migrated entries.
@@ -68,8 +78,10 @@ class HivePersistenceProvider implements IPersistenceProvider {
 
       if (entries.isNotEmpty) {
         await encBox.putAll(entries);
-        developer.log('Migrated ${entries.length} PlayerProgress records into encrypted box.',
-            name: 'security.hive_persistence');
+        developer.log(
+          'Migrated ${entries.length} PlayerProgress records into encrypted box.',
+          name: 'security.hive_persistence',
+        );
       }
 
       return;
@@ -135,9 +147,13 @@ class HivePersistenceProvider implements IPersistenceProvider {
   }
 
   @override
-  Future<void> updateLevelStar(String playerId, String levelId, int stars) async {
+  Future<void> updateLevelStar(
+    String playerId,
+    String levelId,
+    int stars,
+  ) async {
     final progress = await loadProgress(playerId);
-    
+
     final currentStars = progress.levelStars[levelId] ?? 0;
     if (stars > currentStars) {
       final updatedStars = Map<String, int>.from(progress.levelStars);
@@ -208,7 +224,10 @@ class HivePersistenceProvider implements IPersistenceProvider {
     return granted;
   }
 
-  Future<void> _mutate(String playerId, void Function(PlayerProgress) fn) async {
+  Future<void> _mutate(
+    String playerId,
+    void Function(PlayerProgress) fn,
+  ) async {
     final progress = await loadProgress(playerId);
     fn(progress);
     await saveProgress(progress);

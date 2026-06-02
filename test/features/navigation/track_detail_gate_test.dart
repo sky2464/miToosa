@@ -61,10 +61,13 @@ void main() {
       expect(_isPlayable(1, p), true);
     });
 
-    test('level 1 IS playable when level 0 XP is exactly the threshold (boundary)', () {
-      final p = _withLevel(0, stars: 5, xp: kProgressionGateXP);
-      expect(_isPlayable(1, p), true);
-    });
+    test(
+      'level 1 IS playable when level 0 XP is exactly the threshold (boundary)',
+      () {
+        final p = _withLevel(0, stars: 5, xp: kProgressionGateXP);
+        expect(_isPlayable(1, p), true);
+      },
+    );
 
     test('level 1 NOT playable when level 0 XP is one below threshold', () {
       final p = _withLevel(0, stars: 5, xp: kProgressionGateXP - 1);
@@ -94,10 +97,13 @@ void main() {
       expect(_hasMetGate(0, _fresh()), false);
     });
 
-    test('returns true when XP is null (legacy save — backward-compatible)', () {
-      final p = _withLevel(0, stars: 2, xp: null);
-      expect(_hasMetGate(0, p), true);
-    });
+    test(
+      'returns true when XP is null (legacy save — backward-compatible)',
+      () {
+        final p = _withLevel(0, stars: 2, xp: null);
+        expect(_hasMetGate(0, p), true);
+      },
+    );
 
     test('returns true when XP is above threshold', () {
       final p = _withLevel(0, stars: 5, xp: kProgressionGateXP + 3);

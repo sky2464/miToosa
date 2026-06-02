@@ -17,14 +17,12 @@ PlayerProgress _progressWithXp(int xp) {
 }
 
 Widget _wrap(PlayerProgress progress) => ProviderScope(
-      overrides: [
-        playerProgressProvider.overrideWith((ref) async => progress),
-      ],
-      child: MaterialApp(
-        theme: AethericPulseDark.themeData,
-        home: const Scaffold(body: LeaderboardScreen()),
-      ),
-    );
+  overrides: [playerProgressProvider.overrideWith((ref) async => progress)],
+  child: MaterialApp(
+    theme: AethericPulseDark.themeData,
+    home: const Scaffold(body: LeaderboardScreen()),
+  ),
+);
 
 void main() {
   group('LeaderboardScreen — structure', () {
@@ -54,8 +52,9 @@ void main() {
       expect(find.text('LOCAL'), findsOneWidget);
     });
 
-    testWidgets('renders top-3 podium (Mira K., Diego R., Aiko T.)',
-        (tester) async {
+    testWidgets('renders top-3 podium (Mira K., Diego R., Aiko T.)', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(390, 1200);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() {
@@ -100,8 +99,9 @@ void main() {
   });
 
   group('LeaderboardScreen — segmented control interaction', () {
-    testWidgets('tapping a different segment updates active state',
-        (tester) async {
+    testWidgets('tapping a different segment updates active state', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(390, 1200);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() {

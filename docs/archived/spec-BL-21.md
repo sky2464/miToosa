@@ -116,7 +116,7 @@ We are consolidating all CI behaviors into a single, path-filtered PR validation
   - [x] 5.1 Update `.github/workflows/pr-validation.yml`: `dart format` step, hoisted `git fetch`, PR `concurrency`, `workflow_dispatch`, conditional `build_runner`. — _Requirements: AC-001_
   - [x] 5.2 Sync [CLAUDE.md](../../CLAUDE.md) CI section; add `scripts/verify-pr.sh`, `weekly-health.yml`. — _Requirements: AC-001_
   - [x] 5.3 Repo-wide `dart format` applied so format gate passes CI. — _Requirements: AC-001_
-  - [ ] 5.4 Land staged BL-21 via PR; align Master-Plan “shipped” with merge date. — _Process_
+  - [x] 5.4 Land staged BL-21 via PR; align Master-Plan “shipped” with merge date. — _Process_
 
 ### 3.2 Test Plan
 

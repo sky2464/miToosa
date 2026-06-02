@@ -6,7 +6,7 @@ import '../theme/design_system.dart';
 
 /// Circular progress ring with kinetic gradient arc and neon glow.
 class ProgressRing extends StatelessWidget {
-  final double percent;   // 0–100
+  final double percent; // 0–100
   final double size;
   final double strokeWidth;
   final Widget? centerChild;

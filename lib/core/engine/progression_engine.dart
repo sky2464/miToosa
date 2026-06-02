@@ -105,7 +105,10 @@ class ProgressionEngine {
   /// Returns coin reward for a completed level.
   ///
   /// Formula: base 10 + ([stars] × 5) + first-clear bonus 20.
-  static int computeCoinReward({required int stars, required bool isFirstClear}) {
+  static int computeCoinReward({
+    required int stars,
+    required bool isFirstClear,
+  }) {
     int reward = 10 + (stars * 5);
     if (isFirstClear) reward += 20;
     return reward;
@@ -136,10 +139,7 @@ class ProgressionEngine {
   /// Average stars ≥ 4.0 → increase difficulty (good performance).
   /// Average stars < 2.0 → decrease difficulty (struggling).
   /// Otherwise         → keep [current] unchanged.
-  static double computeAdaptiveMultiplier(
-    List<int> history,
-    double current,
-  ) {
+  static double computeAdaptiveMultiplier(List<int> history, double current) {
     if (history.length < kAdaptiveWindowSize) return current;
 
     // Smooth transition guardrail: only evaluate every other level.

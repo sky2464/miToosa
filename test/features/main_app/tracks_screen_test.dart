@@ -22,14 +22,12 @@ PlayerProgress _freshProgress({int freeGamesRemaining = 25}) {
 }
 
 Widget _wrap(PlayerProgress progress) => ProviderScope(
-      overrides: [
-        playerProgressProvider.overrideWith((ref) async => progress),
-      ],
-      child: MaterialApp(
-        theme: AethericPulseDark.themeData,
-        home: const Scaffold(body: WorldMapScreen()),
-      ),
-    );
+  overrides: [playerProgressProvider.overrideWith((ref) async => progress)],
+  child: MaterialApp(
+    theme: AethericPulseDark.themeData,
+    home: const Scaffold(body: WorldMapScreen()),
+  ),
+);
 
 void main() {
   group('WorldMapScreen — Daily Spark hero (AC-001, T-003)', () {
@@ -59,8 +57,9 @@ void main() {
       expect(find.text('0/5'), findsOneWidget);
     });
 
-    testWidgets('hero shows correct games count when 2 games played',
-        (tester) async {
+    testWidgets('hero shows correct games count when 2 games played', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(390, 844);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() {
@@ -121,8 +120,9 @@ void main() {
   });
 
   group('WorldMapScreen — error state (AC-006)', () {
-    testWidgets('shows error text when provider fails, does not crash',
-        (tester) async {
+    testWidgets('shows error text when provider fails, does not crash', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(390, 844);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() {

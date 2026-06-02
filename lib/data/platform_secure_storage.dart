@@ -105,7 +105,10 @@ class PlatformSecureStorage {
 
   /// Encrypts [value] for storage in `localStorage` using a per-key
   /// HMAC-SHA256-derived keystream. Output is `v2:<base64-ciphertext>`.
-  Future<String> _encryptWeb({required String key, required String value}) async {
+  Future<String> _encryptWeb({
+    required String key,
+    required String value,
+  }) async {
     final valueBytes = utf8.encode(value);
     final keystream = await _keystreamFor(
       valueKey: key,
@@ -122,7 +125,10 @@ class PlatformSecureStorage {
   /// plaintext unchanged. Legacy plaintext is migrated to v2 on the next
   /// write call by the caller (no implicit re-write here, to keep `read`
   /// side-effect-free and idempotent).
-  Future<String?> _maybeDecryptWeb({required String key, required String stored}) async {
+  Future<String?> _maybeDecryptWeb({
+    required String key,
+    required String stored,
+  }) async {
     if (!stored.startsWith(_v2Prefix)) {
       // Legacy v1 plaintext — return as-is. Subsequent write() will upgrade.
       return stored;

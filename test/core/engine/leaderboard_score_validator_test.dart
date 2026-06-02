@@ -43,8 +43,9 @@ void main() {
         requestedScore: 100,
         serverMaxXp: 1000,
         now: now,
-        lastWriteAt:
-            now.subtract(const Duration(seconds: kMinWriteIntervalSeconds)),
+        lastWriteAt: now.subtract(
+          const Duration(seconds: kMinWriteIntervalSeconds),
+        ),
       );
       expect(r.didThrottle, isFalse);
       expect(r.shouldWrite, isTrue);
@@ -110,25 +111,29 @@ void main() {
       expect(r.reason, contains('throttled'));
     });
 
-    test('throttle boundary: exactly kMinWriteIntervalSeconds - 1 throttles',
-        () {
-      final r = validateLeaderboardScore(
-        requestedScore: 100,
-        serverMaxXp: 1000,
-        now: now,
-        lastWriteAt: now.subtract(
-            const Duration(seconds: kMinWriteIntervalSeconds - 1)),
-      );
-      expect(r.didThrottle, isTrue);
-    });
+    test(
+      'throttle boundary: exactly kMinWriteIntervalSeconds - 1 throttles',
+      () {
+        final r = validateLeaderboardScore(
+          requestedScore: 100,
+          serverMaxXp: 1000,
+          now: now,
+          lastWriteAt: now.subtract(
+            const Duration(seconds: kMinWriteIntervalSeconds - 1),
+          ),
+        );
+        expect(r.didThrottle, isTrue);
+      },
+    );
 
     test('throttle boundary: exactly kMinWriteIntervalSeconds passes', () {
       final r = validateLeaderboardScore(
         requestedScore: 100,
         serverMaxXp: 1000,
         now: now,
-        lastWriteAt:
-            now.subtract(const Duration(seconds: kMinWriteIntervalSeconds)),
+        lastWriteAt: now.subtract(
+          const Duration(seconds: kMinWriteIntervalSeconds),
+        ),
       );
       expect(r.didThrottle, isFalse);
     });
@@ -140,9 +145,12 @@ void main() {
         now: now,
         lastWriteAt: now.add(const Duration(seconds: 60)),
       );
-      expect(r.didThrottle, isFalse,
-          reason:
-              'forward clock skew should defer to server, not throttle locally');
+      expect(
+        r.didThrottle,
+        isFalse,
+        reason:
+            'forward clock skew should defer to server, not throttle locally',
+      );
     });
 
     test('throttle short-circuits before clamp check', () {

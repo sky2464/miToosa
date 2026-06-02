@@ -70,20 +70,41 @@ class AchievementCard extends StatelessWidget {
                   child: ColorFiltered(
                     colorFilter: a.unlocked
                         ? const ColorFilter.mode(
-                            Colors.transparent, BlendMode.multiply)
+                            Colors.transparent,
+                            BlendMode.multiply,
+                          )
                         : const ColorFilter.matrix(<double>[
-                            0.2126, 0.7152, 0.0722, 0, 0,
-                            0.2126, 0.7152, 0.0722, 0, 0,
-                            0.2126, 0.7152, 0.0722, 0, 0,
-                            0, 0, 0, 0.5, 0,
+                            0.2126,
+                            0.7152,
+                            0.0722,
+                            0,
+                            0,
+                            0.2126,
+                            0.7152,
+                            0.0722,
+                            0,
+                            0,
+                            0.2126,
+                            0.7152,
+                            0.0722,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0.5,
+                            0,
                           ]),
                     child: Image.asset(
                       a.badgePath,
                       width: 60,
                       height: 60,
                       fit: BoxFit.contain,
-                      errorBuilder: (_, _, _) =>
-                          const Icon(Icons.emoji_events, color: AP.fgMuted, size: 40),
+                      errorBuilder: (_, _, _) => const Icon(
+                        Icons.emoji_events,
+                        color: AP.fgMuted,
+                        size: 40,
+                      ),
                     ),
                   ),
                 ),
@@ -102,7 +123,11 @@ class AchievementCard extends StatelessWidget {
                           width: 1,
                         ),
                       ),
-                      child: const Icon(Icons.lock, color: AP.fgMuted, size: 10),
+                      child: const Icon(
+                        Icons.lock,
+                        color: AP.fgMuted,
+                        size: 10,
+                      ),
                     ),
                   ),
               ],

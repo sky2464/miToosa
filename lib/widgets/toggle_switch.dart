@@ -7,11 +7,7 @@ class ToggleSwitch extends StatelessWidget {
   final bool value;
   final ValueChanged<bool> onChanged;
 
-  const ToggleSwitch({
-    super.key,
-    required this.value,
-    required this.onChanged,
-  });
+  const ToggleSwitch({super.key, required this.value, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +47,9 @@ class ToggleSwitch extends StatelessWidget {
                 AnimatedAlign(
                   duration: const Duration(milliseconds: 220),
                   curve: Curves.easeOutBack,
-                  alignment:
-                      value ? Alignment.centerRight : Alignment.centerLeft,
+                  alignment: value
+                      ? Alignment.centerRight
+                      : Alignment.centerLeft,
                   child: Container(
                     width: 18,
                     height: 18,

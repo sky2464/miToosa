@@ -34,11 +34,7 @@ class FeedbackToast extends StatefulWidget {
   }) {
     final entry = OverlayEntry(
       builder: (_) => _ToastPositioner(
-        child: FeedbackToast(
-          headline: headline,
-          amount: amount,
-          icon: icon,
-        ),
+        child: FeedbackToast(headline: headline, amount: amount, icon: icon),
       ),
     );
     Overlay.of(context, rootOverlay: true).insert(entry);
@@ -71,13 +67,15 @@ class _FeedbackToastState extends State<FeedbackToast>
     _scale = Tween<double>(begin: 0.6, end: 1.0).animate(
       CurvedAnimation(parent: _ctrl, curve: AethericPulseDark.springSoft),
     );
-    _opacity = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _ctrl, curve: AethericPulseDark.easeOut),
-    );
+    _opacity = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _ctrl, curve: AethericPulseDark.easeOut));
     _ctrl.forward();
     // Auto-reverse after a short hold so it doesn't linger.
     Timer(const Duration(milliseconds: 900), () {
-      if (mounted) _ctrl.reverse().whenComplete(() => widget.onDismissed?.call());
+      if (mounted)
+        _ctrl.reverse().whenComplete(() => widget.onDismissed?.call());
     });
   }
 
@@ -106,9 +104,12 @@ class _FeedbackToastState extends State<FeedbackToast>
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               decoration: BoxDecoration(
-                gradient: isDark ? AethericPulseDark.gradPrimary : AethericPulseLight.gradientSoft,
-                borderRadius:
-                    BorderRadius.circular(AethericPulseDark.radiusHero),
+                gradient: isDark
+                    ? AethericPulseDark.gradPrimary
+                    : AethericPulseLight.gradientSoft,
+                borderRadius: BorderRadius.circular(
+                  AethericPulseDark.radiusHero,
+                ),
                 border: Border.all(color: border, width: 1),
                 boxShadow: AethericPulseLight.shadowSoftBlue,
               ),

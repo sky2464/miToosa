@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mitoosa/data/network/local_network_server.dart';
 import 'package:mitoosa/data/network/network_exceptions.dart';
 import 'package:mitoosa/data/network/network_models.dart';
+
 void main() {
   group('LocalNetworkServer', () {
     late LocalNetworkServer server;
@@ -81,11 +82,15 @@ void main() {
         cancelOnError: true,
       );
 
-      socket.add(jsonEncode(const JoinSessionMessage(
-        sessionId: 'wrong-session-id',
-        playerId: 'test-player',
-        timestamp: 0,
-      ).toJson()));
+      socket.add(
+        jsonEncode(
+          const JoinSessionMessage(
+            sessionId: 'wrong-session-id',
+            playerId: 'test-player',
+            timestamp: 0,
+          ).toJson(),
+        ),
+      );
 
       // Server must close the connection on bad session ID
       await closedCompleter.future.timeout(const Duration(seconds: 5));
@@ -134,24 +139,24 @@ void main() {
       await server.stop();
     });
 
-    test('Server throws StateError when broadcasting without running', () async {
-      server = LocalNetworkServer(
-        sessionId: testSessionId,
-        onMessageReceived: (message, clientId) {},
-      );
+    test(
+      'Server throws StateError when broadcasting without running',
+      () async {
+        server = LocalNetworkServer(
+          sessionId: testSessionId,
+          onMessageReceived: (message, clientId) {},
+        );
 
-      final testMessage = GameStartMessage(
-        sessionId: testSessionId,
-        levelId: 'level-1',
-        durationSeconds: 60,
-        timestamp: DateTime.now().millisecondsSinceEpoch,
-      );
+        final testMessage = GameStartMessage(
+          sessionId: testSessionId,
+          levelId: 'level-1',
+          durationSeconds: 60,
+          timestamp: DateTime.now().millisecondsSinceEpoch,
+        );
 
-      expect(
-        () => server.broadcast(testMessage),
-        throwsA(isA<StateError>()),
-      );
-    });
+        expect(() => server.broadcast(testMessage), throwsA(isA<StateError>()));
+      },
+    );
 
     test('Server state after stopping', () async {
       server = LocalNetworkServer(
@@ -176,10 +181,7 @@ void main() {
 
       await server.start(testPort);
 
-      expect(
-        () => server.start(testPort),
-        throwsA(isA<StateError>()),
-      );
+      expect(() => server.start(testPort), throwsA(isA<StateError>()));
 
       await server.stop();
     });

@@ -67,8 +67,11 @@ void main() {
       final day7 = DailyRewardEngine.rewardForDay(7);
       for (var d = 1; d < 7; d++) {
         final other = DailyRewardEngine.rewardForDay(d);
-        expect(day7.coins, greaterThanOrEqualTo(other.coins),
-            reason: 'day 7 >= day $d');
+        expect(
+          day7.coins,
+          greaterThanOrEqualTo(other.coins),
+          reason: 'day 7 >= day $d',
+        );
       }
     });
 
@@ -88,8 +91,11 @@ void main() {
       for (var d = 2; d <= 7; d++) {
         final prev = DailyRewardEngine.rewardForDay(d - 1);
         final curr = DailyRewardEngine.rewardForDay(d);
-        expect(curr.coins, greaterThanOrEqualTo(prev.coins),
-            reason: 'day $d >= day ${d - 1}');
+        expect(
+          curr.coins,
+          greaterThanOrEqualTo(prev.coins),
+          reason: 'day $d >= day ${d - 1}',
+        );
       }
     });
   });

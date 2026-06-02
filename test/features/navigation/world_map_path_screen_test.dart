@@ -27,16 +27,16 @@ PlayerProgress _freshWithOneCompletedLevel() {
 }
 
 List<TrackDefinition> _fakeTracks() => [
-      TrackDefinition(
-        id: 'track_test',
-        name: 'Test Track',
-        subtitle: 'A test track',
-        rule: PuzzleRule.oddOneOut,
-        icon: '🧩',
-        targetLevelCount: 3,
-        category: 'Test',
-      ),
-    ];
+  TrackDefinition(
+    id: 'track_test',
+    name: 'Test Track',
+    subtitle: 'A test track',
+    rule: PuzzleRule.oddOneOut,
+    icon: '🧩',
+    targetLevelCount: 3,
+    category: 'Test',
+  ),
+];
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -48,11 +48,7 @@ Widget _buildScreen({
   ContentProvider().tracks = _fakeTracks();
 
   return ProviderScope(
-    overrides: [
-      playerProgressProvider.overrideWith(
-        (ref) async => progress,
-      ),
-    ],
+    overrides: [playerProgressProvider.overrideWith((ref) async => progress)],
     child: MaterialApp(
       themeMode: themeMode,
       theme: AethericPulseLight.lightTheme,
@@ -71,8 +67,9 @@ void main() {
   });
 
   group('WorldMapPathScreen — rendering', () {
-    testWidgets('renders without overflow in portrait (390×844)',
-        (tester) async {
+    testWidgets('renders without overflow in portrait (390×844)', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(390, 844);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() {
@@ -85,12 +82,16 @@ void main() {
       );
       await tester.pump(); // settle the FutureProvider
 
-      expect(tester.takeException(), isNull,
-          reason: 'No RenderFlex overflow in portrait');
+      expect(
+        tester.takeException(),
+        isNull,
+        reason: 'No RenderFlex overflow in portrait',
+      );
     });
 
-    testWidgets('renders without overflow in landscape (844×390)',
-        (tester) async {
+    testWidgets('renders without overflow in landscape (844×390)', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(844, 390);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() {
@@ -103,12 +104,16 @@ void main() {
       );
       await tester.pump();
 
-      expect(tester.takeException(), isNull,
-          reason: 'No RenderFlex overflow in landscape');
+      expect(
+        tester.takeException(),
+        isNull,
+        reason: 'No RenderFlex overflow in landscape',
+      );
     });
 
-    testWidgets('renders without errors in light mode (Brightness.light)',
-        (tester) async {
+    testWidgets('renders without errors in light mode (Brightness.light)', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(390, 844);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() {
@@ -126,14 +131,18 @@ void main() {
 
       // _PathLinePainter uses AethericPulseLight.gradient in light mode —
       // verify CustomPaint does not throw.
-      expect(tester.takeException(), isNull,
-          reason: 'Light-mode path line gradient renders cleanly');
+      expect(
+        tester.takeException(),
+        isNull,
+        reason: 'Light-mode path line gradient renders cleanly',
+      );
     });
   });
 
   group('WorldMapPathScreen — accessibility', () {
-    testWidgets('every unlocked level node has a non-empty Semantics label',
-        (tester) async {
+    testWidgets('every unlocked level node has a non-empty Semantics label', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(390, 844);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() {
@@ -146,7 +155,9 @@ void main() {
       await tester.pump();
 
       // Collect all Semantics labels visible in the tree.
-      final semanticsNodes = tester.getSemantics(find.byType(WorldMapPathScreen));
+      final semanticsNodes = tester.getSemantics(
+        find.byType(WorldMapPathScreen),
+      );
       expect(
         semanticsNodes.label,
         isNotNull,
@@ -154,27 +165,32 @@ void main() {
       );
     });
 
-    testWidgets('node for level 0 (completed) has a label containing "Level 1"',
-        (tester) async {
-      tester.view.physicalSize = const Size(390, 844);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(() {
-        tester.view.resetPhysicalSize();
-        tester.view.resetDevicePixelRatio();
-      });
+    testWidgets(
+      'node for level 0 (completed) has a label containing "Level 1"',
+      (tester) async {
+        tester.view.physicalSize = const Size(390, 844);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
 
-      final progress = _freshWithOneCompletedLevel();
-      await tester.pumpWidget(_buildScreen(progress: progress));
-      await tester.pump();
+        final progress = _freshWithOneCompletedLevel();
+        await tester.pumpWidget(_buildScreen(progress: progress));
+        await tester.pump();
 
-      // The _LevelNode Semantics label for a completed level is:
-      // 'Level 1 completed with N stars'
-      final labelFinder = find.bySemanticsLabel(
-        RegExp(r'Level 1', caseSensitive: false),
-      );
-      expect(labelFinder, findsAtLeastNWidgets(1),
-          reason: 'Level 1 node should have a Semantics label');
-    });
+        // The _LevelNode Semantics label for a completed level is:
+        // 'Level 1 completed with N stars'
+        final labelFinder = find.bySemanticsLabel(
+          RegExp(r'Level 1', caseSensitive: false),
+        );
+        expect(
+          labelFinder,
+          findsAtLeastNWidgets(1),
+          reason: 'Level 1 node should have a Semantics label',
+        );
+      },
+    );
   });
 
   group('WorldMapPathScreen — navigation', () {
@@ -215,8 +231,11 @@ void main() {
         // Use pump instead of pumpAndSettle: _pulseController loops forever
         // and would cause pumpAndSettle to timeout.
         await tester.pump(const Duration(milliseconds: 500));
-        expect(pushCount, greaterThan(0),
-            reason: 'Tapping an unlocked node should push a route');
+        expect(
+          pushCount,
+          greaterThan(0),
+          reason: 'Tapping an unlocked node should push a route',
+        );
       }
     });
   });
@@ -226,101 +245,120 @@ void main() {
     // Phase 3. Exercises the isDark==false branch of _LevelNode.build and the
     // textTheme.headlineMedium?.copyWith(...) resolution from Phase 2.
     testWidgets(
-        'locked node renders without error in Brightness.light (Phase 2/3 guard)',
-        (tester) async {
-      tester.view.physicalSize = const Size(390, 844);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(() {
-        tester.view.resetPhysicalSize();
-        tester.view.resetDevicePixelRatio();
-      });
+      'locked node renders without error in Brightness.light (Phase 2/3 guard)',
+      (tester) async {
+        tester.view.physicalSize = const Size(390, 844);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
 
-      // Use a fresh (all-locked) progress so levels 1+ are locked nodes.
-      final progress = PlayerProgress.fresh(playerId: 'test-player');
-      await tester.pumpWidget(
-        _buildScreen(progress: progress, themeMode: ThemeMode.light),
-      );
-      await tester.pump();
+        // Use a fresh (all-locked) progress so levels 1+ are locked nodes.
+        final progress = PlayerProgress.fresh(playerId: 'test-player');
+        await tester.pumpWidget(
+          _buildScreen(progress: progress, themeMode: ThemeMode.light),
+        );
+        await tester.pump();
 
-      expect(tester.takeException(), isNull,
+        expect(
+          tester.takeException(),
+          isNull,
           reason:
               'No exception when locked nodes render in Brightness.light; '
               'covers lightSurfaceContainer gradient, glassBorderDimLight, '
-              'and lightOnSurface.withValues(alpha:0.38) label color');
-    });
+              'and lightOnSurface.withValues(alpha:0.38) label color',
+        );
+      },
+    );
 
     testWidgets(
-        'locked node exposes Semantics label in light mode (headlineMedium null-safety)',
-        (tester) async {
-      tester.view.physicalSize = const Size(390, 844);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(() {
-        tester.view.resetPhysicalSize();
-        tester.view.resetDevicePixelRatio();
-      });
+      'locked node exposes Semantics label in light mode (headlineMedium null-safety)',
+      (tester) async {
+        tester.view.physicalSize = const Size(390, 844);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
 
-      // Level 0 is unlocked by default in PlayerProgress.fresh; Level 1 is locked.
-      final progress = PlayerProgress.fresh(playerId: 'test-player');
-      await tester.pumpWidget(
-        _buildScreen(progress: progress, themeMode: ThemeMode.light),
-      );
-      await tester.pump();
+        // Level 0 is unlocked by default in PlayerProgress.fresh; Level 1 is locked.
+        final progress = PlayerProgress.fresh(playerId: 'test-player');
+        await tester.pumpWidget(
+          _buildScreen(progress: progress, themeMode: ThemeMode.light),
+        );
+        await tester.pump();
 
-      // Level 1 node (unlocked) should have a Semantics label — verifying that
-      // textTheme.headlineMedium?.copyWith(...) resolved to a non-null TextStyle
-      // in the light theme (ThemeData.light() always provides headlineMedium).
-      final levelLabel = find.bySemanticsLabel(
-        RegExp(r'Level 1', caseSensitive: false),
-      );
-      expect(levelLabel, findsAtLeastNWidgets(1),
+        // Level 1 node (unlocked) should have a Semantics label — verifying that
+        // textTheme.headlineMedium?.copyWith(...) resolved to a non-null TextStyle
+        // in the light theme (ThemeData.light() always provides headlineMedium).
+        final levelLabel = find.bySemanticsLabel(
+          RegExp(r'Level 1', caseSensitive: false),
+        );
+        expect(
+          levelLabel,
+          findsAtLeastNWidgets(1),
           reason:
               'Level node Semantics label must survive Brightness.light path; '
-              'guards textTheme.headlineMedium?.copyWith(...) from Phase 2');
-    });
+              'guards textTheme.headlineMedium?.copyWith(...) from Phase 2',
+        );
+      },
+    );
   });
 
   // S2-02 task 2.1 — all three node states have correct Semantics labels
   group('WorldMapPathScreen — node states (S2-02 2.1)', () {
     testWidgets(
-        'done/current/locked nodes expose correct Semantics labels from mocked progress',
-        (tester) async {
-      tester.view.physicalSize = const Size(390, 844);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(() {
-        tester.view.resetPhysicalSize();
-        tester.view.resetDevicePixelRatio();
-      });
+      'done/current/locked nodes expose correct Semantics labels from mocked progress',
+      (tester) async {
+        tester.view.physicalSize = const Size(390, 844);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
 
-      // Level 0 = done (3 stars), Level 1 = current (first unstarred), Level 2 = locked
-      final progress = _freshWithOneCompletedLevel();
-      await tester.pumpWidget(_buildScreen(progress: progress));
-      await tester.pump();
+        // Level 0 = done (3 stars), Level 1 = current (first unstarred), Level 2 = locked
+        final progress = _freshWithOneCompletedLevel();
+        await tester.pumpWidget(_buildScreen(progress: progress));
+        await tester.pump();
 
-      // Done state: PathConstellation labels done nodes as "Level N completed"
-      expect(
-        find.bySemanticsLabel(RegExp(r'Level 1 completed', caseSensitive: false)),
-        findsAtLeastNWidgets(1),
-        reason: 'Level 1 (index 0) is done — label must say "Level 1 completed"',
-      );
-      // Current state: labelled "Level N, current"
-      expect(
-        find.bySemanticsLabel(RegExp(r'Level 2, current', caseSensitive: false)),
-        findsAtLeastNWidgets(1),
-        reason: 'Level 2 (index 1) is current — label must say "Level 2, current"',
-      );
-      // Locked state: labelled "Level N, locked"
-      expect(
-        find.bySemanticsLabel(RegExp(r'Level 3, locked', caseSensitive: false)),
-        findsAtLeastNWidgets(1),
-        reason: 'Level 3 (index 2) is locked — label must say "Level 3, locked"',
-      );
-    });
+        // Done state: PathConstellation labels done nodes as "Level N completed"
+        expect(
+          find.bySemanticsLabel(
+            RegExp(r'Level 1 completed', caseSensitive: false),
+          ),
+          findsAtLeastNWidgets(1),
+          reason:
+              'Level 1 (index 0) is done — label must say "Level 1 completed"',
+        );
+        // Current state: labelled "Level N, current"
+        expect(
+          find.bySemanticsLabel(
+            RegExp(r'Level 2, current', caseSensitive: false),
+          ),
+          findsAtLeastNWidgets(1),
+          reason:
+              'Level 2 (index 1) is current — label must say "Level 2, current"',
+        );
+        // Locked state: labelled "Level N, locked"
+        expect(
+          find.bySemanticsLabel(
+            RegExp(r'Level 3, locked', caseSensitive: false),
+          ),
+          findsAtLeastNWidgets(1),
+          reason:
+              'Level 3 (index 2) is locked — label must say "Level 3, locked"',
+        );
+      },
+    );
   });
 
   // S2-02 task 2.2 — track switching re-renders constellation
   group('WorldMapPathScreen — track switching (S2-02 2.2)', () {
-    testWidgets('switching to a second track shows that track\'s nodes',
-        (tester) async {
+    testWidgets('switching to a second track shows that track\'s nodes', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(390, 844);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() {
@@ -364,22 +402,30 @@ void main() {
 
       // The first track (track_test) has "Level 1 completed" visible.
       expect(
-        find.bySemanticsLabel(RegExp(r'Level 1 completed', caseSensitive: false)),
+        find.bySemanticsLabel(
+          RegExp(r'Level 1 completed', caseSensitive: false),
+        ),
         findsAtLeastNWidgets(1),
         reason: 'Track Test Level 1 should be shown as completed initially',
       );
 
       // Tap the "Track B" chip to switch tracks.
-      expect(find.text('Track B'), findsOneWidget,
-          reason: 'Track B chip should be visible when 2 tracks are loaded');
+      expect(
+        find.text('Track B'),
+        findsOneWidget,
+        reason: 'Track B chip should be visible when 2 tracks are loaded',
+      );
       await tester.tap(find.text('Track B'));
       await tester.pump();
 
       // After switching, Track B's Level 1 (index 0) should be current.
       expect(
-        find.bySemanticsLabel(RegExp(r'Level 1, current', caseSensitive: false)),
+        find.bySemanticsLabel(
+          RegExp(r'Level 1, current', caseSensitive: false),
+        ),
         findsAtLeastNWidgets(1),
-        reason: 'Track B Level 1 should be "current" (no stars) after switching',
+        reason:
+            'Track B Level 1 should be "current" (no stars) after switching',
       );
     });
   });

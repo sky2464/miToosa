@@ -8,11 +8,11 @@ void main() {
   group('LocalNetworkInfo', () {
     test('getLocalIP returns a valid IP address', () async {
       final ip = await LocalNetworkInfo.getLocalIP();
-      
+
       // Should be either localhost or a valid IPv4 address
       expect(ip, isNotNull);
       expect(ip.isNotEmpty, true);
-      
+
       // Validate IPv4 format (simple check)
       final parts = ip.split('.');
       expect(parts.length, 4);
@@ -43,9 +43,9 @@ void main() {
         startPort: 18765,
         endPort: 18775,
       );
-      
+
       expect(port >= 18765 && port <= 18775, true);
-      
+
       // Verify the returned port is actually available
       final isAvailable = await LocalNetworkInfo.isPortAvailable(port);
       expect(isAvailable, true);
@@ -59,15 +59,12 @@ void main() {
       final server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
       final boundPort = server.port;
       try {
-        await expectLater(
-          () async {
-            await LocalNetworkInfo.findAvailablePort(
-              startPort: boundPort,
-              endPort: boundPort,
-            );
-          },
-          throwsA(isA<PortBindingException>()),
-        );
+        await expectLater(() async {
+          await LocalNetworkInfo.findAvailablePort(
+            startPort: boundPort,
+            endPort: boundPort,
+          );
+        }, throwsA(isA<PortBindingException>()));
       } finally {
         await server.close();
       }
@@ -96,10 +93,10 @@ void main() {
       // Extract the IP from the URL
       final ipMatch = RegExp(r'ws://([^:]+):').firstMatch(url);
       expect(ipMatch, isNotNull);
-      
+
       final extractedIP = ipMatch!.group(1);
       final actualIP = await LocalNetworkInfo.getLocalIP();
-      
+
       expect(extractedIP, actualIP);
     });
   });

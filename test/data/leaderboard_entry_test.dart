@@ -17,8 +17,7 @@ void main() {
         score: 8500,
         week: '2026-W20',
         updatedAt: ts,
-        hashedId:
-            'a' * 64, // 64-char hex (lowercase a is hex-valid)
+        hashedId: 'a' * 64, // 64-char hex (lowercase a is hex-valid)
       );
 
       final json = original.toJson();
@@ -214,8 +213,7 @@ void main() {
     });
 
     test('displayName over 16 chars rejected', () {
-      final err =
-          LeaderboardEntry.validate(mk(displayName: 'A' * 17));
+      final err = LeaderboardEntry.validate(mk(displayName: 'A' * 17));
       expect(err?.field, equals('displayName'));
     });
 
@@ -230,8 +228,9 @@ void main() {
     });
 
     test('score above hard ceiling rejected', () {
-      final err =
-          LeaderboardEntry.validate(mk(score: kMaxLeaderboardScore + 1));
+      final err = LeaderboardEntry.validate(
+        mk(score: kMaxLeaderboardScore + 1),
+      );
       expect(err?.field, equals('score'));
     });
 
@@ -251,8 +250,7 @@ void main() {
     });
 
     test('hashedId with uppercase hex rejected (must be lowercase)', () {
-      final err =
-          LeaderboardEntry.validate(mk(hashedId: 'AAAA${'0' * 60}'));
+      final err = LeaderboardEntry.validate(mk(hashedId: 'AAAA${'0' * 60}'));
       expect(err?.field, equals('hashedId'));
     });
 
@@ -322,8 +320,11 @@ void main() {
       ];
       for (final inst in samples) {
         final week = LeaderboardEntry.isoWeekOf(inst);
-        expect(kIsoWeekPattern.hasMatch(week), isTrue,
-            reason: 'week $week for instant $inst failed regex');
+        expect(
+          kIsoWeekPattern.hasMatch(week),
+          isTrue,
+          reason: 'week $week for instant $inst failed regex',
+        );
       }
     });
 

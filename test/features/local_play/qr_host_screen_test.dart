@@ -7,16 +7,12 @@ void main() {
   group('QRHostScreen', () {
     testWidgets('Widget renders without crashing', (WidgetTester tester) async {
       await tester.pumpWidget(
-        const ProviderScope(
-          child: MaterialApp(
-            home: QRHostScreen(),
-          ),
-        ),
+        const ProviderScope(child: MaterialApp(home: QRHostScreen())),
       );
 
       // Widget should render
       expect(find.byType(QRHostScreen), findsOneWidget);
-      
+
       // Should show idle state by default (no session)
       expect(find.text('No active session'), findsOneWidget);
     });

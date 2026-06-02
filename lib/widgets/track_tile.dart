@@ -73,13 +73,15 @@ class TrackTile extends StatelessWidget {
             Text(
               track.category,
               style: AethericPulseDark.label(
-                  color: AethericPulseDark.onSurfaceMuted),
+                color: AethericPulseDark.onSurfaceMuted,
+              ),
             ),
             const SizedBox(height: 6),
             Text(
               '$completed / $total',
               style: AethericPulseDark.label(
-                  color: AethericPulseDark.brandBlue),
+                color: AethericPulseDark.brandBlue,
+              ),
             ),
           ],
         ),

@@ -92,8 +92,10 @@ class AethericPulseLight {
         iconTheme: IconThemeData(color: softBlueDeep),
         titleTextStyle: TextStyle(
           fontFamily: KineticObsidian.fontDisplay,
-          fontSize: 18, fontWeight: FontWeight.w900,
-          letterSpacing: 0.9, color: softBlueDeep,
+          fontSize: 18,
+          fontWeight: FontWeight.w900,
+          letterSpacing: 0.9,
+          color: softBlueDeep,
         ),
       ),
       cardTheme: CardThemeData(
@@ -115,7 +117,8 @@ class AethericPulseLight {
           ),
           textStyle: const TextStyle(
             fontFamily: KineticObsidian.fontBody,
-            fontSize: 15, fontWeight: FontWeight.w700,
+            fontSize: 15,
+            fontWeight: FontWeight.w700,
             letterSpacing: 0.8,
           ),
         ),
@@ -130,7 +133,8 @@ class AethericPulseLight {
           ),
           textStyle: const TextStyle(
             fontFamily: KineticObsidian.fontBody,
-            fontSize: 14, fontWeight: FontWeight.w500,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
             letterSpacing: 0.8,
           ),
         ),

@@ -32,7 +32,8 @@ void main() {
     testWidgets('claim button fires onClaim', (tester) async {
       bool claimed = false;
       await tester.pumpWidget(
-          _wrap(currentDay: 1, onClaim: () => claimed = true));
+        _wrap(currentDay: 1, onClaim: () => claimed = true),
+      );
       final claimBtn = find.byKey(const ValueKey('daily_reward_claim'));
       expect(claimBtn, findsOneWidget);
       await tester.tap(claimBtn);

@@ -6,14 +6,7 @@ import '../../data/network/local_network_server.dart';
 import '../../data/network/network_models.dart';
 
 /// Local session state for multiplayer play.
-enum LocalSessionPhase {
-  idle,
-  hosting,
-  joining,
-  playing,
-  ended,
-  error,
-}
+enum LocalSessionPhase { idle, hosting, joining, playing, ended, error }
 
 /// Model for a player in a local session.
 class LocalSessionPlayer {
@@ -130,10 +123,7 @@ class _LocalSessionNotifier extends Notifier<LocalSessionState> {
     try {
       final sessionId = 'session-${DateTime.now().millisecondsSinceEpoch}';
       final players = <String, LocalSessionPlayer>{
-        playerId: LocalSessionPlayer(
-          playerId: playerId,
-          name: playerName,
-        ),
+        playerId: LocalSessionPlayer(playerId: playerId, name: playerName),
       };
 
       state = state.copyWith(
@@ -153,7 +143,11 @@ class _LocalSessionNotifier extends Notifier<LocalSessionState> {
   }
 
   /// Join a local session via QR code.
-  Future<void> joinSession(String qrUrl, String playerId, String playerName) async {
+  Future<void> joinSession(
+    String qrUrl,
+    String playerId,
+    String playerName,
+  ) async {
     state = state.copyWith(phase: LocalSessionPhase.joining);
 
     try {
@@ -177,10 +171,7 @@ class _LocalSessionNotifier extends Notifier<LocalSessionState> {
         sessionId: sessionId,
         qrUrl: qrUrl,
         players: {
-          playerId: LocalSessionPlayer(
-            playerId: playerId,
-            name: playerName,
-          ),
+          playerId: LocalSessionPlayer(playerId: playerId, name: playerName),
         },
         currentPlayerId: playerId,
         createdAt: DateTime.now(),
@@ -198,9 +189,7 @@ class _LocalSessionNotifier extends Notifier<LocalSessionState> {
   void startGame() {
     if (!state.isActive) return;
 
-    state = state.copyWith(
-      phase: LocalSessionPhase.playing,
-    );
+    state = state.copyWith(phase: LocalSessionPhase.playing);
   }
 
   /// Record a move for the current player.
@@ -299,5 +288,5 @@ class _LocalSessionNotifier extends Notifier<LocalSessionState> {
 /// Riverpod provider for local session management.
 final localSessionProvider =
     NotifierProvider<_LocalSessionNotifier, LocalSessionState>(() {
-  return _LocalSessionNotifier();
-});
+      return _LocalSessionNotifier();
+    });

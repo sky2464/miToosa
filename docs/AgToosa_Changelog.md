@@ -7,6 +7,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), version
 
 ## [Unreleased]
 
+### Changed
+- **BL-21 eng-review follow-up:** `pr-validation.yml` adds `dart format` gate, PR `concurrency`, and a single hoisted `git fetch` for path-filtered guards; repo-wide `dart format` so CI passes; [CLAUDE.md](../CLAUDE.md) CI section synced with BL-21 (manual dependency maintenance).
+
 ### Added
 - **BL-21 Streamline GitHub Automation and CI/CD**: removed 7 expensive GitHub Actions workflows (`claude.yml`, `claude-code-review.yml`, `daily-health-check.yml`, `dependency-maintenance.yml`, `docs-archival-check.yml`, `prompt-injection-guard.yml`, `web-build.yml`); added unified PR-only `pr-validation.yml` with cached Flutter setup, `dart analyze`, `flutter test`, and path-filtered local guards (`verify_docs_archival.sh`, `check_prompt_injection.sh`). ADR `docs/decisions/remove-expensive-ci-cd.md` (Accepted). Domain dictionary `docs/Context/CONTEXT.md`. **870/870 tests passing.**
 

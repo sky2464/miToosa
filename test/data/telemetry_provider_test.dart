@@ -25,9 +25,7 @@ void main() {
     test('can be overridden with a custom sink', () {
       final customSink = _FakeSink();
       final container = ProviderContainer(
-        overrides: [
-          analyticsSinkProvider.overrideWithValue(customSink),
-        ],
+        overrides: [analyticsSinkProvider.overrideWithValue(customSink)],
       );
       addTearDown(container.dispose);
 
@@ -52,9 +50,7 @@ void main() {
       // Runtime forwarding is covered by analytics_sink_test.dart (unit level).
       final customSink = _FakeSink();
       final container = ProviderContainer(
-        overrides: [
-          analyticsSinkProvider.overrideWithValue(customSink),
-        ],
+        overrides: [analyticsSinkProvider.overrideWithValue(customSink)],
       );
       addTearDown(container.dispose);
 

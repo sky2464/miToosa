@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../theme/design_tokens.dart';
 
 enum PathNodeState { done, current, locked }
+
 enum PathNodeType { regular, bonus, boss }
 
 class PathLevel {
@@ -46,7 +47,7 @@ class PathConstellation extends StatelessWidget {
 
     final doneCount =
         levels.where((l) => l.state == PathNodeState.done).length +
-            (levels.any((l) => l.state == PathNodeState.current) ? 1 : 0);
+        (levels.any((l) => l.state == PathNodeState.current) ? 1 : 0);
 
     return Center(
       child: SizedBox(
@@ -70,7 +71,9 @@ class PathConstellation extends StatelessWidget {
                 top: positions[i].dy - _nodeSize(levels[i]) / 2,
                 child: _PathNodeView(
                   level: levels[i],
-                  onTap: levels[i].state != PathNodeState.locked && onTapLevel != null
+                  onTap:
+                      levels[i].state != PathNodeState.locked &&
+                          onTapLevel != null
                       ? () => onTapLevel!(i)
                       : null,
                 ),
@@ -146,10 +149,7 @@ class _PathLinePainter extends CustomPainter {
       while (distance < metric.length) {
         final len = draw ? dashWidth : dashSpace;
         if (draw) {
-          canvas.drawPath(
-            metric.extractPath(distance, distance + len),
-            paint,
-          );
+          canvas.drawPath(metric.extractPath(distance, distance + len), paint);
         }
         distance += len;
         draw = !draw;
@@ -188,11 +188,7 @@ class _PathNodeView extends StatelessWidget {
         children: [
           // Pulse ring for current
           if (level.state == PathNodeState.current)
-            Positioned(
-              left: -8,
-              top: -8,
-              child: _PulseRing(size: size + 16),
-            ),
+            Positioned(left: -8, top: -8, child: _PulseRing(size: size + 16)),
           // Node circle
           Container(
             width: size,
@@ -211,25 +207,25 @@ class _PathNodeView extends StatelessWidget {
             child: Center(
               child: switch (level.state) {
                 PathNodeState.locked => const Icon(
-                    Icons.lock,
-                    color: AP.fgMuted,
-                    size: 18,
-                  ),
+                  Icons.lock,
+                  color: AP.fgMuted,
+                  size: 18,
+                ),
                 PathNodeState.done => const Icon(
-                    Icons.check,
-                    color: Colors.white,
-                    size: 22,
-                  ),
+                  Icons.check,
+                  color: Colors.white,
+                  size: 22,
+                ),
                 PathNodeState.current => Text(
-                    '${level.n}',
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: isBoss ? 18 : 15,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white,
-                      fontFeatures: const [FontFeature.tabularFigures()],
-                    ),
+                  '${level.n}',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: isBoss ? 18 : 15,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white,
+                    fontFeatures: const [FontFeature.tabularFigures()],
                   ),
+                ),
               },
             ),
           ),
@@ -239,7 +235,10 @@ class _PathNodeView extends StatelessWidget {
               top: size + 4,
               left: -16,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: AP.surface.withValues(alpha: 0.9),
                   borderRadius: BorderRadius.circular(AP.radiusPill),

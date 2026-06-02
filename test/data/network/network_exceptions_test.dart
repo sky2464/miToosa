@@ -43,7 +43,10 @@ void main() {
       });
 
       test('creates with qrData', () {
-        final e = InvalidQRException(message: 'Bad QR', qrData: 'invalid://data');
+        final e = InvalidQRException(
+          message: 'Bad QR',
+          qrData: 'invalid://data',
+        );
         expect(e.qrData, 'invalid://data');
       });
     });

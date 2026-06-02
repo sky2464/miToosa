@@ -67,7 +67,10 @@ class PuzzleGenerator {
     return source[_random.nextInt(source.length)];
   }
 
-  ShapeItem _randomItem({List<ShapeColor>? palette, ShapeFill fill = ShapeFill.filled}) {
+  ShapeItem _randomItem({
+    List<ShapeColor>? palette,
+    ShapeFill fill = ShapeFill.filled,
+  }) {
     return ShapeItem(
       shape: _randomShape(),
       color: _randomColor(palette),
@@ -168,7 +171,11 @@ class PuzzleGenerator {
         } while (newColor == target[idx].color && tries < 20);
       }
 
-      mutated[idx] = ShapeItem(shape: newShape, color: newColor, fill: target[idx].fill);
+      mutated[idx] = ShapeItem(
+        shape: newShape,
+        color: newColor,
+        fill: target[idx].fill,
+      );
     }
 
     return PuzzleOption(id: _uuid(), items: mutated);
@@ -205,7 +212,10 @@ class PuzzleGenerator {
     // Correct option shows the count as that many items of the shape
     final correctOption = PuzzleOption(
       id: correctOptionId,
-      items: List.generate(targetCount, (_) => ShapeItem(shape: targetShape, color: targetColor)),
+      items: List.generate(
+        targetCount,
+        (_) => ShapeItem(shape: targetShape, color: targetColor),
+      ),
       label: '$targetCount',
     );
 
@@ -216,25 +226,36 @@ class PuzzleGenerator {
     int bailout = 0;
     while (wrongOptions.length < difficulty.choiceCount - 1 && bailout < 100) {
       bailout++;
-      final fakeCount = _random.nextInt(difficulty.shapeCount) + 1; // FIX: +1 ensures >= 1
+      final fakeCount =
+          _random.nextInt(difficulty.shapeCount) + 1; // FIX: +1 ensures >= 1
       if (!usedCounts.contains(fakeCount)) {
         usedCounts.add(fakeCount);
-        wrongOptions.add(PuzzleOption(
-          id: _uuid(),
-          items: List.generate(fakeCount, (_) => ShapeItem(shape: targetShape, color: targetColor)),
-          label: '$fakeCount',
-        ));
+        wrongOptions.add(
+          PuzzleOption(
+            id: _uuid(),
+            items: List.generate(
+              fakeCount,
+              (_) => ShapeItem(shape: targetShape, color: targetColor),
+            ),
+            label: '$fakeCount',
+          ),
+        );
       }
     }
 
     // If we couldn't generate enough unique counts, fill remaining with nearby counts
     while (wrongOptions.length < difficulty.choiceCount - 1) {
       int fakeCount = wrongOptions.length + targetCount + 2;
-      wrongOptions.add(PuzzleOption(
-        id: _uuid(),
-        items: List.generate(fakeCount.clamp(1, 12), (_) => ShapeItem(shape: targetShape, color: targetColor)),
-        label: '${fakeCount.clamp(1, 12)}',
-      ));
+      wrongOptions.add(
+        PuzzleOption(
+          id: _uuid(),
+          items: List.generate(
+            fakeCount.clamp(1, 12),
+            (_) => ShapeItem(shape: targetShape, color: targetColor),
+          ),
+          label: '${fakeCount.clamp(1, 12)}',
+        ),
+      );
     }
 
     final allOptions = [correctOption, ...wrongOptions]..shuffle(_random);
@@ -279,27 +300,35 @@ class PuzzleGenerator {
     );
 
     final wrongOptions = <PuzzleOption>[
-      PuzzleOption(id: _uuid(), items: [ShapeItem(shape: commonShape, color: commonColor)])
+      PuzzleOption(
+        id: _uuid(),
+        items: [ShapeItem(shape: commonShape, color: commonColor)],
+      ),
     ];
 
     // FIX: Add bail-out and allow repeated noise if needed
     final usedShapes = {commonShape, oddShape};
     int noiseBailout = 0;
-    while (wrongOptions.length < difficulty.choiceCount - 1 && noiseBailout < 100) {
+    while (wrongOptions.length < difficulty.choiceCount - 1 &&
+        noiseBailout < 100) {
       noiseBailout++;
       Shape noise = _randomShape();
       if (!usedShapes.contains(noise)) {
         usedShapes.add(noise);
-        wrongOptions.add(PuzzleOption(
-          id: _uuid(),
-          items: [ShapeItem(shape: noise, color: _randomColor(palette))],
-        ));
+        wrongOptions.add(
+          PuzzleOption(
+            id: _uuid(),
+            items: [ShapeItem(shape: noise, color: _randomColor(palette))],
+          ),
+        );
       } else if (noiseBailout > 30) {
         // Fallback: allow any shape with a different color
-        wrongOptions.add(PuzzleOption(
-          id: _uuid(),
-          items: [ShapeItem(shape: noise, color: _randomColor(palette))],
-        ));
+        wrongOptions.add(
+          PuzzleOption(
+            id: _uuid(),
+            items: [ShapeItem(shape: noise, color: _randomColor(palette))],
+          ),
+        );
       }
     }
 
@@ -327,7 +356,10 @@ class PuzzleGenerator {
     );
 
     final correctOptionId = _uuid();
-    final correctOption = PuzzleOption(id: correctOptionId, items: List.from(targetItems));
+    final correctOption = PuzzleOption(
+      id: correctOptionId,
+      items: List.from(targetItems),
+    );
 
     var wrongOptions = <PuzzleOption>[];
     for (int i = 0; i < difficulty.choiceCount - 1; i++) {
@@ -343,16 +375,12 @@ class PuzzleGenerator {
       wrongOptions.add(PuzzleOption(id: _uuid(), items: mutated));
     }
 
-    wrongOptions = _deduplicateOptions(
-      correctOption,
-      wrongOptions,
-      () {
-        final mutated = List<ShapeItem>.from(targetItems);
-        final idx = _random.nextInt(mutated.length);
-        mutated[idx] = targetItems[idx].copyWith(color: _randomColor(palette));
-        return [PuzzleOption(id: _uuid(), items: mutated)];
-      },
-    );
+    wrongOptions = _deduplicateOptions(correctOption, wrongOptions, () {
+      final mutated = List<ShapeItem>.from(targetItems);
+      final idx = _random.nextInt(mutated.length);
+      mutated[idx] = targetItems[idx].copyWith(color: _randomColor(palette));
+      return [PuzzleOption(id: _uuid(), items: mutated)];
+    });
 
     final allOptions = [correctOption, ...wrongOptions]..shuffle(_random);
 
@@ -389,17 +417,30 @@ class PuzzleGenerator {
     ); // Visual placeholder for "?"
 
     final correctOptionId = _uuid();
-    final correctOption = PuzzleOption(id: correctOptionId, items: [missingItem]);
+    final correctOption = PuzzleOption(
+      id: correctOptionId,
+      items: [missingItem],
+    );
 
     var wrongOptions = <PuzzleOption>[];
     for (int i = 0; i < difficulty.choiceCount - 1; i++) {
-      wrongOptions.add(PuzzleOption(id: _uuid(), items: [_randomItem(palette: palette)]));
+      wrongOptions.add(
+        PuzzleOption(
+          id: _uuid(),
+          items: [_randomItem(palette: palette)],
+        ),
+      );
     }
 
     wrongOptions = _deduplicateOptions(
       correctOption,
       wrongOptions,
-      () => [PuzzleOption(id: _uuid(), items: [_randomItem(palette: palette)])],
+      () => [
+        PuzzleOption(
+          id: _uuid(),
+          items: [_randomItem(palette: palette)],
+        ),
+      ],
     );
 
     final allOptions = [correctOption, ...wrongOptions]..shuffle(_random);
@@ -421,7 +462,10 @@ class PuzzleGenerator {
 
     // Create a repeating pattern of length 2-3 and show 4-6 items
     final patternLen = 2 + _random.nextInt(2); // 2 or 3
-    final pattern = List.generate(patternLen, (_) => _randomItem(palette: palette));
+    final pattern = List.generate(
+      patternLen,
+      (_) => _randomItem(palette: palette),
+    );
 
     final seqLen = difficulty.shapeCount + 1;
     final fullSequence = List.generate(seqLen, (i) => pattern[i % patternLen]);
@@ -435,13 +479,23 @@ class PuzzleGenerator {
 
     var wrongOptions = <PuzzleOption>[];
     for (int i = 0; i < difficulty.choiceCount - 1; i++) {
-      wrongOptions.add(PuzzleOption(id: _uuid(), items: [_randomItem(palette: palette)]));
+      wrongOptions.add(
+        PuzzleOption(
+          id: _uuid(),
+          items: [_randomItem(palette: palette)],
+        ),
+      );
     }
 
     wrongOptions = _deduplicateOptions(
       correctOption,
       wrongOptions,
-      () => [PuzzleOption(id: _uuid(), items: [_randomItem(palette: palette)])],
+      () => [
+        PuzzleOption(
+          id: _uuid(),
+          items: [_randomItem(palette: palette)],
+        ),
+      ],
     );
 
     final allOptions = [correctOption, ...wrongOptions]..shuffle(_random);
@@ -466,11 +520,13 @@ class PuzzleGenerator {
     final targetItems = <ShapeItem>[];
     for (int bit = bitCount - 1; bit >= 0; bit--) {
       final isOne = (targetValue >> bit) & 1 == 1;
-      targetItems.add(ShapeItem(
-        shape: Shape.circle,
-        color: isOne ? ShapeColor.teal : ShapeColor.red,
-        fill: isOne ? ShapeFill.filled : ShapeFill.outlined,
-      ));
+      targetItems.add(
+        ShapeItem(
+          shape: Shape.circle,
+          color: isOne ? ShapeColor.teal : ShapeColor.red,
+          fill: isOne ? ShapeFill.filled : ShapeFill.outlined,
+        ),
+      );
     }
 
     final correctOptionId = _uuid();
@@ -489,11 +545,9 @@ class PuzzleGenerator {
       final fakeValue = _random.nextInt(pow(2, bitCount).toInt() - 1) + 1;
       if (!usedValues.contains(fakeValue)) {
         usedValues.add(fakeValue);
-        wrongOptions.add(PuzzleOption(
-          id: _uuid(),
-          items: targetItems,
-          label: '$fakeValue',
-        ));
+        wrongOptions.add(
+          PuzzleOption(id: _uuid(), items: targetItems, label: '$fakeValue'),
+        );
       }
     }
 
@@ -535,29 +589,45 @@ class PuzzleGenerator {
 
     // Visual: filled circle = TRUE, outlined circle = FALSE
     final targetItems = [
-      ShapeItem(shape: Shape.circle, color: a ? ShapeColor.green : ShapeColor.red, fill: a ? ShapeFill.filled : ShapeFill.outlined),
-      const ShapeItem(shape: Shape.star, color: ShapeColor.yellow, fill: ShapeFill.filled), // represents the gate
-      ShapeItem(shape: Shape.circle, color: b ? ShapeColor.green : ShapeColor.red, fill: b ? ShapeFill.filled : ShapeFill.outlined),
+      ShapeItem(
+        shape: Shape.circle,
+        color: a ? ShapeColor.green : ShapeColor.red,
+        fill: a ? ShapeFill.filled : ShapeFill.outlined,
+      ),
+      const ShapeItem(
+        shape: Shape.star,
+        color: ShapeColor.yellow,
+        fill: ShapeFill.filled,
+      ), // represents the gate
+      ShapeItem(
+        shape: Shape.circle,
+        color: b ? ShapeColor.green : ShapeColor.red,
+        fill: b ? ShapeFill.filled : ShapeFill.outlined,
+      ),
     ];
 
     final correctOptionId = _uuid();
     final correctOption = PuzzleOption(
       id: correctOptionId,
-      items: [ShapeItem(
-        shape: Shape.circle,
-        color: result ? ShapeColor.green : ShapeColor.red,
-        fill: result ? ShapeFill.filled : ShapeFill.outlined,
-      )],
+      items: [
+        ShapeItem(
+          shape: Shape.circle,
+          color: result ? ShapeColor.green : ShapeColor.red,
+          fill: result ? ShapeFill.filled : ShapeFill.outlined,
+        ),
+      ],
       label: result ? 'TRUE' : 'FALSE',
     );
 
     final wrongOption = PuzzleOption(
       id: _uuid(),
-      items: [ShapeItem(
-        shape: Shape.circle,
-        color: !result ? ShapeColor.green : ShapeColor.red,
-        fill: !result ? ShapeFill.filled : ShapeFill.outlined,
-      )],
+      items: [
+        ShapeItem(
+          shape: Shape.circle,
+          color: !result ? ShapeColor.green : ShapeColor.red,
+          fill: !result ? ShapeFill.filled : ShapeFill.outlined,
+        ),
+      ],
       label: !result ? 'TRUE' : 'FALSE',
     );
 
@@ -602,7 +672,9 @@ class PuzzleGenerator {
     // Show the cipher key as additional target items (use the first 3 mappings)
     final keyItems = <ShapeItem>[];
     for (int i = 0; i < min(3, shapes.length); i++) {
-      keyItems.add(ShapeItem(shape: shapes[i], color: palette[i % palette.length]));
+      keyItems.add(
+        ShapeItem(shape: shapes[i], color: palette[i % palette.length]),
+      );
     }
 
     final correctOptionId = _uuid();
@@ -618,14 +690,15 @@ class PuzzleGenerator {
     int bailout = 0;
     while (wrongOptions.length < difficulty.choiceCount - 1 && bailout < 100) {
       bailout++;
-      final fakeWord = List.generate(wordLen, (_) => letters[_random.nextInt(min(3, letters.length))]).join('');
+      final fakeWord = List.generate(
+        wordLen,
+        (_) => letters[_random.nextInt(min(3, letters.length))],
+      ).join('');
       if (!usedWords.contains(fakeWord)) {
         usedWords.add(fakeWord);
-        wrongOptions.add(PuzzleOption(
-          id: _uuid(),
-          items: targetItems,
-          label: fakeWord,
-        ));
+        wrongOptions.add(
+          PuzzleOption(id: _uuid(), items: targetItems, label: fakeWord),
+        );
       }
     }
 
@@ -636,7 +709,8 @@ class PuzzleGenerator {
 
     return Puzzle(
       id: _uuid(),
-      prompt: 'Decode: ${cipherMap.entries.take(3).map((e) => '${_shapeName(e.key)}=${e.value}').join(', ')}',
+      prompt:
+          'Decode: ${cipherMap.entries.take(3).map((e) => '${_shapeName(e.key)}=${e.value}').join(', ')}',
       rule: PuzzleRule.cipherBreak,
       targetItems: displayItems,
       options: allOptions,
@@ -663,14 +737,21 @@ class PuzzleGenerator {
     final leftSide = <ShapeItem>[
       ...List.generate(a, (_) => ShapeItem(shape: shapeA, color: colorA)),
       // Plus sign represented by a star
-      const ShapeItem(shape: Shape.star, color: ShapeColor.yellow, fill: ShapeFill.outlined),
+      const ShapeItem(
+        shape: Shape.star,
+        color: ShapeColor.yellow,
+        fill: ShapeFill.outlined,
+      ),
       ...List.generate(b, (_) => ShapeItem(shape: shapeB, color: colorB)),
     ];
 
     final correctOptionId = _uuid();
     final correctOption = PuzzleOption(
       id: correctOptionId,
-      items: List.generate(answer, (_) => const ShapeItem(shape: Shape.circle, color: ShapeColor.green)),
+      items: List.generate(
+        answer,
+        (_) => const ShapeItem(shape: Shape.circle, color: ShapeColor.green),
+      ),
       label: '$answer',
     );
 
@@ -683,11 +764,17 @@ class PuzzleGenerator {
       final fakeAnswer = _random.nextInt(12) + 1;
       if (!usedAnswers.contains(fakeAnswer)) {
         usedAnswers.add(fakeAnswer);
-        wrongOptions.add(PuzzleOption(
-          id: _uuid(),
-          items: List.generate(fakeAnswer.clamp(1, 12), (_) => const ShapeItem(shape: Shape.circle, color: ShapeColor.green)),
-          label: '$fakeAnswer',
-        ));
+        wrongOptions.add(
+          PuzzleOption(
+            id: _uuid(),
+            items: List.generate(
+              fakeAnswer.clamp(1, 12),
+              (_) =>
+                  const ShapeItem(shape: Shape.circle, color: ShapeColor.green),
+            ),
+            label: '$fakeAnswer',
+          ),
+        );
       }
     }
 
@@ -780,7 +867,8 @@ class PuzzleGenerator {
       prompt = 'What is √$squared ?';
     } else {
       final base = _random.nextInt(5) + 2;
-      final exp = 2 + (_random.nextInt(2) * (difficulty.shapeCount > 5 ? 1 : 0));
+      final exp =
+          2 + (_random.nextInt(2) * (difficulty.shapeCount > 5 ? 1 : 0));
       answer = pow(base, exp).toInt();
       prompt = 'What is $base${_superscript(exp)} ?';
     }
@@ -794,8 +882,18 @@ class PuzzleGenerator {
   }
 
   String _superscript(int n) {
-    const superscripts = {'0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
-      '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹'};
+    const superscripts = {
+      '0': '⁰',
+      '1': '¹',
+      '2': '²',
+      '3': '³',
+      '4': '⁴',
+      '5': '⁵',
+      '6': '⁶',
+      '7': '⁷',
+      '8': '⁸',
+      '9': '⁹',
+    };
     return n.toString().split('').map((c) => superscripts[c] ?? c).join();
   }
 
@@ -821,7 +919,10 @@ class PuzzleGenerator {
   Puzzle _generateMathFraction(DifficultyParameters difficulty) {
     // Generate a fraction and ask to find the equivalent
     final denominators = [2, 3, 4, 5, 6, 8, 10];
-    final d = denominators[_random.nextInt(min(difficulty.shapeCount, denominators.length))];
+    final d =
+        denominators[_random.nextInt(
+          min(difficulty.shapeCount, denominators.length),
+        )];
     final n = _random.nextInt(d - 1) + 1;
 
     // Find the GCD
@@ -851,18 +952,23 @@ class PuzzleGenerator {
       final label = '${wn ~/ wg}/${wd ~/ wg}';
       if (!usedLabels.contains(label)) {
         usedLabels.add(label);
-        wrongOptions.add(PuzzleOption(id: _uuid(), items: const [], label: label));
+        wrongOptions.add(
+          PuzzleOption(id: _uuid(), items: const [], label: label),
+        );
       }
     }
 
     final allOptions = [correctOption, ...wrongOptions]..shuffle(_random);
 
     // Visual: show n filled circles out of d total circles
-    final targetItems = List.generate(d, (i) => ShapeItem(
-      shape: Shape.circle,
-      color: i < n ? ShapeColor.teal : ShapeColor.red,
-      fill: i < n ? ShapeFill.filled : ShapeFill.outlined,
-    ));
+    final targetItems = List.generate(
+      d,
+      (i) => ShapeItem(
+        shape: Shape.circle,
+        color: i < n ? ShapeColor.teal : ShapeColor.red,
+        fill: i < n ? ShapeFill.filled : ShapeFill.outlined,
+      ),
+    );
 
     return Puzzle(
       id: _uuid(),
@@ -910,7 +1016,10 @@ class PuzzleGenerator {
 
   Puzzle _generateGeometryArea(DifficultyParameters difficulty) {
     final shapeTypes = ['square', 'rectangle', 'triangle'];
-    final shapeType = shapeTypes[_random.nextInt(min(difficulty.shapeCount - 1, shapeTypes.length))];
+    final shapeType =
+        shapeTypes[_random.nextInt(
+          min(difficulty.shapeCount - 1, shapeTypes.length),
+        )];
 
     int answer;
     String prompt;
@@ -939,7 +1048,11 @@ class PuzzleGenerator {
     }
 
     final targetItems = [
-      ShapeItem(shape: displayShape, color: ShapeColor.blue, fill: ShapeFill.filled),
+      ShapeItem(
+        shape: displayShape,
+        color: ShapeColor.blue,
+        fill: ShapeFill.filled,
+      ),
     ];
 
     return _buildMathPuzzle(
@@ -960,7 +1073,11 @@ class PuzzleGenerator {
     final answer = 180 - a1 - a2;
 
     final targetItems = [
-      const ShapeItem(shape: Shape.triangle, color: ShapeColor.orange, fill: ShapeFill.filled),
+      const ShapeItem(
+        shape: Shape.triangle,
+        color: ShapeColor.orange,
+        fill: ShapeFill.filled,
+      ),
     ];
 
     return _buildMathPuzzle(
@@ -977,7 +1094,7 @@ class PuzzleGenerator {
   Puzzle _generateGeometrySymmetry(DifficultyParameters difficulty) {
     // How many lines of symmetry does a shape have?
     final shapes = [
-      (Shape.circle, 'circle', 99),        // infinite → we say "infinite"
+      (Shape.circle, 'circle', 99), // infinite → we say "infinite"
       (Shape.square, 'square', 4),
       (Shape.triangle, 'equilateral triangle', 3),
       (Shape.hexagon, 'hexagon', 6),
@@ -991,7 +1108,11 @@ class PuzzleGenerator {
     final answer = pick.$3;
 
     final targetItems = [
-      ShapeItem(shape: displayShape, color: ShapeColor.purple, fill: ShapeFill.filled),
+      ShapeItem(
+        shape: displayShape,
+        color: ShapeColor.purple,
+        fill: ShapeFill.filled,
+      ),
     ];
 
     if (answer == 99) {
@@ -1051,18 +1172,30 @@ class PuzzleGenerator {
     for (int i = 0; i < objectCount; i++) {
       final id = i == heaviestIdx ? correctId : _uuid();
       final color = _randomColor(palette);
-      options.add(PuzzleOption(
-        id: id,
-        items: List.generate(weights[i], (_) =>
-          ShapeItem(shape: Shape.circle, color: color, fill: ShapeFill.filled)),
-        label: '${weights[i]} kg',
-      ));
+      options.add(
+        PuzzleOption(
+          id: id,
+          items: List.generate(
+            weights[i],
+            (_) => ShapeItem(
+              shape: Shape.circle,
+              color: color,
+              fill: ShapeFill.filled,
+            ),
+          ),
+          label: '${weights[i]} kg',
+        ),
+      );
     }
     options.shuffle(_random);
 
     // Target shows a downward arrow (represented by a triangle)
     final targetItems = [
-      const ShapeItem(shape: Shape.triangle, color: ShapeColor.blue, fill: ShapeFill.filled),
+      const ShapeItem(
+        shape: Shape.triangle,
+        color: ShapeColor.blue,
+        fill: ShapeFill.filled,
+      ),
     ];
 
     return Puzzle(
@@ -1089,15 +1222,45 @@ class PuzzleGenerator {
 
     final correctId = _uuid();
     final options = <PuzzleOption>[
-      PuzzleOption(id: totalMomentum > 0 ? correctId : _uuid(), items: const [], label: 'Right →'),
-      PuzzleOption(id: totalMomentum < 0 ? correctId : _uuid(), items: const [], label: '← Left'),
-      PuzzleOption(id: totalMomentum == 0 ? correctId : _uuid(), items: const [], label: 'Stopped'),
+      PuzzleOption(
+        id: totalMomentum > 0 ? correctId : _uuid(),
+        items: const [],
+        label: 'Right →',
+      ),
+      PuzzleOption(
+        id: totalMomentum < 0 ? correctId : _uuid(),
+        items: const [],
+        label: '← Left',
+      ),
+      PuzzleOption(
+        id: totalMomentum == 0 ? correctId : _uuid(),
+        items: const [],
+        label: 'Stopped',
+      ),
     ]..shuffle(_random);
 
     final targetItems = [
-      ...List.generate(m1, (_) => const ShapeItem(shape: Shape.circle, color: ShapeColor.blue, fill: ShapeFill.filled)),
-      const ShapeItem(shape: Shape.star, color: ShapeColor.yellow, fill: ShapeFill.outlined), // vs
-      ...List.generate(m2, (_) => const ShapeItem(shape: Shape.circle, color: ShapeColor.red, fill: ShapeFill.filled)),
+      ...List.generate(
+        m1,
+        (_) => const ShapeItem(
+          shape: Shape.circle,
+          color: ShapeColor.blue,
+          fill: ShapeFill.filled,
+        ),
+      ),
+      const ShapeItem(
+        shape: Shape.star,
+        color: ShapeColor.yellow,
+        fill: ShapeFill.outlined,
+      ), // vs
+      ...List.generate(
+        m2,
+        (_) => const ShapeItem(
+          shape: Shape.circle,
+          color: ShapeColor.red,
+          fill: ShapeFill.filled,
+        ),
+      ),
     ];
 
     return Puzzle(
@@ -1131,9 +1294,24 @@ class PuzzleGenerator {
     w2 = (w1 * d1) ~/ actualD2;
 
     final targetItems = [
-      ...List.generate(w1, (_) => const ShapeItem(shape: Shape.square, color: ShapeColor.blue, fill: ShapeFill.filled)),
-      const ShapeItem(shape: Shape.triangle, color: ShapeColor.yellow, fill: ShapeFill.outlined), // fulcrum
-      const ShapeItem(shape: Shape.diamond, color: ShapeColor.green, fill: ShapeFill.outlined), // unknown
+      ...List.generate(
+        w1,
+        (_) => const ShapeItem(
+          shape: Shape.square,
+          color: ShapeColor.blue,
+          fill: ShapeFill.filled,
+        ),
+      ),
+      const ShapeItem(
+        shape: Shape.triangle,
+        color: ShapeColor.yellow,
+        fill: ShapeFill.outlined,
+      ), // fulcrum
+      const ShapeItem(
+        shape: Shape.diamond,
+        color: ShapeColor.green,
+        fill: ShapeFill.outlined,
+      ), // unknown
     ];
 
     return _buildMathPuzzle(
@@ -1202,11 +1380,9 @@ class PuzzleGenerator {
       if (fake < 0) fake = fake.abs();
       if (!usedAnswers.contains(fake)) {
         usedAnswers.add(fake);
-        wrongOptions.add(PuzzleOption(
-          id: _uuid(),
-          items: const [],
-          label: '$fake',
-        ));
+        wrongOptions.add(
+          PuzzleOption(id: _uuid(), items: const [], label: '$fake'),
+        );
       }
     }
 

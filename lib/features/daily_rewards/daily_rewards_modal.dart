@@ -24,9 +24,12 @@ class DailyRewardsModal extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('Daily Rewards',
-              style: theme.textTheme.titleLarge
-                  ?.copyWith(fontWeight: FontWeight.w800)),
+          Text(
+            'Daily Rewards',
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.w800,
+            ),
+          ),
           const SizedBox(height: MiToosaTheme.spacingMd),
           Wrap(
             spacing: MiToosaTheme.spacingSm,
@@ -75,8 +78,8 @@ class _DayTile extends StatelessWidget {
     final color = isCurrent
         ? theme.colorScheme.primary
         : isPast
-            ? theme.colorScheme.onSurface.withValues(alpha: 0.3)
-            : theme.colorScheme.onSurface.withValues(alpha: 0.6);
+        ? theme.colorScheme.onSurface.withValues(alpha: 0.3)
+        : theme.colorScheme.onSurface.withValues(alpha: 0.6);
 
     return Container(
       width: 80,
@@ -93,22 +96,28 @@ class _DayTile extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text('Day ${reward.day}',
-              style: theme.textTheme.labelMedium?.copyWith(color: color)),
+          Text(
+            'Day ${reward.day}',
+            style: theme.textTheme.labelMedium?.copyWith(color: color),
+          ),
           const SizedBox(height: 4),
-          Text('🪙 ${reward.coins}',
-              style: theme.textTheme.titleSmall
-                  ?.copyWith(fontWeight: FontWeight.w700)),
+          Text(
+            '🪙 ${reward.coins}',
+            style: theme.textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
           if (reward.isBonusDay) ...[
             const SizedBox(height: 2),
-            Text('BONUS',
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: theme.colorScheme.primary,
-                  fontWeight: FontWeight.w800,
-                )),
+            Text(
+              'BONUS',
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: theme.colorScheme.primary,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
           ],
-          if (isPast)
-            const Icon(Icons.check, size: 16, color: Colors.green),
+          if (isPast) const Icon(Icons.check, size: 16, color: Colors.green),
         ],
       ),
     );

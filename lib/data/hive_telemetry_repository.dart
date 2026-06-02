@@ -76,7 +76,9 @@ class HiveTelemetryRepository implements TelemetryRepository {
     }).toList();
 
     events.sort((left, right) {
-      final timestampCompare = left.value.timestamp.compareTo(right.value.timestamp);
+      final timestampCompare = left.value.timestamp.compareTo(
+        right.value.timestamp,
+      );
       if (timestampCompare != 0) return timestampCompare;
       return left.key.compareTo(right.key);
     });
@@ -100,21 +102,23 @@ class HiveTelemetryRepository implements TelemetryRepository {
     final box = _box;
     if (box == null || box.length <= maxEvents) return;
 
-    final orderedEntries = box.toMap().entries.map((entry) {
-      final raw = entry.value;
-      if (raw is! Map) {
-        throw const FormatException('Telemetry payload must be a map');
-      }
-      return MapEntry(
-        entry.key.toString(),
-        TelemetryEvent.fromJson(Map<dynamic, dynamic>.from(raw)),
-      );
-    }).toList()
-      ..sort((left, right) {
-        final timestampCompare = left.value.timestamp.compareTo(right.value.timestamp);
-        if (timestampCompare != 0) return timestampCompare;
-        return left.key.compareTo(right.key);
-      });
+    final orderedEntries =
+        box.toMap().entries.map((entry) {
+          final raw = entry.value;
+          if (raw is! Map) {
+            throw const FormatException('Telemetry payload must be a map');
+          }
+          return MapEntry(
+            entry.key.toString(),
+            TelemetryEvent.fromJson(Map<dynamic, dynamic>.from(raw)),
+          );
+        }).toList()..sort((left, right) {
+          final timestampCompare = left.value.timestamp.compareTo(
+            right.value.timestamp,
+          );
+          if (timestampCompare != 0) return timestampCompare;
+          return left.key.compareTo(right.key);
+        });
 
     final excess = orderedEntries.length - maxEvents;
     for (var i = 0; i < excess; i++) {

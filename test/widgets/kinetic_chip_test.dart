@@ -4,8 +4,8 @@ import 'package:mitoosa/widgets/kinetic_chip.dart';
 import 'package:mitoosa/theme/design_system.dart';
 
 Widget _wrap(Widget child) => MaterialApp(
-      home: Scaffold(body: SizedBox(width: 300, child: child)),
-    );
+  home: Scaffold(body: SizedBox(width: 300, child: child)),
+);
 
 void main() {
   group('KineticChip', () {
@@ -15,12 +15,14 @@ void main() {
     });
 
     testWidgets('shows leading widget when provided', (tester) async {
-      await tester.pumpWidget(_wrap(
-        const KineticChip(
-          label: 'Chip',
-          leading: Icon(Icons.star, key: ValueKey('leading_icon')),
+      await tester.pumpWidget(
+        _wrap(
+          const KineticChip(
+            label: 'Chip',
+            leading: Icon(Icons.star, key: ValueKey('leading_icon')),
+          ),
         ),
-      ));
+      );
       expect(find.byKey(const ValueKey('leading_icon')), findsOneWidget);
       // Spacer SizedBox is present when leading is provided
       final sizedBoxes = tester.widgetList<SizedBox>(find.byType(SizedBox));
@@ -38,9 +40,9 @@ void main() {
 
     testWidgets('accepts custom color', (tester) async {
       const customColor = Colors.teal;
-      await tester.pumpWidget(_wrap(
-        const KineticChip(label: 'Colored', color: customColor),
-      ));
+      await tester.pumpWidget(
+        _wrap(const KineticChip(label: 'Colored', color: customColor)),
+      );
 
       // The Container holding the chip decoration should use customColor-derived fill
       final containers = tester.widgetList<Container>(find.byType(Container));
@@ -74,8 +76,9 @@ void main() {
       });
 
       final deco = chipContainer.decoration as BoxDecoration;
-      final expectedFill =
-          AethericPulseDark.brandPurple.withValues(alpha: 0.20);
+      final expectedFill = AethericPulseDark.brandPurple.withValues(
+        alpha: 0.20,
+      );
       expect(deco.color, equals(expectedFill));
     });
   });

@@ -46,7 +46,9 @@ Widget _buildLogin() {
 
 void main() {
   group('LoginScreen — rendering', () {
-    testWidgets('renders without overflow in portrait (390×844)', (tester) async {
+    testWidgets('renders without overflow in portrait (390×844)', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(390, 844);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() {
@@ -57,12 +59,16 @@ void main() {
       await tester.pumpWidget(_buildLogin());
       await tester.pump(); // settle FutureProvider
 
-      expect(tester.takeException(), isNull,
-          reason: 'No RenderFlex overflow in portrait');
+      expect(
+        tester.takeException(),
+        isNull,
+        reason: 'No RenderFlex overflow in portrait',
+      );
     });
 
-    testWidgets('brand title renders via textTheme.headlineLarge (Phase 2 guard)',
-        (tester) async {
+    testWidgets('brand title renders via textTheme.headlineLarge (Phase 2 guard)', (
+      tester,
+    ) async {
       await tester.pumpWidget(_buildLogin());
       await tester.pump();
 
@@ -70,59 +76,76 @@ void main() {
       // with Text('miToosa', style: Theme.of(context).textTheme.headlineLarge).
       // If textTheme.headlineLarge is null, Text renders with default style —
       // this test confirms the text is still visible (non-null resolution).
-      expect(find.text('miToosa'), findsOneWidget,
-          reason: 'headlineLarge must resolve to a non-null style');
+      expect(
+        find.text('miToosa'),
+        findsOneWidget,
+        reason: 'headlineLarge must resolve to a non-null style',
+      );
     });
 
-    testWidgets('subtitle renders via textTheme.bodyMedium (Phase 2 guard)',
-        (tester) async {
+    testWidgets('subtitle renders via textTheme.bodyMedium (Phase 2 guard)', (
+      tester,
+    ) async {
       await tester.pumpWidget(_buildLogin());
       await tester.pump();
 
-      expect(find.text('Unlock Your Cognitive Potential'), findsOneWidget,
-          reason: 'bodyMedium must resolve to a non-null style');
+      expect(
+        find.text('Unlock Your Cognitive Potential'),
+        findsOneWidget,
+        reason: 'bodyMedium must resolve to a non-null style',
+      );
     });
   });
 
   group('LoginScreen — accessibility', () {
     testWidgets(
-        'CTA ConstrainedBox satisfies minTapTarget ≥ 44 pt (Phase 3 guard)',
-        (tester) async {
-      tester.view.physicalSize = const Size(390, 844);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(() {
-        tester.view.resetPhysicalSize();
-        tester.view.resetDevicePixelRatio();
-      });
+      'CTA ConstrainedBox satisfies minTapTarget ≥ 44 pt (Phase 3 guard)',
+      (tester) async {
+        tester.view.physicalSize = const Size(390, 844);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
 
-      await tester.pumpWidget(_buildLogin());
-      await tester.pump();
+        await tester.pumpWidget(_buildLogin());
+        await tester.pump();
 
-      // The CTA button is wrapped in:
-      //   ConstrainedBox(constraints: BoxConstraints(minHeight: minTapTarget))
-      // Verify the rendered box honours the 44 pt WCAG touch-target floor.
-      final constrainedBoxes = tester
-          .widgetList<ConstrainedBox>(find.byType(ConstrainedBox))
-          .where((cb) =>
-              cb.constraints.minHeight >= AethericPulseDark.minTapTarget)
-          .toList();
+        // The CTA button is wrapped in:
+        //   ConstrainedBox(constraints: BoxConstraints(minHeight: minTapTarget))
+        // Verify the rendered box honours the 44 pt WCAG touch-target floor.
+        final constrainedBoxes = tester
+            .widgetList<ConstrainedBox>(find.byType(ConstrainedBox))
+            .where(
+              (cb) =>
+                  cb.constraints.minHeight >= AethericPulseDark.minTapTarget,
+            )
+            .toList();
 
-      expect(constrainedBoxes, isNotEmpty,
+        expect(
+          constrainedBoxes,
+          isNotEmpty,
           reason:
               'At least one ConstrainedBox must enforce minHeight ≥ '
-              '${AethericPulseDark.minTapTarget} pt (WCAG touch target)');
-    });
+              '${AethericPulseDark.minTapTarget} pt (WCAG touch target)',
+        );
+      },
+    );
 
-    testWidgets('CTA has Semantics button label for screen readers',
-        (tester) async {
+    testWidgets('CTA has Semantics button label for screen readers', (
+      tester,
+    ) async {
       await tester.pumpWidget(_buildLogin());
       await tester.pump();
 
       final ctaSemanticsLabel = find.bySemanticsLabel(
         RegExp('Get started', caseSensitive: false),
       );
-      expect(ctaSemanticsLabel, findsAtLeastNWidgets(1),
-          reason: 'CTA must expose a Semantics label for assistive technology');
+      expect(
+        ctaSemanticsLabel,
+        findsAtLeastNWidgets(1),
+        reason: 'CTA must expose a Semantics label for assistive technology',
+      );
     });
   });
 }

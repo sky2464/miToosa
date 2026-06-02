@@ -39,7 +39,9 @@ Future<void> main(List<String> args) async {
   final encoded = base64UrlEncode(key);
   final keyFile = File('$storageDir/hive_encryption_key_base64.txt');
   await keyFile.writeAsString(encoded);
-  stdout.writeln('Generated encryption key and wrote to ${keyFile.path} (dev only).');
+  stdout.writeln(
+    'Generated encryption key and wrote to ${keyFile.path} (dev only).',
+  );
 
   // Delete plaintext files (if present) to allow creating encrypted box with same name.
   try {
@@ -62,5 +64,7 @@ Future<void> main(List<String> args) async {
   }
 
   await encBox.close();
-  stdout.writeln('Migration complete. Please remove $storageDir/hive_encryption_key_base64.txt from developer machines and store keys securely.');
+  stdout.writeln(
+    'Migration complete. Please remove $storageDir/hive_encryption_key_base64.txt from developer machines and store keys securely.',
+  );
 }

@@ -60,25 +60,24 @@ void main() {
         valueKey: 'hive_encryption_key_v1',
         length: 64,
       );
-      expect(ks1, equals(ks2),
-          reason: 'Same salt + key + length must produce identical bytes');
+      expect(
+        ks1,
+        equals(ks2),
+        reason: 'Same salt + key + length must produce identical bytes',
+      );
     });
 
     test('keystream differs across keys (per-key isolation)', () {
       final salt = List<int>.generate(16, (i) => i);
-      final ks1 = _expectedKeystream(
-        salt: salt,
-        valueKey: 'key_a',
-        length: 32,
+      final ks1 = _expectedKeystream(salt: salt, valueKey: 'key_a', length: 32);
+      final ks2 = _expectedKeystream(salt: salt, valueKey: 'key_b', length: 32);
+      expect(
+        ks1,
+        isNot(equals(ks2)),
+        reason:
+            'Different valueKey must produce different keystreams '
+            '(prevents shared keystream attacks across stored items)',
       );
-      final ks2 = _expectedKeystream(
-        salt: salt,
-        valueKey: 'key_b',
-        length: 32,
-      );
-      expect(ks1, isNot(equals(ks2)),
-          reason: 'Different valueKey must produce different keystreams '
-              '(prevents shared keystream attacks across stored items)');
     });
 
     test('keystream differs across salts (per-install isolation)', () {
@@ -92,15 +91,33 @@ void main() {
         valueKey: 'shared_key',
         length: 32,
       );
-      expect(ks1, isNot(equals(ks2)),
-          reason: 'Different salts must produce different keystreams '
-              '(per-install crypto isolation)');
+      expect(
+        ks1,
+        isNot(equals(ks2)),
+        reason:
+            'Different salts must produce different keystreams '
+            '(per-install crypto isolation)',
+      );
     });
 
     test('round-trip: XOR encrypt then XOR decrypt recovers plaintext', () {
       final salt = [
-        0xfe, 0xed, 0xfa, 0xce, 0xde, 0xad, 0xbe, 0xef,
-        0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef,
+        0xfe,
+        0xed,
+        0xfa,
+        0xce,
+        0xde,
+        0xad,
+        0xbe,
+        0xef,
+        0x01,
+        0x23,
+        0x45,
+        0x67,
+        0x89,
+        0xab,
+        0xcd,
+        0xef,
       ];
       const plaintext = 'Hive AES-256 encryption key, 44-char base64 string!';
       final ptBytes = utf8.encode(plaintext);
@@ -115,10 +132,16 @@ void main() {
       // Decrypt
       final recovered = _xor(ct, ks);
 
-      expect(utf8.decode(recovered), equals(plaintext),
-          reason: 'XOR with the same keystream must be involutive');
-      expect(ct, isNot(equals(ptBytes)),
-          reason: 'Ciphertext should differ from plaintext (sanity)');
+      expect(
+        utf8.decode(recovered),
+        equals(plaintext),
+        reason: 'XOR with the same keystream must be involutive',
+      );
+      expect(
+        ct,
+        isNot(equals(ptBytes)),
+        reason: 'Ciphertext should differ from plaintext (sanity)',
+      );
     });
 
     test('keystream extends correctly across HMAC block boundaries', () {
@@ -138,17 +161,26 @@ void main() {
           .convert(utf8.encode('miToosa-web-storage-v1|long_value|stream|3'))
           .bytes;
       // We requested 100 bytes — that's blocks 0, 1, 2 (96 bytes) + 4 bytes of block 3.
-      expect(ks.sublist(96, 100), equals(block3.sublist(0, 4)),
-          reason: 'Block boundary catenation must be correct');
+      expect(
+        ks.sublist(96, 100),
+        equals(block3.sublist(0, 4)),
+        reason: 'Block boundary catenation must be correct',
+      );
     });
 
     test('v2 prefix tag distinguishes ciphertext from legacy plaintext', () {
       const legacy = 'plain-uuid-like-value';
       const v2 = 'v2:ZXhhbXBsZQ==';
-      expect(legacy.startsWith('v2:'), isFalse,
-          reason: 'Legacy v1 values must not collide with the v2 tag');
-      expect(v2.startsWith('v2:'), isTrue,
-          reason: 'v2 values carry the version tag for safe migration');
+      expect(
+        legacy.startsWith('v2:'),
+        isFalse,
+        reason: 'Legacy v1 values must not collide with the v2 tag',
+      );
+      expect(
+        v2.startsWith('v2:'),
+        isTrue,
+        reason: 'v2 values carry the version tag for safe migration',
+      );
     });
   });
 }

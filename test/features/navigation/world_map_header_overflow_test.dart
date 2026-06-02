@@ -6,7 +6,12 @@ import 'package:mitoosa/theme/design_system.dart';
 /// Reproduces the RenderFlex overflow reported in the header Row:
 ///   Row → [ title, Spacer, HeartsBar + XP badge ]
 /// at 392 px wide with hearts < 5 (both refuel + share buttons visible).
-Widget _headerRow({required double width, required int hearts, required int diamonds, required int xp}) {
+Widget _headerRow({
+  required double width,
+  required int hearts,
+  required int diamonds,
+  required int xp,
+}) {
   return MaterialApp(
     home: Scaffold(
       body: SizedBox(
@@ -29,16 +34,18 @@ Widget _headerRow({required double width, required int hearts, required int diam
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    HeartsBar(
-                      hearts: hearts,
-                      diamonds: diamonds,
-                    ),
+                    HeartsBar(hearts: hearts, diamonds: diamonds),
                     const SizedBox(width: 10),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 8,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.blue,
-                        borderRadius: BorderRadius.circular(MiToosaTheme.radiusMd),
+                        borderRadius: BorderRadius.circular(
+                          MiToosaTheme.radiusMd,
+                        ),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -62,37 +69,41 @@ Widget _headerRow({required double width, required int hearts, required int diam
 
 void main() {
   group('WorldMapScreen header Row overflow', () {
-    testWidgets('no overflow at 392px with hearts=3, diamonds=2 (both refuel+share visible)',
-        (tester) async {
-      tester.view.physicalSize = const Size(392, 852);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(() {
-        tester.view.resetPhysicalSize();
-        tester.view.resetDevicePixelRatio();
-      });
+    testWidgets(
+      'no overflow at 392px with hearts=3, diamonds=2 (both refuel+share visible)',
+      (tester) async {
+        tester.view.physicalSize = const Size(392, 852);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
 
-      await tester.pumpWidget(
-        _headerRow(width: 392, hearts: 3, diamonds: 2, xp: 120),
-      );
+        await tester.pumpWidget(
+          _headerRow(width: 392, hearts: 3, diamonds: 2, xp: 120),
+        );
 
-      // If there is a RenderFlex overflow the framework throws an assertion error.
-      expect(tester.takeException(), isNull);
-    });
+        // If there is a RenderFlex overflow the framework throws an assertion error.
+        expect(tester.takeException(), isNull);
+      },
+    );
 
-    testWidgets('no overflow at 320px with hearts=0, diamonds=0 (minimal content)',
-        (tester) async {
-      tester.view.physicalSize = const Size(320, 568);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(() {
-        tester.view.resetPhysicalSize();
-        tester.view.resetDevicePixelRatio();
-      });
+    testWidgets(
+      'no overflow at 320px with hearts=0, diamonds=0 (minimal content)',
+      (tester) async {
+        tester.view.physicalSize = const Size(320, 568);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
 
-      await tester.pumpWidget(
-        _headerRow(width: 320, hearts: 0, diamonds: 0, xp: 0),
-      );
+        await tester.pumpWidget(
+          _headerRow(width: 320, hearts: 0, diamonds: 0, xp: 0),
+        );
 
-      expect(tester.takeException(), isNull);
-    });
+        expect(tester.takeException(), isNull);
+      },
+    );
   });
 }

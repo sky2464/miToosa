@@ -5,13 +5,11 @@ import 'package:mitoosa/features/local_play/local_session_screen.dart';
 
 void main() {
   group('LocalSessionScreen', () {
-    testWidgets('Renders without crashing - idle state', (WidgetTester tester) async {
+    testWidgets('Renders without crashing - idle state', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
-        const ProviderScope(
-          child: MaterialApp(
-            home: LocalSessionScreen(),
-          ),
-        ),
+        const ProviderScope(child: MaterialApp(home: LocalSessionScreen())),
       );
 
       expect(find.byType(LocalSessionScreen), findsOneWidget);

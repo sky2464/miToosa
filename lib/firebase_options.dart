@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart' show TargetPlatform, defaultTargetPlatform, kIsWeb;
+import 'package:flutter/foundation.dart'
+    show TargetPlatform, defaultTargetPlatform, kIsWeb;
 
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
@@ -15,7 +16,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.linux:
         throw _placeholderError();
       case TargetPlatform.fuchsia:
-        throw UnsupportedError('Fuchsia is not supported by this placeholder configuration.');
+        throw UnsupportedError(
+          'Fuchsia is not supported by this placeholder configuration.',
+        );
     }
   }
 

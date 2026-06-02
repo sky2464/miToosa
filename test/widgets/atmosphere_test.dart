@@ -3,10 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mitoosa/widgets/atmosphere.dart';
 
 Widget _wrap(Widget child) => MaterialApp(
-      home: Scaffold(
-        body: SizedBox(width: 400, height: 600, child: child),
-      ),
-    );
+  home: Scaffold(body: SizedBox(width: 400, height: 600, child: child)),
+);
 
 void main() {
   group('Atmosphere', () {

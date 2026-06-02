@@ -77,9 +77,7 @@ class StatPill extends StatelessWidget {
         color: t.bg,
         borderRadius: BorderRadius.circular(AP.radiusPill),
         border: Border.all(color: t.bd, width: 1),
-        boxShadow: glow
-            ? [BoxShadow(color: t.bd, blurRadius: 14)]
-            : null,
+        boxShadow: glow ? [BoxShadow(color: t.bd, blurRadius: 14)] : null,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

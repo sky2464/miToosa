@@ -51,11 +51,11 @@ class JoinSessionMessage extends NetworkMessage {
 
   @override
   Map<String, dynamic> toJson() => {
-        'type': 'join_session',
-        'playerId': playerId,
-        'sessionId': sessionId,
-        'timestamp': timestamp,
-      };
+    'type': 'join_session',
+    'playerId': playerId,
+    'sessionId': sessionId,
+    'timestamp': timestamp,
+  };
 
   static JoinSessionMessage fromJson(Map<String, dynamic> json) =>
       JoinSessionMessage(
@@ -82,11 +82,11 @@ class JoinSessionAckMessage extends NetworkMessage {
 
   @override
   Map<String, dynamic> toJson() => {
-        'type': 'join_session_ack',
-        'sessionId': sessionId,
-        'connectedPlayers': connectedPlayers,
-        'timestamp': timestamp,
-      };
+    'type': 'join_session_ack',
+    'sessionId': sessionId,
+    'connectedPlayers': connectedPlayers,
+    'timestamp': timestamp,
+  };
 
   static JoinSessionAckMessage fromJson(Map<String, dynamic> json) =>
       JoinSessionAckMessage(
@@ -115,12 +115,12 @@ class GameStartMessage extends NetworkMessage {
 
   @override
   Map<String, dynamic> toJson() => {
-        'type': 'game_start',
-        'sessionId': sessionId,
-        'levelId': levelId,
-        'durationSeconds': durationSeconds,
-        'timestamp': timestamp,
-      };
+    'type': 'game_start',
+    'sessionId': sessionId,
+    'levelId': levelId,
+    'durationSeconds': durationSeconds,
+    'timestamp': timestamp,
+  };
 
   static GameStartMessage fromJson(Map<String, dynamic> json) =>
       GameStartMessage(
@@ -131,8 +131,7 @@ class GameStartMessage extends NetworkMessage {
       );
 
   @override
-  List<Object?> get props =>
-      [sessionId, levelId, durationSeconds, timestamp];
+  List<Object?> get props => [sessionId, levelId, durationSeconds, timestamp];
 }
 
 /// Player selected an option in the current level.
@@ -159,16 +158,16 @@ class MoveSelectedMessage extends NetworkMessage {
 
   @override
   Map<String, dynamic> toJson() => {
-        'type': 'move_selected',
-        'playerId': playerId,
-        'sessionId': sessionId,
-        'levelId': levelId,
-        'optionIndex': optionIndex,
-        'isCorrect': isCorrect,
-        'stars': stars,
-        'xpGained': xpGained,
-        'timestamp': timestamp,
-      };
+    'type': 'move_selected',
+    'playerId': playerId,
+    'sessionId': sessionId,
+    'levelId': levelId,
+    'optionIndex': optionIndex,
+    'isCorrect': isCorrect,
+    'stars': stars,
+    'xpGained': xpGained,
+    'timestamp': timestamp,
+  };
 
   static MoveSelectedMessage fromJson(Map<String, dynamic> json) =>
       MoveSelectedMessage(
@@ -184,15 +183,15 @@ class MoveSelectedMessage extends NetworkMessage {
 
   @override
   List<Object?> get props => [
-        playerId,
-        sessionId,
-        levelId,
-        optionIndex,
-        isCorrect,
-        stars,
-        xpGained,
-        timestamp,
-      ];
+    playerId,
+    sessionId,
+    levelId,
+    optionIndex,
+    isCorrect,
+    stars,
+    xpGained,
+    timestamp,
+  ];
 }
 
 /// Host broadcasts timer tick to all clients (sent periodically).
@@ -209,11 +208,11 @@ class TimerTickMessage extends NetworkMessage {
 
   @override
   Map<String, dynamic> toJson() => {
-        'type': 'timer_tick',
-        'sessionId': sessionId,
-        'remainingSeconds': remainingSeconds,
-        'timestamp': timestamp,
-      };
+    'type': 'timer_tick',
+    'sessionId': sessionId,
+    'remainingSeconds': remainingSeconds,
+    'timestamp': timestamp,
+  };
 
   static TimerTickMessage fromJson(Map<String, dynamic> json) =>
       TimerTickMessage(
@@ -242,12 +241,12 @@ class PlayerConnectedMessage extends NetworkMessage {
 
   @override
   Map<String, dynamic> toJson() => {
-        'type': 'player_connected',
-        'sessionId': sessionId,
-        'playerId': playerId,
-        'playerName': playerName,
-        'timestamp': timestamp,
-      };
+    'type': 'player_connected',
+    'sessionId': sessionId,
+    'playerId': playerId,
+    'playerName': playerName,
+    'timestamp': timestamp,
+  };
 
   static PlayerConnectedMessage fromJson(Map<String, dynamic> json) =>
       PlayerConnectedMessage(
@@ -258,8 +257,7 @@ class PlayerConnectedMessage extends NetworkMessage {
       );
 
   @override
-  List<Object?> get props =>
-      [sessionId, playerId, playerName, timestamp];
+  List<Object?> get props => [sessionId, playerId, playerName, timestamp];
 }
 
 /// A player has disconnected from the session.
@@ -276,11 +274,11 @@ class PlayerDisconnectedMessage extends NetworkMessage {
 
   @override
   Map<String, dynamic> toJson() => {
-        'type': 'player_disconnected',
-        'sessionId': sessionId,
-        'playerId': playerId,
-        'timestamp': timestamp,
-      };
+    'type': 'player_disconnected',
+    'sessionId': sessionId,
+    'playerId': playerId,
+    'timestamp': timestamp,
+  };
 
   static PlayerDisconnectedMessage fromJson(Map<String, dynamic> json) =>
       PlayerDisconnectedMessage(
@@ -307,11 +305,11 @@ class SessionEndedMessage extends NetworkMessage {
 
   @override
   Map<String, dynamic> toJson() => {
-        'type': 'session_ended',
-        'sessionId': sessionId,
-        'reason': reason,
-        'timestamp': timestamp,
-      };
+    'type': 'session_ended',
+    'sessionId': sessionId,
+    'reason': reason,
+    'timestamp': timestamp,
+  };
 
   static SessionEndedMessage fromJson(Map<String, dynamic> json) =>
       SessionEndedMessage(
@@ -338,11 +336,11 @@ class RequestSyncMessage extends NetworkMessage {
 
   @override
   Map<String, dynamic> toJson() => {
-        'type': 'request_sync',
-        'playerId': playerId,
-        'sessionId': sessionId,
-        'timestamp': timestamp,
-      };
+    'type': 'request_sync',
+    'playerId': playerId,
+    'sessionId': sessionId,
+    'timestamp': timestamp,
+  };
 
   static RequestSyncMessage fromJson(Map<String, dynamic> json) =>
       RequestSyncMessage(
@@ -373,13 +371,13 @@ class SyncStateMessage extends NetworkMessage {
 
   @override
   Map<String, dynamic> toJson() => {
-        'type': 'sync_state',
-        'sessionId': sessionId,
-        'currentLevelId': currentLevelId,
-        'playerScores': playerScores,
-        'remainingSeconds': remainingSeconds,
-        'timestamp': timestamp,
-      };
+    'type': 'sync_state',
+    'sessionId': sessionId,
+    'currentLevelId': currentLevelId,
+    'playerScores': playerScores,
+    'remainingSeconds': remainingSeconds,
+    'timestamp': timestamp,
+  };
 
   static SyncStateMessage fromJson(Map<String, dynamic> json) =>
       SyncStateMessage(
@@ -392,12 +390,12 @@ class SyncStateMessage extends NetworkMessage {
 
   @override
   List<Object?> get props => [
-        sessionId,
-        currentLevelId,
-        playerScores,
-        remainingSeconds,
-        timestamp,
-      ];
+    sessionId,
+    currentLevelId,
+    playerScores,
+    remainingSeconds,
+    timestamp,
+  ];
 }
 
 /// Local play session metadata.
@@ -429,18 +427,22 @@ class LocalPlaySession extends Equatable {
     String? guestPlayerId,
     DateTime? createdAt,
     DateTime? expiresAt,
-  }) =>
-      LocalPlaySession(
-        id: id ?? this.id,
-        hostPlayerId: hostPlayerId ?? this.hostPlayerId,
-        guestPlayerId: guestPlayerId ?? this.guestPlayerId,
-        createdAt: createdAt ?? this.createdAt,
-        expiresAt: expiresAt ?? this.expiresAt,
-      );
+  }) => LocalPlaySession(
+    id: id ?? this.id,
+    hostPlayerId: hostPlayerId ?? this.hostPlayerId,
+    guestPlayerId: guestPlayerId ?? this.guestPlayerId,
+    createdAt: createdAt ?? this.createdAt,
+    expiresAt: expiresAt ?? this.expiresAt,
+  );
 
   @override
-  List<Object?> get props =>
-      [id, hostPlayerId, guestPlayerId, createdAt, expiresAt];
+  List<Object?> get props => [
+    id,
+    hostPlayerId,
+    guestPlayerId,
+    createdAt,
+    expiresAt,
+  ];
 }
 
 /// Score for a player in the current local session.
@@ -466,16 +468,20 @@ class PlayerScore extends Equatable {
     int? coinsGained,
     int? starsEarned,
     List<int>? moveHistory,
-  }) =>
-      PlayerScore(
-        playerId: playerId ?? this.playerId,
-        xpGained: xpGained ?? this.xpGained,
-        coinsGained: coinsGained ?? this.coinsGained,
-        starsEarned: starsEarned ?? this.starsEarned,
-        moveHistory: moveHistory ?? this.moveHistory,
-      );
+  }) => PlayerScore(
+    playerId: playerId ?? this.playerId,
+    xpGained: xpGained ?? this.xpGained,
+    coinsGained: coinsGained ?? this.coinsGained,
+    starsEarned: starsEarned ?? this.starsEarned,
+    moveHistory: moveHistory ?? this.moveHistory,
+  );
 
   @override
-  List<Object?> get props =>
-      [playerId, xpGained, coinsGained, starsEarned, moveHistory];
+  List<Object?> get props => [
+    playerId,
+    xpGained,
+    coinsGained,
+    starsEarned,
+    moveHistory,
+  ];
 }

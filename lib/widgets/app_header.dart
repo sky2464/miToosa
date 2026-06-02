@@ -66,8 +66,11 @@ class AppHeader extends StatelessWidget {
                           child: Image.asset(
                             avatarAsset,
                             fit: BoxFit.cover,
-                            errorBuilder: (_, _, _) =>
-                                const Icon(Icons.person, color: AP.fgMuted, size: 20),
+                            errorBuilder: (_, _, _) => const Icon(
+                              Icons.person,
+                              color: AP.fgMuted,
+                              size: 20,
+                            ),
                           ),
                         ),
                       ),

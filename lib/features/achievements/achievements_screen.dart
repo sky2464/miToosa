@@ -25,14 +25,18 @@ class AchievementsScreen extends ConsumerWidget {
       body: progressAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(
-          child: Text('Could not load achievements.',
-              style: Theme.of(context).textTheme.bodyMedium),
+          child: Text(
+            'Could not load achievements.',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
         ),
         data: (progress) {
           final unlocked = Set<String>.from(progress.unlockedAchievements);
           final totalLevels = progress.levelStars.length;
-          final totalStars =
-              progress.levelStars.values.fold<int>(0, (s, v) => s + v);
+          final totalStars = progress.levelStars.values.fold<int>(
+            0,
+            (s, v) => s + v,
+          );
 
           return ListView.separated(
             padding: const EdgeInsets.all(MiToosaTheme.spacingMd),
@@ -91,27 +95,35 @@ class _AchievementTile extends StatelessWidget {
               if (isUnlocked)
                 const Icon(Icons.check_circle, color: Colors.green, size: 32)
               else
-                Icon(Icons.emoji_events_outlined,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
-                    size: 32),
+                Icon(
+                  Icons.emoji_events_outlined,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                  size: 32,
+                ),
               const SizedBox(width: MiToosaTheme.spacingMd),
               // Info
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(achievement.title,
-                        style: theme.textTheme.titleSmall
-                            ?.copyWith(fontWeight: FontWeight.w700)),
+                    Text(
+                      achievement.title,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                     const SizedBox(height: 2),
-                    Text(achievement.description,
-                        style: theme.textTheme.bodySmall),
+                    Text(
+                      achievement.description,
+                      style: theme.textTheme.bodySmall,
+                    ),
                     if (!isUnlocked) ...[
                       const SizedBox(height: MiToosaTheme.spacingSm),
                       LinearProgressIndicator(
                         value: progress,
-                        backgroundColor:
-                            theme.colorScheme.onSurface.withValues(alpha: 0.1),
+                        backgroundColor: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.1,
+                        ),
                       ),
                     ],
                   ],
@@ -120,8 +132,7 @@ class _AchievementTile extends StatelessWidget {
               const SizedBox(width: MiToosaTheme.spacingSm),
               // Coin reward badge
               Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: theme.colorScheme.primaryContainer,
                   borderRadius: BorderRadius.circular(12),

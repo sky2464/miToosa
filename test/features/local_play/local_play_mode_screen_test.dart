@@ -7,11 +7,7 @@ void main() {
   group('LocalPlayModeScreen', () {
     testWidgets('Renders without crashing', (WidgetTester tester) async {
       await tester.pumpWidget(
-        const ProviderScope(
-          child: MaterialApp(
-            home: LocalPlayModeScreen(),
-          ),
-        ),
+        const ProviderScope(child: MaterialApp(home: LocalPlayModeScreen())),
       );
 
       expect(find.byType(LocalPlayModeScreen), findsOneWidget);

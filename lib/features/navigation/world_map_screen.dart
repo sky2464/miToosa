@@ -29,10 +29,14 @@ class WorldMapScreen extends ConsumerWidget {
     return KineticBackground(
       child: progressAsync.when(
         loading: () => const Center(
-            child: CircularProgressIndicator(color: AethericPulseDark.brandBlue)),
+          child: CircularProgressIndicator(color: AethericPulseDark.brandBlue),
+        ),
         error: (e, _) => Center(
-            child: Text('Error loading progress',
-                style: Theme.of(context).textTheme.bodyMedium)),
+          child: Text(
+            'Error loading progress',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ),
         data: (progress) => _TracksBody(progress: progress, tracks: tracks),
       ),
     );
@@ -67,7 +71,9 @@ class _TracksBodyState extends State<_TracksBody> {
 
     final filtered = _filtered;
     final featured = filtered.isNotEmpty ? filtered.first : null;
-    final rest = filtered.length > 1 ? filtered.sublist(1) : <TrackDefinition>[];
+    final rest = filtered.length > 1
+        ? filtered.sublist(1)
+        : <TrackDefinition>[];
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(
@@ -82,10 +88,10 @@ class _TracksBodyState extends State<_TracksBody> {
           gamesComplete: gamesInSession,
           onStart: featured != null
               ? () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => TrackDetailScreen(track: featured),
-                    ),
-                  )
+                  MaterialPageRoute(
+                    builder: (_) => TrackDetailScreen(track: featured),
+                  ),
+                )
               : null,
         ),
         const SizedBox(height: 14),
@@ -141,15 +147,16 @@ class _TracksBodyState extends State<_TracksBody> {
         ),
         const SizedBox(height: 16),
         // AC-003: Featured track
-        if (featured != null) ...[FeaturedTrack(
-              track: featured,
-              progress: progress,
-              onPlay: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => TrackDetailScreen(track: featured),
-                ),
+        if (featured != null) ...[
+          FeaturedTrack(
+            track: featured,
+            progress: progress,
+            onPlay: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => TrackDetailScreen(track: featured),
               ),
             ),
+          ),
           const SizedBox(height: 12),
         ],
         // AC-003: 2-col TrackTile grid
@@ -162,15 +169,17 @@ class _TracksBodyState extends State<_TracksBody> {
             crossAxisSpacing: 12,
             childAspectRatio: 1.05,
             children: rest
-                .map((t) => TrackTile(
-                      track: t,
-                      progress: progress,
-                      onPlay: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => TrackDetailScreen(track: t),
-                        ),
+                .map(
+                  (t) => TrackTile(
+                    track: t,
+                    progress: progress,
+                    onPlay: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => TrackDetailScreen(track: t),
                       ),
-                    ))
+                    ),
+                  ),
+                )
                 .toList(),
           ),
         const SizedBox(height: 16),
@@ -235,14 +244,12 @@ class _DailySparkHero extends StatelessWidget {
               Text(
                 'Daily spark · resets in ${h}h ${m}m',
                 style: AethericPulseDark.label(
-                    color: AethericPulseDark.brandBlue),
+                  color: AethericPulseDark.brandBlue,
+                ),
               ),
               const SizedBox(height: 8),
               // Headline
-              Text(
-                "Today's session",
-                style: AethericPulseDark.display(),
-              ),
+              Text("Today's session", style: AethericPulseDark.display()),
               const SizedBox(height: 20),
               // ProgressRing N/5 + skill dot sequence
               Row(
@@ -259,10 +266,7 @@ class _DailySparkHero extends StatelessWidget {
                           '$gamesComplete/5',
                           style: AethericPulseDark.headlineMd(),
                         ),
-                        Text(
-                          'games',
-                          style: AethericPulseDark.label(),
-                        ),
+                        Text('games', style: AethericPulseDark.label()),
                       ],
                     ),
                   ),
@@ -356,14 +360,17 @@ class _FilterChips extends StatelessWidget {
               onTap: () => onSelected(label),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: active
                       ? AethericPulseDark.brandBlue.withValues(alpha: 0.25)
                       : Colors.white.withValues(alpha: 0.06),
-                  borderRadius:
-                      BorderRadius.circular(AethericPulseDark.radiusPill),
+                  borderRadius: BorderRadius.circular(
+                    AethericPulseDark.radiusPill,
+                  ),
                   border: Border.all(
                     color: active
                         ? AethericPulseDark.brandBlue.withValues(alpha: 0.70)
@@ -403,8 +410,8 @@ class _StatsCard extends StatelessWidget {
     final history = progress.adaptiveHistory;
     final accuracy = history.isNotEmpty
         ? ((history.where((r) => r >= 4).length / history.length) * 100)
-            .clamp(0, 100)
-            .toDouble()
+              .clamp(0, 100)
+              .toDouble()
         : 92.0;
 
     return GlassCard(
@@ -415,8 +422,11 @@ class _StatsCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.monitor_heart_outlined,
-                  size: 22, color: AethericPulseDark.brandBlue),
+              const Icon(
+                Icons.monitor_heart_outlined,
+                size: 22,
+                color: AethericPulseDark.brandBlue,
+              ),
               const SizedBox(width: 8),
               Text('Stats', style: AethericPulseDark.headlineMd()),
             ],
@@ -461,14 +471,8 @@ class _LabeledBar extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              label,
-              style: AethericPulseDark.label(),
-            ),
-            Text(
-              value,
-              style: AethericPulseDark.label(color: valueColor),
-            ),
+            Text(label, style: AethericPulseDark.label()),
+            Text(value, style: AethericPulseDark.label(color: valueColor)),
           ],
         ),
         const SizedBox(height: 6),

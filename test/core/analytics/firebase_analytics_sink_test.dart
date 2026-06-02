@@ -35,9 +35,7 @@ void main() {
         'timestamp': dt,
       });
 
-      expect(result, {
-        'timestamp': dt.toUtc().toIso8601String(),
-      });
+      expect(result, {'timestamp': dt.toUtc().toIso8601String()});
     });
 
     test('converts Duration to milliseconds', () {
@@ -45,9 +43,7 @@ void main() {
         'elapsed': const Duration(seconds: 2, milliseconds: 250),
       });
 
-      expect(result, {
-        'elapsed': 2250,
-      });
+      expect(result, {'elapsed': 2250});
     });
 
     test('stringifies unsupported object values', () {
@@ -57,9 +53,7 @@ void main() {
         'unsupported': unsupported,
       });
 
-      expect(result, {
-        'unsupported': 'Unsupported(demo)',
-      });
+      expect(result, {'unsupported': 'Unsupported(demo)'});
     });
 
     test('drops null values but preserves non-null values', () {
@@ -68,9 +62,7 @@ void main() {
         'b': 'ok',
       });
 
-      expect(result, {
-        'b': 'ok',
-      });
+      expect(result, {'b': 'ok'});
     });
   });
 }

@@ -17,10 +17,7 @@ class TelemetryEvent {
     return TelemetryEvent(
       name: 'session_start',
       timestamp: (timestamp ?? DateTime.now()).toUtc(),
-      properties: {
-        'session_id': sessionId,
-        'source': source,
-      },
+      properties: {'session_id': sessionId, 'source': source},
     );
   }
 
@@ -112,10 +109,7 @@ class TelemetryEvent {
     return TelemetryEvent(
       name: 'streak_update',
       timestamp: (timestamp ?? DateTime.now()).toUtc(),
-      properties: {
-        'streak_count': streakCount,
-        'result': result,
-      },
+      properties: {'streak_count': streakCount, 'result': result},
     );
   }
 
@@ -127,10 +121,7 @@ class TelemetryEvent {
     return TelemetryEvent(
       name: 'achievement_unlocked',
       timestamp: (timestamp ?? DateTime.now()).toUtc(),
-      properties: {
-        'achievement_id': achievementId,
-        'coin_reward': coinReward,
-      },
+      properties: {'achievement_id': achievementId, 'coin_reward': coinReward},
     );
   }
 
@@ -142,10 +133,7 @@ class TelemetryEvent {
     return TelemetryEvent(
       name: 'daily_reward_claimed',
       timestamp: (timestamp ?? DateTime.now()).toUtc(),
-      properties: {
-        'day': day,
-        'coins': coins,
-      },
+      properties: {'day': day, 'coins': coins},
     );
   }
 
@@ -175,9 +163,7 @@ class TelemetryEvent {
     return TelemetryEvent(
       name: 'allowance_depleted',
       timestamp: (timestamp ?? DateTime.now()).toUtc(),
-      properties: {
-        'daily_limit': dailyLimit,
-      },
+      properties: {'daily_limit': dailyLimit},
     );
   }
 
@@ -188,9 +174,7 @@ class TelemetryEvent {
     return TelemetryEvent(
       name: 'share_attempt',
       timestamp: (timestamp ?? DateTime.now()).toUtc(),
-      properties: {
-        'result': result,
-      },
+      properties: {'result': result},
     );
   }
 
@@ -201,9 +185,7 @@ class TelemetryEvent {
     return TelemetryEvent(
       name: 'share_bonus_granted',
       timestamp: (timestamp ?? DateTime.now()).toUtc(),
-      properties: {
-        'bonus_games': bonusGames,
-      },
+      properties: {'bonus_games': bonusGames},
     );
   }
 
@@ -214,9 +196,7 @@ class TelemetryEvent {
     return TelemetryEvent(
       name: 'upgrade_shown',
       timestamp: (timestamp ?? DateTime.now()).toUtc(),
-      properties: {
-        'placement': placement,
-      },
+      properties: {'placement': placement},
     );
   }
 
@@ -227,9 +207,7 @@ class TelemetryEvent {
     return TelemetryEvent(
       name: 'upgrade_tapped',
       timestamp: (timestamp ?? DateTime.now()).toUtc(),
-      properties: {
-        'placement': placement,
-      },
+      properties: {'placement': placement},
     );
   }
 }

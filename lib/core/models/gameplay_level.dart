@@ -26,6 +26,7 @@ class GameplayLevel extends Equatable {
   final String successMessage;
   final String retryMessage;
   final int perfectScore;
+
   /// Scales [perfectScore] when computing the level's earned score.
   ///
   /// Values > 1.0 represent increased difficulty (higher potential score);
@@ -62,14 +63,20 @@ class GameplayLevel extends Equatable {
           ShapeItem(shape: Shape.square),
         ],
         options: [
-          PuzzleOption(id: correctId, items: const [
-            ShapeItem(shape: Shape.circle),
-            ShapeItem(shape: Shape.square),
-          ]),
-          PuzzleOption(id: wrongId, items: const [
-            ShapeItem(shape: Shape.square),
-            ShapeItem(shape: Shape.triangle),
-          ]),
+          PuzzleOption(
+            id: correctId,
+            items: const [
+              ShapeItem(shape: Shape.circle),
+              ShapeItem(shape: Shape.square),
+            ],
+          ),
+          PuzzleOption(
+            id: wrongId,
+            items: const [
+              ShapeItem(shape: Shape.square),
+              ShapeItem(shape: Shape.triangle),
+            ],
+          ),
         ],
         correctOptionId: correctId,
       ),
@@ -95,12 +102,12 @@ class GameplayLevel extends Equatable {
 
   @override
   List<Object?> get props => [
-        title,
-        puzzle,
-        hint,
-        successMessage,
-        retryMessage,
-        perfectScore,
-        difficultyMultiplier,
-      ];
+    title,
+    puzzle,
+    hint,
+    successMessage,
+    retryMessage,
+    perfectScore,
+    difficultyMultiplier,
+  ];
 }

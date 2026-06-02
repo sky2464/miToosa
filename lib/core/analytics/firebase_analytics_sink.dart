@@ -13,10 +13,7 @@ class FirebaseAnalyticsSink implements AnalyticsSink {
   Future<void> track(TelemetryEvent event) {
     final parameters = sanitizeParameters(event.properties);
 
-    return _analytics.logEvent(
-      name: event.name,
-      parameters: parameters,
-    );
+    return _analytics.logEvent(name: event.name, parameters: parameters);
   }
 
   @visibleForTesting

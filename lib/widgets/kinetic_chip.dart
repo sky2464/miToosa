@@ -10,17 +10,16 @@ class KineticChip extends StatelessWidget {
   final Widget? leading;
   final Color? color;
 
-  const KineticChip({
-    super.key,
-    required this.label,
-    this.leading,
-    this.color,
-  });
+  const KineticChip({super.key, required this.label, this.leading, this.color});
 
   @override
   Widget build(BuildContext context) {
-    final fillColor = (color ?? AethericPulseDark.brandPurple).withValues(alpha: 0.20);
-    final borderColor = (color ?? AethericPulseDark.brandPurple).withValues(alpha: 0.30);
+    final fillColor = (color ?? AethericPulseDark.brandPurple).withValues(
+      alpha: 0.20,
+    );
+    final borderColor = (color ?? AethericPulseDark.brandPurple).withValues(
+      alpha: 0.30,
+    );
     final labelColor = color ?? AethericPulseDark.brandPurple;
 
     return Container(
@@ -33,14 +32,8 @@ class KineticChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (leading != null) ...[
-            leading!,
-            const SizedBox(width: 4),
-          ],
-          Text(
-            label,
-            style: AethericPulseDark.label(color: labelColor),
-          ),
+          if (leading != null) ...[leading!, const SizedBox(width: 4)],
+          Text(label, style: AethericPulseDark.label(color: labelColor)),
         ],
       ),
     );

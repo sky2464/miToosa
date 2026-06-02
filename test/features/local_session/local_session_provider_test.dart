@@ -74,10 +74,7 @@ void main() {
 
   group('LocalSessionPlayer', () {
     test('Creates player with default values', () {
-      final player = LocalSessionPlayer(
-        playerId: 'player-1',
-        name: 'Alice',
-      );
+      final player = LocalSessionPlayer(playerId: 'player-1', name: 'Alice');
 
       expect(player.playerId, 'player-1');
       expect(player.name, 'Alice');
@@ -93,10 +90,7 @@ void main() {
         xp: 100,
       );
 
-      final updated = original.copyWith(
-        xp: 150,
-        stars: 5,
-      );
+      final updated = original.copyWith(xp: 150, stars: 5);
 
       expect(updated.xp, 150);
       expect(updated.stars, 5);
@@ -124,10 +118,9 @@ void main() {
     });
 
     test('startHosting updates state to hosting', () async {
-      await container.read(localSessionProvider.notifier).startHosting(
-            'player-1',
-            'Alice',
-          );
+      await container
+          .read(localSessionProvider.notifier)
+          .startHosting('player-1', 'Alice');
 
       final state = container.read(localSessionProvider);
 
@@ -139,10 +132,9 @@ void main() {
     });
 
     test('startHosting creates expiry timeout', () async {
-      await container.read(localSessionProvider.notifier).startHosting(
-            'player-1',
-            'Alice',
-          );
+      await container
+          .read(localSessionProvider.notifier)
+          .startHosting('player-1', 'Alice');
 
       final state = container.read(localSessionProvider);
 
@@ -151,17 +143,11 @@ void main() {
     });
 
     test('recordMove updates player score', () async {
-      await container.read(localSessionProvider.notifier).startHosting(
-            'player-1',
-            'Alice',
-          );
+      await container
+          .read(localSessionProvider.notifier)
+          .startHosting('player-1', 'Alice');
 
-      container.read(localSessionProvider.notifier).recordMove(
-            0,
-            true,
-            3,
-            50,
-          );
+      container.read(localSessionProvider.notifier).recordMove(0, true, 3, 50);
 
       final state = container.read(localSessionProvider);
       final player = state.players['player-1'];
@@ -171,10 +157,9 @@ void main() {
     });
 
     test('startGame changes phase from hosting to playing', () async {
-      await container.read(localSessionProvider.notifier).startHosting(
-            'player-1',
-            'Alice',
-          );
+      await container
+          .read(localSessionProvider.notifier)
+          .startHosting('player-1', 'Alice');
 
       container.read(localSessionProvider.notifier).startGame();
 
@@ -183,10 +168,9 @@ void main() {
     });
 
     test('endSession resets to idle state', () async {
-      await container.read(localSessionProvider.notifier).startHosting(
-            'player-1',
-            'Alice',
-          );
+      await container
+          .read(localSessionProvider.notifier)
+          .startHosting('player-1', 'Alice');
 
       await container.read(localSessionProvider.notifier).endSession();
 
@@ -199,8 +183,7 @@ void main() {
 
     test('resetError clears error state', () {
       // Manually set error state for testing
-      container.read(localSessionProvider.notifier).state =
-          LocalSessionState(
+      container.read(localSessionProvider.notifier).state = LocalSessionState(
         phase: LocalSessionPhase.error,
         errorMessage: 'Test error',
       );
@@ -215,11 +198,9 @@ void main() {
     test('joinSession updates state', () async {
       const qrUrl = 'ws://192.168.1.100:8765?session=sess-123&playerId=host-1';
 
-      await container.read(localSessionProvider.notifier).joinSession(
-            qrUrl,
-            'player-2',
-            'Bob',
-          );
+      await container
+          .read(localSessionProvider.notifier)
+          .joinSession(qrUrl, 'player-2', 'Bob');
 
       final state = container.read(localSessionProvider);
 
@@ -230,11 +211,9 @@ void main() {
     });
 
     test('joinSession with invalid QR URL sets error', () async {
-      await container.read(localSessionProvider.notifier).joinSession(
-            'invalid-url',
-            'player-2',
-            'Bob',
-          );
+      await container
+          .read(localSessionProvider.notifier)
+          .joinSession('invalid-url', 'player-2', 'Bob');
 
       final state = container.read(localSessionProvider);
 
@@ -243,19 +222,15 @@ void main() {
     });
 
     test('Multiple players can be in session', () async {
-      await container.read(localSessionProvider.notifier).startHosting(
-            'player-1',
-            'Alice',
-          );
+      await container
+          .read(localSessionProvider.notifier)
+          .startHosting('player-1', 'Alice');
 
       // Manually add another player (in real scenario, would come from network)
       final state = container.read(localSessionProvider);
       final updatedPlayers = {
         ...state.players,
-        'player-2': LocalSessionPlayer(
-          playerId: 'player-2',
-          name: 'Bob',
-        ),
+        'player-2': LocalSessionPlayer(playerId: 'player-2', name: 'Bob'),
       };
 
       container.read(localSessionProvider.notifier).state = state.copyWith(
@@ -269,10 +244,9 @@ void main() {
     });
 
     test('Player score updates preserve other player data', () async {
-      await container.read(localSessionProvider.notifier).startHosting(
-            'player-1',
-            'Alice',
-          );
+      await container
+          .read(localSessionProvider.notifier)
+          .startHosting('player-1', 'Alice');
 
       // Add second player
       final state1 = container.read(localSessionProvider);
@@ -335,17 +309,20 @@ void main() {
     });
 
     test('recordMove is no-op when currentPlayerId is null', () async {
-      await container.read(localSessionProvider.notifier).startHosting('p1', 'Alice');
+      await container
+          .read(localSessionProvider.notifier)
+          .startHosting('p1', 'Alice');
       // Override to remove currentPlayerId
-      container.read(localSessionProvider.notifier).state =
-          container.read(localSessionProvider).copyWith(
-                phase: LocalSessionPhase.playing,
-              );
+      container.read(localSessionProvider.notifier).state = container
+          .read(localSessionProvider)
+          .copyWith(phase: LocalSessionPhase.playing);
       // State has no currentPlayerId set via copyWith (still has it from startHosting)
       // Manually clear it
       final s = container.read(localSessionProvider);
-      container.read(localSessionProvider.notifier).state =
-          LocalSessionState(phase: LocalSessionPhase.playing, players: s.players);
+      container.read(localSessionProvider.notifier).state = LocalSessionState(
+        phase: LocalSessionPhase.playing,
+        players: s.players,
+      );
 
       container.read(localSessionProvider.notifier).recordMove(0, true, 3, 50);
       // Should not crash, player scores unchanged
@@ -354,7 +331,9 @@ void main() {
     });
 
     test('resetError is no-op when not in error state', () async {
-      await container.read(localSessionProvider.notifier).startHosting('p1', 'Alice');
+      await container
+          .read(localSessionProvider.notifier)
+          .startHosting('p1', 'Alice');
       container.read(localSessionProvider.notifier).resetError();
       // Phase stays at hosting (no change)
       final state = container.read(localSessionProvider);

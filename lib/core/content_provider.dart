@@ -49,7 +49,9 @@ class ContentProvider {
   final PuzzleGenerator _generator = PuzzleGenerator();
 
   Future<void> init() async {
-    final String jsonString = await rootBundle.loadString('assets/content/worlds.json');
+    final String jsonString = await rootBundle.loadString(
+      'assets/content/worlds.json',
+    );
     final List<dynamic> jsonList = jsonDecode(jsonString);
     tracks = jsonList.map((e) => TrackDefinition.fromJson(e)).toList();
   }

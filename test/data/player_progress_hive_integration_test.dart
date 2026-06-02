@@ -84,7 +84,10 @@ void main() {
     expect(loaded.freeGamesRemaining, equals(12));
     expect(loaded.streakFreezeCount, equals(2));
     expect(loaded.streakMilestones, equals(const [3, 7]));
-    expect(loaded.levelStars, equals(const {'logic_0': 5, 'logic_1': 3, 'memory_0': 4}));
+    expect(
+      loaded.levelStars,
+      equals(const {'logic_0': 5, 'logic_1': 3, 'memory_0': 4}),
+    );
     expect(loaded.unlockedAchievements, equals(['first_clear', 'streak_3']));
     expect(loaded.adaptiveHistory, equals(const [3, 4, 5, 4, 3]));
     expect(loaded.lastLoginDate, equals(DateTime.utc(2026, 5, 15, 8)));
@@ -111,8 +114,11 @@ void main() {
     expect(loadedAlice?.streakCount, equals(1));
     expect(loadedBob?.totalXP, equals(500));
     expect(loadedBob?.streakCount, equals(9));
-    expect(box.keys.length, equals(2),
-        reason: 'Both players should be present in the reopened box');
+    expect(
+      box.keys.length,
+      equals(2),
+      reason: 'Both players should be present in the reopened box',
+    );
   });
 
   test('adaptive history mutations persist after close/reopen', () async {
@@ -145,10 +151,16 @@ void main() {
 
     box = await Hive.openBox<PlayerProgress>(boxName);
     final loaded = box.get(p.playerId);
-    expect(loaded?.dailyXP, equals(125),
-        reason: 'Daily XP total must survive persistence');
-    expect(loaded?.dailyXPDate, isNotNull,
-        reason: 'Daily XP date marker must survive persistence');
+    expect(
+      loaded?.dailyXP,
+      equals(125),
+      reason: 'Daily XP total must survive persistence',
+    );
+    expect(
+      loaded?.dailyXPDate,
+      isNotNull,
+      reason: 'Daily XP date marker must survive persistence',
+    );
   });
 
   test('seenTutorialWorlds list persists across reopen', () async {
@@ -166,8 +178,7 @@ void main() {
     expect(loaded?.seenTutorialWorlds.length, equals(2));
   });
 
-  test('delete removes the record from disk and reopen returns null',
-      () async {
+  test('delete removes the record from disk and reopen returns null', () async {
     final p = PlayerProgress.fresh(playerId: 'delete-player')..totalXP = 42;
 
     var box = await Hive.openBox<PlayerProgress>(boxName);
@@ -176,8 +187,11 @@ void main() {
     await box.close();
 
     box = await Hive.openBox<PlayerProgress>(boxName);
-    expect(box.get('delete-player'), isNull,
-        reason: 'Deleted records must not reappear after reopen');
+    expect(
+      box.get('delete-player'),
+      isNull,
+      reason: 'Deleted records must not reappear after reopen',
+    );
   });
 
   test('empty box returns null for any key', () async {
@@ -197,7 +211,10 @@ void main() {
     await box.close();
 
     box = await Hive.openBox<PlayerProgress>(boxName);
-    expect(box.get('overwrite')?.totalXP, equals(999),
-        reason: 'Last write must win after persistence');
+    expect(
+      box.get('overwrite')?.totalXP,
+      equals(999),
+      reason: 'Last write must win after persistence',
+    );
   });
 }

@@ -36,7 +36,9 @@ class WeeklyBars extends StatelessWidget {
           final today = i == todayIndex;
           return Expanded(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: i == 0 || i == 6 ? 0 : 3),
+              padding: EdgeInsets.symmetric(
+                horizontal: i == 0 || i == 6 ? 0 : 3,
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -57,15 +59,15 @@ class WeeklyBars extends StatelessWidget {
                           gradient: v == 0
                               ? null
                               : today
-                                  ? AP.gradPrimary
-                                  : LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: [
-                                        AP.blueLight.withValues(alpha: 0.7),
-                                        AP.purple.withValues(alpha: 0.4),
-                                      ],
-                                    ),
+                              ? AP.gradPrimary
+                              : LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    AP.blueLight.withValues(alpha: 0.7),
+                                    AP.purple.withValues(alpha: 0.4),
+                                  ],
+                                ),
                           color: v == 0
                               ? Colors.white.withValues(alpha: 0.06)
                               : null,
@@ -88,9 +90,7 @@ class WeeklyBars extends StatelessWidget {
                       fontFamily: 'Inter',
                       fontSize: 10,
                       fontWeight: today ? FontWeight.w700 : FontWeight.w500,
-                      color: today
-                          ? const Color(0xFFBFDBFE)
-                          : AP.fgMuted,
+                      color: today ? const Color(0xFFBFDBFE) : AP.fgMuted,
                     ),
                   ),
                 ],
