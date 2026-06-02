@@ -80,6 +80,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | BL-05 | Referral Tiers (#11) | Feature | L | EP-03 | P2 — _gated on playtest_ |
 | BL-06 | VIP / Ad-Free IAP (#12) | Feature | L | EP-03 | P2 — _gated on playtest_ |
 | BL-09 | Accessibility Audit (Physical Devices) (#15) | Chore | S | EP-04 | P3 — _manual_ |
+| DX-01 | gstack /plan-tune setup | Chore | XS | EP-05 | P4 — _specced 2026-06-01 ([docs/archived/spec-DX-01-gstack-plan-tune.md](archived/spec-DX-01-gstack-plan-tune.md)); partial build 2026-06-01 (commit 3dba900: `agent-preferences.md`, test plan, verify-pr gates); 3/5 spec tasks done; remaining: QA smoke T-001–T-006 + `/agtoosa-ship` docs_ |
 
 > **External-handoff items** (BL-01/02/03/12/13/14/15) and **S1-03/S1-04**
 > have been closed on GitHub with handoff notes. They reopen when the
@@ -178,3 +179,4 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-05-22 | /agtoosa-ship BL-21 — Ship 🚀 Done: moved BL-21 (+ pruned BL-19) from Active Cycle to Completed This Cycle; pruned done Active Tasks; changelog updated. WIP-hygiene re-audit: 0 commits prefixed `WIP:`; 3 status-grep hits (`5a83afb`, `2f9e6c4`, `7da5761`) confirmed false-positives (policy-discussion body text, not WIP commits). No history rewrite per 2026-05-14 policy. dart analyze clean, flutter test 870/870. | AgToosa |
 | 2026-06-01 | /plan-eng-review BL-21 — Follow-up PR: `pr-validation.yml` adds `dart format` gate, PR `concurrency`, hoisted `git fetch`; repo-wide `dart format`; [CLAUDE.md](../../CLAUDE.md) CI section synced. spec-BL-21 §5 complete. `dart analyze` clean (2 info), `flutter test` 870/870. | AgToosa |
 | 2026-06-01 | /agtoosa-ship BL-21 follow-up — Merged `chore/bl-21-ceo-review-pre-ship` + `chore/bl-21-eng-review-follow-up` to `main` (PRs #43/#44). Added `weekly-health.yml`. `scripts/verify-pr.sh` green; smoke **870/870**. Closed duplicate open PRs. | AgToosa |
+| 2026-06-01 | /agtoosa-task DX-01 — Enrolled **DX-01** in Backlog (Chore · P4 · EP-05). Resolves `/agtoosa-status` orphan/untracked findings for commit `3dba900` + `spec-DX-01-gstack-plan-tune.md`. Remaining: QA plan run + ship docs. | AgToosa |
