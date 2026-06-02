@@ -23,8 +23,15 @@
 | AC-010 | Should | T-021 | Integration | — |
 | AC-011 | Should | T-022 | Widget | — |
 | AC-012 | Could | T-023, T-024 | Unit + E2E | — |
+| AC-013 | Must | T-025, T-026 | Widget | ✅ T-025 |
+| AC-014 | Must | T-027 | Widget | ✅ T-027 |
+| AC-015 | Must | T-028 | Widget | ✅ T-028 |
+| AC-016 | Should | T-029 | Widget | — |
+| AC-017 | Must | T-030 | Widget | — |
 
-**Totals:** 12 ACs · 24 test IDs · 8 smoke tests (one per Must AC) · coverage target 80%.
+**Totals:** 17 ACs · 30 test IDs · 11 smoke tests (Must ACs incl. design-review AC-013–015) · coverage target 80%.
+
+> **Design review (2026-06-01):** AC-013–AC-017 added via `/plan-design-review` on [`spec-BL-04.md`](archived/spec-BL-04.md) §2.4–2.9.
 
 ---
 
@@ -77,6 +84,12 @@
 |----|------|------|----|----|
 | T-008 | YOU row is pinned even when player rank > 100 (outside top-N) | `test/features/main_app/leaderboard_screen_test.dart` | AC-003 | Widget |
 | T-022 | `friends` segment shows "Coming soon" empty state without backend call | `test/features/main_app/leaderboard_screen_test.dart` | AC-011 | Widget · asserts no Firestore call |
+| T-025 | Loading state shows podium + ≥3 row skeletons (not center-only spinner) | `test/features/main_app/leaderboard_screen_test.dart` | AC-013 | `@smoke` |
+| T-026 | Skeleton uses `AP.glassFill` / shimmer pattern per §2.5 | `test/features/main_app/leaderboard_screen_test.dart` | AC-013 | Golden optional |
+| T-027 | Firestore error shows retry banner with product-guidelines copy | `test/features/main_app/leaderboard_screen_test.dart` | AC-014 | `@smoke` · mock failed stream |
+| T-028 | Header rank line and XP-to-top-3 derive from neighbour provider (not `#4` demo) | `test/features/main_app/leaderboard_screen_test.dart` | AC-015 | `@smoke` |
+| T-029 | Kill-switch: cached board + "Updates paused" chip visible | `test/features/main_app/leaderboard_screen_test.dart` | AC-016 | Mocks RC + cache |
+| T-030 | Podium renders with 1–2 players only (no layout exception) | `test/features/main_app/leaderboard_screen_test.dart` | AC-017 | Seeded short list |
 
 ### E2E Tests (manual or integration_test/)
 
@@ -98,6 +111,10 @@
 | AC-006 | T-014: cross-UID write rejected (the headline impersonation test) |
 | AC-007 | T-017: minter is idempotent — repeat mint returns existing name |
 | AC-008 | T-018: burst write rejected at rules layer (not just at Function layer) |
+| AC-013 | T-025: skeleton visible before first snapshot (not full-screen spinner only) |
+| AC-014 | T-027: error path shows Retry affordance |
+| AC-015 | T-028: header updates when neighbour stream emits new rank |
+| AC-017 | T-030: single-player week does not crash podium |
 
 ---
 
@@ -113,14 +130,17 @@ Run before every CI build of any leaderboard-touching change:
 - T-014 (AC-006) · cross-UID write blocked
 - T-016 (AC-007) · pseudonym minter
 - T-018 (AC-008) · 5-second rate limit
+- T-025 (AC-013) · loading skeleton (podium + rows)
+- T-027 (AC-014) · error banner + retry
+- T-028 (AC-015) · dynamic header rank
 
-**8 smoke tests → covers all 8 Must-priority ACs.**
+**11 smoke tests → covers all 11 Must-priority ACs** (original 8 + design-review UI ACs).
 
 ---
 
 ## 5. Coverage Strategy
 
-- **Dart:** `flutter test --coverage` → `lcov.info` → `genhtml` report. Target 80% on `lib/data/leaderboard_repository.dart`, `lib/features/leaderboard/leaderboard_provider.dart`, `lib/data/models/leaderboard_entry.dart`.
+- **Dart:** `flutter test --coverage` → `lcov.info` → `genhtml` report. Target 80% on `lib/data/leaderboard_repository.dart`, `lib/features/leaderboard/leaderboard_provider.dart`, `lib/data/models/leaderboard_entry.dart`, and `lib/features/main_app/leaderboard_screen.dart` (UI states AC-013–017).
 - **TypeScript:** `vitest run --coverage` (v8 provider). Target 90% on the three pure modules (`score_validator`, `rate_limiter`, `display_name_minter`); they are pure functions and have no excuse to be untested.
 - **Rules:** every `allow read/write` branch must have at least one passing + one failing test.
 
