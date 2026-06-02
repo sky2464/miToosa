@@ -74,8 +74,9 @@ class _FeedbackToastState extends State<FeedbackToast>
     _ctrl.forward();
     // Auto-reverse after a short hold so it doesn't linger.
     Timer(const Duration(milliseconds: 900), () {
-      if (mounted)
+      if (mounted) {
         _ctrl.reverse().whenComplete(() => widget.onDismissed?.call());
+      }
     });
   }
 

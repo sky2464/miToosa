@@ -615,8 +615,9 @@ enum CurrencyTier {
 
   /// Returns the highest tier that [totalCoins] qualifies for.
   static CurrencyTier tierForCoins(int totalCoins) {
-    if (totalCoins >= CurrencyTier.diamond.minCoins)
+    if (totalCoins >= CurrencyTier.diamond.minCoins) {
       return CurrencyTier.diamond;
+    }
     if (totalCoins >= CurrencyTier.gold.minCoins) return CurrencyTier.gold;
     return CurrencyTier.silver;
   }
