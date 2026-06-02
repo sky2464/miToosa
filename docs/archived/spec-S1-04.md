@@ -2,9 +2,13 @@
 
 **Story ID:** S1-04
 **Epic:** EP-01 — Launch Readiness & Validation
-**Status:** Draft
+**Status:** Archived
 **Date:** 2026-05-04
 **Author:** AgToosa
+
+> **External handoff (2026-05-16):** GitHub #6 closed not-planned with handoff note.
+> Deferred until staging URL is live (see S1-01 / BL-12). Re-enroll in Active Cycle when
+> `[STAGING_URL]` is available for survey distribution.
 
 ---
 

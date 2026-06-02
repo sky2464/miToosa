@@ -8,6 +8,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), version
 ## [Unreleased]
 
 ### Changed
+- **AgToosa status remediation (2026-06-02):** S1-03 and S1-04 specs archived to `docs/archived/spec-S1-03.md` and `docs/archived/spec-S1-04.md` with Completed This Cycle external-handoff rows in `Docs/Master-Plan.md` (clears orphan spec warnings). BL-01+02 re-verified: **8/8** automated tasks done, **5** `[manual]` signing steps remain; `dart analyze` clean · `flutter test` **870/870**.
+
 - **BL-21 eng-review follow-up:** `pr-validation.yml` adds `dart format` gate, PR `concurrency`, and a single hoisted `git fetch` for path-filtered guards; repo-wide `dart format` so CI passes; [CLAUDE.md](../CLAUDE.md) CI section synced with BL-21 (manual dependency maintenance); `weekly-health.yml` (Mondays 06:00 UTC `flutter test` on `main`). Smoke: **870/870** via `scripts/verify-pr.sh`.
 
 ### Added

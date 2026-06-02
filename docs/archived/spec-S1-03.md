@@ -2,9 +2,13 @@
 
 **Story ID:** S1-03
 **Epic:** EP-01 — Launch Readiness & Validation
-**Status:** Draft
+**Status:** Archived
 **Date:** 2026-05-04
 **Author:** AgToosa
+
+> **External handoff (2026-05-16):** GitHub issue closed not-planned with handoff note.
+> Human QA remains — execute `docs/qa/wedge-qa-checklist.md` and update
+> `docs/RELEASE-GATES.md`. Re-enroll in Active Cycle when ready to run the walkthrough.
 
 ---
 

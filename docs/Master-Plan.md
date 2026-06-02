@@ -82,9 +82,10 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | BL-09 | Accessibility Audit (Physical Devices) (#15) | Chore | S | EP-04 | P3 — _manual_ |
 | DX-01 | gstack /plan-tune setup | Chore | XS | EP-05 | P4 — _specced 2026-06-01 ([docs/archived/spec-DX-01-gstack-plan-tune.md](archived/spec-DX-01-gstack-plan-tune.md)); partial build 2026-06-01 (commit 3dba900: `agent-preferences.md`, test plan, verify-pr gates); 3/5 spec tasks done; remaining: QA smoke T-001–T-006 + `/agtoosa-ship` docs_ |
 
-> **External-handoff items** (BL-01/02/03/12/13/14/15) and **S1-03/S1-04**
-> have been closed on GitHub with handoff notes. They reopen when the
-> human/external action is ready to proceed.
+> **External-handoff items** (BL-01/02/03/12/13/14/15) closed on GitHub with handoff notes.
+> **S1-03** and **S1-04** are tracked in Completed This Cycle (external handoff, not code-shipped);
+> specs archived under `docs/archived/spec-S1-03.md` and `docs/archived/spec-S1-04.md`.
+> Reopen in Active Cycle when the human/external action is ready.
 
 ## Blocked
 
@@ -111,6 +112,8 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | S1-05 | Repo & Docs Cleanup (cleanup_001) | 2026-05-04 | docs/archived/spec-cleanup-001.md · review-cleanup-001.md |
 | S1-02 | Analytics Backend Integration | 2026-05-11 | docs/archived/spec-s1-02.md · docs/archived/review-s1-02.md · docs/archived/ship-check-s1-02.md |
 | S1-01 | Staging Deployment & QA Gate | 2026-05-11 | docs/archived/spec-S1-01.md · docs/STAGING-SETUP.md · docs/RELEASE-GATES.md |
+| S1-03 | Manual Wedge QA Walkthrough (external handoff) | 2026-05-16 | GitHub closed not-planned with handoff · checklist `docs/qa/wedge-qa-checklist.md` · spec `docs/archived/spec-S1-03.md` · human QA pending |
+| S1-04 | Playtest Survey & Recruitment (external handoff) | 2026-05-16 | GitHub #6 closed not-planned · deferred until staging URL · spec `docs/archived/spec-S1-04.md` · reopen when BL-12/staging live |
 | S2-01 | Aetheric Pulse UI Redesign — foundation + 3 screens (partial) | 2026-05-14 | docs/archived/spec-S2-01.md · docs/archived/review-S2-01.md · 23/29 tasks · 4 P0 follow-ups filed (S2-02/03/04) |
 | BL-16 | Reconcile orphaned archived specs with Master-Plan | 2026-05-14 | All 5 orphan specs reconciled as H-01–H-05 historical entries. GitHub #30 closed. |
 | BL-17 | Split design_system.dart (737→4 files ≤324 lines) | 2026-05-15 | kinetic_obsidian.dart 324 · aetheric_pulse_dark.dart 269 · aetheric_pulse_light.dart 145 · design_system.dart 16 (barrel) · 743/743 tests passing. GitHub #26 #31 closed. |
@@ -181,3 +184,7 @@ Keep codebase healthy and dependencies current. Deliverables: automated dependen
 | 2026-06-01 | /plan-eng-review BL-21 — Follow-up PR: `pr-validation.yml` adds `dart format` gate, PR `concurrency`, hoisted `git fetch`; repo-wide `dart format`; [CLAUDE.md](../../CLAUDE.md) CI section synced. spec-BL-21 §5 complete. `dart analyze` clean (2 info), `flutter test` 870/870. | AgToosa |
 | 2026-06-01 | /agtoosa-ship BL-21 follow-up — Merged `chore/bl-21-ceo-review-pre-ship` + `chore/bl-21-eng-review-follow-up` to `main` (PRs #43/#44). Added `weekly-health.yml`. `scripts/verify-pr.sh` green; smoke **870/870**. Closed duplicate open PRs. | AgToosa |
 | 2026-06-01 | /agtoosa-task DX-01 — Enrolled **DX-01** in Backlog (Chore · P4 · EP-05). Resolves `/agtoosa-status` orphan/untracked findings for commit `3dba900` + `spec-DX-01-gstack-plan-tune.md`. Remaining: QA plan run + ship docs. | AgToosa |
+| 2026-06-02 | /agtoosa-task S1-03 + S1-04 — Reconciled orphan specs: archived `docs/archived/spec-S1-03.md` and `docs/archived/spec-S1-04.md` (Status: Archived); removed draft copies from `docs/` root; added Completed This Cycle rows (external handoff, not code-shipped). Clears `/agtoosa-status` orphan warnings. | AgToosa |
+| 2026-06-02 | /agtoosa-build BL-01+02 — Verification pass (no new automated tasks): counter confirmed **8/8** automated + **5 `[manual]`** (3.2, 5.1–5.4). Gates: `dart analyze` clean (2 info) · `flutter test` **870/870** · prompt-injection guard not re-run (docs-only delta). Manual signing still pending per `docs/RELEASE-SIGNING.md` and `docs/release/BL-01-02-*.md` runbooks. | AgToosa |
+| 2026-06-02 | /agtoosa-review security BL-01+02 — Signing scaffolding pass: `key.properties`/keystore patterns gitignored; release build fails loud on missing signing fields; no secrets in repo; runbooks document rotation and NEVER-rotate Android upload key. No code changes required. | AgToosa |
+| 2026-06-02 | /agtoosa-ship docs — Changelog + Master-Plan sync for S1-03/S1-04 archival and BL-01+02 verification re-pass. | AgToosa |
