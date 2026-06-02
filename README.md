@@ -6,6 +6,7 @@
 [![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 [![Platform](https://img.shields.io/badge/Platform-iOS%20%7C%20Android%20%7C%20Web%20%7C%20macOS-blue?style=for-the-badge)](https://flutter.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![PR Validation](https://github.com/sky2464/miToosa/actions/workflows/pr-validation.yml/badge.svg)](https://github.com/sky2464/miToosa/actions/workflows/pr-validation.yml)
 
 **miToosa** is a next-generation, dopamine-driven cognitive puzzle game designed to sharpen pattern recognition, memory, and IQ. Built with a **2026-native aesthetic**, it focuses on short, high-impact sessions that provide immediate neurological feedback using the **Aetheric Pulse** design system.
 

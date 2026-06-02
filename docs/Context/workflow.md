@@ -1,6 +1,6 @@
 # Workflow Configuration
 
-<!-- Last updated: 2026-05-04 — /agtoosa-init -->
+<!-- Last updated: 2026-06-01 — BL-21 DX expansion (verify-pr.sh) -->
 
 ## TDD
 tdd: true
@@ -28,9 +28,12 @@ lint_config: "analysis_options.yaml"
 
 ## Verification Gates
 verification_gates:
+  - "bash scripts/verify-pr.sh   # local mirror of pr-validation.yml (preferred before PR)"
+  - "dart format --output=none --set-exit-if-changed .  # included in verify-pr"
   - "dart analyze          # lint + type check"
   - "flutter test          # full test suite"
   - "flutter pub get       # dependency resolution"
+  - "dart pub run build_runner build --delete-conflicting-outputs  # when lib/ or pubspec changed (verify-pr runs conditionally)"
 # Run all gates before every commit or push.
 
 ## Code Generation

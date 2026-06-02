@@ -26,6 +26,7 @@ Before any deployment, verify all of the following. If **any** check fails, list
 | ✅ Acceptance criteria exist | `Docs/archived/spec-*.md` contains `## Acceptance Criteria` with at least one Must-priority row |
 | ✅ `/agtoosa-review` completed | `Docs/archived/review-*.md` exists and contains no unresolved 🔴 Critical findings |
 | ✅ All tests pass | Run full test suite and confirm green |
+| ✅ PR validation gates | `bash scripts/verify-pr.sh` (or CI `pr-validation.yml` green on the PR) |
 | ✅ Smoke tests tagged | Test plan or test suite has at least one `@smoke`-tagged test per Must-priority AC |
 | ✅ Changelog entry drafted | `Docs/AgToosa_Changelog.md` has an entry for this feature |
 | ✅ No `WIP:` commits remain | `git log` shows no commits prefixed with `WIP:` |
