@@ -80,7 +80,7 @@ Produce a read-only health dashboard by parsing `Docs/Master-Plan.md`, cross-ref
     *   For any commit referencing an In Progress story but whose task checkboxes haven't been updated, record: ℹ️ Info — "Recent commits touch `[ID]` files but Active Tasks checkboxes may be out of date. *Fix with:* `/agtoosa-build`".
 
 3.  **WIP / fixup commit scan:**
-    *   Run `git log --oneline --all --grep="WIP\|fixup!\|squash!"` to find WIP and fixup commits across all branches.
+    *   Run `git log --oneline --all --grep="^WIP:\|^fixup!\|^squash!"` to find WIP and fixup commits across all branches. Match **subject prefix only** (`WIP:`, `fixup!`, `squash!` at line start) — do not flag commits whose bodies mention WIP-hygiene policy text.
     *   For each WIP/fixup commit found, record: 🟡 Warning — "WIP/fixup commit found: `[hash] [message]` on branch `[branch]`. *Fix with:* `/agtoosa-ship` (squash step)".
 
 4.  **Branch divergence:**
