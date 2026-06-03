@@ -137,3 +137,86 @@ class AP {
   /// Map a badge ID (e.g. 'novice_mind') to its PNG path.
   static String badge(String id) => '$badgeDir/$id.png';
 }
+
+/// Theme-aware Aetheric Pulse tokens — use in widgets instead of hardcoded
+/// [AethericPulseDark] values so light mode renders correctly.
+class APTheme {
+  final bool isDark;
+  final Color fg;
+  final Color fgSecondary;
+  final Color fgMeta;
+  final Color fgMuted;
+  final Color glassFill;
+  final Color glassBorder;
+  final Color brandBlue;
+  final Color dotPendingFill;
+  final Color dotPendingBorder;
+  final Color chipInactiveFill;
+  final Color chipInactiveBorder;
+  final List<BoxShadow> cardShadows;
+
+  const APTheme._({
+    required this.isDark,
+    required this.fg,
+    required this.fgSecondary,
+    required this.fgMeta,
+    required this.fgMuted,
+    required this.glassFill,
+    required this.glassBorder,
+    required this.brandBlue,
+    required this.dotPendingFill,
+    required this.dotPendingBorder,
+    required this.chipInactiveFill,
+    required this.chipInactiveBorder,
+    required this.cardShadows,
+  });
+
+  factory APTheme.of(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return isDark ? APTheme.dark() : APTheme.light();
+  }
+
+  factory APTheme.dark() => APTheme._(
+    isDark: true,
+    fg: AethericPulseDark.onSurface,
+    fgSecondary: AethericPulseDark.onSurfaceSecondary,
+    fgMeta: AethericPulseDark.onSurfaceMeta,
+    fgMuted: AethericPulseDark.onSurfaceMuted,
+    glassFill: AethericPulseDark.glassFill,
+    glassBorder: AethericPulseDark.glassBorder,
+    brandBlue: AethericPulseDark.brandBlue,
+    dotPendingFill: Colors.white.withValues(alpha: 0.10),
+    dotPendingBorder: Colors.white.withValues(alpha: 0.30),
+    chipInactiveFill: Colors.white.withValues(alpha: 0.06),
+    chipInactiveBorder: Colors.white.withValues(alpha: 0.10),
+    cardShadows: [
+      ...AethericPulseDark.cardOuter,
+      ...AethericPulseDark.cardInner,
+    ],
+  );
+
+  factory APTheme.light() => APTheme._(
+    isDark: false,
+    fg: AethericPulseLight.lightOnSurface,
+    fgSecondary: AethericPulseLight.lightOnSurfaceVariant,
+    fgMeta: AethericPulseLight.lightOutline,
+    fgMuted: AethericPulseLight.lightOutlineVariant,
+    glassFill: AethericPulseLight.glassFillLight,
+    glassBorder: AethericPulseLight.glassBorderDimLight,
+    brandBlue: AethericPulseLight.softBlue,
+    dotPendingFill: AethericPulseLight.lightOutlineVariant.withValues(
+      alpha: 0.35,
+    ),
+    dotPendingBorder: AethericPulseLight.lightOutline.withValues(alpha: 0.55),
+    chipInactiveFill: AethericPulseLight.lightSurfaceContainer,
+    chipInactiveBorder: AethericPulseLight.lightOutlineVariant,
+    cardShadows: AethericPulseLight.shadowSoftBlue,
+  );
+
+  TextStyle display({Color? color}) => AP.display(color: color ?? fg);
+  TextStyle headlineMd({Color? color}) => AP.headlineMd(color: color ?? fg);
+  TextStyle headlineLg({Color? color}) => AP.headlineLg(color: color ?? fg);
+  TextStyle bodyMd({Color? color}) =>
+      AP.bodyMd(color: color ?? fgSecondary);
+  TextStyle label({Color? color}) => AP.label(color: color ?? fgMeta);
+}

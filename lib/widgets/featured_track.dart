@@ -26,6 +26,7 @@ class FeaturedTrack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = APTheme.of(context);
     final completed = progress.levelStars.entries
         .where((e) => e.key.startsWith('${track.id}_') && e.value > 0)
         .length;
@@ -38,16 +39,15 @@ class FeaturedTrack extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Expanded left column: name, subtitle, progress bar, CTA
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(track.name, style: AethericPulseDark.headlineLg()),
+                Text(track.name, style: theme.headlineLg()),
                 const SizedBox(height: 4),
                 Text(
                   track.subtitle,
-                  style: AethericPulseDark.bodyMd(),
+                  style: theme.bodyMd(),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -56,9 +56,7 @@ class FeaturedTrack extends StatelessWidget {
                 const SizedBox(height: 6),
                 Text(
                   '$completed / $total levels',
-                  style: AethericPulseDark.label(
-                    color: AethericPulseDark.onSurfaceMuted,
-                  ),
+                  style: theme.label(color: theme.fgMuted),
                 ),
                 const SizedBox(height: 16),
                 PrimaryButton(
@@ -70,28 +68,27 @@ class FeaturedTrack extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 16),
-          // 3D PNG icon well
           Container(
             width: 80,
             height: 80,
             decoration: BoxDecoration(
-              color: AethericPulseDark.brandBlue.withValues(alpha: 0.12),
+              color: theme.brandBlue.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(18),
               border: Border.all(
-                color: AethericPulseDark.brandBlue.withValues(alpha: 0.22),
+                color: theme.brandBlue.withValues(alpha: 0.22),
                 width: 1,
               ),
-              boxShadow: AethericPulseDark.blueGlow,
+              boxShadow: theme.isDark ? AethericPulseDark.blueGlow : null,
             ),
             child: Center(
               child: Image.asset(
                 AP.trackIcon(track.id),
                 width: 48,
                 height: 48,
-                errorBuilder: (_, err, stack) => const Icon(
+                errorBuilder: (_, err, stack) => Icon(
                   Icons.grid_view_rounded,
                   size: 36,
-                  color: AethericPulseDark.brandBlue,
+                  color: theme.brandBlue,
                 ),
               ),
             ),

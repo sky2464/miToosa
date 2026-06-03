@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../theme/design_system.dart';
+import '../theme/design_tokens.dart';
 
-/// Aetheric Pulse progress bar.
-/// 4px height, blue→purple gradient fill, cyan glow shadow.
+/// Aetheric Pulse progress bar — theme-aware track fill.
 /// [value] must be between 0.0 and 1.0.
 class KineticProgressBar extends StatelessWidget {
   final double value;
@@ -19,13 +19,14 @@ class KineticProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = APTheme.of(context);
     final clampedValue = value.clamp(0.0, 1.0);
     final fillGradient = gradient ?? AethericPulseDark.gradPrimary;
 
     return Container(
       height: height,
       decoration: BoxDecoration(
-        color: AethericPulseDark.glassFill,
+        color: theme.glassFill,
         borderRadius: BorderRadius.circular(AethericPulseDark.radiusPill),
       ),
       child: Stack(

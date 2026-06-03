@@ -9,13 +9,16 @@ import '../navigation/world_map_path_screen.dart';
 import 'progress_screen.dart';
 import 'leaderboard_screen.dart';
 import '../../features/settings/settings_screen.dart';
+import '../../data/player_progress.dart';
 import '../../data/player_progress_provider.dart';
 import '../../data/telemetry_provider.dart';
 import '../../data/telemetry_session_controller.dart';
 import '../../theme/design_system.dart';
 import '../../widgets/app_header.dart';
 import '../../widgets/atmosphere.dart';
+import '../../widgets/credits_menu_sheet.dart';
 import '../../widgets/kinetic_background.dart';
+import '../../widgets/profile_menu_sheet.dart';
 
 class MainAppShell extends ConsumerStatefulWidget {
   const MainAppShell({super.key});
@@ -67,9 +70,9 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final coins = ref
-        .watch(playerProgressProvider)
-        .maybeWhen(data: (p) => p.coins, orElse: () => 0);
+    final progressAsync = ref.watch(playerProgressProvider);
+    final coins = progressAsync.maybeWhen(data: (p) => p.coins, orElse: () => 0);
+    final progress = progressAsync.maybeWhen(data: (p) => p, orElse: () => null);
     return Scaffold(
       backgroundColor: isDark
           ? AethericPulseDark.surface
@@ -87,7 +90,11 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
             ),
           Column(
             children: [
-              _SafeAppHeader(coins: coins),
+              _SafeAppHeader(
+                coins: coins,
+                progress: progress,
+                onGoSettings: () => setState(() => _selectedIndex = 4),
+              ),
               Expanded(
                 child: IndexedStack(index: _selectedIndex, children: _pages),
               ),
@@ -107,14 +114,35 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
 
 class _SafeAppHeader extends StatelessWidget {
   final int coins;
-  const _SafeAppHeader({required this.coins});
+  final PlayerProgress? progress;
+  final VoidCallback onGoSettings;
+
+  const _SafeAppHeader({
+    required this.coins,
+    required this.progress,
+    required this.onGoSettings,
+  });
 
   @override
   Widget build(BuildContext context) {
     final top = MediaQuery.of(context).padding.top;
+    final level = progress != null ? (progress!.totalXP ~/ 1000) + 1 : 1;
     return Padding(
       padding: EdgeInsets.only(top: top),
-      child: AppHeader(credits: coins),
+      child: AppHeader(
+        credits: coins,
+        roleLabel: 'Pilot · Lv $level',
+        onProfileTap: progress == null
+            ? null
+            : () => showProfileMenuSheet(
+                context,
+                progress: progress!,
+                onEditProfile: onGoSettings,
+              ),
+        onCreditsTap: progress == null
+            ? null
+            : () => showCreditsMenuSheet(context, progress: progress!),
+      ),
     );
   }
 }

@@ -55,8 +55,8 @@ class _PrimaryButtonState extends State<PrimaryButton> {
                         offset: const Offset(0, 8),
                       ),
                       BoxShadow(
-                        color: Colors.white.withValues(alpha: 0.25),
-                        blurRadius: 0,
+                        color: Colors.white.withValues(alpha: 0.15),
+                        blurRadius: 4,
                         offset: const Offset(0, 1),
                       ),
                     ]
@@ -65,7 +65,6 @@ class _PrimaryButtonState extends State<PrimaryButton> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                // Inset shine highlight
                 Positioned.fill(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(AP.radiusPill),
@@ -74,9 +73,9 @@ class _PrimaryButtonState extends State<PrimaryButton> {
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
-                            end: Alignment.center,
+                            end: const Alignment(0, 0.35),
                             colors: [
-                              Colors.white.withValues(alpha: 0.18),
+                              Colors.white.withValues(alpha: 0.10),
                               Colors.transparent,
                             ],
                           ),

@@ -71,5 +71,26 @@ void main() {
       expect(size.width, greaterThanOrEqualTo(44));
       expect(size.height, greaterThanOrEqualTo(44));
     });
+
+    testWidgets('glow shadows avoid hard 1px edge (blurRadius > 0)', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrap(PrimaryButton(onPressed: () {}, child: const Text('Play'))),
+      );
+      final container = tester.widget<Container>(
+        find
+            .descendant(
+              of: find.byType(PrimaryButton),
+              matching: find.byType(Container),
+            )
+            .first,
+      );
+      final shadows =
+          (container.decoration as BoxDecoration).boxShadow ?? const [];
+      for (final shadow in shadows) {
+        expect(shadow.blurRadius, greaterThan(0));
+      }
+    });
   });
 }

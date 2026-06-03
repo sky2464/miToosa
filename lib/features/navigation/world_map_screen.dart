@@ -5,9 +5,9 @@ import '../../core/content_provider.dart';
 import '../../data/player_progress.dart';
 import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
+import '../../theme/design_tokens.dart';
 import '../../widgets/featured_track.dart';
 import '../../widgets/glass_card.dart';
-import '../../widgets/kinetic_background.dart';
 import '../../widgets/kinetic_progress_bar.dart';
 import '../../widgets/primary_button.dart';
 import '../../widgets/progress_ring.dart';
@@ -26,19 +26,17 @@ class WorldMapScreen extends ConsumerWidget {
     final progressAsync = ref.watch(playerProgressProvider);
     final tracks = ContentProvider().tracks;
 
-    return KineticBackground(
-      child: progressAsync.when(
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: AethericPulseDark.brandBlue),
-        ),
-        error: (e, _) => Center(
-          child: Text(
-            'Error loading progress',
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-        ),
-        data: (progress) => _TracksBody(progress: progress, tracks: tracks),
+    return progressAsync.when(
+      loading: () => const Center(
+        child: CircularProgressIndicator(color: AethericPulseDark.brandBlue),
       ),
+      error: (e, _) => Center(
+        child: Text(
+          'Error loading progress',
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+      ),
+      data: (progress) => _TracksBody(progress: progress, tracks: tracks),
     );
   }
 }
@@ -205,6 +203,7 @@ class _DailySparkHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = APTheme.of(context);
     final now = DateTime.now();
     final tomorrow = DateTime(now.year, now.month, now.day + 1);
     final remaining = tomorrow.difference(now);
@@ -230,7 +229,7 @@ class _DailySparkHero extends StatelessWidget {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    AethericPulseDark.brandBlue.withValues(alpha: 0.25),
+                    theme.brandBlue.withValues(alpha: 0.25),
                     Colors.transparent,
                   ],
                 ),
@@ -243,13 +242,10 @@ class _DailySparkHero extends StatelessWidget {
               // Eyebrow timer
               Text(
                 'Daily spark · resets in ${h}h ${m}m',
-                style: AethericPulseDark.label(
-                  color: AethericPulseDark.brandBlue,
-                ),
+                style: theme.label(color: theme.brandBlue),
               ),
               const SizedBox(height: 8),
-              // Headline
-              Text("Today's session", style: AethericPulseDark.display()),
+              Text("Today's session", style: theme.headlineLg()),
               const SizedBox(height: 20),
               // ProgressRing N/5 + skill dot sequence
               Row(
@@ -264,9 +260,9 @@ class _DailySparkHero extends StatelessWidget {
                       children: [
                         Text(
                           '$gamesComplete/5',
-                          style: AethericPulseDark.headlineMd(),
+                          style: theme.headlineMd(),
                         ),
-                        Text('games', style: AethericPulseDark.label()),
+                        Text('games', style: theme.label()),
                       ],
                     ),
                   ),
@@ -287,12 +283,12 @@ class _DailySparkHero extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: done
-                                      ? AethericPulseDark.brandBlue
-                                      : Colors.white.withValues(alpha: 0.10),
+                                      ? theme.brandBlue
+                                      : theme.dotPendingFill,
                                   border: Border.all(
                                     color: done
-                                        ? AethericPulseDark.brandBlue
-                                        : Colors.white.withValues(alpha: 0.30),
+                                        ? theme.brandBlue
+                                        : theme.dotPendingBorder,
                                     width: 1,
                                   ),
                                 ),
@@ -308,10 +304,8 @@ class _DailySparkHero extends StatelessWidget {
                             padding: const EdgeInsets.only(bottom: 2),
                             child: Text(
                               skillLabels[i],
-                              style: AethericPulseDark.label(
-                                color: done
-                                    ? AethericPulseDark.onSurface
-                                    : AethericPulseDark.onSurfaceMuted,
+                              style: theme.label(
+                                color: done ? theme.fg : theme.fgMuted,
                               ),
                             ),
                           );
@@ -325,6 +319,7 @@ class _DailySparkHero extends StatelessWidget {
               // PrimaryButton CTA
               PrimaryButton(
                 fullWidth: true,
+                glow: false,
                 onPressed: onStart,
                 child: const Text('Start session'),
               ),
@@ -348,6 +343,7 @@ class _FilterChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = APTheme.of(context);
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       physics: const BouncingScrollPhysics(),
@@ -366,25 +362,25 @@ class _FilterChips extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: active
-                      ? AethericPulseDark.brandBlue.withValues(alpha: 0.25)
-                      : Colors.white.withValues(alpha: 0.06),
+                      ? theme.brandBlue.withValues(alpha: 0.25)
+                      : theme.chipInactiveFill,
                   borderRadius: BorderRadius.circular(
                     AethericPulseDark.radiusPill,
                   ),
                   border: Border.all(
                     color: active
-                        ? AethericPulseDark.brandBlue.withValues(alpha: 0.70)
-                        : Colors.white.withValues(alpha: 0.10),
+                        ? theme.brandBlue.withValues(alpha: 0.70)
+                        : theme.chipInactiveBorder,
                     width: 1,
                   ),
-                  boxShadow: active ? AethericPulseDark.blueGlow : null,
+                  boxShadow: active && theme.isDark
+                      ? AethericPulseDark.blueGlow
+                      : null,
                 ),
                 child: Text(
                   label[0].toUpperCase() + label.substring(1),
-                  style: AethericPulseDark.label(
-                    color: active
-                        ? AethericPulseDark.brandBlue
-                        : AethericPulseDark.onSurfaceMuted,
+                  style: theme.label(
+                    color: active ? theme.brandBlue : theme.fgMuted,
                   ),
                 ),
               ),

@@ -5,12 +5,15 @@ import 'package:mitoosa/widgets/glass_card.dart';
 
 Widget _wrap(Widget child) => MaterialApp(home: Scaffold(body: child));
 
-/// Returns the BoxDecoration from the innermost Container in GlassCard.
+/// Returns the BoxDecoration from the GlassCard fill Container.
 BoxDecoration _innerDecoration(WidgetTester tester) {
   final containers = tester.widgetList<Container>(find.byType(Container));
   for (final c in containers) {
     final deco = c.decoration;
-    if (deco is BoxDecoration && deco.color == AethericPulseDark.glassFill) {
+    if (deco is BoxDecoration &&
+        deco.color != null &&
+        deco.border != null &&
+        deco.border!.top.width == 1) {
       return deco;
     }
   }
@@ -24,16 +27,34 @@ void main() {
       expect(find.text('hello'), findsOneWidget);
     });
 
-    testWidgets('default shadow uses cardOuter + cardInner (2 entries)', (
+    testWidgets('default shadow uses cardOuter + cardInner in dark theme', (
       tester,
     ) async {
-      await tester.pumpWidget(_wrap(const GlassCard(child: SizedBox.shrink())));
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AethericPulseDark.themeData,
+          home: const Scaffold(body: GlassCard(child: SizedBox.shrink())),
+        ),
+      );
       final deco = _innerDecoration(tester);
       final expected = [
         ...AethericPulseDark.cardOuter,
         ...AethericPulseDark.cardInner,
       ];
       expect(deco.boxShadow, equals(expected));
+    });
+
+    testWidgets('default shadow uses light soft blue shadow in light theme', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AethericPulseLight.lightTheme,
+          home: const Scaffold(body: GlassCard(child: SizedBox.shrink())),
+        ),
+      );
+      final deco = _innerDecoration(tester);
+      expect(deco.boxShadow, equals(AethericPulseLight.shadowSoftBlue));
     });
 
     testWidgets('neonGlow: true uses blueGlow shadow list', (tester) async {
@@ -75,6 +96,32 @@ void main() {
       );
       final deco = _innerDecoration(tester);
       expect(deco.boxShadow, equals(custom));
+    });
+
+    testWidgets('uses light glass fill in light theme', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AethericPulseLight.lightTheme,
+          home: const Scaffold(body: GlassCard(child: SizedBox.shrink())),
+        ),
+      );
+      final deco = _innerDecoration(tester);
+      expect(deco.color, equals(AethericPulseLight.glassFillLight));
+      expect(
+        deco.border?.top.color,
+        equals(AethericPulseLight.glassBorderDimLight),
+      );
+    });
+
+    testWidgets('uses dark glass fill in dark theme', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AethericPulseDark.themeData,
+          home: const Scaffold(body: GlassCard(child: SizedBox.shrink())),
+        ),
+      );
+      final deco = _innerDecoration(tester);
+      expect(deco.color, equals(AethericPulseDark.glassFill));
     });
   });
 }

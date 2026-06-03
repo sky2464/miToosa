@@ -3,10 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import '../theme/design_system.dart';
+import '../theme/design_tokens.dart';
 
-/// Aetheric Pulse glass card.
-/// rgba(255,255,255,0.08) fill, 24px backdrop blur, uniform 1px border,
-/// outer drop shadow + inner white glow. Default radius 24px.
+/// Aetheric Pulse glass card — theme-aware fill, blur, border, and shadows.
 class GlassCard extends StatelessWidget {
   final Widget child;
   final double borderRadius;
@@ -25,11 +24,9 @@ class GlassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final shadows =
-        boxShadow ??
-        (neonGlow
-            ? AethericPulseDark.blueGlow
-            : [...AethericPulseDark.cardOuter, ...AethericPulseDark.cardInner]);
+    final theme = APTheme.of(context);
+    final shadows = boxShadow ??
+        (neonGlow ? AethericPulseDark.blueGlow : theme.cardShadows);
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius),
       child: BackdropFilter(
@@ -37,9 +34,9 @@ class GlassCard extends StatelessWidget {
         child: Container(
           padding: padding,
           decoration: BoxDecoration(
-            color: AethericPulseDark.glassFill,
+            color: theme.glassFill,
             borderRadius: BorderRadius.circular(borderRadius),
-            border: Border.all(color: AethericPulseDark.glassBorder, width: 1),
+            border: Border.all(color: theme.glassBorder, width: 1),
             boxShadow: shadows,
           ),
           child: child,

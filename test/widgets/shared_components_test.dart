@@ -103,13 +103,30 @@ void main() {
       expect(find.text('PILOT · LV 3'), findsOneWidget);
     });
 
-    testWidgets('onAvatarTap fires when avatar is tapped', (tester) async {
+    testWidgets('onProfileTap fires when avatar is tapped', (tester) async {
       var tapped = false;
       await tester.pumpWidget(
-        _wrap(AppHeader(credits: 0, onAvatarTap: () => tapped = true)),
+        _wrap(AppHeader(credits: 0, onProfileTap: () => tapped = true)),
       );
-      // GestureDetector wraps a 36×36 container; tap the first found
       await tester.tap(find.byType(GestureDetector).first);
+      expect(tapped, isTrue);
+    });
+
+    testWidgets('onProfileTap fires when brand name is tapped', (tester) async {
+      var tapped = false;
+      await tester.pumpWidget(
+        _wrap(AppHeader(credits: 0, onProfileTap: () => tapped = true)),
+      );
+      await tester.tap(find.text('miToosa'));
+      expect(tapped, isTrue);
+    });
+
+    testWidgets('onCreditsTap fires when credits pill is tapped', (tester) async {
+      var tapped = false;
+      await tester.pumpWidget(
+        _wrap(AppHeader(credits: 100, onCreditsTap: () => tapped = true)),
+      );
+      await tester.tap(find.text('100'));
       expect(tapped, isTrue);
     });
   });
