@@ -6,7 +6,7 @@ Step-by-step runbooks for the five **deferred human tasks** on story **BL-01+02*
 |------|--------|-------------------------|
 | **3.2** | [Xcode automatic signing](BL-01-02-3.2-xcode-automatic-signing.md) | Debug + Release profiles; Archive builds without signing errors |
 | **5.1** | [Android keystore (`keytool`)](BL-01-02-5.1-android-keystore-keytool.md) | Upload keystore + populated `android/key.properties` |
-| **5.2** | [Apple Distribution + App Store Connect](BL-01-02-5.2-apple-distribution-app-store-connect.md) | Distribution identity in Keychain; app record for `com.chicademy.mitoosa` |
+| **5.2** | [Apple Distribution + App Store Connect](BL-01-02-5.2-apple-distribution-app-store-connect.md) | Distribution identity in Keychain; app record for `dev.atoosa.mitoosa` |
 | **5.3** | [Play Console upload key](BL-01-02-5.3-play-console-upload-key.md) | SHA-256 registered; Play App Signing enabled |
 | **5.4** | [E2E TestFlight + Play Internal](BL-01-02-5.4-e2e-testflight-play-internal.md) | Installable builds on physical devices from both stores |
 
@@ -34,7 +34,7 @@ You can parallelize **5.1** and **5.2** if two people (or two accounts) are avai
 |-------------|-----|---------|
 | Paid developer account | [Apple Developer Program](https://developer.apple.com/programs/) (team `TYK6BBNDW5` or your fork’s team) | [Google Play Console](https://play.google.com/console) developer account |
 | Hardware / OS | macOS with Xcode (latest stable) | Any OS with JDK (`keytool` ships with JDK) |
-| App identifiers | Bundle ID `com.chicademy.mitoosa` | Application ID `com.chicademy.mitoosa` (same as `android/app/build.gradle.kts`) |
+| App identifiers | Bundle ID `dev.atoosa.mitoosa` | Application ID `com.chicademy.mitoosa` (same as `android/app/build.gradle.kts`; Android launch is deferred) |
 | Repo state | `flutter pub get` · `cd ios && pod install` | `android/key.properties.template` present; **do not** commit real `android/key.properties` |
 
 ---

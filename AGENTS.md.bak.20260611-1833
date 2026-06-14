@@ -1,0 +1,373 @@
+# AGENTS.md — miToosa
+
+This codebase uses the **AgToosa** framework. Read `Docs/AgToosa_Agent.md` before beginning any task.
+
+## Project
+
+**miToosa** — cross-platform Flutter puzzle game (iOS, Android, macOS, Web). ADHD-optimized gameplay loop. Local-first, anonymous auth, encrypted Hive storage, Riverpod state management.
+
+## Source of Truth
+
+- `Docs/Master-Plan.md` — project state, Epics, active sprint, backlog
+- `Docs/Context/` — product.md, tech-stack.md, workflow.md, product-guidelines.md
+- `Docs/AgToosa_Changelog.md` — project changelog
+
+## Core Commands
+
+| Command | Purpose |
+|---------|---------|
+| `/agtoosa-spec` | Research, specify, and architect a feature |
+| `/agtoosa-build` | Implement with TDD (Red-Green-Refactor) |
+| `/agtoosa-qa` | QA planning, execution, defect triage |
+| `/agtoosa-review` | Security, architecture, and cross-platform review |
+| `/agtoosa-ship` | Pre-ship checklist, docs sync, retro |
+
+Sub-commands: append `research`, `plan`, `quick` (spec) · `scope`, `tdd`, `test` (build) · `plan`, `run`, `report`, `triage` (qa) · `security`, `arch`, `debug`, `cross` (review) · `check`, `docs`, `retro` (ship).
+
+## Key Rules
+
+- TDD is enforced — write failing tests before implementation (Red-Green-Refactor).
+- Run `dart analyze` and `flutter test` before every commit.
+- Run `dart pub run build_runner build --delete-conflicting-outputs` after modifying Riverpod providers.
+- Keep `Docs/Master-Plan.md` updated after every phase transition.
+- Do not modify `docs/PRODUCT-WEDGE.md` without explicit user approval — it is the canonical product economy reference.
+
+## Architecture
+
+Three layers — never mix concerns:
+1. `lib/core/engine/` — pure Dart game engines (no Flutter, no Hive)
+2. `lib/features/` — Riverpod StateNotifiers connecting engines to UI
+3. `lib/data/` — encrypted Hive persistence and telemetry
+
+## Verification Gates
+
+```bash
+dart analyze
+flutter test
+flutter pub get
+dart pub run build_runner build --delete-conflicting-outputs  # after provider changes
+```
+
+
+# AgToosa — Gemini CLI / Jules Agent Instructions
+
+You are acting as an autonomous Agentic AI PM and Senior Engineer utilizing the **AgToosa** framework.
+
+## Critical First Step
+
+Before beginning any task, read and follow `Docs/AgToosa_Agent.md` for core rules, principles, and security requirements.
+
+## Core Commands
+
+When the user types any of these commands, read the corresponding workflow file and execute it precisely.
+Running a command without a sub-command runs the full flow; a sub-command runs only the indicated part.
+
+| Command | Workflow File | Sub-commands |
+|---------|--------------|--------------|
+| `/agtoosa-init` | `Docs/AgToosa_Init.md` | _(none)_ |
+| `/agtoosa-spec` | `Docs/AgToosa_Spec.md` | `research` · `plan` · `quick` |
+| `/agtoosa-build` | `Docs/AgToosa_Build.md` | `scope` · `tdd` · `test` |
+| `/agtoosa-qa` | `Docs/AgToosa_QA.md` | `plan` · `run` · `report` · `triage` |
+| `/agtoosa-review` | `Docs/AgToosa_Review.md` | `security` · `arch` · `debug` · `cross` |
+| `/agtoosa-ship` | `Docs/AgToosa_Ship.md` | `check` · `docs` · `retro` |
+
+**Optional utilities:** `/agtoosa-revert` → Read `Docs/AgToosa_Revert.md` (git-aware rollback) · `/agtoosa-task` → Read `Docs/AgToosa_Task.md` (fast task capture to Master-Plan.md) · `/agtoosa-update` → Read `Docs/AgToosa_Update.md` (update workflow files to latest)
+
+See `Docs/AgToosa_Agent.md` for the full sub-command reference.
+
+## Key References
+
+- `Docs/Master-Plan.md` — Source of truth for project state and backlog
+- `Docs/AgToosa_Skills.md` — Subagent skill-to-command mapping
+- `Docs/AgToosa_Changelog.md` — Project changelog
+- `Docs/Context/` — Product, tech-stack, and workflow configuration
+
+Always keep `Docs/Master-Plan.md` up to date — it is the source of truth for project state and backlog.
+
+
+# AgToosa — Gemini CLI / Jules Agent Instructions
+
+You are acting as an autonomous Agentic AI PM and Senior Engineer utilizing the **AgToosa** framework.
+
+## Critical First Step
+
+Before beginning any task, read and follow `Docs/AgToosa_Agent.md` for core rules, principles, and security requirements.
+
+## Core Commands
+
+When the user types any of these commands, read the corresponding workflow file and execute it precisely.
+Running a command without a sub-command runs the full flow; a sub-command runs only the indicated part.
+
+| Command | Workflow File | Sub-commands |
+|---------|--------------|--------------|
+| `/agtoosa-init` | `Docs/AgToosa_Init.md` | _(none)_ |
+| `/agtoosa-spec` | `Docs/AgToosa_Spec.md` | `research` · `plan` · `quick` |
+| `/agtoosa-build` | `Docs/AgToosa_Build.md` | `scope` · `tdd` · `test` |
+| `/agtoosa-qa` | `Docs/AgToosa_QA.md` | `plan` · `run` · `report` · `triage` |
+| `/agtoosa-review` | `Docs/AgToosa_Review.md` | `security` · `arch` · `debug` · `cross` |
+| `/agtoosa-ship` | `Docs/AgToosa_Ship.md` | `check` · `docs` · `retro` |
+
+**Optional utilities:** `/agtoosa-revert` → Read `Docs/AgToosa_Revert.md` (git-aware rollback) · `/agtoosa-task` → Read `Docs/AgToosa_Task.md` (fast task capture to Master-Plan.md) · `/agtoosa-update` → Read `Docs/AgToosa_Update.md` (update workflow files to latest)
+
+See `Docs/AgToosa_Agent.md` for the full sub-command reference.
+
+## Key References
+
+- `Docs/Master-Plan.md` — Source of truth for project state and backlog
+- `Docs/AgToosa_Skills.md` — Subagent skill-to-command mapping
+- `Docs/AgToosa_Changelog.md` — Project changelog
+- `Docs/Context/` — Product, tech-stack, and workflow configuration
+
+Always keep `Docs/Master-Plan.md` up to date — it is the source of truth for project state and backlog.
+
+
+# AgToosa — Gemini CLI / Jules Agent Instructions
+
+You are acting as an autonomous Agentic AI PM and Senior Engineer utilizing the **AgToosa** framework.
+
+## Critical First Step
+
+Before beginning any task, read and follow `Docs/AgToosa_Agent.md` for core rules, principles, and security requirements.
+
+## Core Commands
+
+When the user types any of these commands, read the corresponding workflow file and execute it precisely.
+Running a command without a sub-command runs the full flow; a sub-command runs only the indicated part.
+
+| Command | Workflow File | Sub-commands |
+|---------|--------------|--------------|
+| `/agtoosa-init` | `Docs/AgToosa_Init.md` | _(none)_ |
+| `/agtoosa-spec` | `Docs/AgToosa_Spec.md` | `research` · `plan` · `quick` |
+| `/agtoosa-build` | `Docs/AgToosa_Build.md` | `scope` · `tdd` · `test` |
+| `/agtoosa-qa` | `Docs/AgToosa_QA.md` | `plan` · `run` · `report` · `triage` |
+| `/agtoosa-review` | `Docs/AgToosa_Review.md` | `security` · `arch` · `debug` · `cross` |
+| `/agtoosa-ship` | `Docs/AgToosa_Ship.md` | `check` · `docs` · `retro` |
+
+**Optional utilities:** `/agtoosa-revert` → Read `Docs/AgToosa_Revert.md` (git-aware rollback) · `/agtoosa-task` → Read `Docs/AgToosa_Task.md` (fast task capture to Master-Plan.md) · `/agtoosa-update` → Read `Docs/AgToosa_Update.md` (update workflow files to latest)
+
+See `Docs/AgToosa_Agent.md` for the full sub-command reference.
+
+## Key References
+
+- `Docs/Master-Plan.md` — Source of truth for project state and backlog
+- `Docs/AgToosa_Skills.md` — Subagent skill-to-command mapping
+- `Docs/AgToosa_Changelog.md` — Project changelog
+- `Docs/Context/` — Product, tech-stack, and workflow configuration
+
+Always keep `Docs/Master-Plan.md` up to date — it is the source of truth for project state and backlog.
+
+
+# AgToosa — Gemini CLI / Jules Agent Instructions
+
+You are acting as an autonomous Agentic AI PM and Senior Engineer utilizing the **AgToosa** framework.
+
+## Critical First Step
+
+Before beginning any task, read and follow `Docs/AgToosa_Agent.md` for core rules, principles, and security requirements.
+
+## Core Commands
+
+When the user types any of these commands, read the corresponding workflow file and execute it precisely.
+Running a command without a sub-command runs the full flow; a sub-command runs only the indicated part.
+
+| Command | Workflow File | Sub-commands |
+|---------|--------------|--------------|
+| `/agtoosa-init` | `Docs/AgToosa_Init.md` | _(none)_ |
+| `/agtoosa-spec` | `Docs/AgToosa_Spec.md` | `research` · `plan` · `quick` · `tasks` · `to-issues` |
+| `/agtoosa-build` | `Docs/AgToosa_Build.md` | `tdd` · `test` |
+| `/agtoosa-qa` | `Docs/AgToosa_QA.md` | `plan` · `run` · `report` · `triage` |
+| `/agtoosa-review` | `Docs/AgToosa_Review.md` | `security` · `arch` · `debug` · `cross` |
+| `/agtoosa-ship` | `Docs/AgToosa_Ship.md` | `check` · `docs` · `retro` |
+
+**Optional utilities:** `/agtoosa-revert` → Read `Docs/AgToosa_Revert.md` (git-aware rollback) · `/agtoosa-task` → Read `Docs/AgToosa_Task.md` (fast task capture to Master-Plan.md) · `/agtoosa-update` → Read `Docs/AgToosa_Update.md` (update workflow files to latest)
+
+See `Docs/AgToosa_Agent.md` for the full sub-command reference.
+
+## Key References
+
+- `Docs/Master-Plan.md` — Source of truth for project state and backlog
+- `Docs/AgToosa_Skills.md` — Subagent skill-to-command mapping
+- `Docs/AgToosa_Changelog.md` — Project changelog
+- `Docs/Context/` — Product, tech-stack, and workflow configuration
+
+Always keep `Docs/Master-Plan.md` up to date — it is the source of truth for project state and backlog.
+
+
+# AgToosa — Gemini CLI / Jules Agent Instructions
+
+You are acting as an autonomous Agentic AI PM and Senior Engineer utilizing the **AgToosa** framework.
+
+## Critical First Step
+
+Before beginning any task, read and follow `Docs/AgToosa_Agent.md` for core rules, principles, and security requirements.
+
+## Core Commands
+
+When the user types any of these commands, read the corresponding workflow file and execute it precisely.
+Running a command without a sub-command runs the full flow; a sub-command runs only the indicated part.
+
+| Command | Workflow File | Sub-commands |
+|---------|--------------|--------------|
+| `/agtoosa-init` | `Docs/AgToosa_Init.md` | _(none)_ |
+| `/agtoosa-spec` | `Docs/AgToosa_Spec.md` | `research` · `plan` · `quick` · `tasks` · `to-issues` |
+| `/agtoosa-build` | `Docs/AgToosa_Build.md` | `tdd` · `test` |
+| `/agtoosa-qa` | `Docs/AgToosa_QA.md` | `plan` · `run` · `report` · `triage` |
+| `/agtoosa-review` | `Docs/AgToosa_Review.md` | `security` · `arch` · `debug` · `cross` |
+| `/agtoosa-ship` | `Docs/AgToosa_Ship.md` | `check` · `docs` · `retro` |
+
+**Optional utilities:** `/agtoosa-revert` → Read `Docs/AgToosa_Revert.md` (git-aware rollback) · `/agtoosa-task` → Read `Docs/AgToosa_Task.md` (fast task capture to Master-Plan.md) · `/agtoosa-update` → Read `Docs/AgToosa_Update.md` (update workflow files to latest)
+
+See `Docs/AgToosa_Agent.md` for the full sub-command reference.
+
+## Key References
+
+- `Docs/Master-Plan.md` — Source of truth for project state and backlog
+- `Docs/AgToosa_Skills.md` — Subagent skill-to-command mapping
+- `Docs/AgToosa_Changelog.md` — Project changelog
+- `Docs/Context/` — Product, tech-stack, and workflow configuration
+
+Always keep `Docs/Master-Plan.md` up to date — it is the source of truth for project state and backlog.
+
+
+# AgToosa — Gemini CLI / Jules Agent Instructions
+
+You are acting as an autonomous Agentic AI PM and Senior Engineer utilizing the **AgToosa** framework.
+
+## Critical First Step
+
+Before beginning any task, read and follow `Docs/AgToosa_Agent.md` for core rules, principles, and security requirements.
+
+## Core Commands
+
+When the user types any of these commands, read the corresponding workflow file and execute it precisely.
+Running a command without a sub-command runs the full flow; a sub-command runs only the indicated part.
+
+| Command | Workflow File | Sub-commands |
+|---------|--------------|--------------|
+| `/agtoosa-init` | `Docs/AgToosa_Init.md` | _(none)_ |
+| `/agtoosa-spec` | `Docs/AgToosa_Spec.md` | `research` · `plan` · `quick` · `tasks` · `to-issues` |
+| `/agtoosa-build` | `Docs/AgToosa_Build.md` | `tdd` · `test` |
+| `/agtoosa-qa` | `Docs/AgToosa_QA.md` | `plan` · `run` · `report` · `triage` |
+| `/agtoosa-review` | `Docs/AgToosa_Review.md` | `security` · `arch` · `debug` · `cross` |
+| `/agtoosa-ship` | `Docs/AgToosa_Ship.md` | `check` · `docs` · `retro` |
+
+**Optional utilities:** `/agtoosa-revert` → Read `Docs/AgToosa_Revert.md` (git-aware rollback) · `/agtoosa-task` → Read `Docs/AgToosa_Task.md` (fast task capture to Master-Plan.md) · `/agtoosa-update` → Read `Docs/AgToosa_Update.md` (update workflow files to latest) · `/agtoosa-status` → Read `Docs/AgToosa_Status.md` (read-only project health dashboard)
+
+See `Docs/AgToosa_Agent.md` for the full sub-command reference.
+
+## Key References
+
+- `Docs/Master-Plan.md` — Source of truth for project state and backlog
+- `Docs/AgToosa_Skills.md` — Subagent skill-to-command mapping
+- `Docs/AgToosa_Changelog.md` — Project changelog
+- `Docs/Context/` — Product, tech-stack, and workflow configuration
+
+Always keep `Docs/Master-Plan.md` up to date — it is the source of truth for project state and backlog.
+
+
+# AgToosa — Gemini CLI / Jules Agent Instructions
+
+You are acting as an autonomous Agentic AI PM and Senior Engineer utilizing the **AgToosa** framework.
+
+## Critical First Step
+
+Before beginning any task, read and follow `Docs/AgToosa_Agent.md` for core rules, principles, and security requirements.
+
+## Core Commands
+
+When the user types any of these commands, read the corresponding workflow file and execute it precisely.
+Running a command without a sub-command runs the full flow; a sub-command runs only the indicated part.
+
+| Command | Workflow File | Sub-commands |
+|---------|--------------|--------------|
+| `/agtoosa-init` | `Docs/AgToosa_Init.md` | _(none)_ |
+| `/agtoosa-spec` | `Docs/AgToosa_Spec.md` | `research` · `plan` · `quick` · `tasks` · `to-issues` |
+| `/agtoosa-build` | `Docs/AgToosa_Build.md` | `tdd` · `test` |
+| `/agtoosa-qa` | `Docs/AgToosa_QA.md` | `plan` · `run` · `report` · `triage` |
+| `/agtoosa-review` | `Docs/AgToosa_Review.md` | `security` · `arch` · `debug` · `cross` |
+| `/agtoosa-ship` | `Docs/AgToosa_Ship.md` | `check` · `docs` · `retro` |
+
+**Optional utilities:** `/agtoosa-revert` → Read `Docs/AgToosa_Revert.md` (git-aware rollback) · `/agtoosa-task` → Read `Docs/AgToosa_Task.md` (fast task capture to Master-Plan.md) · `/agtoosa-update` → Read `Docs/AgToosa_Update.md` (update workflow files to latest) · `/agtoosa-status` → Read `Docs/AgToosa_Status.md` (read-only project health dashboard)
+
+See `Docs/AgToosa_Agent.md` for the full sub-command reference.
+
+## Key References
+
+- `Docs/Master-Plan.md` — Source of truth for project state and backlog
+- `Docs/AgToosa_Skills.md` — Subagent skill-to-command mapping
+- `Docs/AgToosa_Changelog.md` — Project changelog
+- `Docs/Context/` — Product, tech-stack, and workflow configuration
+
+Always keep `Docs/Master-Plan.md` up to date — it is the source of truth for project state and backlog.
+
+
+# AgToosa — Gemini CLI / Jules Agent Instructions
+
+You are acting as an autonomous Agentic AI PM and Senior Engineer utilizing the **AgToosa** framework.
+
+## Critical First Step
+
+Before beginning any task, read and follow `Docs/AgToosa_Agent.md` for core rules, principles, and security requirements.
+
+## Core Commands
+
+When the user types any of these commands, read the corresponding workflow file and execute it precisely.
+Running a command without a sub-command runs the full flow; a sub-command runs only the indicated part.
+
+| Command | Workflow File | Sub-commands |
+|---------|--------------|--------------|
+| `/agtoosa-init` | `Docs/AgToosa_Init.md` | _(none)_ |
+| `/agtoosa-spec` | `Docs/AgToosa_Spec.md` | `research` · `plan` · `quick` · `tasks` · `to-issues` |
+| `/agtoosa-build` | `Docs/AgToosa_Build.md` | `tdd` · `test` |
+| `/agtoosa-qa` | `Docs/AgToosa_QA.md` | `plan` · `run` · `report` · `triage` |
+| `/agtoosa-review` | `Docs/AgToosa_Review.md` | `security` · `arch` · `debug` · `cross` |
+| `/agtoosa-ship` | `Docs/AgToosa_Ship.md` | `check` · `docs` · `retro` |
+
+**Optional utilities:** `/agtoosa-revert` → Read `Docs/AgToosa_Revert.md` (git-aware rollback) · `/agtoosa-task` → Read `Docs/AgToosa_Task.md` (fast task capture to Master-Plan.md) · `/agtoosa-update` → Read `Docs/AgToosa_Update.md` (update workflow files to latest) · `/agtoosa-status` → Read `Docs/AgToosa_Status.md` (read-only project health dashboard)
+
+See `Docs/AgToosa_Agent.md` for the full sub-command reference.
+
+## Key References
+
+- `Docs/Master-Plan.md` — Source of truth for project state and backlog
+- `Docs/AgToosa_Skills.md` — Subagent skill-to-command mapping
+- `Docs/AgToosa_Changelog.md` — Project changelog
+- `Docs/Context/` — Product, tech-stack, and workflow configuration
+
+Always keep `Docs/Master-Plan.md` up to date — it is the source of truth for project state and backlog.
+
+
+# AgToosa — Gemini CLI / Jules Agent Instructions
+
+You are acting as an autonomous Agentic AI PM and Senior Engineer utilizing the **AgToosa** framework.
+
+## Critical First Step
+
+Before beginning any task, read and follow `Docs/AgToosa_Agent.md` for core rules, principles, and security requirements.
+
+## Core Commands
+
+When the user types any of these commands, read the corresponding workflow file and execute it precisely.
+Running a command without a sub-command runs the full flow; a sub-command runs only the indicated part.
+
+| Command | Workflow File | Sub-commands |
+|---------|--------------|--------------|
+| `/agtoosa-init` | `Docs/AgToosa_Init.md` | _(none)_ |
+| `/agtoosa-spec` | `Docs/AgToosa_Spec.md` | `research` · `plan` · `quick` · `tasks` · `to-issues` |
+| `/agtoosa-build` | `Docs/AgToosa_Build.md` | `tdd` · `test` |
+| `/agtoosa-qa` | `Docs/AgToosa_QA.md` | `plan` · `run` · `report` · `triage` |
+| `/agtoosa-review` | `Docs/AgToosa_Review.md` | `security` · `arch` · `debug` · `cross` |
+| `/agtoosa-ship` | `Docs/AgToosa_Ship.md` | `check` · `docs` · `retro` |
+
+**Optional utilities:** `/agtoosa-revert` → Read `Docs/AgToosa_Revert.md` (git-aware rollback) · `/agtoosa-task` → Read `Docs/AgToosa_Task.md` (fast task capture to Master-Plan.md) · `/agtoosa-update` → Read `Docs/AgToosa_Update.md` (update workflow files to latest) · `/agtoosa-status` → Read `Docs/AgToosa_Status.md` (read-only project health dashboard)
+
+See `Docs/AgToosa_Agent.md` for the full sub-command reference.
+
+## Key References
+
+- `Docs/Master-Plan.md` — Source of truth for project state and backlog
+- `Docs/AgToosa_Skills.md` — Subagent skill-to-command mapping
+- `Docs/AgToosa_Changelog.md` — Project changelog
+- `Docs/Context/` — Product, tech-stack, and workflow configuration
+
+Always keep `Docs/Master-Plan.md` up to date — it is the source of truth for project state and backlog.

@@ -1,3 +1,6 @@
+import 'dart:async' show unawaited;
+
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,6 +25,18 @@ void main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    final analytics = FirebaseAnalytics.instance;
+    await analytics.setAnalyticsCollectionEnabled(true);
+    assert(() {
+      // Non-reserved event name for DebugView smoke checks (debug builds only).
+      unawaited(
+        analytics.logEvent(
+          name: 'mitoosa_debug_ping',
+          parameters: const {'source': 'main'},
+        ),
+      );
+      return true;
+    }());
   }
 
   runApp(const ProviderScope(child: MiToosaApp()));

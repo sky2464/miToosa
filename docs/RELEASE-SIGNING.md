@@ -59,7 +59,7 @@ iOS release signing is managed through Xcode + Apple Developer Program. Unlike A
 
 - An **Apple Developer Program** membership (paid, USD $99/year) under team `TYK6BBNDW5` (or your fork's team).
 - macOS host with the latest stable Xcode installed.
-- Bundle identifier `com.chicademy.mitoosa` registered in App Store Connect.
+- Bundle identifier `dev.atoosa.mitoosa` registered in App Store Connect.
 
 ## Setup
 
@@ -75,10 +75,10 @@ iOS release signing is managed through Xcode + Apple Developer Program. Unlike A
    - **Automatic** (recommended): tick **Automatically manage signing**, then select your Apple Developer team from the dropdown. Xcode will provision Debug + Release profiles for you.
    - **Manual**: untick automatic signing and import a Distribution certificate (`.p12`) into your Keychain, then attach a downloaded Provisioning Profile per build configuration.
 
-4. Confirm the **Bundle Identifier** reads `com.chicademy.mitoosa` for Release.
+4. Confirm the **Bundle Identifier** reads `dev.atoosa.mitoosa` for Release.
 
 5. In **App Store Connect** (https://appstoreconnect.apple.com), create the app record:
-   - **My Apps → +** → **New App** → platform iOS → bundle id `com.chicademy.mitoosa`.
+   - **My Apps → +** → **New App** → platform iOS → bundle id `dev.atoosa.mitoosa`.
    - Fill metadata (name, SKU, primary language).
 
 ## Switching teams locally
@@ -140,7 +140,7 @@ The certificate SHA-256 fingerprint reported by `apksigner` MUST match the uploa
 
 ## iOS
 
-- **Xcode: `No profiles for 'com.chicademy.mitoosa' were found`** — sign in to the right Apple Developer account in Xcode (Settings → Accounts), confirm the team is selected in Signing & Capabilities, then click **Try Again**. If you switched teams, also bump the bundle id or claim it under the new team in the Developer portal.
+- **Xcode: `No profiles for 'dev.atoosa.mitoosa' were found`** — sign in to the right Apple Developer account in Xcode (Settings → Accounts), confirm the team is selected in Signing & Capabilities, then click **Try Again**. If you switched teams, also bump the bundle id or claim it under the new team in the Developer portal.
 - **App Store Connect: `Invalid Binary` after upload** — open the email Apple sends for the specific reason. Common causes: missing `NSPhotoLibraryUsageDescription` in `Info.plist`, ITMS-90683 missing usage strings, attempting to upload a Debug-signed archive (re-archive in Release).
 - **Archive succeeds but `Distribute App` is greyed out** — the archive was built for the iOS Simulator, not a device. Reset destination to **Any iOS Device (arm64)** and re-archive.
 - **`Code Signing Error: Provisioning profile … doesn't include the currently selected device`** — only affects Debug builds on physical devices; not relevant to App Store distribution. Either add the device UDID via Apple Developer portal or switch to a simulator.

@@ -11,3 +11,7 @@
 **Prompt Injection Guard**: A local or pipeline-level regression script (`scripts/check_prompt_injection.sh`) that regex-scans documentation for unsafe agent directives. Not: "jailbreak filter", "runtime injection scanner".
 
 **Docs Archival**: The system policy and script (`scripts/verify_docs_archival.sh`) that verifies all completed executable specifications are correctly moved to `docs/archived/` before code changes are shipped. Not: "spec backup", "clean-up cron".
+
+**Tutorial Demo**: A short, interactive tap-through puzzle shown inside `HowToPlayModal` before a player's first real attempt on a track. Uses seeded easy puzzles from `TutorialDemoContent`; no timer or heart cost. Maps to `lib/widgets/tutorial_demo_panel.dart`. Not: "onboarding walkthrough", "coach marks", "full gameplay session".
+
+**How-To Play Modal**: Per-track overlay (`lib/widgets/how_to_play_modal.dart`) shown on first track entry or via gameplay `?` control. BL-24 upgrades it from static copy to embed a Tutorial Demo. Not: "Settings help screen", "USER-GUIDE.md".

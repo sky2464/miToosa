@@ -1,0 +1,17 @@
+description = "AgToosa: TDD Red-Green-Refactor against the planned task list → tests + SAST/DAST"
+prompt = """
+
+## Gemini command routing
+
+This file is the native Gemini CLI command for `/agtoosa-build`. When the user invokes `/agtoosa-build`, execute the AgToosa workflow below — do **not** route to `/create-skill` or generate a project skill for AgToosa workflow names.
+
+Read Docs/AgToosa_Build.md and execute the build workflow. If prerequisites fail, stop and instruct the user — do not auto-run /agtoosa-spec. Report Terminal Evidence Contract fields for every command and parallel subagent.
+
+Dispatch based on any arguments provided after the command:
+- /agtoosa-build        → full TDD build workflow (Red-Green-Refactor + comprehensive testing + tracking)
+- /agtoosa-build scope  → task planning has moved to /agtoosa-spec; run `/agtoosa-spec tasks` instead
+- /agtoosa-build tdd    → TDD Red-Green-Refactor cycle for the current task list
+- /agtoosa-build test   → testing and quality-gate phase only
+
+On successful completion, print this line verbatim: ✅ Done. Run /agtoosa-status to verify findings cleared.
+"""

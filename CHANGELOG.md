@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Tracks light mode** — theme-aware `GlassCard`, hero typography, and progress dots via `APTheme` (S2-05)
+- **Start session CTA** — removed harsh horizontal line on primary button; hero uses `glow: false` (S2-05)
+
+### Added
+- **Header menus** — profile and credits bottom sheets wired from app header (S2-05)
+
 ## [1.5.0] — 2026-04-22
 
 ### Added

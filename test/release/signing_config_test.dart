@@ -3,6 +3,40 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  group('iPhone launch identity', () {
+    test('Runner uses the locked iOS bundle identifier', () {
+      final projectFile = File('ios/Runner.xcodeproj/project.pbxproj');
+      expect(projectFile.existsSync(), isTrue);
+      final projectText = projectFile.readAsStringSync();
+
+      expect(
+        projectText,
+        contains('PRODUCT_BUNDLE_IDENTIFIER = dev.atoosa.mitoosa;'),
+      );
+      expect(
+        projectText,
+        contains('PRODUCT_BUNDLE_IDENTIFIER = dev.atoosa.mitoosa.RunnerTests;'),
+      );
+      expect(
+        projectText,
+        isNot(contains('PRODUCT_BUNDLE_IDENTIFIER = com.chicademy.mitoosa;')),
+      );
+      expect(
+        projectText,
+        isNot(contains('PRODUCT_BUNDLE_IDENTIFIER = com.mitoosa.app;')),
+      );
+    });
+
+    test('release runbook points App Store work at the locked bundle id', () {
+      final docsFile = File('docs/RELEASE-SIGNING.md');
+      expect(docsFile.existsSync(), isTrue);
+      final docsText = docsFile.readAsStringSync();
+
+      expect(docsText, contains('dev.atoosa.mitoosa'));
+      expect(docsText, isNot(contains('com.mitoosa.app')));
+    });
+  });
+
   group('Android release signing scaffolding', () {
     test('gitignore contains expected secret patterns', () {
       final gitignore = File('.gitignore');

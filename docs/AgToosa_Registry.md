@@ -56,8 +56,8 @@ Packs are **markdown-only** for safety — no executable code is automatically r
 2. **Confirm** when prompted (packs are reviewed by maintainers before publication).
 3. **Download** the pack tarball from GitHub.
 4. **Verify** the pack's SHA-256 hash against the registry (abort on mismatch).
-5. **Stage** the pack files into your project's `ship/` directory.
-6. **Review and merge** — the files integrate alongside core AgToosa workflows.
+5. **Queue** the pack files under `.agtoosa/pack-queue/<pack-name>/` in the AgToosa repo (outside ephemeral `ship/`).
+6. **Review and merge** — run `bash agtoosa.sh` in your project to integrate queued packs alongside core AgToosa workflows.
 
 ---
 
@@ -95,6 +95,23 @@ Each pack entry includes:
 
 ---
 
+## Offline cache and trust
+
+AgToosa caches `registry.json` locally so list/search/info work when the network is slow or unavailable (default TTL: 1 hour).
+
+| Surface | Cache location |
+|---------|----------------|
+| Bash | `$AGTOOSA_REGISTRY_CACHE_DIR/registry.json` if set, else `~/.cache/agtoosa/registry.json` |
+| PowerShell | `%USERPROFILE%\.cache\agtoosa\registry.json` |
+
+**HTTPS trust model:** The registry index is downloaded over HTTPS from GitHub only. There is no GPG or signed manifest for `registry.json` in v1 — treat the index as trusted to the same degree as the HTTPS origin. If you need a fresh index, delete the cache file (or wait for TTL expiry) and run `--registry list` again when online.
+
+**High-assurance installs:** Pack tarballs are always SHA-256 checked against the hash in the index during install. For stricter environments, pre-seed `AGTOOSA_REGISTRY_CACHE_DIR` with a vetted `registry.json` and independently verify each pack's SHA-256 (e.g. `sha256sum`) against a trusted source before `bash agtoosa.sh --registry install <name>`.
+
+**Publishing packs:** Use Bash — `bash agtoosa.sh --registry publish` (the PowerShell port prints a redirect; it does not run the publish wizard).
+
+---
+
 ## Security
 
 **How your safety is protected:**
@@ -123,9 +140,15 @@ Each pack entry includes:
 - The registry is cached for 1 hour; try again later.
 - For offline installation, use `--registry install ./local-pack`.
 
-**"No version specified but multiple exist"**
-- When you run `--registry install <name>`, it installs the latest published version.
-- To pin a version: `--registry install <name>@1.2.0`
+**"Pack version not found"**
+- The `@version` you requested is not listed in `registry.json` for that pack name.
+- Run `--registry info <name>` to see the version currently in the index.
+- To install the index version, omit `@version`: `--registry install <name>`.
+- Pinned installs fail closed; AgToosa will not install a different version silently.
+
+**Version pinning**
+- `--registry install <name>` installs the pack row for that name in the registry index.
+- `--registry install <name>@1.2.0` installs only when the index lists exactly `1.2.0` for that name.
 
 ---
 

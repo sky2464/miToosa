@@ -24,6 +24,7 @@ class TrackTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = APTheme.of(context);
     final completed = progress.levelStars.entries
         .where((e) => e.key.startsWith('${track.id}_') && e.value > 0)
         .length;
@@ -42,10 +43,10 @@ class TrackTile extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: AethericPulseDark.brandBlue.withValues(alpha: 0.12),
+                color: theme.brandBlue.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(
-                  color: AethericPulseDark.brandBlue.withValues(alpha: 0.18),
+                  color: theme.brandBlue.withValues(alpha: 0.18),
                   width: 1,
                 ),
               ),
@@ -54,10 +55,10 @@ class TrackTile extends StatelessWidget {
                   AP.trackIcon(track.id),
                   width: 28,
                   height: 28,
-                  errorBuilder: (_, err, stack) => const Icon(
+                  errorBuilder: (_, err, stack) => Icon(
                     Icons.grid_view_rounded,
                     size: 24,
-                    color: AethericPulseDark.brandBlue,
+                    color: theme.brandBlue,
                   ),
                 ),
               ),
@@ -65,23 +66,19 @@ class TrackTile extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               track.name,
-              style: AethericPulseDark.headlineMd(),
+              style: theme.headlineMd(),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: 2),
             Text(
               track.category,
-              style: AethericPulseDark.label(
-                color: AethericPulseDark.onSurfaceMuted,
-              ),
+              style: theme.label(color: theme.fgMuted),
             ),
             const SizedBox(height: 6),
             Text(
               '$completed / $total',
-              style: AethericPulseDark.label(
-                color: AethericPulseDark.brandBlue,
-              ),
+              style: theme.label(color: theme.brandBlue),
             ),
           ],
         ),
