@@ -33,11 +33,13 @@ void main() {
     test('GoogleService-Info.plist exists locally after configure', () {
       final plist = File('ios/Runner/GoogleService-Info.plist');
       expect(plist.existsSync(), isTrue);
+      final contents = plist.readAsStringSync();
       expect(
-        plist.readAsStringSync(),
+        contents,
         allOf(
           contains('dev.atoosa.mitoosa'),
           contains('mitoosa-2121b'),
+          contains('1:567413645788:ios:03903b33a13cb4f4fc6f19'),
         ),
       );
     });

@@ -8,7 +8,7 @@ This document covers the manual setup required to activate analytics forwarding 
 
 - Firebase project **`mitoosa-2121b`** exists (active alias: `default` in this repo)
 - **Google Analytics is linked** to the Firebase project (Integrations → Google Analytics → Enable). DebugView and event upload do not work until this is done.
-- After GA is linked, `ios/Runner/GoogleService-Info.plist` should include a `MEASUREMENT_ID` key and `IS_ANALYTICS_ENABLED` should be `true` when re-downloaded from Firebase.
+- After GA is linked, confirm `ios/Runner/GoogleService-Info.plist` has the correct `GOOGLE_APP_ID` and `BUNDLE_ID`. **iOS-only** Firebase projects use an app data stream (Stream ID + Firebase App ID), not a web `G-XXXXXXXX` Measurement ID — that `G-` value appears only for **web** data streams.
 - iOS app registered in Firebase with bundle ID `dev.atoosa.mitoosa`
 - Firebase CLI authenticated: `firebase login` (required for `flutterfire configure`)
 - Flutter SDK installed
@@ -23,7 +23,7 @@ This document covers the manual setup required to activate analytics forwarding 
    export PATH="$PATH:$HOME/.pub-cache/bin"
    flutterfire configure --project=mitoosa-2121b --platforms=ios --ios-bundle-id=dev.atoosa.mitoosa --yes
    ```
-3. **Verify** `ios/Runner/GoogleService-Info.plist` contains `MEASUREMENT_ID` (not only `GOOGLE_APP_ID`). If `IS_ANALYTICS_ENABLED` is still `false` and there is no `MEASUREMENT_ID`, GA is not linked yet — DebugView will stay empty.
+3. **Verify** `ios/Runner/GoogleService-Info.plist` contains `GOOGLE_APP_ID` `1:567413645788:ios:03903b33a13cb4f4fc6f19` and `BUNDLE_ID` `dev.atoosa.mitoosa`. Missing `MEASUREMENT_ID` (`G-…`) is **normal** for an iOS-only app stream.
 4. Confirm `lib/firebase_options.dart` matches generated credentials.
 5. Run the app with Firebase forwarding enabled:
    ```bash
@@ -54,11 +54,17 @@ flutterfire configure --project=mitoosa-2121b --platforms=ios --ios-bundle-id=de
 
 ### DebugView shows no events
 
-**First check (most common):** Google Analytics is not linked to the project. Fetch the iOS config from Firebase (or open `ios/Runner/GoogleService-Info.plist`). If you do **not** see `MEASUREMENT_ID`, fix GA linking before anything else:
+Per [Google Analytics DebugView](https://support.google.com/analytics/answer/7201382): debug mode must be enabled on the device, then open **Analytics → DebugView** and select your device in **DEBUG DEVICE**. Events are hidden if client-side privacy/consent blocks collection (miToosa does not use consent mode).
 
-1. [Firebase Integrations](https://console.firebase.google.com/project/mitoosa-2121b/settings/integrations) → Google Analytics → **Enable**
-2. Re-run `flutterfire configure` (see Steps above)
-3. Confirm plist now has `MEASUREMENT_ID`
+**First check:** Confirm GA is linked and the iOS stream exists (Admin → Data streams → **mitoosa (ios)**, stream `15071973403`, bundle `dev.atoosa.mitoosa`). Do **not** create a web stream just to get a `G-` Measurement ID — that is for websites, not the Flutter iOS SDK.
+
+**Second check:** Use **Firebase** Console → **Analytics → DebugView** (not only the GA4 property UI). Select your simulator/device in **DEBUG DEVICE**.
+
+Refresh the plist if credentials changed:
+
+```bash
+bash scripts/sync-firebase-ios-plist.sh
+```
 
 DebugView only receives **debug-mode** traffic. Production batches can take up to ~1 hour and never appear in DebugView.
 
@@ -66,8 +72,8 @@ DebugView only receives **debug-mode** traffic. Production batches can take up t
    ```bash
    flutter run -d "iPhone 17 Pro" --dart-define=FIREBASE_ENABLED=true
    ```
-2. **Enable iOS Analytics debug mode** — required for DebugView:
-   - **Simulator / `flutter run`:** the shared `Runner` scheme includes `-FIRDebugEnabled` for Debug builds (committed in `ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme`).
+2. **Enable iOS Analytics debug mode** — required for DebugView ([Firebase docs](https://firebase.google.com/docs/analytics/debugview#ios)):
+   - **Simulator / `flutter run`:** `AppDelegate.swift` persists `/google/firebase/debug_mode` and `/google/measurement/debug_mode` in DEBUG builds (scheme also has `-FIRDebugEnabled`).
    - **Physical device from Xcode:** Product → Scheme → Edit Scheme → Run → Arguments → add `-FIRDebugEnabled` if you use a custom scheme without that flag.
 3. **Sign in** past the login screen so `MainAppShell` loads (custom telemetry session events fire there).
 4. **Play at least one level** if you want `level_complete`-style events (when wired); automatic Firebase events (`first_open`, `screen_view`, automatic `session_start`) can appear as soon as the app runs with debug mode on.
