@@ -33,7 +33,7 @@ xcrun simctl install booted "$APP_PATH"
 
 echo "▶ Launching with -FIRDebugEnabled…"
 xcrun simctl launch --terminate-running-process booted "$BUNDLE_ID" \
-  -FIRDebugEnabled -FIRAnalyticsVerboseLoggingEnabled
+  -FIRDebugEnabled -FIRAnalyticsDebugEnabled -FIRAnalyticsVerboseLoggingEnabled
 
 echo ""
 echo "✅ App launched with Firebase debug mode active."

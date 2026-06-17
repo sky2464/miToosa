@@ -1,34 +1,30 @@
 # [0001] Seeded Tutorial Demos via PuzzleGenerator
 
-**Status**: Proposed  
-**Date**: 2026-06-14  
+**Status**: Superseded by `2026-06-14-tutorial-content-json.md`
+**Date**: 2026-06-14
 **Deciders**: AI agent + human review (pending BL-24 approval)
 
 ## Context
 
-BL-24 replaces the static `HowToPlayModal` with interactive tap-through demos for all 23 tracks. Hand-authoring 23 fixed puzzles in JSON is high maintenance; `PuzzleGenerator` already supports injectable `Random` for determinism in tests.
+BL-24 replaces the static `HowToPlayModal` with interactive tap-through demos for all 23 tracks. This ADR proposed seeded demos from `PuzzleGenerator`, but the approved BL-24 plan requires explicit tutorial definitions in `assets/content/tutorials.json` so goals, steps, demo type, correct action, and objective copy can be reviewed per track.
 
 ## Decision
 
-Generate tutorial demo puzzles with `PuzzleGenerator(Random(trackSeed))` where `trackSeed` is derived from a stable hash of `track.id`, using easy `DifficultyParameters` (minimal shapes/choices). Store no separate tutorial puzzle asset file in v1.
+Do not use this ADR as the active BL-24 implementation decision. Use `2026-06-14-tutorial-content-json.md` for tutorial content and `2026-06-14-native-tutorial-demos.md` for the demo rendering strategy.
 
 ## Rationale
 
-- One code path covers all `PuzzleRule` variants automatically.
-- Widget/unit tests can assert stable puzzle output per track id.
-- Avoids new JSON asset maintenance when tracks change.
+The seeded-only approach was superseded because it does not provide enough control over player-facing tutorial copy and per-track objective language.
 
 ## Consequences
 
 ### Positive
 
-- All tracks get demos without per-track authoring.
-- Reuses `ShapeRenderer` and puzzle models from gameplay.
+- Historical record of an alternative considered for BL-24.
 
 ### Negative
 
-- Generator changes could alter demo puzzles (mitigate with golden-hash tests per representative track).
-- Text-heavy rules (math, cipher) may need copy tweaks in the modal chrome, not the generator output.
+- Not the active decision. Future implementers should not follow this ADR for BL-24.
 
 ## Alternatives Considered
 

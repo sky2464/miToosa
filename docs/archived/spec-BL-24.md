@@ -1,9 +1,9 @@
 # Spec: BL-24 — Interactive How-To Demos
 
-> **Story ID:** BL-24  
-> **Epic:** EP-04 User Experience Polish  
-> **Status:** 🟦 Todo  
-> **Estimate:** M  
+> **Story ID:** BL-24
+> **Epic:** EP-01 Launch Readiness & Validation
+> **Status:** ⬜ Backlog
+> **Estimate:** M
 > **Spec created:** 2026-06-14
 
 ## 1. Requirements
@@ -12,222 +12,261 @@
 
 | Field | Value |
 |-------|-------|
-| Goal | Replace static per-track how-to copy with a short interactive tap-through demo so new players learn each track's mechanic before spending a heart |
-| User outcome | First-time track entrants understand what to tap; returning players can reopen the demo from gameplay without penalty |
-| Success condition | First entry into any unseen track shows interactive demo; correct demo tap shows success feedback; CTA proceeds to difficulty/gameplay; `seenTutorialWorlds` persists; widget + integration tests green |
-| Proof / evidence | `test/widgets/tutorial_demo_panel_test.dart`, `test/widgets/how_to_play_modal_test.dart`, `test/features/navigation/track_detail_tutorial_test.dart`; `dart analyze` clean; `flutter test` green |
-| Non-goals | Global onboarding rewrite; timer/hearts in demo; video/GIF tutorials; backend analytics events; App Privacy questionnaire (separate backlog item) |
-| Assumptions | Interactive demo = one easy seeded puzzle per track (tap correct option → success → CTA). All 23 tracks covered via `PuzzleGenerator(Random(trackSeed))` per ADR-0001. First-entry trigger belongs on track play path (`TrackDetailScreen`), not only `WorldMapScreen`. |
-| Risks | Demo UI overflow on small iPhones; generator drift changes demo puzzles; unwired `seenTutorialWorlds` (brownfield gap) delays value until navigation wiring ships |
-| Unresolved questions | Settings → "How to play" hub (Should AC — may defer if timeboxed). Cycle enrollment vs BL-23 blocked work (owner decision at approval). |
+| Goal | Teach players how each puzzle track works before or during first play. |
+| User outcome | New players understand the objective for every track and every procedural level without reading long instructions. |
+| Success condition | All 23 tracks have valid tutorial definitions; first-entry tutorial shows once; gameplay always shows a compact objective. |
+| Proof / evidence | Unit/widget tests, `dart analyze`, `flutter test`, and manual iPhone smoke for onboarding + first track + help reopen. |
+| Non-goals | No Rive, Remotion, GIF/video pack, new monetization copy, backend, or edits to `docs/PRODUCT-WEDGE.md`. |
+| Assumptions | Native Flutter MVP is the approved asset strategy; story stays in Backlog until explicitly pulled into the Launch Sprint; no manual external service step is required. |
+| Risks | Tutorial copy can drift from procedural puzzle behavior; first-entry gating can accidentally affect timers/hearts; small iPhone screens can overflow; icon mapping can hide missing assets with silent fallbacks. |
+| Unresolved questions | None for spec generation. |
 
 ### 1.2 Brownfield Baseline
 
 | Area | Current state | Intended delta |
 |------|---------------|----------------|
-| `HowToPlayModal` | Static icon, name, subtitle, CTA | Embeds interactive `TutorialDemoPanel` with tap feedback |
-| First-entry trigger | **Not wired** — `seenTutorialWorlds` written only in tests; `TrackDetailScreen` goes straight to difficulty sheet | Check `seenTutorialWorlds` before `_showDifficultySheet`; show modal; `markTutorialSeen` on CTA |
-| Gameplay `?` button | Reopens static modal | Reopens interactive modal (no `markTutorialSeen` side effect) |
-| Settings | No "How to play" row (design mock has one) | Optional row opens demo for featured/first track |
-| Tests | `how_to_play_modal_test.dart` covers static fields | Extended for demo interaction + track entry integration |
+| Track count | `assets/content/worlds.json` defines 23 tracks. | Every current track gets a tutorial definition. |
+| Puzzle rules | `PuzzleRule` contains the active procedural rule set. | Every current rule maps to a tutorial demo type and objective. |
+| How-to modal | `HowToPlayModal` exists but shows static icon/name/subtitle/CTA. | Modal becomes an interactive native Flutter demo surface. |
+| Tutorial persistence | `PlayerProgress.seenTutorialWorlds` and `markTutorialSeen` already exist. | First-entry flow actually reads/writes that state. |
+| Gameplay help | Gameplay header has a `?` button reopening the modal. | Reopen shows the same interactive demo without gameplay-state mutation. |
+| Onboarding | First-run onboarding exists, but app-root routing can bypass it for nonempty anonymous auth. | Root/progress state shows onboarding while `onboardingComplete == false`. |
+| Track icons | Track cards request `AP.trackIcon(track.id)`, but current asset names do not cover all track IDs. | Add an explicit mapping to available category icons or safe fallbacks. |
 
-**Drift evidence:** `docs/archived/spec-engagement-loop-v1.md` AC marked done for WorldMap first-entry, but `lib/features/navigation/track_detail_screen.dart` has no `HowToPlayModal` import. Resolution: implement on current navigation path (`TrackDetailScreen`).
+**Repo evidence inventory:** `assets/content/worlds.json`, `lib/core/models/puzzle.dart`, `lib/core/engine/puzzle_generator.dart`, `lib/widgets/how_to_play_modal.dart`, `lib/features/gameplay/gameplay_screen.dart`, `lib/features/navigation/track_detail_screen.dart`, `lib/data/player_progress.dart`, `lib/theme/design_tokens.dart`, `test/widgets/how_to_play_modal_test.dart`.
 
-**Claim boundary:** Tutorial persistence is agent-instructed via existing Hive `PlayerProgress` field; no new schema version required.
+**Claim boundary:** Spec acceptance is agent-instructed. Runtime behavior is implementation-enforced only after `/agtoosa-build` completes and tests pass.
 
 ### 1.3 User Stories
 
-**As a** new player entering a track for the first time, **I want** a short interactive demo that shows me what to tap **so that** I do not waste a heart learning the rule.
+**As a** new player, **I want** an interactive demo before I play an unfamiliar track **so that** I understand what to tap before spending attention or session resources.
 
-**As a** returning player, **I want** to reopen the how-to demo from gameplay **so that** I can refresh the rule without leaving the level.
+**As a** player in a live level, **I want** a compact objective visible near the puzzle prompt **so that** I can quickly understand the current level's goal.
 
-**As a** player on a small screen, **I want** the demo modal to scroll if needed **so that** all controls remain reachable.
+**As a** returning player, **I want** to reopen the how-to demo from gameplay **so that** I can refresh the rule without changing my score, hearts, timer, or progress.
 
 ### 1.4 Acceptance Criteria (EARS)
 
 | ID | EARS | Priority |
 |----|------|----------|
-| AC-001 | WHEN a player starts a level on a track not in `seenTutorialWorlds` THE SYSTEM SHALL show `HowToPlayModal` with an interactive demo before the difficulty sheet. | Must |
-| AC-002 | WHEN the player taps the correct demo option THE SYSTEM SHALL show inline success feedback and enable the primary CTA. | Must |
-| AC-003 | WHEN the player taps an incorrect demo option THE SYSTEM SHALL show inline retry feedback without closing the modal. | Must |
-| AC-004 | WHEN the player taps the demo CTA after success THE SYSTEM SHALL call `markTutorialSeen(track.id)`, dismiss the modal, and continue to the difficulty selection flow. | Must |
-| AC-005 | WHEN a player re-enters a track already in `seenTutorialWorlds` THE SYSTEM SHALL skip the demo and proceed directly to difficulty selection. | Must |
-| AC-006 | WHEN the player taps the gameplay header `?` control THE SYSTEM SHALL reopen the interactive demo without mutating `seenTutorialWorlds`. | Must |
-| AC-007 | WHILE the demo is active THE SYSTEM SHALL NOT start puzzle timers, deduct hearts, or record gameplay telemetry events. | Must |
-| AC-008 | FOR EACH track in `assets/content/worlds.json` THE SYSTEM SHALL produce a deterministic easy demo puzzle from `TutorialDemoContent.forTrack(track)`. | Must |
-| AC-009 | WHEN the demo modal is shown on a 320pt-wide viewport THE SYSTEM SHALL remain scrollable without layout overflow. | Should |
-| AC-010 | WHEN the player opens Settings THE SYSTEM SHALL offer a "How to play" row that opens the interactive demo for the featured track. | Should |
-| AC-011 | THE SYSTEM SHALL expose semantic labels on demo options and the CTA for VoiceOver. | Should |
+| AC-001 | WHEN a tutorial definition is loaded THE SYSTEM SHALL validate coverage for all 23 track IDs and all current puzzle rules. | Must |
+| AC-002 | WHEN a player enters a track whose tutorial is unseen THE SYSTEM SHALL show the interactive tutorial before timed play starts. | Must |
+| AC-003 | WHEN the player dismisses the tutorial THE SYSTEM SHALL persist that track ID in encrypted local progress and skip it on later entries. | Must |
+| AC-004 | WHEN the player taps the gameplay help button THE SYSTEM SHALL reopen the tutorial without changing seen state, score, hearts, timer, or progress. | Must |
+| AC-005 | WHILE gameplay is active THE SYSTEM SHALL show a compact objective derived from the tutorial rule and live puzzle prompt. | Must |
+| AC-006 | WHEN tutorial UI renders THE SYSTEM SHALL meet 44pt touch targets, semantic labels, Dynamic Type tolerance, and reduced-motion behavior. | Must |
+| AC-007 | WHEN track artwork is requested THE SYSTEM SHALL map current track IDs to available icon assets or safe fallbacks without broken image noise. | Should |
 
 ### 1.5 Out of Scope
 
-- Rewriting the 4-page global onboarding (`onboarding_screen.dart`)
-- Per-level tutorials or multi-step coach marks
-- Analytics events for tutorial completion
-- App Store App Privacy questionnaire (deferred; not BL-24)
-- Extracting full gameplay option UI into a shared package (minimal duplication acceptable in `TutorialDemoPanel`)
-- Localized copy beyond existing English strings
+- Rive animations, Remotion videos, GIF/video tutorial packs, or new authored animation dependencies.
+- Backend, cloud sync, leaderboard changes, or Firebase Analytics event work.
+- Economy or monetization copy changes, especially `docs/PRODUCT-WEDGE.md`.
+- Rewriting game engines or changing scoring/progression behavior.
+- Creating App Store screenshots, promo videos, or social marketing assets.
+- Enrolling BL-24 into the active sprint without explicit user approval.
 
-### 1.6 Failure Modes (Must ACs)
+### 1.6 Failure Modes
 
 | AC | Failure mode | Mitigation |
 |----|--------------|------------|
-| AC-001 | Modal never shows; players skip learning | Integration test on `TrackDetailScreen` tap path |
-| AC-002 | CTA enabled before success | Widget test asserts CTA disabled until correct tap |
-| AC-003 | Wrong tap dismisses modal | Widget test: incorrect tap keeps modal open |
-| AC-004 | `seenTutorialWorlds` not persisted | Integration test with mock persistence |
-| AC-005 | Demo shows every entry | Test with pre-seeded `seenTutorialWorlds` |
-| AC-006 | Reopen marks seen again | Test `?` path does not call `markTutorialSeen` |
-| AC-007 | Timer/heart side effects | Demo panel has no gameplay VM/provider coupling |
-| AC-008 | Nondeterministic demos break tests | `TutorialDemoContent` unit tests with fixed track ids |
-| AC-009 | Overflow on SE | Widget test at 320×568 with `scrollable` modal body |
+| AC-001 | A new track or rule ships without tutorial coverage. | Unit test loads tracks/rules and fails on missing tutorial definitions. |
+| AC-002 | Timer starts behind the tutorial or tutorial does not appear. | Widget/integration test asserts unseen track shows tutorial before gameplay timer UI begins. |
+| AC-003 | Tutorial repeats every visit or never persists. | Persistence test asserts `seenTutorialWorlds` changes after dismissal and skip occurs next entry. |
+| AC-004 | Help reopen mutates progress or gameplay state. | Widget test snapshots seen state, score, hearts, timer, and progress around help reopen. |
+| AC-005 | Objective strip is absent or mismatched with the live prompt. | Widget test asserts objective and prompt render together for representative visual/text rules. |
+| AC-006 | Modal overflows or is inaccessible on small iPhones. | 320pt viewport widget test plus semantics checks. |
+| AC-007 | Track images silently fall back for known tracks. | Unit/widget test verifies ID-to-asset mapping for all 23 tracks. |
 
 ## 2. Design
 
 ### 2.1 Architecture Blueprint
 
+Files to create:
+
+- `assets/content/tutorials.json` — 23 tutorial definitions keyed by `trackId` and `rule`.
+- `lib/core/tutorial/tutorial_definition.dart` — pure Dart model and `TutorialDemoType` enum.
+- `lib/core/tutorial/tutorial_repository.dart` — pure Dart/asset-loading adapter that validates tutorial coverage.
+- `lib/widgets/tutorial/tutorial_demo_panel.dart` — native Flutter interactive demo surface.
+- `lib/widgets/tutorial/tutorial_objective_strip.dart` — compact gameplay objective display.
+- `test/core/tutorial/tutorial_repository_test.dart` — coverage and validation tests.
+- `test/widgets/tutorial/tutorial_demo_panel_test.dart` — interaction/accessibility tests.
+- `test/widgets/tutorial/tutorial_objective_strip_test.dart` — objective rendering tests.
+- `test/features/navigation/track_detail_tutorial_test.dart` — first-entry and skip flow tests.
+- `Docs/adr/2026-06-14-native-tutorial-demos.md` — decision to use Flutter-native interaction.
+- `Docs/adr/2026-06-14-tutorial-content-json.md` — decision to author tutorial definitions in JSON.
+
+Files to change:
+
+- `pubspec.yaml` — register `assets/content/tutorials.json`.
+- `lib/core/content_provider.dart` — load or expose tutorial repository alongside tracks without changing engine rules.
+- `lib/widgets/how_to_play_modal.dart` — embed the interactive demo and route CTA state.
+- `lib/features/navigation/track_detail_screen.dart` — gate first-entry tutorial before difficulty selection and persist dismissal.
+- `lib/features/gameplay/gameplay_screen.dart` — render objective strip and preserve `?` reopen without side effects.
+- `lib/main.dart` — ensure incomplete onboarding routes to `OnboardingScreen` from root/progress state.
+- `lib/theme/design_tokens.dart` or a small helper — map current track IDs to available icon assets/fallbacks.
+- `test/widgets/how_to_play_modal_test.dart` — replace static-only expectations with demo behavior.
+- `Docs/Master-Plan.md` — backlog row only; no active task enrollment.
+
+Key interfaces:
+
+```dart
+class TutorialDefinition {
+  final String trackId;
+  final PuzzleRule rule;
+  final String goal;
+  final List<String> steps;
+  final TutorialDemoType demoType;
+  final String correctAction;
+  final String objectiveTemplate;
+}
+
+enum TutorialDemoType {
+  shapeMatch,
+  count,
+  oddOneOut,
+  sequence,
+  binary,
+  boolean,
+  cipher,
+  math,
+  geometry,
+  physics,
+  grid,
+}
 ```
-lib/core/tutorial_demo_content.dart     # Seeded puzzle factory (pure Dart)
-lib/widgets/tutorial_demo_panel.dart    # Tap options + feedback (Flutter)
-lib/widgets/how_to_play_modal.dart      # Modal chrome + embed panel + CTA gating
-lib/features/navigation/track_detail_screen.dart  # First-entry gate + markTutorialSeen
-lib/features/gameplay/gameplay_screen.dart        # ? button → interactive modal
-lib/features/settings/settings_screen.dart        # Should: How to play row
-test/widgets/tutorial_demo_panel_test.dart
-test/widgets/how_to_play_modal_test.dart          # extend
-test/features/navigation/track_detail_tutorial_test.dart
-test/core/tutorial_demo_content_test.dart
-```
 
-**Data flow:**
+Tutorial copy must stay short, sentence case, and ADHD-friendly. It should explain what to do, not how the code works.
 
-```mermaid
-sequenceDiagram
-  participant Player
-  participant TrackDetail
-  participant Modal as HowToPlayModal
-  participant Demo as TutorialDemoPanel
-  participant Content as TutorialDemoContent
-  participant Progress as PlayerProgress
+### 2.2 Track Objective Matrix
 
-  Player->>TrackDetail: tap level / Continue
-  TrackDetail->>Progress: track.id in seenTutorialWorlds?
-  alt first visit
-    TrackDetail->>Modal: show(track, onStart)
-    Modal->>Content: forTrack(track)
-    Content-->>Demo: seeded Puzzle
-    Player->>Demo: tap option
-    Demo-->>Modal: success state
-    Player->>Modal: tap CTA
-    Modal->>Progress: markTutorialSeen(track.id)
-    Modal->>TrackDetail: onStart → difficulty sheet
-  else return visit
-    TrackDetail->>TrackDetail: _showDifficultySheet
-  end
-```
+| Track | Player must do | Interactive method |
+|-------|----------------|--------------------|
+| Pattern Match | Pick the option identical to the target pattern. | Tap matching shape card. |
+| Shape Counter | Count requested shapes. | Tap number option. |
+| Odd One Out | Find the item that differs. | Tap odd shape. |
+| Color Code | Match the color sequence. | Tap matching color pattern. |
+| Missing Piece | Fill the blank in a sequence. | Tap missing item. |
+| Sequence | Predict the next item. | Tap next shape. |
+| Binary Logic | Convert filled/outlined dots to a number. | Tap decoded number. |
+| Logic Gates | Apply AND/OR/XOR. | Tap TRUE/FALSE. |
+| Cipher Break | Use the shape-letter key. | Tap decoded text. |
+| Add & Subtract | Solve quick arithmetic. | Tap answer. |
+| Multiply & Divide | Solve multiplication/division. | Tap answer. |
+| Powers & Roots | Solve exponent/root prompt. | Tap answer. |
+| Remainders | Find modulo remainder. | Tap answer. |
+| Fractions | Simplify or compare the fraction. | Tap fraction. |
+| Algebra Lab | Solve for x. | Tap value. |
+| Area Master | Calculate area. | Tap answer. |
+| Angle Finder | Find missing triangle angle. | Tap angle. |
+| Symmetry Lab | Count symmetry lines. | Tap count or infinity. |
+| Gravity Drop | Choose heaviest object. | Tap object/weight. |
+| Momentum | Predict collision direction. | Tap direction. |
+| Balance Lab | Balance lever torque. | Tap missing weight. |
+| Number Grid | Complete grid pattern. | Tap missing number. |
+| Equation Balance | Make both sides equal. | Tap total/value. |
 
-**Module boundaries:**
+### 2.3 Data Flow
 
-- `TutorialDemoContent` — pure Dart; no Flutter imports; uses `PuzzleGenerator(Random(seed))`
-- `TutorialDemoPanel` — presentation only; receives `Puzzle` + callbacks
-- `HowToPlayModal` — orchestrates demo state + CTA enablement
-- Navigation screens — gate when to show modal; persistence via existing `persistenceProvider`
+1. App startup loads tracks and tutorial definitions from bundled assets.
+2. `TutorialRepository` validates every `TrackDefinition` has one matching `TutorialDefinition` and every active rule has a supported `TutorialDemoType`.
+3. When a player opens a track/level, navigation checks `PlayerProgress.seenTutorialWorlds`.
+4. If unseen, `HowToPlayModal` renders `TutorialDemoPanel`; timers and gameplay view models are not started.
+5. On demo dismissal, persistence calls `markTutorialSeen(playerId, track.id)`, invalidates `playerProgressProvider`, and continues to difficulty/gameplay.
+6. If seen, navigation skips directly to difficulty/gameplay.
+7. During gameplay, `TutorialObjectiveStrip` renders the definition objective plus the live puzzle prompt.
+8. The gameplay help button reopens the modal in help mode; help mode does not persist or mutate gameplay state.
 
-### 2.2 STRIDE Threat Model
+### 2.4 Threat Model (STRIDE)
 
-| Threat | Category | Surface | Mitigation |
-|--------|----------|---------|------------|
-| Malicious track id in progress JSON | Tampering | Hive local storage | Existing encrypted Hive; tutorial list is non-security-critical |
-| Demo prompt injection via worlds.json | Tampering | Asset bundle | worlds.json is signed with app; no runtime user edit |
-| Tutorial skip breaks monetization | Elevation | Hearts economy | Demo is pre-heart; no bypass of gameplay gates |
-| PII in demo telemetry | Information disclosure | N/A | AC-007: no telemetry during demo |
-| Modal DoS via rapid reopen | Denial of service | UI | Local only; dismissible via CTA; no network |
+| Threat | Category | Mitigation |
+|--------|----------|------------|
+| Malformed tutorial JSON crashes startup. | Denial of Service | Validate schema with safe fallback and tests; fail visibly during development. |
+| Tutorial content drifts from actual puzzle rule. | Tampering / Quality | Coverage tests bind `trackId`, `rule`, and demo type to current `worlds.json` and `PuzzleRule`. |
+| Tutorial dismissal grants gameplay progress or affects resources. | Elevation of Privilege | Demo does not use gameplay VM; AC-004/AC-007 tests assert no score/heart/timer/progress mutation. |
+| User-controlled prompt text leaks into tutorial UI. | Information Disclosure | Tutorial content is bundled app asset only; no user input or secrets. |
+| Repeated modal opens degrade usability. | Denial of Service | Seen-state skip on first-entry path; manual help remains player-triggered. |
+| Analytics accidentally records tutorial behavior as gameplay. | Repudiation / Privacy | No analytics/backend work in BL-24; any future telemetry must be separate. |
 
-**Trust boundaries touched:** local asset bundle, Hive `PlayerProgress`, user tap input. No auth, network, or secrets.
+Trust boundaries: local asset bundle, encrypted Hive progress, player tap input. No new network, auth, secrets, or external APIs.
 
-### 2.3 Dependencies
+### 2.5 Build Scope
 
-No new `pubspec.yaml` dependencies. Reuses `PuzzleGenerator`, `ShapeRenderer`, existing theme tokens.
+✅ Ready to proceed — Scope Boundary
+Files in scope      : `assets/content/tutorials.json`, `pubspec.yaml`, `lib/core/tutorial/*`, `lib/widgets/tutorial/*`, `lib/widgets/how_to_play_modal.dart`, `lib/features/navigation/track_detail_screen.dart`, `lib/features/gameplay/gameplay_screen.dart`, `lib/main.dart`, `lib/theme/design_tokens.dart`, related tests, BL-24 docs/ADRs
+Directories in scope: `assets/content/`, `lib/core/tutorial/`, `lib/widgets/tutorial/`, `test/core/tutorial/`, `test/widgets/tutorial/`, `test/features/navigation/`, `Docs/archived/`, `Docs/adr/`
+Out of scope        : `docs/PRODUCT-WEDGE.md`, game engine rule changes, backend/Firebase analytics, App Store media assets, active sprint enrollment, unrelated BL-23 files
 
-### 2.4 Build Scope
+### 2.6 Brownfield Drift Resolution
 
-**Files in scope:**
-
-- `lib/core/tutorial_demo_content.dart` (new)
-- `lib/widgets/tutorial_demo_panel.dart` (new)
-- `lib/widgets/how_to_play_modal.dart` (modify)
-- `lib/features/navigation/track_detail_screen.dart` (modify)
-- `lib/features/gameplay/gameplay_screen.dart` (modify — verify `?` path)
-- `lib/features/settings/settings_screen.dart` (modify — Should AC-010)
-- `test/core/tutorial_demo_content_test.dart` (new)
-- `test/widgets/tutorial_demo_panel_test.dart` (new)
-- `test/widgets/how_to_play_modal_test.dart` (modify)
-- `test/features/navigation/track_detail_tutorial_test.dart` (new)
-- `docs/adr/0001-seeded-tutorial-demos.md` (reference)
-
-**Out of scope:**
-
-- `lib/core/engine/puzzle_generator.dart` rule logic changes (unless demo bug found)
-- `assets/content/worlds.json` content edits
-- `world_map_screen.dart` structural refactor
-- Firebase / analytics
-- `docs/PRODUCT-WEDGE.md`
+| Drift | Resolution |
+|-------|------------|
+| Existing BL-24 draft used seeded generator demos instead of JSON content. | Supersede with JSON content ADR because product wants explicit tutorial copy/objectives per track. |
+| Existing Master-Plan row pointed BL-24 at EP-04 with Todo status. | Update to EP-01 backlog row to match approved plan. |
+| `Docs/Context/CONTEXT.md` referred to seeded `TutorialDemoContent`. | Update terms to reference `tutorials.json` and `TutorialRepository`. |
 
 ## 3. Tasks
 
 ### 3.1 Task Tree
 
-- [ ] **1. Core demo content**
-  - [ ] 1.1 Add `TutorialDemoContent.forTrack(track)` with stable seed from `track.id` — _Requirements: AC-008_
-  - [ ] 1.2 Unit tests: determinism + easy difficulty params for 3 representative tracks — _Requirements: AC-008_
-
-- [ ] **2. Interactive demo UI**
-  - [ ] 2.1 Add `TutorialDemoPanel` (options, correct/incorrect feedback, semantics) — _Requirements: AC-002, AC-003, AC-011_
-  - [ ] 2.2 Widget tests: correct tap enables parent success; wrong tap shows retry — _Requirements: AC-002, AC-003_
-
-- [ ] **3. Modal integration**
-  - [ ] 3.1 Upgrade `HowToPlayModal` to embed panel; gate CTA on demo success; scrollable body — _Requirements: AC-002, AC-009_
-  - [ ] 3.2 Extend `how_to_play_modal_test.dart` for demo + CTA gating — _Requirements: AC-002_
-
-- [ ] **4. Navigation wiring**
-  - [ ] 4.1 `TrackDetailScreen`: first-entry gate before `_showDifficultySheet`; `markTutorialSeen` on CTA — _Requirements: AC-001, AC-004, AC-005_
-  - [ ] 4.2 Integration test: first visit shows modal; second skips — _Requirements: AC-001, AC-005_
-  - [ ] 4.3 `GameplayScreen` `?` reopens demo without persistence side effect — _Requirements: AC-006, AC-007_
-
-- [ ] **5. Settings (Should)**
-  - [ ] 5.1 Add Settings "How to play" row → demo for featured track — _Requirements: AC-010_
-
-- [ ] **6. Verification**
-  - [ ] 6.1 `dart analyze` + `flutter test` full suite — _Requirements: all Must ACs_
+- [ ] **1. Spec artifacts:** Write BL-24 spec, ADRs, test plan, and Master-Plan backlog row.
+  - [ ] 1.1 Create/update BL-24 spec without approval marker — _Requirements: AC-001, AC-002, AC-003, AC-004, AC-005, AC-006, AC-007_
+  - [ ] 1.2 Create BL-24 test plan with AC coverage and smoke set — _Requirements: AC-001, AC-002, AC-003, AC-004, AC-005, AC-006, AC-007_
+  - [ ] 1.3 Create ADRs for native Flutter demos and JSON tutorial content — _Requirements: AC-001, AC-006_
+  - [ ] 1.4 Update `Docs/Master-Plan.md` backlog row only — _Requirements: AC-001_
+- [ ] **2. Tutorial content:** Define `tutorials.json`, validation model, and all 23 track objectives.
+  - [ ] 2.1 Add `assets/content/tutorials.json` with all track definitions — _Requirements: AC-001_
+  - [ ] 2.2 Add `TutorialDefinition`, `TutorialDemoType`, and repository validation — _Requirements: AC-001_
+  - [ ] 2.3 Register tutorial asset in `pubspec.yaml` — _Requirements: AC-001_
+- [ ] **3. Tutorial UI:** Build reusable interactive demo modal with success state and accessibility.
+  - [ ] 3.1 Build `TutorialDemoPanel` using Flutter widgets and existing shape rendering — _Requirements: AC-002, AC-006_
+  - [ ] 3.2 Update `HowToPlayModal` to host the demo, feedback, and CTA state — _Requirements: AC-002, AC-006_
+- [ ] **4. Flow wiring:** Show first-entry tutorial once, preserve `?` reopen, add gameplay objective strip.
+  - [ ] 4.1 Gate unseen track entry before timed play starts — _Requirements: AC-002_
+  - [ ] 4.2 Persist dismissal and skip seen tracks — _Requirements: AC-003_
+  - [ ] 4.3 Preserve gameplay help reopen without mutation — _Requirements: AC-004_
+  - [ ] 4.4 Add gameplay objective strip from tutorial definition and live prompt — _Requirements: AC-005_
+  - [ ] 4.5 Ensure root onboarding still appears when `onboardingComplete == false` — _Requirements: AC-006_
+- [ ] **5. Asset mapping:** Fix track ID to available PNG mapping with fallbacks.
+  - [ ] 5.1 Add explicit track ID to icon asset mapping for all 23 tracks — _Requirements: AC-007_
+  - [ ] 5.2 Add tests proving no known track falls through to broken image noise — _Requirements: AC-007_
+- [ ] **6. Verification:** Add unit/widget tests, run gates, and document manual smoke.
+  - [ ] 6.1 Add coverage tests for tutorial definitions and rule mapping — _Requirements: AC-001_
+  - [ ] 6.2 Add widget/integration tests for first-entry, skip, help reopen, objective strip, accessibility, and reduced motion — _Requirements: AC-002, AC-003, AC-004, AC-005, AC-006_
+  - [ ] 6.3 Run `dart analyze` and `flutter test`; record manual iPhone smoke as deferred evidence if not executable locally — _Requirements: AC-001, AC-002, AC-003, AC-004, AC-005, AC-006, AC-007_
 
 ### 3.2 Wave Plan
 
-**Wave 1 (parallel):** 1.1, 1.2, 2.1, 2.2 — no shared files between 1.x and 2.1 author; 2.2 depends on 2.1.
+**Wave 1 (parallel):** 2.1, 2.2, 3.1, 6.1
+**Wave 2 (sequential after Wave 1):** 2.3, 3.2, 4.1, 4.2
+**Wave 3 (sequential after Wave 2):** 4.3, 4.4, 4.5, 5.1, 5.2
+**Wave 4 (sequential after Wave 3):** 6.2, 6.3
 
-**Wave 2 (sequential):** 3.1 → 3.2 — depends on Wave 1.
+### 3.3 Test Plan
 
-**Wave 3 (sequential):** 4.1 → 4.2 → 4.3 — depends on Wave 2.
+Test plan: `Docs/AgToosa_TestPlan-BL-24.md`
+AC coverage: 7 ACs mapped to 7 test IDs
+Smoke set: 5 tests tagged `@smoke`
 
-**Wave 4 (parallel after Wave 3):** 5.1, 6.1 — 5.1 optional Should; 6.1 last.
-
-### 3.3 Spec Quality Analyzer
+### 3.4 Spec Quality Analyzer
 
 | Check | Result |
 |-------|--------|
-| Must ACs testable | Pass — mapped in test plan |
-| Goal / scope / tasks aligned | Pass |
-| No TBD requirements | Pass |
-| Brownfield drift documented | Pass — §1.2 |
-| Claim boundaries stated | Pass — agent-instructed Hive persistence |
+| Every Must AC is observable and testable. | Pass |
+| Goal, non-goals, build scope, ACs, task tree, and test plan are aligned. | Pass |
+| Every Must AC maps to at least one test-plan row. | Pass |
+| Claim boundaries are stated. | Pass |
+| `Docs/Master-Plan.md` remains repo-local source of truth. | Pass |
+| No placeholder/TBD requirements remain. | Pass |
 
-### 3.4 Story Skill Opportunity
+### 3.5 Story Skill Opportunity
 
-| Skill | Trigger | Decision |
-|-------|---------|----------|
-| `tutorial-demo-panel` | Editing how-to / tutorial widgets | **Do not generate** — one-off story; reuse AgToosa build TDD |
+| Skill name | Trigger description | Purpose | Inputs | Optional resources | Validation | Decision |
+|------------|---------------------|---------|--------|--------------------|------------|----------|
+| tutorial-content-auditor | Repeated future edits to `tutorials.json` or track/rule content | Check tutorial coverage and copy constraints | `worlds.json`, `tutorials.json`, `PuzzleRule` | None | Unit coverage command | Do not generate now; one story does not justify a project skill. |
 
 ## Spec Revision Log
 
 | Rev | Date | Change | Why | Approved |
 |-----|------|--------|-----|----------|
-| — | — | — | — | — |
+| R0 | 2026-06-14 | Initial BL-24 spec aligned to approved plan. | User requested full `/agtoosa-spec` artifacts for interactive how-to demos. | Pending |

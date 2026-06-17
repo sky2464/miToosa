@@ -74,8 +74,8 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 | ID | Title | Type | Estimate | Epic | Priority | Status |
 |----|-------|------|----------|------|----------|--------|
 | BL-23 | Chore: App Store metadata + screenshots upload | Chore | M | EP-01 | P0 | ⬜ Backlog |
-| BL-24 | Feature: Interactive How-To Demos | Feature | M | EP-04 | P1 | 🟦 Todo |
 | BL-25 | Feature: Physical iPhone TestFlight QA pass | Feature | M | EP-01 | P0 | ⬜ Backlog |
+| BL-24 | Feature: Interactive how-to demos | Feature | M | EP-01 | P1 | ⬜ Backlog |
 | S1-03 | Feature: Manual wedge QA walkthrough | Feature | S | EP-01 | P1 | ⬜ Backlog |
 | S1-04 | Feature: Playtest survey + recruitment | Feature | M | EP-01 | P1 | ⬜ Backlog |
 | BL-04 | Feature: Backend leaderboard (post-playtest gate) | Feature | L | EP-03 | P2 | ⬜ Backlog |
@@ -87,10 +87,10 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | ID | Title | Stories | Status |
 |----|-------|---------|--------|
-| EP-01 | Epic: Launch Readiness & Validation | 8 open / 14 total | 🟨 In Progress |
+| EP-01 | Epic: Launch Readiness & Validation | 9 open / 15 total | 🟨 In Progress |
 | EP-02 | Epic: Platform Release Infrastructure | 2 open / 4 total | 🟨 In Progress |
 | EP-03 | Epic: Retention & Monetization Expansion | 5 open / 5 total | ⬜ Backlog |
-| EP-04 | Epic: User Experience Polish | 1 open / 7 total | 🟨 In Progress |
+| EP-04 | Epic: User Experience Polish | 0 open / 6 total | ✅ Mostly Done |
 | EP-05 | Epic: Technical Debt & Infrastructure | 0 open / 4 total | ✅ Mostly Done |
 
 **EP-01 charter:** Prove product-market fit and ship v1.5.0 iPhone launch — staging/analytics where needed, playtest validation, launch docs, and App Store readiness. Success = TestFlight build accepted and wedge KPIs measurable.
@@ -133,7 +133,7 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | Date | Event | By |
 |------|-------|----|
-| 2026-06-14 | /agtoosa-spec BL-24 — Spec drafted; `docs/archived/spec-BL-24.md` + test plan; 11 ACs (8 Must); estimate M; pending approval | AgToosa |
+| 2026-06-14 | /agtoosa-spec BL-24 — Spec drafted; `docs/archived/spec-BL-24.md` + test plan + ADRs; 7 ACs (6 Must); estimate M; backlog only; pending approval | AgToosa |
 | 2026-06-14 | /agtoosa-build BL-23 — Firebase CLI reauth OK; `flutterfire configure` complete; `firebase_options_test.dart` updated (4 tests green) | AgToosa |
 | 2026-06-11 | /agtoosa-build BL-23 — Build 🏗️ Started; spec approved; blocked on `firebase login --reauth` for `flutterfire configure` | AgToosa |
 | 2026-06-11 | /agtoosa-spec BL-23 — Spec ✅ approved; `docs/AgToosa_Spec-BL-23-flutterfire-ios.md` + test plan | AgToosa |
