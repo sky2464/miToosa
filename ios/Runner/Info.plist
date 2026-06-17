@@ -77,5 +77,7 @@
 	<string>This app does not require local network access.</string>
 	<key>NSBonjourServiceTypes</key>
 	<array/>
+	<key>FIREBASE_ANALYTICS_COLLECTION_ENABLED</key>
+	<true/>
 </dict>
 </plist>
