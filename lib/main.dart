@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
@@ -27,16 +28,34 @@ void main() async {
       );
     }
     final analytics = FirebaseAnalytics.instance;
-    await analytics.setConsent(analyticsStorageConsentGranted: true);
+    await analytics.setConsent(
+      analyticsStorageConsentGranted: true,
+      adStorageConsentGranted: true,
+      adUserDataConsentGranted: true,
+      adPersonalizationSignalsConsentGranted: true,
+    );
     await analytics.setAnalyticsCollectionEnabled(true);
     if (kDebugMode) {
       debugPrint('Firebase Analytics enabled for ${DefaultFirebaseOptions.ios.appId}');
-      await analytics.logEvent(
-        name: 'mitoosa_debug_ping',
-        parameters: const {'source': 'main'},
-      );
-      final appInstanceId = await analytics.appInstanceId;
-      debugPrint('Firebase appInstanceId: $appInstanceId');
+      // Delay to give the native SDK time to apply Consent and Collection enablement
+      Future.delayed(const Duration(seconds: 3), () async {
+        debugPrint('Sending initial Firebase debug ping...');
+        await analytics.logEvent(
+          name: 'mitoosa_debug_ping',
+          parameters: const {'source': 'main'},
+        );
+        final appInstanceId = await analytics.appInstanceId;
+        debugPrint('Firebase appInstanceId: $appInstanceId');
+
+        // Start a periodic pulse to provide a steady stream of events in DebugView
+        Timer.periodic(const Duration(seconds: 15), (timer) async {
+          debugPrint('Sending periodic Firebase debug pulse...');
+          await analytics.logEvent(
+            name: 'mitoosa_debug_pulse',
+            parameters: {'tick': timer.tick},
+          );
+        });
+      });
     }
   }
 

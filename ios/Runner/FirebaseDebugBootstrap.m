@@ -27,8 +27,9 @@ static void MitoosaSetAPMUserDefaultsDebugMode(void) {
 }
 
 static void MitoosaEnsureFirebaseDebugLaunchArguments(void) {
-  NSMutableArray<NSString *> *arguments =
-      [[[NSProcessInfo processInfo] arguments] mutableCopy];
+  NSArray<NSString *> *args = [[NSProcessInfo processInfo] arguments];
+  NSLog(@"[MitoosaDebug] Initial process arguments: %@", args);
+  NSMutableArray<NSString *> *arguments = [args mutableCopy];
   if (arguments == nil) {
     return;
   }
@@ -46,6 +47,7 @@ static void MitoosaEnsureFirebaseDebugLaunchArguments(void) {
 
 void MitoosaEnableFirebaseAnalyticsDebugMode(void) {
 #if DEBUG
+  NSLog(@"[MitoosaDebug] MitoosaEnableFirebaseAnalyticsDebugMode called.");
   NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
   [defaults setBool:YES forKey:@"/google/firebase/debug_mode"];
   [defaults setBool:YES forKey:@"/google/measurement/debug_mode"];
@@ -58,6 +60,7 @@ void MitoosaEnableFirebaseAnalyticsDebugMode(void) {
 
 #if DEBUG
 __attribute__((constructor(0))) static void MitoosaFirebaseDebugBootstrap(void) {
+  NSLog(@"[MitoosaDebug] MitoosaFirebaseDebugBootstrap constructor(0) executing.");
   MitoosaEnableFirebaseAnalyticsDebugMode();
 }
 #endif
