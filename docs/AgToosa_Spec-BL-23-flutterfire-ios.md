@@ -83,18 +83,25 @@
 ### 3.1 Task Tree
 
 - [ ] **1.** FlutterFire configure (owner/agent with Firebase CLI auth)
-  - [ ] 1.1 Ensure iOS app exists in Firebase project `mitoosa-2121b` for `dev.atoosa.mitoosa` — _AC-001, AC-002_
-  - [ ] 1.2 Run `flutterfire configure --project=mitoosa-2121b --platforms=ios` — _AC-001, AC-002_
-  - [ ] 1.3 Confirm `GoogleService-Info.plist` on disk and gitignored — _AC-002, AC-004_
+  - [x] 1.1 Ensure iOS app exists in Firebase project `mitoosa-2121b` for `dev.atoosa.mitoosa` — _AC-001, AC-002_
+  - [x] 1.2 Run `flutterfire configure --project=mitoosa-2121b --platforms=ios` — _AC-001, AC-002_
+  - [x] 1.3 Confirm `GoogleService-Info.plist` on disk and gitignored — _AC-002, AC-004_
 - [ ] **2.** Tests and docs
-  - [ ] 2.1 Update `firebase_options_test.dart` for configured iOS options — _AC-001_
+  - [x] 2.1 Update `firebase_options_test.dart` for configured iOS options — _AC-001_
   - [ ] 2.2 Update `docs/ANALYTICS-SETUP.md` with project ID and DebugView checklist — _AC-003, AC-005_
   - [ ] 2.3 Update `docs/IPHONE-LAUNCH-READINESS.md` checkboxes — _AC-006_
 - [ ] **3.** Verification
   - [ ] 3.1 `dart analyze` + `flutter test` — all green — _AC-001_
-  - [ ] 3.2 Manual DebugView verification — _AC-005_ `[manual-deferred until device run]`
+  - [ ] 3.2 Manual DebugView verification — _AC-005_ `[manual-deferred: 2026-06-19]`
 
-### 3.2 Test Plan
+### 3.2 Wave Plan
+
+**Wave 1 (completed):** 1.1, 1.2, 1.3 — Firebase console/app registration and local FlutterFire generation are dependency-ordered.
+**Wave 2 (parallel after Wave 1):** 2.1, 2.2, 2.3 — tests and docs can be updated independently after generated config exists.
+**Wave 3 (sequential after Wave 2):** 3.1 — run `dart analyze` and `flutter test` after code/docs updates land.
+**Wave 4 (manual-deferred after Wave 3):** 3.2 — DebugView verification requires a device/simulator run and Firebase console access.
+
+### 3.3 Test Plan
 
 See `docs/AgToosa_TestPlan-BL-23.md`.
 

@@ -2,3 +2,7 @@
 {"ts":"2026-06-11T20:50:00Z","phase":"spec","event":"approved","story":"BL-23","by":"AgToosa"}
 {"ts":"2026-06-11T20:50:00Z","phase":"build","event":"start","story":"BL-23","by":"AgToosa"}
 {"ts":"2026-06-15T03:44:38Z","phase":"spec","event":"drafted","story":"BL-24","by":"AgToosa"}
+{"ts":"2026-06-19T12:00:00Z","phase":"spec","event":"tasks-reconciled","story":"BL-23","by":"AgToosa"}
+{"ts":"2026-06-19T12:00:00Z","phase":"build","event":"tracking-reconciled","story":"BL-23","by":"AgToosa"}
+{"ts":"2026-06-19T12:00:00Z","phase":"ship","event":"docs-version-parity","story":"v1.5.0","by":"AgToosa"}
+{"ts":"2026-06-19T12:00:00Z","phase":"task","event":"source-of-truth-reconciled","story":"DX-01,BL-19","by":"AgToosa"}

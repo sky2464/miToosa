@@ -8,7 +8,15 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), version
 ## [Unreleased]
 
 ### Shipped (AgToosa cycle)
+- _No unreleased shipped entries._
+
+---
+
+## [1.5.0] — 2026-06-19
+
+### Launch Readiness
 - 2026-06-11 — **S2-05** Tracks UI fixes (theme-aware glass, header menus, CTA polish) — [spec-S2-05.md](archived/spec-S2-05.md) · [ship-check-S2-05.md](archived/ship-check-S2-05.md)
+- iPhone launch milestone aligned with `pubspec.yaml` `1.5.0+2`; active release work remains in BL-23 until DebugView/manual launch gates complete.
 
 ---
 

@@ -1,7 +1,7 @@
 # Master-Plan
 
 > **Source of truth for active work.** Completed work lives in `Docs/archived/` — see Completed This Cycle for links.
-> **Last updated:** 2026-06-14
+> **Last updated:** 2026-06-19
 
 ## Project Charter
 
@@ -25,11 +25,11 @@
 ## Active Cycle
 
 > Stories committed to the current sprint/cycle.
-> **Progress:** `███▱▱▱▱▱▱▱ 3/6 tasks` _(BL-23 in progress)_
+> **Progress:** `████▱▱▱ 4/7 automated tasks` _(BL-23 in progress; 1 manual-deferred)_
 
 | ID | Title | Type | Estimate | Status | Tasks Done |
 |----|-------|------|----------|--------|-----------|
-| BL-23 | Chore: FlutterFire iOS config + verify DebugView | Chore | S | 🟨 In Progress | 3/6 |
+| BL-23 | Chore: FlutterFire iOS config + verify DebugView | Chore | S | 🟨 In Progress | 4/7 tasks (1 manual-deferred) |
 
 Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blocked · 🔧 Awaiting Manual · 🏁 Shipped
 
@@ -37,16 +37,17 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 > BL-23 — see `docs/AgToosa_Spec-BL-23-flutterfire-ios.md`
 
-| Task | Status | Notes |
-|------|--------|-------|
-| 1.1 Ensure iOS app in Firebase `mitoosa-2121b` | ✅ Done | iOS app `dev.atoosa.mitoosa` registered via `flutterfire configure` |
-| 1.2 Run `flutterfire configure` | ✅ Done | `mitoosa-2121b`; `firebase_options.dart` + local plist generated |
-| 1.3 Confirm plist gitignored | ✅ Done | `ios/Runner/GoogleService-Info.plist` gitignored |
-| 2.1 Update `firebase_options_test.dart` | ⬜ Todo | After 1.2 |
-| 2.2 Update analytics docs | 🟨 In Progress | Project ID pinned in `docs/ANALYTICS-SETUP.md` |
-| 2.3 Update launch readiness checkboxes | ⬜ Todo | After 1.2 |
-| 3.1 analyze + test | ⬜ Todo | |
-| 3.2 DebugView manual | 🔧 Awaiting Manual | After 1.2 + device run |
+- [ ] **1.** FlutterFire configure: generate iOS Firebase config for `mitoosa-2121b`
+  - [x] 1.1 Ensure iOS app exists in Firebase project `mitoosa-2121b` for `dev.atoosa.mitoosa` — _Requirements: AC-001, AC-002_
+  - [x] 1.2 Run `flutterfire configure --project=mitoosa-2121b --platforms=ios` — _Requirements: AC-001, AC-002_
+  - [x] 1.3 Confirm `GoogleService-Info.plist` on disk and gitignored — _Requirements: AC-002, AC-004_
+- [ ] **2.** Tests and docs: update verification coverage and launch docs
+  - [x] 2.1 Update `firebase_options_test.dart` for configured iOS options — _Requirements: AC-001_
+  - [ ] 2.2 Update `docs/ANALYTICS-SETUP.md` with project ID and DebugView checklist — _Requirements: AC-003, AC-005_ _(in progress: project ID pinned)_
+  - [ ] 2.3 Update `docs/IPHONE-LAUNCH-READINESS.md` checkboxes — _Requirements: AC-006_
+- [ ] **3.** Verification: prove automated checks and defer external DebugView
+  - [ ] 3.1 `dart analyze` + `flutter test` — all green — _Requirements: AC-001_
+  - [ ] 3.2 Manual DebugView verification — _Requirements: AC-005_ `[manual-deferred: 2026-06-19]`
 
 ## Manual / Deferred Tasks
 
@@ -60,6 +61,7 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 | BL-22 | — | 2026-06-03 | Xcode Archive → TestFlight → App Store submit |
 | BL-22 | — | 2026-06-03 | Physical iPhone QA (onboarding, gameplay, share, VoiceOver, offline) |
 | EP-01 | — | 2026-05-04 | Company registration (see `docs/COMPANY-REGISTRATION-READINESS.md`) |
+| BL-23 | 3.2 | 2026-06-19 | Manual DebugView verification after physical device/simulator run with `FIREBASE_ENABLED=true` |
 
 ## Blocked
 
@@ -80,6 +82,7 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 | S1-04 | Feature: Playtest survey + recruitment | Feature | M | EP-01 | P1 | ⬜ Backlog |
 | BL-04 | Feature: Backend leaderboard (post-playtest gate) | Feature | L | EP-03 | P2 | ⬜ Backlog |
 | BL-05 | Feature: VIP / IAP flow | Feature | L | EP-03 | P2 | ⬜ Backlog |
+| DX-01 | Chore: Complete gstack `/plan-tune` QA + ship docs | Chore | XS | EP-05 | P4 | ⬜ Backlog |
 
 ## Epics
 
@@ -91,7 +94,7 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 | EP-02 | Epic: Platform Release Infrastructure | 2 open / 4 total | 🟨 In Progress |
 | EP-03 | Epic: Retention & Monetization Expansion | 5 open / 5 total | ⬜ Backlog |
 | EP-04 | Epic: User Experience Polish | 0 open / 6 total | ✅ Mostly Done |
-| EP-05 | Epic: Technical Debt & Infrastructure | 0 open / 4 total | ✅ Mostly Done |
+| EP-05 | Epic: Technical Debt & Infrastructure | 1 open / 6 total | 🟨 In Progress |
 
 **EP-01 charter:** Prove product-market fit and ship v1.5.0 iPhone launch — staging/analytics where needed, playtest validation, launch docs, and App Store readiness. Success = TestFlight build accepted and wedge KPIs measurable.
 
@@ -126,6 +129,7 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 | S2-04 | Feature: Navigation & shell polish | 2026-05-15 | [spec-S2-04.md](archived/spec-S2-04.md) |
 | BL-01 | Chore: iOS signing setup | 2026-05-15 | [spec-BL-01-BL-02-platform-signing.md](archived/spec-BL-01-BL-02-platform-signing.md) |
 | BL-21 | Chore: Remove expensive CI/CD workflows | 2026-05-15 | [spec-BL-21.md](archived/spec-BL-21.md) |
+| BL-19 | Chore: Sanitize embedded prompt-injection text in design-system docs | 2026-05-16 | [spec-BL-19.md](archived/spec-BL-19.md) |
 
 > Older Update Log entries: [update-log-2026-05.md](archived/update-log-2026-05.md)
 
@@ -133,6 +137,7 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | Date | Event | By |
 |------|-------|----|
+| 2026-06-19 | /agtoosa-status follow-up — Reconciled BL-23 task tree/counter, added Wave Plan, aligned v1.5.0 changelog parity, and re-tracked DX-01/BL-19 source-of-truth entries | AgToosa |
 | 2026-06-14 | /agtoosa-spec BL-24 — Spec drafted; `docs/archived/spec-BL-24.md` + test plan + ADRs; 7 ACs (6 Must); estimate M; backlog only; pending approval | AgToosa |
 | 2026-06-14 | /agtoosa-build BL-23 — Firebase CLI reauth OK; `flutterfire configure` complete; `firebase_options_test.dart` updated (4 tests green) | AgToosa |
 | 2026-06-11 | /agtoosa-build BL-23 — Build 🏗️ Started; spec approved; blocked on `firebase login --reauth` for `flutterfire configure` | AgToosa |
