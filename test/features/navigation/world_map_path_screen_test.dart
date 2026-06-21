@@ -17,6 +17,8 @@ import 'package:mitoosa/data/player_progress_provider.dart';
 import 'package:mitoosa/features/navigation/world_map_path_screen.dart';
 import 'package:mitoosa/theme/design_system.dart';
 
+import '../../helpers/test_safe_theme.dart';
+
 // ── Fixtures ────────────────────────────────────────────────────────────────
 
 PlayerProgress _freshWithOneCompletedLevel() {
@@ -51,8 +53,8 @@ Widget _buildScreen({
     overrides: [playerProgressProvider.overrideWith((ref) async => progress)],
     child: MaterialApp(
       themeMode: themeMode,
-      theme: AethericPulseLight.lightTheme,
-      darkTheme: AethericPulseDark.themeData,
+      theme: testSafeTheme(AethericPulseLight.lightTheme),
+      darkTheme: testSafeTheme(AethericPulseDark.themeData),
       home: const WorldMapPathScreen(),
     ),
   );
@@ -215,7 +217,7 @@ void main() {
           ],
           child: MaterialApp(
             navigatorObservers: [observer],
-            theme: ThemeData.dark(),
+            theme: testSafeTheme(ThemeData.dark()),
             home: const WorldMapPathScreen(),
           ),
         ),
@@ -392,8 +394,8 @@ void main() {
           ],
           child: MaterialApp(
             themeMode: ThemeMode.dark,
-            theme: AethericPulseLight.lightTheme,
-            darkTheme: AethericPulseDark.themeData,
+            theme: testSafeTheme(AethericPulseLight.lightTheme),
+            darkTheme: testSafeTheme(AethericPulseDark.themeData),
             home: const Scaffold(body: WorldMapPathScreen()),
           ),
         ),

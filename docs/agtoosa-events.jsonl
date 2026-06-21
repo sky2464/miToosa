@@ -6,3 +6,5 @@
 {"ts":"2026-06-19T12:00:00Z","phase":"build","event":"tracking-reconciled","story":"BL-23","by":"AgToosa"}
 {"ts":"2026-06-19T12:00:00Z","phase":"ship","event":"docs-version-parity","story":"v1.5.0","by":"AgToosa"}
 {"ts":"2026-06-19T12:00:00Z","phase":"task","event":"source-of-truth-reconciled","story":"DX-01,BL-19","by":"AgToosa"}
+{"ts":"2026-06-20T12:00:00Z","phase":"build","event":"complete","story":"BL-23","by":"AgToosa"}
+{"ts":"2026-06-20T18:00:00Z","phase":"ship","event":"complete","story":"BL-23","by":"AgToosa"}

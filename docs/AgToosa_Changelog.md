@@ -12,11 +12,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), version
 
 ---
 
+## [1.5.1] — 2026-06-20
+
+### Launch Readiness
+- 2026-06-20 — **BL-23** FlutterFire iOS config (`mitoosa-2121b`), analytics docs, DebugView checklist, smoke tests — [spec-BL-23.md](archived/spec-BL-23.md) · [review-BL-23.md](archived/review-BL-23.md) · [ship-check-BL-23.md](archived/ship-check-BL-23.md) · smoke **PASS** (3/3); T-005 DebugView **manual-deferred**
+- Widget test harness: `test/helpers/test_safe_theme.dart` disables InkSparkle shader in headless tests (887 tests green)
+
+---
+
 ## [1.5.0] — 2026-06-19
 
 ### Launch Readiness
 - 2026-06-11 — **S2-05** Tracks UI fixes (theme-aware glass, header menus, CTA polish) — [spec-S2-05.md](archived/spec-S2-05.md) · [ship-check-S2-05.md](archived/ship-check-S2-05.md)
-- iPhone launch milestone aligned with `pubspec.yaml` `1.5.0+2`; active release work remains in BL-23 until DebugView/manual launch gates complete.
+- iPhone launch milestone aligned with `pubspec.yaml` `1.5.0+2`
 
 ---
 

@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mitoosa/features/onboarding/onboarding_screen.dart';
 import 'package:mitoosa/theme/design_system.dart';
 
+import '../../helpers/test_safe_theme.dart';
+
 void main() {
   group('OnboardingScreen', () {
     bool completed = false;
@@ -11,7 +13,7 @@ void main() {
 
     Widget buildSubject() => MaterialApp(
       home: OnboardingScreen(onComplete: () => completed = true),
-      theme: MiToosaTheme.darkTheme,
+      theme: testSafeTheme(MiToosaTheme.darkTheme),
     );
 
     testWidgets('renders all 4 pages (BL-07 first-session expectation page)', (

@@ -4,6 +4,8 @@ import 'package:mitoosa/core/content_provider.dart';
 import 'package:mitoosa/core/models/puzzle.dart';
 import 'package:mitoosa/widgets/how_to_play_modal.dart';
 
+import '../helpers/test_safe_theme.dart';
+
 TrackDefinition _track() => TrackDefinition(
   id: 'track_test',
   name: 'Logic Gates',
@@ -12,7 +14,10 @@ TrackDefinition _track() => TrackDefinition(
   icon: '🧠',
 );
 
-Widget _wrap(Widget child) => MaterialApp(home: Scaffold(body: child));
+Widget _wrap(Widget child) => MaterialApp(
+  theme: testSafeMaterialTheme,
+  home: Scaffold(body: child),
+);
 
 void main() {
   group('HowToPlayModal', () {

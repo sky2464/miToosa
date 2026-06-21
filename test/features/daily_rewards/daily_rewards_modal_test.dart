@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mitoosa/features/daily_rewards/daily_rewards_modal.dart';
 
+import '../../helpers/test_safe_theme.dart';
+
 Widget _wrap({required int currentDay, required VoidCallback onClaim}) =>
     MaterialApp(
+      theme: testSafeMaterialTheme,
       home: Scaffold(
         body: DailyRewardsModal(currentDay: currentDay, onClaim: onClaim),
       ),

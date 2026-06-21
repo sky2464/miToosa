@@ -33,6 +33,24 @@ This document covers the manual setup required to activate analytics forwarding 
 7. For release builds where analytics should be active, pass `--dart-define=FIREBASE_ENABLED=true`.
 8. Complete App Store Connect App Privacy answers to declare the Firebase + Google Analytics behavior used in the submitted build.
 
+## DebugView verification checklist
+
+Use this checklist after `flutterfire configure` completes and before App Store submission. Manual sign-off is recorded in `docs/AgToosa_TestPlan-BL-23.md` (T-005).
+
+- [ ] Google Analytics is linked to Firebase project `mitoosa-2121b`.
+- [ ] `ios/Runner/GoogleService-Info.plist` exists locally with bundle ID `dev.atoosa.mitoosa`.
+- [ ] App rebuilt (not hot-reloaded) with `flutter run -d iPhone --dart-define=FIREBASE_ENABLED=true`.
+- [ ] iOS Analytics debug mode enabled (DEBUG build: `-FIRDebugEnabled` / persisted debug flags in `AppDelegate.swift`).
+- [ ] Signed in past login so `MainAppShell` loads and telemetry can fire.
+- [ ] Firebase Console → **Analytics → DebugView** open; correct device selected in **DEBUG DEVICE**.
+- [ ] At least one event visible within 60 seconds (`mitoosa_debug_ping`, `mitoosa_debug_pulse`, or automatic session/screen events).
+
+**Quick run command:**
+
+```bash
+flutter run -d iPhone --dart-define=FIREBASE_ENABLED=true
+```
+
 ## Notes
 
 - The placeholder `lib/firebase_options.dart` intentionally throws when Firebase is enabled before configuration.

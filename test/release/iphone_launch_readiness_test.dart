@@ -17,6 +17,28 @@ void main() {
       expect(text, contains('App Privacy questionnaire'));
     });
 
+    test('launch readiness marks FlutterFire configure complete', () {
+      final file = File('docs/IPHONE-LAUNCH-READINESS.md');
+      final text = file.readAsStringSync();
+
+      expect(
+        text,
+        contains(
+          '[x] Replace placeholder `lib/firebase_options.dart` by running `flutterfire configure`',
+        ),
+      );
+      expect(
+        text,
+        contains('[x] Confirm generated config replaces `lib/firebase_options.dart`.'),
+      );
+      expect(
+        text,
+        contains(
+          '[x] Confirm `ios/Runner/GoogleService-Info.plist` exists locally',
+        ),
+      );
+    });
+
     test('metadata draft includes App Store submission fields', () {
       final file = File('docs/APP-STORE-METADATA.md');
       expect(file.existsSync(), isTrue);

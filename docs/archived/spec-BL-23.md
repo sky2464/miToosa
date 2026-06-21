@@ -2,9 +2,10 @@
 
 > **Story ID:** BL-23  
 > **Epic:** EP-01 Launch Readiness & Validation  
-> **Status:** 🔧 Awaiting Manual  
+> **Status:** 🏁 Shipped  
 > **Estimate:** S  
 > **Spec created:** 2026-06-11  
+> **Shipped:** 2026-06-20  
 
 ## Goal Contract
 
@@ -92,7 +93,7 @@
   - [x] 2.3 Update `docs/IPHONE-LAUNCH-READINESS.md` checkboxes — _AC-006_
 - [x] **3.** Verification
   - [x] 3.1 `dart analyze` + `flutter test` — all green — _AC-001_
-  - [ ] 3.2 Manual DebugView verification — _AC-005_ `[manual-deferred: 2026-06-19]`
+  - [ ] 3.2 Manual DebugView verification — _AC-005_ `[manual-deferred: 2026-06-19; ship policy 2026-06-20]`
 
 ### 3.2 Wave Plan
 

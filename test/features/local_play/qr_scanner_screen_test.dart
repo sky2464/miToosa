@@ -3,12 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mitoosa/features/local_play/qr_scanner_screen.dart';
 
+import '../../helpers/test_safe_theme.dart';
+
+Widget _wrap(Widget child) => ProviderScope(
+  child: MaterialApp(theme: testSafeMaterialTheme, home: child),
+);
+
 void main() {
   group('QRScannerScreen', () {
     testWidgets('Widget renders without crashing', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        const ProviderScope(child: MaterialApp(home: QRScannerScreen())),
-      );
+      await tester.pumpWidget(_wrap(const QRScannerScreen()));
 
       expect(find.byType(QRScannerScreen), findsOneWidget);
       // Entry form visible by default
@@ -18,9 +22,7 @@ void main() {
     testWidgets('Shows session URL and name fields', (
       WidgetTester tester,
     ) async {
-      await tester.pumpWidget(
-        const ProviderScope(child: MaterialApp(home: QRScannerScreen())),
-      );
+      await tester.pumpWidget(_wrap(const QRScannerScreen()));
 
       expect(find.text('Your Name'), findsOneWidget);
       expect(find.text('Session URL'), findsOneWidget);
@@ -28,9 +30,7 @@ void main() {
     });
 
     testWidgets('Validates empty URL field', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        const ProviderScope(child: MaterialApp(home: QRScannerScreen())),
-      );
+      await tester.pumpWidget(_wrap(const QRScannerScreen()));
 
       // Clear the name field so it triggers validation too
       await tester.tap(find.text('Connect to Host'));
@@ -43,9 +43,7 @@ void main() {
     testWidgets('Validates URL must start with ws://', (
       WidgetTester tester,
     ) async {
-      await tester.pumpWidget(
-        const ProviderScope(child: MaterialApp(home: QRScannerScreen())),
-      );
+      await tester.pumpWidget(_wrap(const QRScannerScreen()));
 
       await tester.enterText(
         find.widgetWithText(TextFormField, 'Session URL'),

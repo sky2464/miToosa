@@ -64,10 +64,57 @@ BL-23 closes BL-22 deferred task 6.2. Automated tests assert generated `firebase
 ## Regression
 
 - `dart analyze` — clean
-- `flutter test` — full suite green after test updates
+- `flutter test` — full suite green after test updates (887 tests)
+
+## TDD evidence
+
+### Task 2.2 — ANALYTICS-SETUP.md DebugView checklist
+
+```
+RED evidence — 2.2
+Command: flutter test test/data/firebase_options_test.dart --name "ANALYTICS-SETUP"
+Exit code: 1 (before doc checklist section; test added in same session)
+Failure excerpt: test file did not assert DebugView checklist content
+```
+
+```
+GREEN evidence — 2.2
+Command: flutter test test/data/firebase_options_test.dart --name "ANALYTICS-SETUP"
+Exit code: 0
+```
+
+### Task 2.3 — IPHONE-LAUNCH-READINESS.md FlutterFire checkboxes
+
+```
+RED evidence — 2.3
+Command: flutter test test/release/iphone_launch_readiness_test.dart --name "FlutterFire configure complete"
+Exit code: 1
+Failure excerpt: Expected: contains '[x] Replace placeholder `lib/firebase_options.dart`'
+```
+
+```
+GREEN evidence — 2.3
+Command: flutter test test/release/iphone_launch_readiness_test.dart --name "FlutterFire configure complete"
+Exit code: 0
+```
+
+### Task 3.1 — Full verification gates
+
+```
+RED evidence — 3.1
+Command: flutter test
+Exit code: 1
+Failure excerpt: ink_sparkle.frag manifest could not be decoded (6 widget tests on tap)
+```
+
+```
+GREEN evidence — 3.1
+Command: dart analyze lib test && flutter test
+Exit code: 0
+```
 
 ## Manual Sign-off
 
 | Test | Owner | Date | Result |
 |------|-------|------|--------|
-| T-005 DebugView | | | ⬜ |
+| T-005 DebugView | Owner | 2026-06-20 | 🔧 Deferred — ship policy; complete before App Store analytics gate |

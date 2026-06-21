@@ -15,7 +15,7 @@ This checklist captures what the repo can prepare and what the owner must do in 
 - [x] Firebase setup runbook documents the launch decision to enable Firebase + Google Analytics.
 - [x] App Store metadata draft exists in `docs/APP-STORE-METADATA.md`.
 - [x] Company registration readiness checklist exists in `docs/COMPANY-REGISTRATION-READINESS.md`.
-- [ ] Replace placeholder `lib/firebase_options.dart` by running `flutterfire configure` after the Firebase iOS app is created.
+- [x] Replace placeholder `lib/firebase_options.dart` by running `flutterfire configure` after the Firebase iOS app is created.
 - [ ] Publish privacy and support URLs, then replace placeholders in App Store metadata.
 
 ## Manual owner checklist
@@ -47,17 +47,17 @@ This checklist captures what the repo can prepare and what the owner must do in 
 
 ### Firebase + Google Analytics
 
-- [ ] Create Firebase project.
+- [x] Create Firebase project (`mitoosa-2121b`).
 - [ ] Enable Google Analytics in the Firebase project.
-- [ ] Register iOS app with bundle ID `dev.atoosa.mitoosa`.
-- [ ] From repo root, run:
+- [x] Register iOS app with bundle ID `dev.atoosa.mitoosa`.
+- [x] From repo root, run:
 
 ```bash
 flutterfire configure --project=mitoosa-2121b --platforms=ios --ios-bundle-id=dev.atoosa.mitoosa
 ```
 
-- [ ] Confirm generated config replaces `lib/firebase_options.dart`.
-- [ ] Confirm `ios/Runner/GoogleService-Info.plist` exists locally and is not committed if it contains project credentials.
+- [x] Confirm generated config replaces `lib/firebase_options.dart`.
+- [x] Confirm `ios/Runner/GoogleService-Info.plist` exists locally and is not committed if it contains project credentials.
 - [ ] Decide Google Analytics data-sharing settings in Firebase/Google admin.
 - [ ] For release verification, run with:
 

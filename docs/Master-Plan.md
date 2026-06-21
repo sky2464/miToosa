@@ -1,7 +1,7 @@
 # Master-Plan
 
 > **Source of truth for active work.** Completed work lives in `Docs/archived/` — see Completed This Cycle for links.
-> **Last updated:** 2026-06-19
+> **Last updated:** 2026-06-20
 
 ## Project Charter
 
@@ -11,43 +11,30 @@
 | Goal | Ship v1.5.0 to the iPhone App Store with a validated free-first wedge and Firebase analytics |
 | User outcome | Casual puzzle players get ADHD-optimized 3–5 minute sessions without sign-up friction; they understand the 25 free games/day + share bonus model |
 | Success condition | App Store submission accepted; TestFlight QA passed on physical iPhone; D1 retention signal ≥40% from playtest; analytics events visible in Firebase DebugView |
-| Proof / evidence | `flutter test` green (882 tests); `dart analyze` clean; `docs/LAUNCH.md` manual gates checked; Firebase session events in DebugView; archived BL-22 ship check |
+| Proof / evidence | `flutter test` green (887 tests); `dart analyze` clean; `docs/LAUNCH.md` manual gates checked; BL-23 FlutterFire shipped; T-005 DebugView manual pending |
 | Non-goals | Android/macOS/Web store launch in v1.5.0; backend leaderboard; IAP/VIP; server sync; referral tiers (see `docs/PRODUCT-WEDGE.md`) |
 | Assumptions | Apple Developer account and company formation proceed on owner timeline; Firebase + GA is the launch analytics stack; local-first Hive persistence remains canonical |
-| Risks | External gates (company, App Store Connect, Firebase console) block ship; placeholder `firebase_options.dart` until `flutterfire configure`; physical-device QA not yet executed |
+| Risks | External gates (company, App Store Connect, Firebase console) block store release; physical-device QA not yet executed |
 | Unresolved questions | Public privacy/support URL hosting; exact App Store review timeline; playtest recruitment post-TestFlight |
 | GitHub repo | https://github.com/sky2464/miToosa |
-| Milestone | v1.5.0 — iPhone App Store launch |
+| Milestone | v1.5.1 (next) — iPhone App Store launch |
 | Active cycle | Launch Sprint — iPhone readiness + UX polish (2026-06-02 → 2026-06-25) |
 | Cycle capacity | 13 story points |
-| Current phase | 🟨 Build — BL-23 FlutterFire iOS config (configure complete; DebugView manual pending) |
+| Current phase | ⬜ Idle — pick next story from Backlog (`/agtoosa-spec`) |
 
 ## Active Cycle
 
 > Stories committed to the current sprint/cycle.
-> **Progress:** `████▱▱▱ 4/7 automated tasks` _(BL-23 in progress; 1 manual-deferred)_
 
 | ID | Title | Type | Estimate | Status | Tasks Done |
 |----|-------|------|----------|--------|-----------|
-| BL-23 | Chore: FlutterFire iOS config + verify DebugView | Chore | S | 🟨 In Progress | 4/7 tasks (1 manual-deferred) |
+| — | _No active stories — run `/agtoosa-spec` to start the next cycle item_ | — | — | — | — |
 
 Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blocked · 🔧 Awaiting Manual · 🏁 Shipped
 
 ## Active Tasks
 
-> BL-23 — see `docs/AgToosa_Spec-BL-23-flutterfire-ios.md`
-
-- [ ] **1.** FlutterFire configure: generate iOS Firebase config for `mitoosa-2121b`
-  - [x] 1.1 Ensure iOS app exists in Firebase project `mitoosa-2121b` for `dev.atoosa.mitoosa` — _Requirements: AC-001, AC-002_
-  - [x] 1.2 Run `flutterfire configure --project=mitoosa-2121b --platforms=ios` — _Requirements: AC-001, AC-002_
-  - [x] 1.3 Confirm `GoogleService-Info.plist` on disk and gitignored — _Requirements: AC-002, AC-004_
-- [ ] **2.** Tests and docs: update verification coverage and launch docs
-  - [x] 2.1 Update `firebase_options_test.dart` for configured iOS options — _Requirements: AC-001_
-  - [ ] 2.2 Update `docs/ANALYTICS-SETUP.md` with project ID and DebugView checklist — _Requirements: AC-003, AC-005_ _(in progress: project ID pinned)_
-  - [ ] 2.3 Update `docs/IPHONE-LAUNCH-READINESS.md` checkboxes — _Requirements: AC-006_
-- [ ] **3.** Verification: prove automated checks and defer external DebugView
-  - [ ] 3.1 `dart analyze` + `flutter test` — all green — _Requirements: AC-001_
-  - [ ] 3.2 Manual DebugView verification — _Requirements: AC-005_ `[manual-deferred: 2026-06-19]`
+*(Empty — no active story tasks.)*
 
 ## Manual / Deferred Tasks
 
@@ -90,7 +77,7 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | ID | Title | Stories | Status |
 |----|-------|---------|--------|
-| EP-01 | Epic: Launch Readiness & Validation | 9 open / 15 total | 🟨 In Progress |
+| EP-01 | Epic: Launch Readiness & Validation | 8 open / 16 total | 🟨 In Progress |
 | EP-02 | Epic: Platform Release Infrastructure | 2 open / 4 total | 🟨 In Progress |
 | EP-03 | Epic: Retention & Monetization Expansion | 5 open / 5 total | ⬜ Backlog |
 | EP-04 | Epic: User Experience Polish | 0 open / 6 total | ✅ Mostly Done |
@@ -118,6 +105,7 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | ID | Title | Shipped | Archived Spec |
 |----|-------|---------|--------------|
+| BL-23 | Chore: FlutterFire iOS config + verify DebugView | 2026-06-20 | [spec-BL-23.md](archived/spec-BL-23.md) |
 | S2-05 | Feature: Tracks UI fixes (theme-aware glass, header menus) | 2026-06-11 | [spec-S2-05.md](archived/spec-S2-05.md) |
 | BL-22 | Chore: iPhone launch readiness prep (docs, bundle ID, Firebase scaffold) | 2026-06-03 | [spec-BL-22.md](archived/spec-BL-22.md) |
 | S1-01 | Feature: Staging deployment & QA gate | 2026-05-11 | [spec-S1-01.md](archived/spec-S1-01.md) |
@@ -137,6 +125,10 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | Date | Event | By |
 |------|-------|----|
+| 2026-06-20 | /agtoosa-ship — Ship 🚀 repo ship PASS — BL-23 — smoke 3/3; spec archived; T-005 DebugView manual-deferred | AgToosa |
+| 2026-06-20 | /agtoosa-build BL-23 — Tasks 🟢 2.2, 2.3, 3.1 complete; 887 tests green; `@smoke` tags; ink_sparkle widget-test fix | AgToosa |
+| 2026-06-20 | /agtoosa-review BL-23 — Review ✅ Approved — 0 critical, 5 warnings; `docs/archived/review-BL-23.md` | AgToosa |
+| 2026-06-20 | /agtoosa-review BL-23 — Review 🔍 Started — 4-persona review | AgToosa |
 | 2026-06-19 | /agtoosa-status follow-up — Reconciled BL-23 task tree/counter, added Wave Plan, aligned v1.5.0 changelog parity, and re-tracked DX-01/BL-19 source-of-truth entries | AgToosa |
 | 2026-06-14 | /agtoosa-spec BL-24 — Spec drafted; `docs/archived/spec-BL-24.md` + test plan + ADRs; 7 ACs (6 Must); estimate M; backlog only; pending approval | AgToosa |
 | 2026-06-14 | /agtoosa-build BL-23 — Firebase CLI reauth OK; `flutterfire configure` complete; `firebase_options_test.dart` updated (4 tests green) | AgToosa |

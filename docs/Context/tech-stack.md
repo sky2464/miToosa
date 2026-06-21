@@ -40,7 +40,7 @@ test_patterns:
   - "ProviderContainer for Riverpod provider isolation tests"
   - "Real Hive boxes in temp directory for integration tests (no mocking)"
   - "Reference test: test/core/engine/gameplay_engine_test.dart"
-current_test_count: "870 passing (as of BL-21, 2026-05-22)"
+current_test_count: "887 passing (as of BL-23 ship, 2026-06-20)"
 
 ## Browser / Device Matrix
 browser_matrix:
