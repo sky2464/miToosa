@@ -141,4 +141,6 @@ See `docs/AgToosa_TestPlan-BL-26.md`.
 
 ---
 
-⏳ **Awaiting approval** — reply **Approve** to append `## ✅ Spec Approved` and proceed to `/agtoosa-build`, or request edits.
+## ✅ Spec Approved
+
+Approved: 2026-07-11 15:37 (user: approve)
