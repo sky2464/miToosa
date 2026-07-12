@@ -1,7 +1,7 @@
 # Master-Plan
 
 > **Source of truth for active work.** Completed work lives in `Docs/archived/` — see Completed This Cycle for links.
-> **Last updated:** 2026-07-12 (/agtoosa-spec BL-25)
+> **Last updated:** 2026-07-12 (/agtoosa-spec BL-25 approved)
 
 ## Project Charter
 
@@ -20,7 +20,7 @@
 | Milestone | v1.5.1 (next) — iPhone App Store launch |
 | Active cycle | Launch Sprint — iPhone readiness + UX polish (2026-06-02 → 2026-06-25) |
 | Cycle capacity | 13 story points |
-| Current phase | 🟦 Spec — BL-25 enrolled Active Cycle; awaiting approval |
+| Current phase | 🟦 Todo — BL-25 Spec ✅ Approved; run `/agtoosa-build` |
 
 ## Active Cycle
 
@@ -156,6 +156,7 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | Date | Event | By |
 |------|-------|----|
+| 2026-07-12 | /agtoosa-spec — Spec ✅ Approved — BL-25 — `docs/archived/spec-BL-25.md`; estimate M; enrolled in cycle | User |
 | 2026-07-12 | /agtoosa-spec BL-25 — Spec drafted; enrolled Active Cycle; awaiting approval | AgToosa |
 | 2026-07-12 | /agtoosa-task — Reconciled 7 orphaned historical specs + BL-23 duplicate cleanup | AgToosa |
 | 2026-07-11 | /agtoosa-ship — Ship 🚀 repo ship PASS — BL-26 — readiness tests 10/10; spec archived; URL publish + ASC screenshots manual-deferred | AgToosa |
