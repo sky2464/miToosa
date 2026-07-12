@@ -36,7 +36,7 @@ non_goals:
   - "No real-time multiplayer"
 
 ## Current Milestone
-current_milestone: "v1.5.0 — iPhone App Store launch (EP-01); UX polish in flight (EP-04); playtest deferred until TestFlight"
+current_milestone: "v1.5.1 — iPhone App Store launch (EP-01); BL-26 metadata prep active; playtest deferred until TestFlight"
 
 ## Success Metrics
 success_metrics:

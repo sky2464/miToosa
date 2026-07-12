@@ -1,0 +1,9 @@
+---
+description: miToosa flutter-engine-guard specialist — pure-Dart engine boundary checks for lib/core/engine/.
+globs: lib/core/engine/**
+alwaysApply: false
+---
+
+# flutter-engine-guard
+
+When invoked for build/review on engine changes, read `.codex/skills/flutter-engine-guard/SKILL.md` and execute validation. Return structured evidence per `docs/AgToosa_Specialists.md`.

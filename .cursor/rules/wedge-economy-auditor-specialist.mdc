@@ -1,0 +1,9 @@
+---
+description: miToosa wedge-economy-auditor — PRODUCT-WEDGE copy compliance for economy UI strings.
+globs: lib/features/**,lib/widgets/**,docs/PRODUCT-WEDGE.md
+alwaysApply: false
+---
+
+# wedge-economy-auditor
+
+When invoked for spec/review on economy copy, read `.codex/skills/wedge-economy-auditor/SKILL.md`. Do not edit `docs/PRODUCT-WEDGE.md` without user approval.

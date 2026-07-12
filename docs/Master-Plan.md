@@ -1,17 +1,17 @@
 # Master-Plan
 
 > **Source of truth for active work.** Completed work lives in `Docs/archived/` — see Completed This Cycle for links.
-> **Last updated:** 2026-07-11
+> **Last updated:** 2026-07-11 (init refresh)
 
 ## Project Charter
 
 | Field | Value |
 |-------|-------|
 | Product | miToosa — cross-platform Flutter puzzle game (iOS launch focus for v1.5.0) |
-| Goal | Ship v1.5.0 to the iPhone App Store with a validated free-first wedge and Firebase analytics |
+| Goal | Ship v1.5.1 to the iPhone App Store with a validated free-first wedge and Firebase analytics |
 | User outcome | Casual puzzle players get ADHD-optimized 3–5 minute sessions without sign-up friction; they understand the 25 free games/day + share bonus model |
 | Success condition | App Store submission accepted; TestFlight QA passed on physical iPhone; D1 retention signal ≥40% from playtest; analytics events visible in Firebase DebugView |
-| Proof / evidence | `flutter test` green (887 tests); `dart analyze` clean; `docs/LAUNCH.md` manual gates checked; BL-23 FlutterFire shipped; T-005 DebugView manual pending; BL-26 metadata prep in Active Cycle |
+| Proof / evidence | `flutter test` green (892 tests); `dart analyze` clean on lib/test; BL-26 metadata/docs guards shipped; BL-23 FlutterFire shipped; T-005 DebugView manual pending |
 | Non-goals | Android/macOS/Web store launch in v1.5.0; backend leaderboard; IAP/VIP; server sync; referral tiers (see `docs/PRODUCT-WEDGE.md`) |
 | Assumptions | Apple Developer account and company formation proceed on owner timeline; Firebase + GA is the launch analytics stack; local-first Hive persistence remains canonical |
 | Risks | External gates (company, App Store Connect, Firebase console) block store release; physical-device QA not yet executed |
@@ -20,7 +20,7 @@
 | Milestone | v1.5.1 (next) — iPhone App Store launch |
 | Active cycle | Launch Sprint — iPhone readiness + UX polish (2026-06-02 → 2026-06-25) |
 | Cycle capacity | 13 story points |
-| Current phase | 🏗️ Build — BL-26 spec approved (`/agtoosa-build`) |
+| Current phase | 🏁 Shipped — BL-26 repo ship complete (`/agtoosa-spec` for next story) |
 
 ## Active Cycle
 
@@ -28,27 +28,13 @@
 
 | ID | Title | Type | Estimate | Status | Tasks Done |
 |----|-------|------|----------|--------|-----------|
-| BL-26 | Chore: App Store metadata + screenshots prep | Chore | M | 🟦 Todo | 0/7 |
+| — | *(Empty — run `/agtoosa-spec` to enroll the next story)* | — | — | — | — |
 
 Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blocked · 🔧 Awaiting Manual · 🏁 Shipped
 
 ## Active Tasks
 
-### BL-26 — App Store metadata + screenshots prep
-
-- [ ] **1.** Privacy + support copy
-  - [ ] 1.1 Align `docs/PRIVACY-POLICY.md` to Firebase+GA launch posture
-  - [ ] 1.2 Add `docs/SUPPORT.md` with contact, expectations, and cross-links
-- [ ] **2.** Metadata + screenshot checklist
-  - [ ] 2.1 Finalize `docs/APP-STORE-METADATA.md` with `manual-deferred` URL placeholders
-  - [ ] 2.2 Expand screenshot capture checklist (scenes, sizes, quality bar)
-  - [ ] 2.3 Sync `IPHONE-LAUNCH-READINESS.md` + `LAUNCH.md` cross-links and manual gates
-- [ ] **3.** Automated guards + closure
-  - [ ] 3.1 Extend `test/release/iphone_launch_readiness_test.dart`
-  - [ ] 3.2 Verify `dart analyze` + targeted/full test suite green
-- [ ] **4.** Manual external gates
-  - [ ] 4.1 Publish Privacy Policy + Support URLs and paste finals into ASC/metadata `[manual-deferred: 2026-07-11]`
-  - [ ] 4.2 Capture iPhone screenshots per checklist and upload in App Store Connect `[manual-deferred: 2026-07-11]`
+*(Empty — no in-progress story.)*
 
 ## Manual / Deferred Tasks
 
@@ -56,6 +42,8 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | Story | Task # | Deferred Since | Description |
 |-------|--------|----------------|-------------|
+| BL-26 | 4.1 | 2026-07-11 | Publish Privacy Policy + Support URLs and paste finals into ASC/metadata |
+| BL-26 | 4.2 | 2026-07-11 | Capture iPhone screenshots per checklist and upload in App Store Connect |
 | BL-22 | — | 2026-06-03 | Register App ID `dev.atoosa.mitoosa` in Apple Developer |
 | BL-22 | — | 2026-06-03 | Create Firebase project + iOS app; run `flutterfire configure` _(superseded by BL-23; project ID `mitoosa-2121b`)_ |
 | BL-22 | — | 2026-06-03 | Publish privacy policy and support URLs |
@@ -90,21 +78,21 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | ID | Title | Stories | Status |
 |----|-------|---------|--------|
-| EP-01 | Epic: Launch Readiness & Validation | 8 open / 16 total | 🟨 In Progress |
-| EP-02 | Epic: Platform Release Infrastructure | 2 open / 4 total | 🟨 In Progress |
-| EP-03 | Epic: Retention & Monetization Expansion | 5 open / 5 total | ⬜ Backlog |
+| EP-01 | Epic: Launch Readiness & Validation | 5 open / 16 total | 🟨 In Progress |
+| EP-02 | Epic: Platform Release Infrastructure | 0 open / 4 total | 🟨 In Progress |
+| EP-03 | Epic: Retention & Monetization Expansion | 2 open / 5 total | ⬜ Backlog |
 | EP-04 | Epic: User Experience Polish | 0 open / 6 total | ✅ Mostly Done |
 | EP-05 | Epic: Technical Debt & Infrastructure | 1 open / 6 total | 🟨 In Progress |
 
-**EP-01 charter:** Prove product-market fit and ship v1.5.0 iPhone launch — staging/analytics where needed, playtest validation, launch docs, and App Store readiness. Success = TestFlight build accepted and wedge KPIs measurable.
+**EP-01 charter:** Prove product-market fit and ship v1.5.1 iPhone launch — staging/analytics where needed, playtest validation, launch docs, and App Store readiness. Success = TestFlight build accepted and wedge KPIs measurable.
 
 **EP-02 charter:** Unblock signed release builds for iOS (primary) and deferred Android. Signing runbooks, bundle IDs, Firebase project wiring, TestFlight pipeline.
 
-**EP-03 charter:** Post-validation monetization and social loops — leaderboard backend, referral tiers, VIP/IAP — gated on playtest metrics per `docs/PRODUCT-WEDGE.md`.
+**EP-03 charter:** Post-validation monetization and social loops — leaderboard backend (BL-04), VIP/IAP (BL-05), referral tiers (charter only — backlog story TBD) — gated on playtest metrics per `docs/PRODUCT-WEDGE.md`.
 
 **EP-04 charter:** Aetheric Pulse design system polish — glassmorphism, navigation, tracks UI, accessibility, leaderboard demo UX.
 
-**EP-05 charter:** CI/CD hygiene, dependency maintenance, doc archival, AgToosa framework upgrades.
+**EP-05 charter:** CI/CD hygiene, dependency maintenance, doc archival, AgToosa framework upgrades. Local multiplayer POC (`lib/features/local_play/`) tracked as deferred experimentation — not v1.5.1 launch scope.
 
 ## Active Diagnosis
 
@@ -118,6 +106,7 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | ID | Title | Shipped | Archived Spec |
 |----|-------|---------|--------------|
+| BL-26 | Chore: App Store metadata + screenshots prep | 2026-07-11 | [spec-BL-26.md](archived/spec-BL-26.md) |
 | BL-23 | Chore: FlutterFire iOS config + verify DebugView | 2026-06-20 | [spec-BL-23.md](archived/spec-BL-23.md) |
 | S2-05 | Feature: Tracks UI fixes (theme-aware glass, header menus) | 2026-06-11 | [spec-S2-05.md](archived/spec-S2-05.md) |
 | BL-22 | Chore: iPhone launch readiness prep (docs, bundle ID, Firebase scaffold) | 2026-06-03 | [spec-BL-22.md](archived/spec-BL-22.md) |
@@ -138,6 +127,13 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | Date | Event | By |
 |------|-------|----|
+| 2026-07-11 | /agtoosa-ship — Ship 🚀 repo ship PASS — BL-26 — readiness tests 10/10; spec archived; URL publish + ASC screenshots manual-deferred | AgToosa |
+| 2026-07-11 | /agtoosa-review — Review ✅ Approved — BL-26 — 0 critical, 8 warnings; `docs/archived/review-BL-26.md` | AgToosa |
+| 2026-07-11 | /agtoosa-review — Review 🔍 Started — BL-26 — 4-persona review running | AgToosa |
+| 2026-07-11 | /agtoosa-build BL-26 — Build ✅ complete — 7/7 automated tasks; 892 tests green; `dart analyze lib test` clean; 2 manual-deferred (URL publish, ASC screenshots); status → Awaiting Manual | AgToosa |
+| 2026-07-11 | /agtoosa-build BL-26 — Build 🏗️ Started — 7 automated tasks; scope: privacy, support, metadata, launch docs, readiness tests | AgToosa |
+| 2026-07-11 | /agtoosa-init — Phase E ✅ — 4 specialists approved and materialized: flutter-engine-guard, wedge-economy-auditor, iphone-launch-gate, hive-schema-guard → `docs/Context/specialists.md` | AgToosa |
+| 2026-07-11 | /agtoosa-init — Init ✅ full refresh (option B) — codebase scan; Master-Architecture v2026-07-11; epics reconciled; 887 tests / schema v7 / Firebase iOS wired; Phases E–G pending approval | AgToosa |
 | 2026-07-11 | /agtoosa-spec BL-26 — Spec ✅ Approved — `docs/archived/spec-BL-26.md`; estimate M; enrolled in Active Cycle | User |
 | 2026-07-11 | /agtoosa-spec BL-26 — Spec drafted (quick); renumbered backlog metadata from BL-23→BL-26; enrolled Active Cycle; awaiting approval | AgToosa |
 | 2026-06-20 | /agtoosa-ship — Ship 🚀 repo ship PASS — BL-23 — smoke 3/3; spec archived; T-005 DebugView manual-deferred | AgToosa |

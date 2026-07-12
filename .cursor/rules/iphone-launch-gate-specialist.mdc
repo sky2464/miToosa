@@ -1,0 +1,9 @@
+---
+description: miToosa iphone-launch-gate — iOS release readiness tests and LAUNCH.md gate audit.
+globs: test/release/**,docs/LAUNCH.md,docs/IPHONE-LAUNCH-READINESS.md,docs/APP-STORE-METADATA.md
+alwaysApply: false
+---
+
+# iphone-launch-gate
+
+When invoked for EP-01/EP-02 build/ship, read `.codex/skills/iphone-launch-gate/SKILL.md` and run release test suite.

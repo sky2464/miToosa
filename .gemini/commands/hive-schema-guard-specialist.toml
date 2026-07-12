@@ -1,0 +1,5 @@
+description = "miToosa specialist: Hive PlayerProgress schema and migration validation"
+prompt = """
+Read `.codex/skills/hive-schema-guard/SKILL.md` and execute the hive-schema-guard specialist workflow.
+Return structured evidence per `docs/AgToosa_Specialists.md`.
+"""

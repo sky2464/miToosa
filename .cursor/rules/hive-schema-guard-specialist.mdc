@@ -1,0 +1,9 @@
+---
+description: miToosa hive-schema-guard — PlayerProgress schema version and migration test validation.
+globs: lib/data/player_progress.dart,test/data/player_progress_test.dart
+alwaysApply: false
+---
+
+# hive-schema-guard
+
+When invoked for Hive schema changes, read `.codex/skills/hive-schema-guard/SKILL.md` and run migration tests.

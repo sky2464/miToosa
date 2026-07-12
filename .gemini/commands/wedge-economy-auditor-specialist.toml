@@ -1,0 +1,5 @@
+description = "miToosa specialist: economy copy audit vs docs/PRODUCT-WEDGE.md"
+prompt = """
+Read `.codex/skills/wedge-economy-auditor/SKILL.md` and execute the wedge-economy-auditor specialist workflow.
+Do not edit docs/PRODUCT-WEDGE.md. Return structured evidence per `docs/AgToosa_Specialists.md`.
+"""

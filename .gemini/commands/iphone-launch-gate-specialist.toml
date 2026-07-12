@@ -1,0 +1,5 @@
+description = "miToosa specialist: iPhone launch readiness (test/release + LAUNCH.md gates)"
+prompt = """
+Read `.codex/skills/iphone-launch-gate/SKILL.md` and execute the iphone-launch-gate specialist workflow.
+Return structured evidence per `docs/AgToosa_Specialists.md`.
+"""

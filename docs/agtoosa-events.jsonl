@@ -8,3 +8,10 @@
 {"ts":"2026-06-19T12:00:00Z","phase":"task","event":"source-of-truth-reconciled","story":"DX-01,BL-19","by":"AgToosa"}
 {"ts":"2026-06-20T12:00:00Z","phase":"build","event":"complete","story":"BL-23","by":"AgToosa"}
 {"ts":"2026-06-20T18:00:00Z","phase":"ship","event":"complete","story":"BL-23","by":"AgToosa"}
+{"ts":"2026-07-12T04:00:00Z","phase":"init","event":"complete","story":"—","by":"AgToosa","note":"full refresh option B"}
+{"ts":"2026-07-12T04:02:00Z","phase":"build","event":"start","story":"BL-26","by":"AgToosa"}
+{"ts":"2026-07-12T04:10:00Z","phase":"build","event":"complete","story":"BL-26","by":"AgToosa"}
+{"ts":"2026-07-12T04:20:00Z","phase":"review","event":"start","story":"BL-26","by":"AgToosa"}
+{"ts":"2026-07-12T04:22:00Z","phase":"review","event":"approved","story":"BL-26","by":"AgToosa"}
+{"ts":"2026-07-12T04:25:00Z","phase":"ship","event":"complete","story":"BL-26","by":"AgToosa"}
+{"ts":"2026-07-12T04:22:00Z","phase":"init","event":"specialists-materialized","story":"—","by":"AgToosa","ids":["flutter-engine-guard","wedge-economy-auditor","iphone-launch-gate","hive-schema-guard"]}

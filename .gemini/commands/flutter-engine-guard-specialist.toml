@@ -1,0 +1,5 @@
+description = "miToosa specialist: pure-Dart engine boundary guard (lib/core/engine/)"
+prompt = """
+Read `.codex/skills/flutter-engine-guard/SKILL.md` and execute the flutter-engine-guard specialist workflow.
+Return structured evidence per `docs/AgToosa_Specialists.md`.
+"""
