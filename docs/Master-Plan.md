@@ -1,7 +1,7 @@
 # Master-Plan
 
 > **Source of truth for active work.** Completed work lives in `Docs/archived/` — see Completed This Cycle for links.
-> **Last updated:** 2026-07-11 (init refresh)
+> **Last updated:** 2026-07-12 (/agtoosa-spec BL-25)
 
 ## Project Charter
 
@@ -20,7 +20,7 @@
 | Milestone | v1.5.1 (next) — iPhone App Store launch |
 | Active cycle | Launch Sprint — iPhone readiness + UX polish (2026-06-02 → 2026-06-25) |
 | Cycle capacity | 13 story points |
-| Current phase | 🏁 Shipped — BL-26 repo ship complete (`/agtoosa-spec` for next story) |
+| Current phase | 🟦 Spec — BL-25 enrolled Active Cycle; awaiting approval |
 
 ## Active Cycle
 
@@ -28,13 +28,36 @@
 
 | ID | Title | Type | Estimate | Status | Tasks Done |
 |----|-------|------|----------|--------|-----------|
-| — | *(Empty — run `/agtoosa-spec` to enroll the next story)* | — | — | — | — |
+| BL-25 | Feature: Physical iPhone TestFlight QA pass | Feature | M | 🟦 Todo | 0/5 |
 
 Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blocked · 🔧 Awaiting Manual · 🏁 Shipped
 
 ## Active Tasks
 
-*(Empty — no in-progress story.)*
+### BL-25 — Physical iPhone TestFlight QA pass
+
+- [ ] **1.** QA documentation: TestFlight checklist + evidence template
+  - [ ] 1.1 Create `docs/qa/iphone-testflight-qa-checklist.md` — _Requirements: AC-001_
+  - [ ] 1.2 Create `docs/qa/iphone-testflight-evidence-template.md` — _Requirements: AC-002_
+  - [ ] 1.3 Cross-link from `IPHONE-LAUNCH-READINESS.md`, `LAUNCH.md`, `wedge-qa-checklist.md` — _Requirements: AC-001, AC-012_
+- [ ] **2.** Automated guards
+  - [ ] 2.1 Extend `test/release/iphone_launch_readiness_test.dart` — _Requirements: AC-012_
+  - [ ] 2.2 Run `dart analyze lib test` and `flutter test` — _Requirements: AC-012_
+- [ ] **3.** Manual TestFlight QA execution (physical iPhone)
+  - [ ] 3.1 Install TestFlight build on physical iPhone — _Requirements: AC-003_ `[manual-deferred]`
+  - [ ] 3.2 Cold launch + onboarding; time-to-first-game ≤60s — _Requirements: AC-003, AC-004, AC-015_ `[manual-deferred]`
+  - [ ] 3.3 Complete full 3-round gameplay session — _Requirements: AC-005_ `[manual-deferred]`
+  - [ ] 3.4 Share flow: +40 once; second share denied — _Requirements: AC-006_ `[manual-deferred]`
+  - [ ] 3.5 Offline mode gameplay + relaunch — _Requirements: AC-007_ `[manual-deferred]`
+  - [ ] 3.6 VoiceOver smoke + Dynamic Type largest — _Requirements: AC-008, AC-013_ `[manual-deferred]`
+  - [ ] 3.7 Wedge copy walkthrough — _Requirements: AC-009_ `[manual-deferred]`
+  - [ ] 3.8 Force-quit persistence check — _Requirements: AC-011_ `[manual-deferred]`
+  - [ ] 3.9 Settings/support link scan — _Requirements: AC-014_ `[manual-deferred]`
+- [ ] **4.** Analytics verification
+  - [ ] 4.1 Firebase DebugView spot-check (`FIREBASE_ENABLED=true`) — _Requirements: AC-010_ `[manual-deferred]`
+- [ ] **5.** Evidence closure
+  - [ ] 5.1 Complete dated evidence file; gate log in `RELEASE-GATES.md` — _Requirements: AC-002, AC-003–AC-011_ `[manual-deferred]`
+  - [ ] 5.2 Mark Physical iPhone QA complete in launch docs + Master-Plan — _Requirements: AC-003–AC-011_ `[manual-deferred]`
 
 ## Manual / Deferred Tasks
 
@@ -64,13 +87,13 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | ID | Title | Type | Estimate | Epic | Priority | Status |
 |----|-------|------|----------|------|----------|--------|
-| BL-25 | Feature: Physical iPhone TestFlight QA pass | Feature | M | EP-01 | P0 | ⬜ Backlog |
 | BL-24 | Feature: Interactive how-to demos | Feature | M | EP-01 | P1 | ⬜ Backlog |
 | S1-03 | Feature: Manual wedge QA walkthrough | Feature | S | EP-01 | P1 | ⬜ Backlog |
 | S1-04 | Feature: Playtest survey + recruitment | Feature | M | EP-01 | P1 | ⬜ Backlog |
 | BL-04 | Feature: Backend leaderboard (post-playtest gate) | Feature | L | EP-03 | P2 | ⬜ Backlog |
 | BL-05 | Feature: VIP / IAP flow | Feature | L | EP-03 | P2 | ⬜ Backlog |
 | DX-01 | Chore: Complete gstack `/plan-tune` QA + ship docs | Chore | XS | EP-05 | P4 | ⬜ Backlog |
+| LP-01 | Chore: Local network QR play (deferred POC) | Chore | L | EP-05 | P3 | ⬜ Backlog |
 
 ## Epics
 
@@ -82,7 +105,7 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 | EP-02 | Epic: Platform Release Infrastructure | 0 open / 4 total | 🟨 In Progress |
 | EP-03 | Epic: Retention & Monetization Expansion | 2 open / 5 total | ⬜ Backlog |
 | EP-04 | Epic: User Experience Polish | 0 open / 6 total | ✅ Mostly Done |
-| EP-05 | Epic: Technical Debt & Infrastructure | 1 open / 6 total | 🟨 In Progress |
+| EP-05 | Epic: Technical Debt & Infrastructure | 2 open / 7 total | 🟨 In Progress |
 
 **EP-01 charter:** Prove product-market fit and ship v1.5.1 iPhone launch — staging/analytics where needed, playtest validation, launch docs, and App Store readiness. Success = TestFlight build accepted and wedge KPIs measurable.
 
@@ -120,6 +143,12 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 | BL-01 | Chore: iOS signing setup | 2026-05-15 | [spec-BL-01-BL-02-platform-signing.md](archived/spec-BL-01-BL-02-platform-signing.md) |
 | BL-21 | Chore: Remove expensive CI/CD workflows | 2026-05-15 | [spec-BL-21.md](archived/spec-BL-21.md) |
 | BL-19 | Chore: Sanitize embedded prompt-injection text in design-system docs | 2026-05-16 | [spec-BL-19.md](archived/spec-BL-19.md) |
+| AP-01 | Feature: Aetheric Pulse Dark redesign | 2026-04-22 | [spec-aetheric-pulse-redesign.md](archived/spec-aetheric-pulse-redesign.md) |
+| LR-01 | Chore: Launch readiness LAUNCH.md closeout | 2026-04-17 | [spec-launch-readiness-v1.md](archived/spec-launch-readiness-v1.md) |
+| EL-01 | Feature: Engagement loop (hearts, hints, stars, run timer) | 2026-04-17 | [spec-engagement-loop-v1.md](archived/spec-engagement-loop-v1.md) |
+| LT-01 | Feature: Local telemetry collection v1 | 2026-04-17 | [spec-local-telemetry-collection-v1.md](archived/spec-local-telemetry-collection-v1.md) |
+| DM-01 | Chore: Dependency & skill maintenance system | 2026-04-15 | [spec-dependency-skill-maintenance-v1.md](archived/spec-dependency-skill-maintenance-v1.md) |
+| IT-01 | Feature: iToosa → miToosa feature migration v1 | 2025-07-24 | [spec-itoosa-feature-migration-v1.md](archived/spec-itoosa-feature-migration-v1.md) |
 
 > Older Update Log entries: [update-log-2026-05.md](archived/update-log-2026-05.md)
 
@@ -127,6 +156,8 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | Date | Event | By |
 |------|-------|----|
+| 2026-07-12 | /agtoosa-spec BL-25 — Spec drafted; enrolled Active Cycle; awaiting approval | AgToosa |
+| 2026-07-12 | /agtoosa-task — Reconciled 7 orphaned historical specs + BL-23 duplicate cleanup | AgToosa |
 | 2026-07-11 | /agtoosa-ship — Ship 🚀 repo ship PASS — BL-26 — readiness tests 10/10; spec archived; URL publish + ASC screenshots manual-deferred | AgToosa |
 | 2026-07-11 | /agtoosa-review — Review ✅ Approved — BL-26 — 0 critical, 8 warnings; `docs/archived/review-BL-26.md` | AgToosa |
 | 2026-07-11 | /agtoosa-review — Review 🔍 Started — BL-26 — 4-persona review running | AgToosa |

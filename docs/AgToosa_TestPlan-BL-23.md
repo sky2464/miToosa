@@ -1,6 +1,6 @@
 # Test Plan — BL-23 FlutterFire iOS Config + DebugView
 
-> **Spec:** [docs/AgToosa_Spec-BL-23-flutterfire-ios.md](AgToosa_Spec-BL-23-flutterfire-ios.md)  
+> **Spec:** [docs/archived/spec-BL-23.md](archived/spec-BL-23.md)  
 > **Coverage target:** 80% (per `docs/Context/workflow.md`)  
 > **Generated:** 2026-06-11  
 
