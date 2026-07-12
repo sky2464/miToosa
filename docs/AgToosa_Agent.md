@@ -68,11 +68,12 @@ Your core principles are:
 
 | Sub-command | What it does |
 |-------------|-------------|
-| `/agtoosa-review` | **Full flow:** Security Officer + Engineering Manager + CEO + QA Lead reviews → cross-platform suggestion |
+| `/agtoosa-review` | **Full flow:** Security Officer + Engineering Manager + CEO + QA Lead reviews → cross-model gate when tier recommends → cross-platform suggestion |
 | `/agtoosa-review security` | **Security only:** OWASP Top 10 + STRIDE audit on the diff |
 | `/agtoosa-review arch` | **Architecture only:** 500-line limit, OOP compliance, observability, test coverage |
 | `/agtoosa-review debug` | **Iron Law debug:** systematic root-cause investigation for a specific bug or test failure |
 | `/agtoosa-review cross` | **Cross-platform:** guidance for getting a second-opinion review on a different AI platform |
+| `/agtoosa-review cross-model` | **Cross-model:** independent reviewer subagent/model gate (`Docs/AgToosa_CrossModelReview.md`) |
 
 ### `/agtoosa-ship` — Deploy, archive, suggest next
 
@@ -81,7 +82,7 @@ Your core principles are:
 | `/agtoosa-ship` | **Full flow:** readiness gate → WIP squash → deploy → archive specs → changelog → suggest next story |
 | `/agtoosa-ship check` | **Readiness gate only:** verify all pre-ship conditions without deploying |
 | `/agtoosa-ship docs` | **Docs only:** archive completed specs, update changelog and Master-Plan |
-| `/agtoosa-ship retro` | **Retrospective:** sprint review — what shipped vs. planned, quality trends, keep/stop/start |
+| `/agtoosa-ship retro` | **Retrospective:** structured cycle retro artifact (`Docs/AgToosa_Retro.md`) — Planned vs Shipped, evidence index, Keep/Stop/Start, proposals with next commands |
 
 ### Utility Commands
 | Command | Workflow File | Description |
@@ -92,7 +93,14 @@ Your core principles are:
 | `/agtoosa-task` | `Docs/AgToosa_Task.md` | Fast task capture to Master-Plan.md for bugs, chores, spikes, and fixes |
 | `/agtoosa-update` | `Docs/AgToosa_Update.md` | Detect → Plan → Apply → Verify baseline update (`check` · `plan` · `apply` · `verify`; `check` is read-only) |
 | `/agtoosa-status` | `Docs/AgToosa_Status.md` | Read-only project health dashboard with git cross-reference (`plan` · `readiness` · `git` · `orphans`) |
+| *(script)* | `Docs/AgToosa_Dashboard.md` | Local stdout-only Markdown/HTML state projection (`bash Docs/agtoosa-dashboard.sh`) — not a Status health-score replacement |
 | `/agtoosa-status-guide` | `Docs/AgToosa_StatusGuide.md` | Read-only status coach that explains top Recommended Next Actions and asks before fixes. Native picker entry on Copilot (`.github/agents/`) only; on other platforms invoke by name — the agent reads `Docs/AgToosa_StatusGuide.md` directly |
+| `/agtoosa-handoff` | `Docs/AgToosa_Handoff.md` | Export a handoff pack for async or background agents (`wave` · `task`); includes story, ACs, files, allowed actions, verification commands, and return contract |
+| `/agtoosa-import` | `Docs/AgToosa_Import.md` | Run Import Checklist to verify and integrate results returned from async agents; maps artifacts to ACs and gates Tracking updates (`check`) |
+| *(guide)* | `Docs/AgToosa_Worktree.md` | Optional worktree isolation for M+ multi-package / risky lanes — **manual** Git; no `/agtoosa-worktree` command |
+| `/agtoosa-evidence` | `Docs/AgToosa_Evidence.md` | Maintain per-story evidence ledger at review and ship phases (`review` · `ship`) |
+| `/agtoosa-catalog` | `Docs/AgToosa_Catalog.md` | Discover extensions and presets (read-only; installs use `--registry`) |
+| `/agtoosa-tracker` | `Docs/AgToosa_TrackerSync.md` | Export Master-Plan stories or propose tracker return changes (`export` · `propose`; no live API sync) |
 | `/agtoosa-help` | Platform help entry points (`.claude/commands/`, `.gemini/commands/`, `.github/prompts/`, Cursor/Windsurf core rules) | **Assistance-only:** static command reference; default path does not read Master-Plan or git |
 | `/agtoosa-help next` | Same platform help surfaces | **Assistance-only:** read-only context read; recommends exactly one next command without executing it |
 
@@ -124,11 +132,13 @@ Specialist lanes must emit the **structured evidence block** defined in `Docs/Ag
 - `Docs/AgToosa_Quickref.md` — One-page command + rules quickref (cheapest context entry point)
 - `Docs/Master-Plan.md` — Source of truth for project state and backlog (read before every command)
 - `Docs/agtoosa-verify.sh` — Deterministic lifecycle verifier (`bash Docs/agtoosa-verify.sh [--strict|stats]`); CI gate template in `Docs/agtoosa-gate.yml.example`
+- `Docs/agtoosa-dashboard.sh` — Local stdout-only Markdown/HTML state projection (`bash Docs/agtoosa-dashboard.sh`); see `Docs/AgToosa_Dashboard.md`
 - `Docs/agtoosa-events.jsonl` — Append-only phase-event log written at every phase transition
 - `Docs/AgToosa_Readiness.md` — Initial readiness checklist and promise-to-proof matrix
 - `Docs/AgToosa_Goal.md` — Goal clarification utility/sub-workflow
 - `Docs/AgToosa_Skills.md` — Subagent skill-to-command mapping and Codex skill contracts
 - `Docs/AgToosa_Specialists.md` — Project-specific specialist subagent contract and orchestration
+- `Docs/AgToosa_CrossModelReview.md` — Cross-model review gate (writer/reviewer separation, evidence merge, fallbacks)
 - `Docs/AgToosa_Changelog.md` — Project changelog
 - `Docs/Master-Architecture.md` — Current solution architecture, C4-style diagrams, boundaries, data flow, deployment, security, and observability
 - `Docs/Context/` — Product, tech-stack, and workflow configuration

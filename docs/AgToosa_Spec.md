@@ -275,6 +275,14 @@ Before spec generation, confirm coverage (as findings or interview answers) for:
         **Wave 2 (sequential after Wave 1):** [list sub-task IDs]
         ```
 
+    *   **Work Package DAG derivation (agent-instructed):** After the Wave Plan exists, emit `### 3.4 Work Package DAG` in the active spec (schema in `Docs/SPEC-FORMAT.md`). Rules:
+        - Emit **one Work Package row for every executable sub-task** (`package_id` = `PKG-<task-id>`, for example `PKG-1.1`).
+        - Set `wave` from the Wave Plan; set `depends_on` to packages in earlier waves whose outputs this task needs (or `—`).
+        - Fill `owned_files`, `inputs`, `outputs`, `merge_order`, and `verification` for every row.
+        - Packages proposed for **parallel** execution must have non-empty `owned_files` and `verification`.
+        - Same-wave `owned_files` sets must be **disjoint**. On overlap (duplicate paths or intersecting directory wildcards), replace the parallel relationship with an explicit **sequential fallback** in the Wave Plan.
+        - Every `depends_on` reference must resolve to an existing package with an **earlier wave**; reject unknown, self, circular, same-wave, or later-wave dependencies.
+        - XS / single-task stories may stay sequential without full DAG ceremony.
     *   Mirror the task tree into `Docs/Master-Plan.md` under `## Active Tasks` (replacing the flat table format).
 
 14. **Test Plan Skeleton:**
@@ -298,6 +306,10 @@ Before spec generation, confirm coverage (as findings or interview answers) for:
     *   Present the same candidate table shape as `/agtoosa-init` Project Skill Discovery (Skill name, Trigger description, Purpose, Inputs, Optional resources, Validation, Decision).
     *   Require **explicit user approval** before writing any `.codex/skills/<skill-name>/SKILL.md` file.
     *   Record accepted and declined decisions in the active spec file or `Docs/Master-Plan.md` **Update Log**.
+
+## Policy violation contract
+
+Consult `Docs/AgToosa_GovernancePolicy.md` (checker: `Docs/agtoosa-policy-check.sh`) before actions covered by a declared rule. On a policy violation: identify the rule `id`, `enforcement_class`, and `on_violation`; follow that `on_violation` only (`warn` / `instruct_stop` / wired `block_generator`); never invent stronger enforcement; never echo secret values. Preserve `Docs/Master-Plan.md` as lifecycle authority — policy handling must not write story status or tasks.
 
 ## Output
 *   Present the generated Spec (with Goal Contract and embedded plan), task list, and test plan skeleton to the user.

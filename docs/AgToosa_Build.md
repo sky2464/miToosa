@@ -7,6 +7,8 @@
 | `/agtoosa-build` | Full flow: Parts 1 + 2 + 3 |
 | `/agtoosa-build tdd` | Part 1 only — TDD Red-Green-Refactor loop against the task list from the approved spec |
 | `/agtoosa-build test` | Parts 2 + 3 — run the full testing army + security scans, then update tracking |
+| `/agtoosa-build handoff` | Export a handoff pack for remaining wave tasks via `Docs/AgToosa_Handoff.md` (recommend target via `Docs/AgToosa_AgentCapability.md`) |
+| `/agtoosa-build import` | Run Import Checklist for returning async agent results via `Docs/AgToosa_Import.md` |
 
 ### Claude Code Parallel Pattern
 
@@ -18,6 +20,8 @@ On Claude Code, independent tasks within a phase can be dispatched to parallel s
 - Each parallel subagent must return the **Terminal Evidence Contract** block from `Docs/AgToosa_Agent.md` (command, exit code, pass/fail, warnings, errors, changed files, next action).
 - Collect results when all parallel tasks complete; merge conflicts are resolved by the orchestrating agent.
 - The orchestrator must summarize unresolved terminal output before marking any task checkbox done.
+- Async or background agents dispatched via parallel sub-agents should receive a `/agtoosa-handoff` pack (run `/agtoosa-build handoff` before dispatch) and return results via `/agtoosa-import` (Terminal Evidence still required).
+- Before async dispatch, consult `Docs/AgToosa_AgentCapability.md` for an installed-surface routing recommendation and documented fallbacks.
 - See `/agtoosa-review` for the reference parallel pattern (4 reviewer personas run simultaneously).
 
 > **Note:** Parallel dispatch applies to Claude Code only. On other platforms, run tasks sequentially.
@@ -75,9 +79,23 @@ After every command, test run, scan, or parallel subagent during `/agtoosa-build
 
 2.  **Dependency Validation:** Never assume dependency versions from memory — verify via web search or terminal (`npm view`, `pip index`, `dart pub outdated`).
 
-3.  **Wave execution:** Read `### 3.2 Wave Plan` in the active spec and execute tasks **wave by wave**: complete every task in Wave N — including its Terminal Evidence — before starting Wave N+1. Within a wave, tasks share no files or data dependencies, so on Claude Code they may be dispatched in parallel via the pattern above; on all other platforms run the wave's tasks sequentially. If the spec has no Wave Plan, fall back to the `## Active Tasks` order in `Docs/Master-Plan.md`.
+3.  **Wave execution:** Read `### 3.2 Wave Plan` and `### 3.4 Work Package DAG` in the active spec and execute tasks **wave by wave**: complete every task in Wave N — including its Terminal Evidence — before starting Wave N+1. Within a wave, tasks share no files or data dependencies, so on Claude Code they may be dispatched in parallel via the pattern above; on all other platforms run the wave's tasks sequentially. If the spec has no Wave Plan, fall back to the `## Active Tasks` order in `Docs/Master-Plan.md`.
+
+    > **Work Package fan-out gate (agent-instructed):** Before parallel fan-out of a wave, read each Work Package row for that wave:
+    > - Confirm every `depends_on` package exists, is complete, and has an **earlier wave**.
+    > - Confirm same-wave `owned_files` sets are **disjoint**. On overlap, do **not** fan out in parallel — convert the affected packages to an explicit **sequential fallback** in the Wave Plan and run them in `merge_order`.
+    > - Run each package's `verification` command after its lane completes; present accepted results in `merge_order` before Tracking updates.
+    > - Claim Boundary: package checks are **agent-instructed**; agent selection and branch integration are **manual**; a runtime scheduler is **roadmap**.
+
+    > **Optional worktree isolation (agent-instructed):** For **M+** waves with at least two parallel packages (or an explicitly risky lane), offer optional isolation per `Docs/AgToosa_Worktree.md`. Preferred path: `../<repo>-<package_id>`. Git worktree add/list/remove/prune is **manual** — AgToosa does not create worktrees. When skipping: state exactly `No worktree: run packages sequentially in one branch and verify a clean working tree between packages.` Lifecycle routing remains a **read-only** consult of `Docs/AgToosa_AgentCapability.md` (do not edit it).
+
+    > **Async dispatch:** Before sending tasks to async or background agents for a wave, offer to run `/agtoosa-handoff wave` (see `Docs/AgToosa_Handoff.md`) to export a handoff pack that includes the selected-wave Work Packages section. Agents should return results via `/agtoosa-import` before any Tracking update.
 
 4.  **For each atomic task, execute the TDD Cycle:**
+
+    **⚠️ External / async task detection — runs before every task:**
+    Before starting a task, check whether the work was completed out-of-band (by an async agent, background runner, or external actor). If so, run the Import Checklist (`/agtoosa-import` or `Docs/AgToosa_Import.md`) before any Tracking update. Never mark a task complete without recorded verification commands and mapped ACs. "Imported claims are not evidence until repo-local verification passes."
+
 
     **⚠️ Manual Task Detection — runs before every task:**
     Before starting a task, check whether its line in `Docs/Master-Plan.md` or the active spec contains `[manual]` or `[manual-deferred]`.
@@ -203,8 +221,17 @@ Any bug, edge case, or out-of-scope requirement discovered during the TDD cycle 
     `{"ts":"[ISO-8601 UTC]","phase":"build","event":"complete","story":"[Story ID]","by":"AgToosa"}`
 12. **Self-verify:** Run `bash Docs/agtoosa-verify.sh` and resolve any FAIL findings before reporting the build complete.
 
+## Policy violation contract
+
+Consult `Docs/AgToosa_GovernancePolicy.md` (checker: `Docs/agtoosa-policy-check.sh`) before actions covered by a declared rule. On a policy violation: identify the rule `id`, `enforcement_class`, and `on_violation`; follow that `on_violation` only (`warn` / `instruct_stop` / wired `block_generator`); never invent stronger enforcement; never echo secret values. Preserve `Docs/Master-Plan.md` as lifecycle authority — policy handling must not write story status or tasks.
+
+## Hook lifecycle pointers
+
+Consult `Docs/AgToosa_Hooks.md` for the single event/platform matrix. During Build, apply checklist (or proven native) steps for `task-start`, `pre-tool-use`, `pre-test`, and `post-test` as applicable. Do not duplicate the matrix here. Optional pack absence is not a health or verifier finding.
+
 ## Output
 *   Confirm build and test phases are complete and all tests pass.
 *   Present a summary of test results and any security findings.
+*   If any wave tasks remain for async dispatch, offer to run `/agtoosa-build handoff` (see `Docs/AgToosa_Handoff.md`) before handing off to external agents. On return, run `/agtoosa-build import` (see `Docs/AgToosa_Import.md`) to verify and integrate results.
 *   Print the closure line verbatim: `✅ Done. Run /agtoosa-status to verify findings cleared.`
 *   Prompt the user to run `/agtoosa-review`.

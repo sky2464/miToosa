@@ -4,11 +4,12 @@
 
 | Sub-command | Runs |
 |-------------|------|
-| `/agtoosa-review` | Full flow: all 4 personas + cross-platform suggestion |
+| `/agtoosa-review` | Full flow: all 4 personas + cross-model gate when tier recommends + cross-platform suggestion |
 | `/agtoosa-review security` | Security Officer persona only — OWASP + STRIDE audit |
 | `/agtoosa-review arch` | Engineering Manager persona only — architecture, 500-line limit, observability |
 | `/agtoosa-review debug` | Iron Law root-cause investigation for a specific bug or failing test |
 | `/agtoosa-review cross` | Cross-platform second-opinion guidance (switch to another installed AI platform and re-run review) |
+| `/agtoosa-review cross-model` | Cross-model review gate — independent reviewer subagent/model (`Docs/AgToosa_CrossModelReview.md`) |
 
 ## Objective
 Ensure code quality, security, and simplicity through multi-persona review.
@@ -116,8 +117,27 @@ Different AI models surface different classes of bugs — a second platform revi
     3. Compare findings — issues flagged by **both** platforms are high-confidence; issues flagged by only one warrant investigation
     *   Merge findings from both reports before running `/agtoosa-ship`. Cross-platform review is **strongly recommended** for security-sensitive changes.
 
+### Part 5 — Cross-Model Review Gate (`/agtoosa-review cross-model`)
+
+Writer/reviewer separation across different agents or models reduces single-agent blind spots. **Do not duplicate the full contract here** — read and execute `Docs/AgToosa_CrossModelReview.md`.
+
+For parallel vs sequential routing per installed host, consult `Docs/AgToosa_AgentCapability.md` (Cross-model column + Fallback Chain) before launching reviewer lanes.
+
+8.  **Cross-Model Review:**
+    *   After Part 1 virtual personas (or when running `cross-model` alone), compute the risk tier from the active spec threat model and Must ACs.
+    *   For **recommended** or **strongly recommended** tiers, run `/agtoosa-review cross-model` or record an explicit **skip rationale** in the review report `## Cross-Model Review` section.
+    *   Delegate an **independent reviewer** subagent or second model with a **read-only** guarantee — the reviewer must not modify files or git state during the gate.
+    *   When `Docs/Context/specialists.md` exists, orchestrate `review`-phase specialists per `Docs/AgToosa_Specialists.md` (trigger match only).
+    *   Merge findings with confidence tiers (`both-models`, `reviewer-only`, `writer-only`, `virtual-persona-only`) before Part 3 verdict.
+    *   Fallback when no second model is available: `/agtoosa-review cross`, sequential virtual personas, or documented skip — see `Docs/AgToosa_CrossModelReview.md`.
+
+## Policy violation contract
+
+Consult `Docs/AgToosa_GovernancePolicy.md` (checker: `Docs/agtoosa-policy-check.sh`) before actions covered by a declared rule. On a policy violation: identify the rule `id`, `enforcement_class`, and `on_violation`; follow that `on_violation` only (`warn` / `instruct_stop` / wired `block_generator`); never invent stronger enforcement; never echo secret values. Preserve `Docs/Master-Plan.md` as lifecycle authority — policy handling must not write story status or tasks.
+
 ## Output
 *   Save the review report to `Docs/archived/review-[story-id].md` (e.g., `Docs/archived/review-DEV-15.md`). This file is required by `/agtoosa-ship check`. The file must contain the structured findings table with all 🔴 / 🟡 / 🟢 items.
+*   Create or update `Docs/archived/evidence-[story-id].md` per `Docs/AgToosa_Evidence.md` (or run `/agtoosa-evidence review`). Populate `phase=review` rows from the story test plan and review findings. This step is required when writing the review report — do not defer it to ship.
 *   Present the approval gate:
 
     ```

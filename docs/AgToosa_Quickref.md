@@ -10,12 +10,10 @@
 | 0. Once per project | `/agtoosa-init` | `Docs/AgToosa_Init.md` |
 | 1. Spec & plan | `/agtoosa-spec <idea>` | `Docs/AgToosa_Spec.md` |
 | 2. TDD build | `/agtoosa-build` | `Docs/AgToosa_Build.md` |
-| 3. Review gate | `/agtoosa-review` | `Docs/AgToosa_Review.md` |
+| 3. Review gate | `/agtoosa-review` | `Docs/AgToosa_Review.md` (`security` · `arch` · `debug` · `cross` · `cross-model` → `Docs/AgToosa_CrossModelReview.md`) |
 | 4. Ship & archive | `/agtoosa-ship` | `Docs/AgToosa_Ship.md` |
 
-Utilities (load on demand): `/agtoosa-status`, `/agtoosa-task`, `/agtoosa-qa`,
-`/agtoosa-goal`, `/agtoosa-update`, `/agtoosa-debug`, `/agtoosa-revert`,
-`/agtoosa-concise`, `/agtoosa-help` — each maps to `Docs/AgToosa_<Name>.md`.
+Utilities (on demand): `/agtoosa-status`, `/agtoosa-task`, `/agtoosa-qa`, `/agtoosa-goal`, `/agtoosa-update`, `/agtoosa-debug`, `/agtoosa-revert`, `/agtoosa-concise`, `/agtoosa-handoff`, `/agtoosa-import`, `/agtoosa-evidence`, `/agtoosa-help`, `/agtoosa-catalog`, `/agtoosa-tracker` (`Docs/AgToosa_TrackerSync.md`) — each other utility maps to `Docs/AgToosa_<Name>.md`.
 
 ## Non-negotiables
 
@@ -31,6 +29,8 @@ Utilities (load on demand): `/agtoosa-status`, `/agtoosa-task`, `/agtoosa-qa`,
    unless they explicitly asked to chain phases.
 6. **Scope discipline.** Stay inside the spec's Build Scope; new ideas go to
    the Master-Plan Backlog, not into the current diff.
+7. **Work Package DAG (when present).** Specs may declare `### 3.4 Work Package DAG` rows; Build checks ownership before fan-out; Handoff/Import report gaps. Agent-instructed derivation; generator-enforced schema copies; bats/CI when wired.
+8. **Optional worktree isolation.** See `Docs/AgToosa_Worktree.md` for M+ multi-package lanes; Git commands are **manual**.
 
 ## State files
 
@@ -41,6 +41,8 @@ Utilities (load on demand): `/agtoosa-status`, `/agtoosa-task`, `/agtoosa-qa`,
 | `Docs/AgToosa_TestPlan-<id>.md` | AC-to-test mapping + RED/GREEN evidence |
 | `Docs/archived/review-<id>.md` | Review verdicts |
 | `Docs/agtoosa-events.jsonl` | Append-only phase-event log (one JSON line per transition) |
+| `Docs/agtoosa-evidence.jsonl` | Optional JSONL mirror of per-story evidence ledger (non-authoritative; canonical is `Docs/archived/evidence-<id>.md`) |
+| `Docs/archived/retro-<YYYY-MM-DD>.md` | Structured `/agtoosa-ship retro` artifact (proposals only; see `Docs/AgToosa_Retro.md`) |
 | `Docs/Context/*.md` | Product, tech-stack, workflow context |
 
 ## Verification
@@ -51,10 +53,28 @@ Deterministic, no-AI gate — run any time, and in CI:
 bash Docs/agtoosa-verify.sh            # gates: context, specs, ACs, evidence
 bash Docs/agtoosa-verify.sh --strict   # warnings fail too
 bash Docs/agtoosa-verify.sh stats      # cycle analytics
+bash Docs/agtoosa-dashboard.sh         # local Markdown/HTML state projection (see AgToosa_Dashboard.md)
 ```
 
-CI template: copy `Docs/agtoosa-gate.yml.example` to
-`.github/workflows/agtoosa-gate.yml` to block PRs on verifier failures.
+| Gate | Checks |
+|------|--------|
+| 1 — Context | `Context/product.md`, `tech-stack.md`, `workflow.md` exist and have no template placeholders |
+| 2 — Master-Plan | Epic rows present; Update Log within rotation budget (150 rows) |
+| 3 — Spec approval | Active-cycle stories have approved specs, EARS AC rows, threat model, AC→test mapping, RED evidence, task tree, Wave Plan |
+| 4 — Review | Done stories have archived review artifacts |
+| 5 — Version | Generator bash/ps1 parity (maintainer repos) or installed `.agtoosa-version` marker |
+
+CI gate: `Docs/agtoosa-gate.yml.example` is a **template only** until you
+copy, review, push, and observe a run. Full sequence:
+[Docs/examples/verifier-ci-adoption.md](examples/verifier-ci-adoption.md).
+
+## Generator CLI (install/maintenance)
+
+```bash
+bash agtoosa.sh --doctor .     # version skew, wiring gaps, context health
+bash agtoosa.sh --uninstall .  # remove AgToosa-owned files (keeps your data)
+bash agtoosa.sh --update .     # refresh workflow docs from generator
+```
 
 ## Phase-event logging
 
@@ -64,4 +84,4 @@ At every phase transition append one line to `Docs/agtoosa-events.jsonl`:
 {"ts":"2026-01-01T00:00:00Z","phase":"build","event":"complete","story":"DEV-012","by":"AgToosa"}
 ```
 
-`phase` ∈ init|spec|build|review|ship|qa|task; `event` ∈ start|complete|blocked.
+`phase` ∈ init|spec|build|review|ship|qa|task|handoff|import|evidence; `event` ∈ start|complete|blocked.
