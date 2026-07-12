@@ -2,6 +2,8 @@
 
 Use this draft when creating the iOS App Store Connect record for the iPhone launch.
 
+**Related:** [Privacy Policy](PRIVACY-POLICY.md) · [Support](SUPPORT.md) · [iPhone Launch Readiness](IPHONE-LAUNCH-READINESS.md) · [Launch Plan](LAUNCH.md)
+
 ## App information
 
 | Field | Draft value |
@@ -26,17 +28,18 @@ Use this draft when creating the iOS App Store Connect record for the iPhone lau
 | Keywords | puzzle,brain,pattern,memory,focus,streak,logic,quick games |
 | What's New | Initial iPhone launch. |
 | Copyright | Copyright Atoosa Dev. All rights reserved. |
-| Privacy Policy URL | TODO: publish and paste final URL |
-| Support URL | TODO: publish and paste final URL |
+| Privacy Policy URL | `[manual-deferred: owner to publish public HTTPS URL — source: docs/PRIVACY-POLICY.md]` |
+| Support URL | `[manual-deferred: owner to publish public HTTPS URL — source: docs/SUPPORT.md]` |
 | Marketing URL | Optional |
 
 ## Review notes
 
 - No account is required.
 - Progress is local-first.
-- Firebase + Google Analytics are enabled for launch analytics only.
+- Firebase + Google Analytics are enabled for launch analytics only when `FIREBASE_ENABLED=true`.
 - No leaderboard, social graph, IAP, VIP, server sync, gambling, contests, chat, or user-generated content in this launch.
 - If App Review asks how to test analytics, launch a release/TestFlight build with `FIREBASE_ENABLED=true` and play one session.
+- Public policy/support pages: [PRIVACY-POLICY.md](PRIVACY-POLICY.md), [SUPPORT.md](SUPPORT.md).
 
 ## App Privacy questionnaire guide
 
@@ -46,7 +49,7 @@ Answer from the actual release build behavior, not future plans.
 - Local Hive progress stays on device.
 - Anonymous local player ID is not an account, email, phone number, or real name.
 - Do not declare leaderboard, ads, purchases, referrals, or server sync unless those features are actually enabled in the submitted build.
-- Keep `docs/PRIVACY-POLICY.md` aligned with the final public Privacy Policy URL.
+- Keep [docs/PRIVACY-POLICY.md](PRIVACY-POLICY.md) aligned with the final public Privacy Policy URL.
 
 ## Age rating guide
 
@@ -66,21 +69,29 @@ The app uses encrypted local storage and platform crypto/keychain behavior. Comp
 
 ## Screenshot capture plan
 
-Required: one to ten iPhone screenshots.
+**Required:** one to ten iPhone screenshots for App Store Connect.
 
-Capture final release screens after TestFlight install on a real iPhone or iOS Simulator matching App Store screenshot sizes:
+### Device sizes
 
-- Onboarding/value screen.
-- Tracks/home screen.
-- Gameplay screen.
-- Progress/streak screen.
-- Settings/privacy or local-first screen.
+Capture for the primary iPhone display sizes Apple requests at submit time (typically **6.7"** and **6.5"** iPhone classes). Use a real iPhone or iOS Simulator matching the target resolution. Re-capture if Apple updates required sizes before submit.
 
-Quality bar:
+### Required scenes
 
-- No debug banners.
-- No placeholder URLs.
-- No impossible progress values.
+Capture final release screens after TestFlight install (or release build on Simulator):
+
+1. **Onboarding / value** — first-run welcome or value proposition.
+2. **Tracks / home** — track picker with glass UI.
+3. **Gameplay** — active puzzle session (timer visible, no debug overlay).
+4. **Progress / streak** — XP, streak, or completion state.
+5. **Settings / privacy** — settings or local-first / privacy posture screen.
+
+### Quality bar
+
+- No debug banners, Flutter inspector overlays, or `DEBUG` ribbons.
+- No placeholder URLs or `TODO` text visible in UI.
+- No impossible progress values (negative counts, overflow text).
 - No clipped text or layout overflow.
 - Screenshots only show features available in the submitted build.
+- Use production theme; avoid simulator chrome where Apple allows device-frame captures.
 
+**Manual gate:** Upload captured PNGs in App Store Connect — `[manual-deferred: owner after TestFlight build on physical iPhone]`.

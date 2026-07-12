@@ -14,9 +14,12 @@ This checklist captures what the repo can prepare and what the owner must do in 
 - [x] Release signing runbooks point iOS App Store work at `dev.atoosa.mitoosa`.
 - [x] Firebase setup runbook documents the launch decision to enable Firebase + Google Analytics.
 - [x] App Store metadata draft exists in `docs/APP-STORE-METADATA.md`.
+- [x] Privacy policy source exists in `docs/PRIVACY-POLICY.md` (Firebase + GA aligned).
+- [x] Support page source exists in `docs/SUPPORT.md`.
 - [x] Company registration readiness checklist exists in `docs/COMPANY-REGISTRATION-READINESS.md`.
 - [x] Replace placeholder `lib/firebase_options.dart` by running `flutterfire configure` after the Firebase iOS app is created.
-- [ ] Publish privacy and support URLs, then replace placeholders in App Store metadata.
+- [ ] Publish Privacy Policy + Support URLs and paste finals into ASC/metadata `[manual-deferred: 2026-07-11]` — sources: [PRIVACY-POLICY.md](PRIVACY-POLICY.md), [SUPPORT.md](SUPPORT.md), [APP-STORE-METADATA.md](APP-STORE-METADATA.md).
+- [ ] Capture iPhone screenshots per [APP-STORE-METADATA.md § Screenshot capture plan](APP-STORE-METADATA.md#screenshot-capture-plan) and upload in App Store Connect `[manual-deferred: 2026-07-11]`.
 
 ## Manual owner checklist
 
@@ -69,8 +72,9 @@ flutter run --dart-define=FIREBASE_ENABLED=true
 
 ### Public web/contact requirements
 
-- [ ] Publish Privacy Policy URL.
-- [ ] Publish Support URL.
+- [ ] Publish Privacy Policy URL — source: [PRIVACY-POLICY.md](PRIVACY-POLICY.md) `[manual-deferred: 2026-07-11]`
+- [ ] Publish Support URL — source: [SUPPORT.md](SUPPORT.md) `[manual-deferred: 2026-07-11]`
+- [ ] Paste live URLs into [APP-STORE-METADATA.md](APP-STORE-METADATA.md) and App Store Connect `[manual-deferred: 2026-07-11]`
 - [ ] Decide legal/privacy/support email addresses.
 - [ ] Optional: publish marketing/product page.
 

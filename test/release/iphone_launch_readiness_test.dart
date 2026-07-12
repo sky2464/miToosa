@@ -47,8 +47,10 @@ void main() {
       for (final required in [
         'Name',
         'Subtitle',
-        'Category',
+        'Description',
         'Keywords',
+        "What's New",
+        'Category',
         'Privacy Policy URL',
         'Support URL',
         'Age rating',
@@ -57,6 +59,80 @@ void main() {
       ]) {
         expect(text, contains(required), reason: '$required missing');
       }
+    });
+
+    test('metadata uses manual-deferred URL placeholders not bare TODO', () {
+      final text = File('docs/APP-STORE-METADATA.md').readAsStringSync();
+
+      expect(text, contains('manual-deferred'));
+      expect(text, isNot(contains('TODO: publish and paste final URL')));
+      expect(text, contains('Privacy Policy URL'));
+      expect(text, contains('Support URL'));
+    });
+
+    test('privacy policy aligns with Firebase and Google Analytics launch posture', () {
+      final file = File('docs/PRIVACY-POLICY.md');
+      expect(file.existsSync(), isTrue);
+      final text = file.readAsStringSync();
+
+      expect(text, contains('FIREBASE_ENABLED=true'));
+      expect(
+        text,
+        anyOf(contains('Firebase'), contains('Google Analytics')),
+      );
+      expect(text, contains('Hive'));
+      expect(text, isNot(contains('does not make any network requests')));
+      expect(text, isNot(contains('No analytics sent to any server')));
+    });
+
+    test('support page exists with contact channels and cross-links', () {
+      final file = File('docs/SUPPORT.md');
+      expect(file.existsSync(), isTrue);
+      final text = file.readAsStringSync();
+
+      expect(text, contains('sky2464@gmail.com'));
+      expect(text, contains('Response expectations'));
+      expect(text, contains('PRIVACY-POLICY.md'));
+      expect(text, contains('USER-GUIDE.md'));
+    });
+
+    test('screenshot checklist lists required scenes sizes and quality bar', () {
+      final text = File('docs/APP-STORE-METADATA.md').readAsStringSync();
+
+      for (final scene in [
+        'Onboarding',
+        'Tracks',
+        'Gameplay',
+        'Progress',
+        'Settings',
+      ]) {
+        expect(text, contains(scene), reason: '$scene scene missing');
+      }
+      expect(text, contains('6.7'));
+      expect(text, contains('Quality bar'));
+      expect(text, contains('debug banners'));
+    });
+
+    test('launch docs cross-link BL-26 artifacts and keep manual gates open', () {
+      final launchText = File('docs/LAUNCH.md').readAsStringSync();
+      final readinessText =
+          File('docs/IPHONE-LAUNCH-READINESS.md').readAsStringSync();
+
+      for (final artifact in [
+        'APP-STORE-METADATA.md',
+        'PRIVACY-POLICY.md',
+        'SUPPORT.md',
+      ]) {
+        expect(launchText, contains(artifact));
+        expect(readinessText, contains(artifact));
+      }
+
+      expect(launchText, contains('manual-deferred'));
+      expect(readinessText, contains('manual-deferred'));
+      expect(
+        launchText,
+        isNot(contains('[x] Publish public privacy/support URLs')),
+      );
     });
 
     test('company readiness checklist captures human-only formation steps', () {

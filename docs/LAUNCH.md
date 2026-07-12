@@ -1,6 +1,6 @@
 # miToosa iPhone Launch Plan
 
-**Release target:** v1.5.0 iPhone App Store launch  
+**Release target:** v1.5.1 iPhone App Store launch  
 **Current focus:** 100% iPhone/iOS until App Store readiness is complete  
 **Bundle ID:** `dev.atoosa.mitoosa`  
 **App Store name:** `miToosa`  
@@ -11,7 +11,10 @@ Android, macOS, and Web release work is deferred. Existing cross-platform code s
 ## Source files
 
 - `docs/IPHONE-LAUNCH-READINESS.md` — owner checklist for App Store, Firebase, company, public URLs, and physical iPhone QA.
-- `docs/APP-STORE-METADATA.md` — App Store product-page draft and questionnaire guide.
+- `docs/APP-STORE-METADATA.md` — App Store product-page draft, screenshot checklist, and questionnaire guide.
+- `docs/PRIVACY-POLICY.md` — public privacy policy source (Firebase + GA when `FIREBASE_ENABLED=true`).
+- `docs/SUPPORT.md` — public support page source for App Store Support URL.
+- `docs/USER-GUIDE.md` — in-app help and gameplay reference linked from Support.
 - `docs/COMPANY-REGISTRATION-READINESS.md` — company formation and App Store seller-readiness checklist.
 - `docs/ANALYTICS-SETUP.md` — Firebase + Google Analytics activation runbook.
 - `docs/RELEASE-SIGNING.md` — signing, archive, TestFlight, and troubleshooting runbook.
@@ -22,9 +25,10 @@ Android, macOS, and Web release work is deferred. Existing cross-platform code s
 - [x] Firebase Analytics scaffolding exists behind `FIREBASE_ENABLED`.
 - [x] Placeholder `lib/firebase_options.dart` fails closed until FlutterFire config is generated.
 - [x] Release signing runbooks exist.
-- [x] Privacy and data-retention docs exist.
-- [ ] Generated Firebase config added after external Firebase project/app setup.
-- [ ] Public privacy/support URLs published and inserted into App Store metadata.
+- [x] Privacy and data-retention docs exist ([PRIVACY-POLICY.md](PRIVACY-POLICY.md), [SUPPORT.md](SUPPORT.md)).
+- [x] Generated Firebase config added after external Firebase project/app setup (BL-23).
+- [ ] Publish public privacy/support URLs and paste finals into App Store metadata `[manual-deferred: 2026-07-11]` — see [APP-STORE-METADATA.md](APP-STORE-METADATA.md).
+- [ ] Capture and upload iPhone screenshots per metadata checklist `[manual-deferred: 2026-07-11]`.
 
 ## Manual external gates
 
@@ -48,9 +52,9 @@ Android, macOS, and Web release work is deferred. Existing cross-platform code s
 
 ### Firebase + Google Analytics
 
-- [ ] Create Firebase project with Google Analytics enabled.
-- [ ] Register iOS app `dev.atoosa.mitoosa`.
-- [ ] Run `flutterfire configure --project=<your-firebase-project-id> --platforms=ios`.
+- [x] Create Firebase project with Google Analytics enabled (`mitoosa-2121b`).
+- [x] Register iOS app `dev.atoosa.mitoosa`.
+- [x] Run `flutterfire configure --project=mitoosa-2121b --platforms=ios --ios-bundle-id=dev.atoosa.mitoosa`.
 - [ ] Verify Firebase DebugView with `FIREBASE_ENABLED=true`.
 - [ ] Ensure App Store privacy answers declare the release analytics behavior.
 

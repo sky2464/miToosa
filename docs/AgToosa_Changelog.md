@@ -8,7 +8,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), version
 ## [Unreleased]
 
 ### Shipped (AgToosa cycle)
-- _No unreleased shipped entries._
+- 2026-07-11 — **BL-26** App Store metadata, privacy/support copy, screenshot checklist, doc guards — [spec-BL-26.md](archived/spec-BL-26.md) · [review-BL-26.md](archived/review-BL-26.md) · [ship-check-BL-26.md](archived/ship-check-BL-26.md) · smoke **PASS** (10/10 readiness tests); URL publish + ASC screenshots **manual-deferred**
 
 ---
 

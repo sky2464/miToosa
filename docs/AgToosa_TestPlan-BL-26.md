@@ -74,3 +74,21 @@ BL-26 is a docs/tests chore. Automated tests extend `test/release/iphone_launch_
 ## Smoke set
 
 `T-001`, `T-002`, `T-003`
+
+## TDD Evidence
+
+```
+RED evidence — 3.1
+Command: flutter test test/release/iphone_launch_readiness_test.dart
+Exit code: 1
+Failure excerpt: Expected file docs/SUPPORT.md to exist; privacy policy contained 'does not make any network requests'
+
+GREEN evidence — 3.1
+Command: flutter test test/release/iphone_launch_readiness_test.dart
+Exit code: 0
+
+GREEN evidence — 3.2
+Command: dart analyze lib test && flutter test
+Exit code: 0
+Result: 892 tests passed; no issues in lib/test
+```

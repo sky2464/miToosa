@@ -2,7 +2,7 @@
 
 > **Story ID:** BL-26  
 > **Epic:** EP-01 Launch Readiness & Validation  
-> **Status:** 🟦 Todo  
+> **Status:** 🔧 Awaiting Manual  
 > **Estimate:** M  
 > **Spec created:** 2026-07-11  
 > **Mode:** `/agtoosa-spec quick`  
@@ -107,16 +107,16 @@ Out of scope: `docs/PRODUCT-WEDGE.md`, `pubspec.yaml` version, ASC/TestFlight ex
 
 ### 3.1 Task Tree
 
-- [ ] **1.** Privacy + support copy
-  - [ ] 1.1 Align `docs/PRIVACY-POLICY.md` to Firebase+GA launch posture — _Requirements: AC-002_
-  - [ ] 1.2 Add `docs/SUPPORT.md` with contact, expectations, and cross-links — _Requirements: AC-003_
-- [ ] **2.** Metadata + screenshot checklist
-  - [ ] 2.1 Finalize `docs/APP-STORE-METADATA.md` with `manual-deferred` URL placeholders — _Requirements: AC-001, AC-007_
-  - [ ] 2.2 Expand screenshot capture checklist (scenes, sizes, quality bar) — _Requirements: AC-004_
-  - [ ] 2.3 Sync `IPHONE-LAUNCH-READINESS.md` + `LAUNCH.md` cross-links and manual gates — _Requirements: AC-005_
-- [ ] **3.** Automated guards + closure
-  - [ ] 3.1 Extend `test/release/iphone_launch_readiness_test.dart` — _Requirements: AC-006_
-  - [ ] 3.2 Verify `dart analyze` + targeted/full test suite green — _Requirements: AC-001–AC-006_
+- [x] **1.** Privacy + support copy
+  - [x] 1.1 Align `docs/PRIVACY-POLICY.md` to Firebase+GA launch posture — _Requirements: AC-002_
+  - [x] 1.2 Add `docs/SUPPORT.md` with contact, expectations, and cross-links — _Requirements: AC-003_
+- [x] **2.** Metadata + screenshot checklist
+  - [x] 2.1 Finalize `docs/APP-STORE-METADATA.md` with `manual-deferred` URL placeholders — _Requirements: AC-001, AC-007_
+  - [x] 2.2 Expand screenshot capture checklist (scenes, sizes, quality bar) — _Requirements: AC-004_
+  - [x] 2.3 Sync `IPHONE-LAUNCH-READINESS.md` + `LAUNCH.md` cross-links and manual gates — _Requirements: AC-005_
+- [x] **3.** Automated guards + closure
+  - [x] 3.1 Extend `test/release/iphone_launch_readiness_test.dart` — _Requirements: AC-006_
+  - [x] 3.2 Verify `dart analyze` + targeted/full test suite green — _Requirements: AC-001–AC-006_
 - [ ] **4.** Manual external gates
   - [ ] 4.1 Publish Privacy Policy + Support URLs and paste finals into ASC/metadata — _Requirements: AC-001, AC-005_ `[manual-deferred: 2026-07-11]`
   - [ ] 4.2 Capture iPhone screenshots per checklist and upload in App Store Connect — _Requirements: AC-004, AC-005_ `[manual-deferred: 2026-07-11]`
