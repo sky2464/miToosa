@@ -18,6 +18,7 @@ Android, macOS, and Web release work is deferred. Existing cross-platform code s
 - `docs/COMPANY-REGISTRATION-READINESS.md` — company formation and App Store seller-readiness checklist.
 - `docs/ANALYTICS-SETUP.md` — Firebase + Google Analytics activation runbook.
 - `docs/RELEASE-SIGNING.md` — signing, archive, TestFlight, and troubleshooting runbook.
+- `docs/qa/iphone-testflight-qa-checklist.md` — physical iPhone TestFlight QA scenarios and sign-off criteria.
 
 ## Code readiness
 
@@ -60,6 +61,7 @@ Android, macOS, and Web release work is deferred. Existing cross-platform code s
 
 ### Physical iPhone QA
 
+- [ ] Run [iPhone TestFlight QA Checklist](qa/iphone-testflight-qa-checklist.md) and capture a dated evidence file from its companion template.
 - [ ] Install from TestFlight on a real iPhone.
 - [ ] Verify cold launch, onboarding, full gameplay session, settings, share flow, restart persistence, offline behavior, VoiceOver, Dynamic Type, and no broken links/placeholders.
 
@@ -83,4 +85,3 @@ Final release validation happens in Xcode Organizer and TestFlight:
 - [ ] Validate App passes.
 - [ ] TestFlight build processes.
 - [ ] TestFlight install on a real iPhone passes.
-

@@ -1,7 +1,7 @@
 # Master-Plan
 
 > **Source of truth for active work.** Completed work lives in `Docs/archived/` — see Completed This Cycle for links.
-> **Last updated:** 2026-07-12 (/agtoosa-spec BL-25 approved)
+> **Last updated:** 2026-07-14 (/agtoosa-build BL-25 automated tasks complete; BL-27 enrolled; physical iPhone QA pending)
 
 ## Project Charter
 
@@ -11,7 +11,7 @@
 | Goal | Ship v1.5.1 to the iPhone App Store with a validated free-first wedge and Firebase analytics |
 | User outcome | Casual puzzle players get ADHD-optimized 3–5 minute sessions without sign-up friction; they understand the 25 free games/day + share bonus model |
 | Success condition | App Store submission accepted; TestFlight QA passed on physical iPhone; D1 retention signal ≥40% from playtest; analytics events visible in Firebase DebugView |
-| Proof / evidence | `flutter test` green (892 tests); `dart analyze` clean on lib/test; BL-26 metadata/docs guards shipped; BL-23 FlutterFire shipped; T-005 DebugView manual pending |
+| Proof / evidence | `flutter test` green (893 tests); `dart analyze` clean on lib/test; BL-26 metadata/docs guards shipped; BL-23 FlutterFire shipped; T-005 DebugView manual pending |
 | Non-goals | Android/macOS/Web store launch in v1.5.0; backend leaderboard; IAP/VIP; server sync; referral tiers (see `docs/PRODUCT-WEDGE.md`) |
 | Assumptions | Apple Developer account and company formation proceed on owner timeline; Firebase + GA is the launch analytics stack; local-first Hive persistence remains canonical |
 | Risks | External gates (company, App Store Connect, Firebase console) block store release; physical-device QA not yet executed |
@@ -20,7 +20,7 @@
 | Milestone | v1.5.1 (next) — iPhone App Store launch |
 | Active cycle | Launch Sprint — iPhone readiness + UX polish (2026-06-02 → 2026-06-25) |
 | Cycle capacity | 13 story points |
-| Current phase | 🟦 Todo — BL-25 Spec ✅ Approved; run `/agtoosa-build` |
+| Current phase | 🟦 Todo — BL-27 approved and enrolled after BL-25 automated completion; run `/agtoosa-build` |
 
 ## Active Cycle
 
@@ -28,7 +28,8 @@
 
 | ID | Title | Type | Estimate | Status | Tasks Done |
 |----|-------|------|----------|--------|-----------|
-| BL-25 | Feature: Physical iPhone TestFlight QA pass | Feature | M | 🟦 Todo | 0/5 |
+| BL-25 | Feature: Physical iPhone TestFlight QA pass | Feature | M | 🔧 Awaiting Manual | 5/5 tasks (12 manual-deferred) |
+| BL-27 | Chore: Generalize lifecycle verifier project-ID parsing | Chore | XS | 🟦 Todo | 0/5 |
 
 Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blocked · 🔧 Awaiting Manual · 🏁 Shipped
 
@@ -36,13 +37,13 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 ### BL-25 — Physical iPhone TestFlight QA pass
 
-- [ ] **1.** QA documentation: TestFlight checklist + evidence template
-  - [ ] 1.1 Create `docs/qa/iphone-testflight-qa-checklist.md` — _Requirements: AC-001_
-  - [ ] 1.2 Create `docs/qa/iphone-testflight-evidence-template.md` — _Requirements: AC-002_
-  - [ ] 1.3 Cross-link from `IPHONE-LAUNCH-READINESS.md`, `LAUNCH.md`, `wedge-qa-checklist.md` — _Requirements: AC-001, AC-012_
-- [ ] **2.** Automated guards
-  - [ ] 2.1 Extend `test/release/iphone_launch_readiness_test.dart` — _Requirements: AC-012_
-  - [ ] 2.2 Run `dart analyze lib test` and `flutter test` — _Requirements: AC-012_
+- [x] **1.** QA documentation: TestFlight checklist + evidence template
+  - [x] 1.1 Create `docs/qa/iphone-testflight-qa-checklist.md` — _Requirements: AC-001_
+  - [x] 1.2 Create `docs/qa/iphone-testflight-evidence-template.md` — _Requirements: AC-002_
+  - [x] 1.3 Cross-link from `IPHONE-LAUNCH-READINESS.md`, `LAUNCH.md`, `wedge-qa-checklist.md` — _Requirements: AC-001, AC-012_
+- [x] **2.** Automated guards
+  - [x] 2.1 Extend `test/release/iphone_launch_readiness_test.dart` — _Requirements: AC-012_
+  - [x] 2.2 Run `dart analyze lib test` and `flutter test` — _Requirements: AC-012_
 - [ ] **3.** Manual TestFlight QA execution (physical iPhone)
   - [ ] 3.1 Install TestFlight build on physical iPhone — _Requirements: AC-003_ `[manual-deferred]`
   - [ ] 3.2 Cold launch + onboarding; time-to-first-game ≤60s — _Requirements: AC-003, AC-004, AC-015_ `[manual-deferred]`
@@ -59,12 +60,24 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
   - [ ] 5.1 Complete dated evidence file; gate log in `RELEASE-GATES.md` — _Requirements: AC-002, AC-003–AC-011_ `[manual-deferred]`
   - [ ] 5.2 Mark Physical iPhone QA complete in launch docs + Master-Plan — _Requirements: AC-003–AC-011_ `[manual-deferred]`
 
+### BL-27 — Generalize lifecycle verifier project-ID parsing
+
+- [ ] **1.** Add failing verifier fixture tests
+  - [ ] 1.1 Add synthetic EP-01 + BL-25 fixture and assert the pre-patch verifier emits the known ID-prefix findings — _Requirements: AC-001, AC-002, AC-005_
+  - [ ] 1.2 Add DEV-001 compatibility and invalid-ID negative fixtures — _Requirements: AC-004, AC-006_
+- [ ] **2.** Generalize ID discovery
+  - [ ] 2.1 Add a single bounded project-ID extraction helper/pattern in `docs/agtoosa-verify.sh` — _Requirements: AC-001, AC-002, AC-003, AC-004, AC-006_
+  - [ ] 2.2 Replace the Gate 2, 3, 4, and 7 `DEV-###` scans with the shared helper/pattern — _Requirements: AC-001, AC-002, AC-003_
+- [ ] **3.** Verify the local patch
+  - [ ] 3.1 Run the fixture test suite, real-project verifier JSON mode, and shell syntax check — _Requirements: AC-001–AC-006_
+
 ## Manual / Deferred Tasks
 
 > Tasks that require a human action outside the agent. These are **not** counted against the health score.
 
 | Story | Task # | Deferred Since | Description |
 |-------|--------|----------------|-------------|
+| BL-25 | 3.1–5.2 | 2026-07-14 | Physical iPhone TestFlight QA, DebugView, evidence capture, and launch-doc closure (12 owner-executed steps) |
 | BL-26 | 4.1 | 2026-07-11 | Publish Privacy Policy + Support URLs and paste finals into ASC/metadata |
 | BL-26 | 4.2 | 2026-07-11 | Capture iPhone screenshots per checklist and upload in App Store Connect |
 | BL-22 | — | 2026-06-03 | Register App ID `dev.atoosa.mitoosa` in Apple Developer |
@@ -105,7 +118,7 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 | EP-02 | Epic: Platform Release Infrastructure | 0 open / 4 total | 🟨 In Progress |
 | EP-03 | Epic: Retention & Monetization Expansion | 2 open / 5 total | ⬜ Backlog |
 | EP-04 | Epic: User Experience Polish | 0 open / 6 total | ✅ Mostly Done |
-| EP-05 | Epic: Technical Debt & Infrastructure | 2 open / 7 total | 🟨 In Progress |
+| EP-05 | Epic: Technical Debt & Infrastructure | 3 open / 8 total | 🟨 In Progress |
 
 **EP-01 charter:** Prove product-market fit and ship v1.5.1 iPhone launch — staging/analytics where needed, playtest validation, launch docs, and App Store readiness. Success = TestFlight build accepted and wedge KPIs measurable.
 
@@ -156,6 +169,13 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | Date | Event | By |
 |------|-------|----|
+| 2026-07-14 | /agtoosa-spec — BL-27 enrolled in Active Cycle after BL-25 automated completion; status 🟦 Todo; build not started | AgToosa |
+| 2026-07-14 | /agtoosa-build — Build ✅ automated tasks complete — BL-25 — 5/5 automated tasks green; 893 full-suite tests, 18 release tests, `dart analyze lib test` clean; status → Awaiting Manual (12 physical-device gates) | AgToosa |
+| 2026-07-14 | /agtoosa-build — Tasks 🟢 1.1–1.3, 2.1 complete — BL-25 — TestFlight checklist, evidence template, launch-doc links, and focused release guard green (11 tests) | AgToosa |
+| 2026-07-14 | /agtoosa-build — Build 🏗️ Started — BL-25 — 5 automated tasks; scope: TestFlight QA checklist/template, launch-doc links, release readiness guard, and full Flutter verification | AgToosa |
+| 2026-07-14 | /agtoosa-spec — Spec ✅ Approved — BL-27 — `docs/archived/spec-BL-27.md`; estimate XS; queued for enrollment immediately after BL-25 automated completion | User |
+| 2026-07-14 | /agtoosa-spec — BL-27 draft created: `docs/archived/spec-BL-27.md` + `docs/AgToosa_TestPlan-BL-27.md`; project-local verifier patch only; pending approval and not enrolled in Active Cycle | AgToosa |
+| 2026-07-14 | /agtoosa-task — Added BL-27 P1 maintenance chore: generalize `docs/agtoosa-verify.sh` project-ID parsing; current `DEV-###` assumptions falsely fail EP-* and miss BL-25 lifecycle checks | AgToosa |
 | 2026-07-12 | /agtoosa-spec — Spec ✅ Approved — BL-25 — `docs/archived/spec-BL-25.md`; estimate M; enrolled in cycle | User |
 | 2026-07-12 | /agtoosa-spec BL-25 — Spec drafted; enrolled Active Cycle; awaiting approval | AgToosa |
 | 2026-07-12 | /agtoosa-task — Reconciled 7 orphaned historical specs + BL-23 duplicate cleanup | AgToosa |

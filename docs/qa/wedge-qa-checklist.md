@@ -7,6 +7,8 @@
 
 Record pass/fail for each item and drop the result into the Gate Log in `docs/RELEASE-GATES.md`.
 
+For a physical iPhone TestFlight run, use the [iPhone TestFlight QA Checklist](iphone-testflight-qa-checklist.md) as the source of truth and record evidence with its companion template.
+
 ---
 
 ## Setup

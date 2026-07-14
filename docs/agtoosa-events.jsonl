@@ -15,3 +15,8 @@
 {"ts":"2026-07-12T04:22:00Z","phase":"review","event":"approved","story":"BL-26","by":"AgToosa"}
 {"ts":"2026-07-12T04:25:00Z","phase":"ship","event":"complete","story":"BL-26","by":"AgToosa"}
 {"ts":"2026-07-12T04:22:00Z","phase":"init","event":"specialists-materialized","story":"—","by":"AgToosa","ids":["flutter-engine-guard","wedge-economy-auditor","iphone-launch-gate","hive-schema-guard"]}
+{"ts":"2026-07-14T12:00:00Z","phase":"spec","event":"draft","story":"BL-27","by":"AgToosa","note":"project-local verifier ID parsing compatibility; pending approval"}
+{"ts":"2026-07-14T12:05:00Z","phase":"spec","event":"approved","story":"BL-27","by":"User","note":"queued after BL-25 automated completion"}
+{"ts":"2026-07-14T12:10:00Z","phase":"build","event":"start","story":"BL-25","by":"AgToosa"}
+{"ts":"2026-07-14T13:30:00Z","phase":"build","event":"complete","story":"BL-25","by":"AgToosa","note":"5 automated tasks complete; 12 manual-deferred"}
+{"ts":"2026-07-14T13:35:00Z","phase":"spec","event":"enrolled","story":"BL-27","by":"AgToosa","note":"after BL-25 automated completion; build not started"}

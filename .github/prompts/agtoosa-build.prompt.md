@@ -1,10 +1,11 @@
 ---
+name: agtoosa-build
 mode: agent
 description: "AgToosa: TDD Red-Green-Refactor against the planned task list → tests + SAST/DAST"
 tools: [codebase, terminal]
 ---
 
-Read Docs/AgToosa_Build.md and execute the build workflow. Task planning is done in /agtoosa-spec — run that first if tasks are missing from Master-Plan.md.
+Read Docs/AgToosa_Build.md and execute the build workflow. If prerequisites fail, **stop** and instruct the user — do **not** auto-run `/agtoosa-spec`. Report **Terminal Evidence Contract** fields for every command and parallel subagent.
 
 Sub-command dispatch:
 - No argument → full TDD build workflow (Red-Green-Refactor + comprehensive testing + tracking)
@@ -12,4 +13,4 @@ Sub-command dispatch:
 - `tdd` → TDD Red-Green-Refactor cycle for the current task list
 - `test` → testing and quality-gate phase only
 
-On successful completion, print this line verbatim: `✅ Done. Run /agtoosa-status to verify findings cleared.`
+On successful completion, print this line verbatim: `Next: /agtoosa-<command> — <rationale>` plus `SYNC:` pulse (see Lifecycle Next-Step Contract)

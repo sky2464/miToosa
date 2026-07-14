@@ -1,0 +1,30 @@
+# Optional AgToosa delivery evidence profiles (DEV-087 / Gate 7 DEV-089).
+# Copy to .agtoosa/evidence.yml after human review — this .example is never auto-active.
+# Schema-only validation: bash Docs/agtoosa-evidence-profile-check.sh
+# Gate 7 enforcement: Docs/agtoosa-verify.sh (absent file = healthy; never eval command:).
+# Do not store secrets here.
+#
+# Canonical contract: Docs/AgToosa_Delivery_Evidence_Contract.md
+# Config index: .agtoosa/README.md (policy.yaml vs evidence.yml)
+
+version: 1
+
+# Optional: which profile the team intends for the active delivery class.
+active: standard
+
+profiles:
+  # Default feature/chore delivery
+  standard:
+    required: [spec, tests, review]
+
+  # Auth, crypto, secrets, or network-facing changes
+  security-sensitive:
+    required: [spec, threat-model, tests, sast, dependency-scan, review]
+
+  # Versioned / public release
+  release:
+    required: [spec, tests, review, changelog, rollback-note]
+
+# Allowed artifact tokens (v1):
+#   spec, tests, review, threat-model, sast, dependency-scan, changelog, rollback-note
+# Allowed profile names (v1): standard, security-sensitive, release

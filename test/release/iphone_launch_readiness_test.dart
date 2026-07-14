@@ -29,7 +29,9 @@ void main() {
       );
       expect(
         text,
-        contains('[x] Confirm generated config replaces `lib/firebase_options.dart`.'),
+        contains(
+          '[x] Confirm generated config replaces `lib/firebase_options.dart`.',
+        ),
       );
       expect(
         text,
@@ -70,20 +72,20 @@ void main() {
       expect(text, contains('Support URL'));
     });
 
-    test('privacy policy aligns with Firebase and Google Analytics launch posture', () {
-      final file = File('docs/PRIVACY-POLICY.md');
-      expect(file.existsSync(), isTrue);
-      final text = file.readAsStringSync();
+    test(
+      'privacy policy aligns with Firebase and Google Analytics launch posture',
+      () {
+        final file = File('docs/PRIVACY-POLICY.md');
+        expect(file.existsSync(), isTrue);
+        final text = file.readAsStringSync();
 
-      expect(text, contains('FIREBASE_ENABLED=true'));
-      expect(
-        text,
-        anyOf(contains('Firebase'), contains('Google Analytics')),
-      );
-      expect(text, contains('Hive'));
-      expect(text, isNot(contains('does not make any network requests')));
-      expect(text, isNot(contains('No analytics sent to any server')));
-    });
+        expect(text, contains('FIREBASE_ENABLED=true'));
+        expect(text, anyOf(contains('Firebase'), contains('Google Analytics')));
+        expect(text, contains('Hive'));
+        expect(text, isNot(contains('does not make any network requests')));
+        expect(text, isNot(contains('No analytics sent to any server')));
+      },
+    );
 
     test('support page exists with contact channels and cross-links', () {
       final file = File('docs/SUPPORT.md');
@@ -96,44 +98,51 @@ void main() {
       expect(text, contains('USER-GUIDE.md'));
     });
 
-    test('screenshot checklist lists required scenes sizes and quality bar', () {
-      final text = File('docs/APP-STORE-METADATA.md').readAsStringSync();
+    test(
+      'screenshot checklist lists required scenes sizes and quality bar',
+      () {
+        final text = File('docs/APP-STORE-METADATA.md').readAsStringSync();
 
-      for (final scene in [
-        'Onboarding',
-        'Tracks',
-        'Gameplay',
-        'Progress',
-        'Settings',
-      ]) {
-        expect(text, contains(scene), reason: '$scene scene missing');
-      }
-      expect(text, contains('6.7'));
-      expect(text, contains('Quality bar'));
-      expect(text, contains('debug banners'));
-    });
+        for (final scene in [
+          'Onboarding',
+          'Tracks',
+          'Gameplay',
+          'Progress',
+          'Settings',
+        ]) {
+          expect(text, contains(scene), reason: '$scene scene missing');
+        }
+        expect(text, contains('6.7'));
+        expect(text, contains('Quality bar'));
+        expect(text, contains('debug banners'));
+      },
+    );
 
-    test('launch docs cross-link BL-26 artifacts and keep manual gates open', () {
-      final launchText = File('docs/LAUNCH.md').readAsStringSync();
-      final readinessText =
-          File('docs/IPHONE-LAUNCH-READINESS.md').readAsStringSync();
+    test(
+      'launch docs cross-link BL-26 artifacts and keep manual gates open',
+      () {
+        final launchText = File('docs/LAUNCH.md').readAsStringSync();
+        final readinessText = File(
+          'docs/IPHONE-LAUNCH-READINESS.md',
+        ).readAsStringSync();
 
-      for (final artifact in [
-        'APP-STORE-METADATA.md',
-        'PRIVACY-POLICY.md',
-        'SUPPORT.md',
-      ]) {
-        expect(launchText, contains(artifact));
-        expect(readinessText, contains(artifact));
-      }
+        for (final artifact in [
+          'APP-STORE-METADATA.md',
+          'PRIVACY-POLICY.md',
+          'SUPPORT.md',
+        ]) {
+          expect(launchText, contains(artifact));
+          expect(readinessText, contains(artifact));
+        }
 
-      expect(launchText, contains('manual-deferred'));
-      expect(readinessText, contains('manual-deferred'));
-      expect(
-        launchText,
-        isNot(contains('[x] Publish public privacy/support URLs')),
-      );
-    });
+        expect(launchText, contains('manual-deferred'));
+        expect(readinessText, contains('manual-deferred'));
+        expect(
+          launchText,
+          isNot(contains('[x] Publish public privacy/support URLs')),
+        );
+      },
+    );
 
     test('company readiness checklist captures human-only formation steps', () {
       final file = File('docs/COMPANY-REGISTRATION-READINESS.md');
@@ -175,5 +184,64 @@ void main() {
         );
       }
     });
+
+    test(
+      'TestFlight QA artifacts cover required scenarios and are cross-linked',
+      () {
+        final checklist = File('docs/qa/iphone-testflight-qa-checklist.md');
+        final evidenceTemplate = File(
+          'docs/qa/iphone-testflight-evidence-template.md',
+        );
+
+        expect(checklist.existsSync(), isTrue);
+        expect(evidenceTemplate.existsSync(), isTrue);
+
+        final checklistText = checklist.readAsStringSync();
+        for (final required in [
+          'Cold Launch',
+          'Onboarding',
+          'Full Gameplay Session',
+          'Share Bonus',
+          'Offline Mode',
+          'VoiceOver',
+          'Dynamic Type',
+          'Wedge Copy',
+          'Force-Quit Persistence',
+          'Settings and Support Links',
+          'Firebase DebugView',
+        ]) {
+          expect(
+            checklistText,
+            contains(required),
+            reason: '$required missing',
+          );
+        }
+
+        final evidenceText = evidenceTemplate.readAsStringSync();
+        for (final required in [
+          'Build number',
+          'Device model',
+          'iOS version',
+          'Tester',
+          'Date',
+          'AC ID',
+          'Pass / Fail',
+        ]) {
+          expect(evidenceText, contains(required), reason: '$required missing');
+        }
+
+        for (final file in [
+          File('docs/IPHONE-LAUNCH-READINESS.md'),
+          File('docs/LAUNCH.md'),
+          File('docs/qa/wedge-qa-checklist.md'),
+        ]) {
+          expect(
+            file.readAsStringSync(),
+            contains('iphone-testflight-qa-checklist.md'),
+            reason: '${file.path} missing TestFlight QA checklist link',
+          );
+        }
+      },
+    );
   });
 }

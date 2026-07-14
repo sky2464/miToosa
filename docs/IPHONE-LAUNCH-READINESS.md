@@ -80,6 +80,7 @@ flutter run --dart-define=FIREBASE_ENABLED=true
 
 ### Physical iPhone QA
 
+- [ ] Use [iPhone TestFlight QA Checklist](qa/iphone-testflight-qa-checklist.md) and record the run with the [evidence template](qa/iphone-testflight-evidence-template.md).
 - [ ] TestFlight install on a real iPhone.
 - [ ] Cold launch.
 - [ ] Onboarding.
@@ -115,4 +116,3 @@ Final App Store gate:
 - [ ] Build uploads to TestFlight.
 - [ ] TestFlight install on a real iPhone passes.
 - [ ] App Privacy questionnaire matches Firebase + Google Analytics behavior and current data collection.
-

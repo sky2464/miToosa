@@ -1,4 +1,5 @@
 ---
+name: agtoosa-concise
 mode: agent
 description: "AgToosa: ultra-compressed communication mode — drop filler, keep precision, ~75% token reduction"
 tools: [codebase]

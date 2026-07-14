@@ -1,4 +1,5 @@
 ---
+name: agtoosa-revert
 mode: agent
 description: "AgToosa: git-aware logical rollback by phase or commit"
 tools: [codebase, terminal]

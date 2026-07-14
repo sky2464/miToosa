@@ -155,18 +155,22 @@ flutter test test/release/
 ## TDD Evidence
 
 ```
-RED evidence — 2.1
-Command: flutter test test/release/iphone_launch_readiness_test.dart --name "TestFlight QA"
+RED evidence — 1.1, 1.2, 1.3, 2.1
+Command: flutter test test/release/iphone_launch_readiness_test.dart --name "TestFlight QA artifacts"
 Exit code: 1
-Failure excerpt: docs/qa/iphone-testflight-qa-checklist.md does not exist
+Failure excerpt: Expected: true; Actual: <false> (TestFlight QA checklist did not exist)
 
-GREEN evidence — 2.1
+GREEN evidence — 1.1, 1.2, 1.3, 2.1
 Command: flutter test test/release/iphone_launch_readiness_test.dart
 Exit code: 0
 
 GREEN evidence — 2.2
-Command: dart analyze lib test && flutter test
-Exit code: 0
+Command: dart analyze lib test && flutter test --reporter compact
+Exit code: 0 (893 tests passed)
+
+GREEN evidence — iphone-launch-gate
+Command: flutter test test/release/
+Exit code: 0 (18 tests passed)
 ```
 
 Manual evidence blocks (T-003–T-011, T-013–T-014) are captured in `docs/qa/iphone-testflight-evidence-[YYYY-MM-DD].md` during `/agtoosa-build` Wave 4.

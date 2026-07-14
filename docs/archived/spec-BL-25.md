@@ -152,13 +152,13 @@ Out of scope: `lib/` feature code (unless defect filed), `docs/PRODUCT-WEDGE.md`
 
 ### 3.1 Task Tree
 
-- [ ] **1.** QA documentation: TestFlight checklist + evidence template
-  - [ ] 1.1 Create `docs/qa/iphone-testflight-qa-checklist.md` with scenarios for AC-003–AC-011, AC-013–AC-015 — _Requirements: AC-001_
-  - [ ] 1.2 Create `docs/qa/iphone-testflight-evidence-template.md` with build/device/tester fields — _Requirements: AC-002_
-  - [ ] 1.3 Cross-link checklist from `IPHONE-LAUNCH-READINESS.md`, `LAUNCH.md`, and `wedge-qa-checklist.md` — _Requirements: AC-001, AC-012_
-- [ ] **2.** Automated guards
-  - [ ] 2.1 Extend `test/release/iphone_launch_readiness_test.dart` to assert checklist + template sections — _Requirements: AC-012_
-  - [ ] 2.2 Run `dart analyze lib test` and `flutter test` — _Requirements: AC-012_
+- [x] **1.** QA documentation: TestFlight checklist + evidence template
+  - [x] 1.1 Create `docs/qa/iphone-testflight-qa-checklist.md` with scenarios for AC-003–AC-011, AC-013–AC-015 — _Requirements: AC-001_
+  - [x] 1.2 Create `docs/qa/iphone-testflight-evidence-template.md` with build/device/tester fields — _Requirements: AC-002_
+  - [x] 1.3 Cross-link checklist from `IPHONE-LAUNCH-READINESS.md`, `LAUNCH.md`, and `wedge-qa-checklist.md` — _Requirements: AC-001, AC-012_
+- [x] **2.** Automated guards
+  - [x] 2.1 Extend `test/release/iphone_launch_readiness_test.dart` to assert checklist + template sections — _Requirements: AC-012_
+  - [x] 2.2 Run `dart analyze lib test` and `flutter test` — _Requirements: AC-012_
 - [ ] **3.** Manual TestFlight QA execution (physical iPhone)
   - [ ] 3.1 Install TestFlight build on physical iPhone; record build/version — _Requirements: AC-003_ `[manual-deferred]`
   - [ ] 3.2 Cold launch + onboarding; verify time-to-first-game ≤60s — _Requirements: AC-003, AC-004, AC-015_ `[manual-deferred]`
