@@ -1,7 +1,7 @@
 # Test Plan — BL-28 First-Run Onboarding Gate
 
 > **Spec:** [spec-BL-28.md](archived/spec-BL-28.md)
-> **Status:** Draft pending approval
+> **Status:** Approved — enrolled Active Cycle (2026-07-26)  
 > **Created:** 2026-07-14
 
 ## Scope & Strategy
@@ -64,4 +64,8 @@ Test declarative root routing with controlled auth and progress providers. The a
 
 ## RED / GREEN Evidence Log
 
-Populated during /agtoosa-build.
+| Date | Phase | Evidence |
+|------|-------|----------|
+| 2026-07-26 | RED | Added `test/features/auth/root_routing_test.dart` — 7 cases; initial run failed (no `RootAppRouter`). |
+| 2026-07-26 | GREEN | `lib/app/root_app_router.dart` + `main.dart` / `login_screen.dart` wiring; 7/7 routing tests pass; `flutter test` 900/900; `dart analyze lib test` clean. |
+| 2026-07-26 | MANUAL | T-006 iPhone fresh-install smoke deferred — task 3.3. |

@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'theme/design_system.dart';
-import 'features/auth/login_screen.dart';
-import 'features/main_app/main_app_shell.dart';
-import 'features/auth/auth_provider.dart';
+import 'app/root_app_router.dart';
 import 'data/player_progress_provider.dart';
 
 import 'data/hive_persistence_provider.dart';
@@ -67,7 +65,6 @@ class MiToosaApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authProvider);
     final progressAsync = ref.watch(playerProgressProvider);
     final themeMode = progressAsync.maybeWhen(
       data: (p) => _themeModeFromOverride(p.themeModeOverride),
@@ -80,12 +77,7 @@ class MiToosaApp extends ConsumerWidget {
       darkTheme: AethericPulseDark.themeData,
       themeMode: themeMode,
       debugShowCheckedModeBanner: false,
-      home: authState.when(
-        data: (playerId) =>
-            playerId.isEmpty ? const LoginScreen() : const MainAppShell(),
-        loading: () => const LoginScreen(),
-        error: (_, _) => const LoginScreen(),
-      ),
+      home: const RootAppRouter(),
     );
   }
 

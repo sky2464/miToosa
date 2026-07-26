@@ -1,7 +1,7 @@
 # Test Plan — BL-27 Lifecycle Verifier Project-ID Parsing
 
 > **Spec:** [docs/archived/spec-BL-27.md](archived/spec-BL-27.md)  
-> **Status:** Draft pending spec approval  
+> **Status:** Build complete (2026-07-26)  
 > **Created:** 2026-07-14
 
 ## Scope
@@ -46,6 +46,23 @@ Verify that the repository-local Bash verifier recognizes project-specific IDs w
 - **AC:** AC-006
 - **Steps:** Run the verifier against a synthetic `DEV-001` epic and active story.
 - **Pass:** Discovery behavior remains green.
+
+## TDD Evidence
+
+RED evidence — 1.1
+Command: `bash test/tools/agtoosa_verify_test.sh` (against pre-patch `docs/agtoosa-verify.sh`)
+Exit code: 1
+Failure excerpt: real project emitted `G2-epics` and `G3-idle` despite EP-01/BL-25 rows in Master-Plan
+
+RED evidence — 1.2
+Command: `bash docs/agtoosa-verify.sh --root <fixture> --format json`
+Exit code: 1
+Failure excerpt: EP-01 + BL-25 synthetic fixture failed epic/active discovery (DEV-###-only parser)
+
+GREEN evidence — 3.1
+Command: `bash -n docs/agtoosa-verify.sh && bash test/tools/agtoosa_verify_test.sh && bash docs/agtoosa-verify.sh --format json`
+Exit code: 0
+Failure excerpt: n/a — 6 fixture assertions passed; real project verifier exit 0 (17 pass, 3 warn, 0 fail)
 
 ## Regression Commands
 

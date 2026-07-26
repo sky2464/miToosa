@@ -1,6 +1,6 @@
 # ADR: Root Onboarding State Gate
 
-**Status:** Proposed — pending BL-28 approval
+**Status:** Accepted — BL-28 shipped 2026-07-26
 **Date:** 2026-07-14
 **Decision owners:** Product owner and miToosa maintainers
 **Related story:** BL-28

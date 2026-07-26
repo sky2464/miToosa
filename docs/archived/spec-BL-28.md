@@ -2,7 +2,7 @@
 
 > **Story ID:** BL-28
 > **Epic:** EP-01 Launch Readiness & Validation
-> **Status:** ⬜ Backlog
+> **Status:** 🏁 Shipped — repo 2026-07-26 (T-006 iPhone smoke manual-deferred)
 > **Estimate:** S
 > **Clarity:** ready
 > **Spec created:** 2026-07-14
@@ -53,7 +53,6 @@
 - New tutorial/demo content; BL-24 remains the companion story for per-track help.
 - Account recovery, cloud synchronization, login-provider UI, or analytics changes.
 - Changes to PlayerProgress field numbers or Hive schema.
-- Enrolling BL-28 into the active cycle before explicit approval.
 
 ### 1.6 Failure Modes
 
@@ -108,19 +107,26 @@ Out of scope        : docs/PRODUCT-WEDGE.md, tutorial content, game engines, Fir
 
 ### 3.1 Task Tree
 
-- [ ] **1. Root-state tests:** Establish the routing contract before implementation.
-  - [ ] 1.1 Add a failing fresh-player root-routing widget test. — _Requirements: AC-001_
-  - [ ] 1.2 Add completed, loading, and error-state tests. — _Requirements: AC-002, AC-004, AC-005_
-- [ ] **2. Declarative routing:** Make root destination depend on both providers.
-  - [ ] 2.1 Implement a root-state routing widget or helper in main.dart. — _Requirements: AC-001, AC-002, AC-004, AC-005_
-  - [ ] 2.2 Remove or isolate duplicate imperative onboarding navigation. — _Requirements: AC-001, AC-002_
-  - [ ] 2.3 Refresh routing after onboarding completion. — _Requirements: AC-003_
+- [x] **1. Root-state tests:** Establish the routing contract before implementation.
+  - [x] 1.1 Add a failing fresh-player root-routing widget test. — _Requirements: AC-001_
+  - [x] 1.2 Add completed, loading, and error-state tests. — _Requirements: AC-002, AC-004, AC-005_
+- [x] **2. Declarative routing:** Make root destination depend on both providers.
+  - [x] 2.1 Implement a root-state routing widget or helper in main.dart. — _Requirements: AC-001, AC-002, AC-004, AC-005_
+  - [x] 2.2 Remove or isolate duplicate imperative onboarding navigation. — _Requirements: AC-001, AC-002_
+  - [x] 2.3 Refresh routing after onboarding completion. — _Requirements: AC-003_
 - [ ] **3. Verification:** Prove startup behavior on test and device surfaces.
-  - [ ] 3.1 Add a no-flash and retry assertion to the widget suite. — _Requirements: AC-004, AC-005_
-  - [ ] 3.2 Run dart analyze and flutter test. — _Requirements: AC-001, AC-002, AC-003, AC-004, AC-005_
+  - [x] 3.1 Add a no-flash and retry assertion to the widget suite. — _Requirements: AC-004, AC-005_
+  - [x] 3.2 Run dart analyze and flutter test. — _Requirements: AC-001, AC-002, AC-003, AC-004, AC-005_
   - [ ] 3.3 Run fresh-install iPhone smoke through first track. — _Requirements: AC-006_ [manual]
 
-### 3.2 Wave Plan
+### Wave Plan
+
+**Wave 1 (parallel):** 1.1, 1.2  
+**Wave 2 (sequential after Wave 1):** 2.1, 2.2  
+**Wave 3 (sequential after Wave 2):** 2.3, 3.1  
+**Wave 4 (sequential after Wave 3):** 3.2, 3.3  
+
+### 3.2 Wave Plan (detail)
 
 **Wave 1 (parallel):** 1.1, 1.2
 **Wave 2 (sequential after Wave 1):** 2.1, 2.2
@@ -155,3 +161,7 @@ No new project skill is proposed. Root-state routing is a one-story Flutter conc
 | Every Must AC has an automated test plan entry. | Pass |
 | Scope avoids tutorial and persistence-schema overlap. | Pass |
 | Approval and cycle enrollment remain user-gated. | Pass |
+
+## ✅ Spec Approved
+
+Approved: 2026-07-26 13:34

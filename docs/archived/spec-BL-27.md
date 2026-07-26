@@ -2,7 +2,7 @@
 
 > **Story ID:** BL-27  
 > **Epic:** EP-05 Technical Debt & Infrastructure  
-> **Status:** 🟦 Todo — Approved; scheduled after BL-25 automated completion  
+> **Status:** 🏁 Shipped  
 > **Estimate:** XS  
 > **Spec created:** 2026-07-14
 
@@ -79,16 +79,24 @@ This is a backwards-compatible local patch. Existing `DEV-###` IDs match the gen
 
 ### 3.1 Task Tree
 
-- [ ] **1.** Add failing verifier fixture tests
-  - [ ] 1.1 Add synthetic EP-01 + BL-25 fixture and assert the pre-patch verifier emits the known ID-prefix findings — _Requirements: AC-001, AC-002, AC-005_
-  - [ ] 1.2 Add DEV-001 compatibility and invalid-ID negative fixtures — _Requirements: AC-004, AC-006_
-- [ ] **2.** Generalize ID discovery
-  - [ ] 2.1 Add a single bounded project-ID extraction helper/pattern in `docs/agtoosa-verify.sh` — _Requirements: AC-001, AC-002, AC-003, AC-004, AC-006_
-  - [ ] 2.2 Replace the Gate 2, 3, 4, and 7 `DEV-###` scans with the shared helper/pattern — _Requirements: AC-001, AC-002, AC-003_
-- [ ] **3.** Verify the local patch
-  - [ ] 3.1 Run the fixture test suite, real-project verifier JSON mode, and shell syntax check — _Requirements: AC-001–AC-006_
+- [x] **1.** Add failing verifier fixture tests
+  - [x] 1.1 Add synthetic EP-01 + BL-25 fixture and assert the pre-patch verifier emits the known ID-prefix findings — _Requirements: AC-001, AC-002, AC-005_
+  - [x] 1.2 Add DEV-001 compatibility and invalid-ID negative fixtures — _Requirements: AC-004, AC-006_
+- [x] **2.** Generalize ID discovery
+  - [x] 2.1 Add a single bounded project-ID extraction helper/pattern in `docs/agtoosa-verify.sh` — _Requirements: AC-001, AC-002, AC-003, AC-004, AC-006_
+  - [x] 2.2 Replace the Gate 2, 3, 4, and 7 `DEV-###` scans with the shared helper/pattern — _Requirements: AC-001, AC-002, AC-003_
+- [x] **3.** Verify the local patch
+  - [x] 3.1 Run the fixture test suite, real-project verifier JSON mode, and shell syntax check — _Requirements: AC-001–AC-006_
 
-### 3.2 Wave Plan
+### Wave Plan
+
+**Wave 1 (sequential):** 1.1, 1.2 — establish RED fixture coverage before implementation.
+
+**Wave 2 (sequential after Wave 1):** 2.1, 2.2 — implementation shares `docs/agtoosa-verify.sh` and must be merged as one coherent parser change.
+
+**Wave 3 (sequential after Wave 2):** 3.1 — verify fixtures and the real project after the parser is updated.
+
+### 3.2 Wave Plan (detail)
 
 **Wave 1 (sequential):** 1.1, 1.2 — establish RED fixture coverage before implementation.
 

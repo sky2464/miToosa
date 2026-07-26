@@ -1,7 +1,7 @@
 # Master-Plan
 
 > **Source of truth for active work.** Completed work lives in `Docs/archived/` — see Completed This Cycle for links.
-> **Last updated:** 2026-07-14 (/agtoosa-spec drafted BL-28–BL-38 product-readiness portfolio; backlog-only; BL-25 manual QA and BL-27 Todo unchanged)
+> **Last updated:** 2026-07-26 (/agtoosa-ship BL-28 repo ship PASS)
 
 ## Project Charter
 
@@ -11,7 +11,7 @@
 | Goal | Ship v1.5.1 to the iPhone App Store with a validated free-first wedge and Firebase analytics |
 | User outcome | Casual puzzle players get ADHD-optimized 3–5 minute sessions without sign-up friction; they understand the 25 free games/day + share bonus model |
 | Success condition | App Store submission accepted; TestFlight QA passed on physical iPhone; D1 retention signal ≥40% from playtest; analytics events visible in Firebase DebugView |
-| Proof / evidence | `flutter test` green (893 tests); `dart analyze` clean on lib/test; BL-26 metadata/docs guards shipped; BL-23 FlutterFire shipped; T-005 DebugView manual pending |
+| Proof / evidence | `flutter test` green (900 tests); `dart analyze` clean on lib/test; BL-28 onboarding gate shipped; BL-26 metadata/docs guards shipped; BL-23 FlutterFire shipped; T-005 DebugView manual pending |
 | Non-goals | Android/macOS/Web store launch in v1.5.0; backend leaderboard; IAP/VIP; server sync; referral tiers (see `docs/PRODUCT-WEDGE.md`) |
 | Assumptions | Apple Developer account and company formation proceed on owner timeline; Firebase + GA is the launch analytics stack; local-first Hive persistence remains canonical |
 | Risks | External gates (company, App Store Connect, Firebase console) block store release; physical-device QA not yet executed |
@@ -20,7 +20,7 @@
 | Milestone | v1.5.1 (next) — iPhone App Store launch |
 | Active cycle | Launch Sprint — iPhone readiness + UX polish (2026-06-02 → 2026-06-25) |
 | Cycle capacity | 13 story points |
-| Current phase | 🟦 Todo — BL-27 approved and enrolled after BL-25 automated completion; run `/agtoosa-build` |
+| Current phase | 🔧 Awaiting Manual — BL-25 physical TestFlight QA (12 owner steps); BL-28 T-006 iPhone smoke deferred |
 
 ## Active Cycle
 
@@ -29,7 +29,6 @@
 | ID | Title | Type | Estimate | Status | Tasks Done |
 |----|-------|------|----------|--------|-----------|
 | BL-25 | Feature: Physical iPhone TestFlight QA pass | Feature | M | 🔧 Awaiting Manual | 5/5 tasks (12 manual-deferred) |
-| BL-27 | Chore: Generalize lifecycle verifier project-ID parsing | Chore | XS | 🟦 Todo | 0/5 |
 
 Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blocked · 🔧 Awaiting Manual · 🏁 Shipped
 
@@ -60,23 +59,13 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
   - [ ] 5.1 Complete dated evidence file; gate log in `RELEASE-GATES.md` — _Requirements: AC-002, AC-003–AC-011_ `[manual-deferred]`
   - [ ] 5.2 Mark Physical iPhone QA complete in launch docs + Master-Plan — _Requirements: AC-003–AC-011_ `[manual-deferred]`
 
-### BL-27 — Generalize lifecycle verifier project-ID parsing
-
-- [ ] **1.** Add failing verifier fixture tests
-  - [ ] 1.1 Add synthetic EP-01 + BL-25 fixture and assert the pre-patch verifier emits the known ID-prefix findings — _Requirements: AC-001, AC-002, AC-005_
-  - [ ] 1.2 Add DEV-001 compatibility and invalid-ID negative fixtures — _Requirements: AC-004, AC-006_
-- [ ] **2.** Generalize ID discovery
-  - [ ] 2.1 Add a single bounded project-ID extraction helper/pattern in `docs/agtoosa-verify.sh` — _Requirements: AC-001, AC-002, AC-003, AC-004, AC-006_
-  - [ ] 2.2 Replace the Gate 2, 3, 4, and 7 `DEV-###` scans with the shared helper/pattern — _Requirements: AC-001, AC-002, AC-003_
-- [ ] **3.** Verify the local patch
-  - [ ] 3.1 Run the fixture test suite, real-project verifier JSON mode, and shell syntax check — _Requirements: AC-001–AC-006_
-
 ## Manual / Deferred Tasks
 
 > Tasks that require a human action outside the agent. These are **not** counted against the health score.
 
 | Story | Task # | Deferred Since | Description |
 |-------|--------|----------------|-------------|
+| BL-28 | 3.3 / T-006 | 2026-07-26 | Fresh-install iPhone smoke — onboarding to first playable track within 60s (shipped repo-side; device proof pending) |
 | BL-25 | 3.1–5.2 | 2026-07-14 | Physical iPhone TestFlight QA, DebugView, evidence capture, and launch-doc closure (12 owner-executed steps) |
 | BL-26 | 4.1 | 2026-07-11 | Publish Privacy Policy + Support URLs and paste finals into ASC/metadata |
 | BL-26 | 4.2 | 2026-07-11 | Capture iPhone screenshots per checklist and upload in App Store Connect |
@@ -100,7 +89,6 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | ID | Title | Type | Estimate | Epic | Priority | Status |
 |----|-------|------|----------|------|----------|--------|
-| BL-28 | Fix: First-run onboarding gate | Fix | S | EP-01 | P0 | ⬜ Backlog |
 | BL-29 | Feature: Free-games wedge delivery | Feature | M | EP-01 | P0 | ⬜ Backlog |
 | BL-30 | Feature: Track catalog integrity | Feature | M | EP-01 | P0 | ⬜ Backlog |
 | BL-31 | Fix: Truthful launch surfaces | Fix | M | EP-01 | P0 | ⬜ Backlog |
@@ -125,11 +113,11 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | ID | Title | Stories | Status |
 |----|-------|---------|--------|
-| EP-01 | Epic: Launch Readiness & Validation | 12 open / 23 total | 🟨 In Progress |
+| EP-01 | Epic: Launch Readiness & Validation | 11 open / 23 total | 🟨 In Progress |
 | EP-02 | Epic: Platform Release Infrastructure | 2 open / 6 total | 🟨 In Progress |
 | EP-03 | Epic: Retention & Monetization Expansion | 2 open / 5 total | ⬜ Backlog |
 | EP-04 | Epic: User Experience Polish | 1 open / 7 total | 🟨 In Progress |
-| EP-05 | Epic: Technical Debt & Infrastructure | 4 open / 9 total | 🟨 In Progress |
+| EP-05 | Epic: Technical Debt & Infrastructure | 3 open / 9 total | 🟨 In Progress |
 
 **EP-01 charter:** Prove product-market fit and ship v1.5.1 iPhone launch — staging/analytics where needed, playtest validation, launch docs, and App Store readiness. Success = TestFlight build accepted and wedge KPIs measurable.
 
@@ -153,6 +141,8 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | ID | Title | Shipped | Archived Spec |
 |----|-------|---------|--------------|
+| BL-28 | Fix: First-run onboarding gate | 2026-07-26 | [spec-BL-28.md](archived/spec-BL-28.md) |
+| BL-27 | Chore: Generalize lifecycle verifier project-ID parsing | 2026-07-26 | [spec-BL-27.md](archived/spec-BL-27.md) |
 | BL-26 | Chore: App Store metadata + screenshots prep | 2026-07-11 | [spec-BL-26.md](archived/spec-BL-26.md) |
 | BL-23 | Chore: FlutterFire iOS config + verify DebugView | 2026-06-20 | [spec-BL-23.md](archived/spec-BL-23.md) |
 | S2-05 | Feature: Tracks UI fixes (theme-aware glass, header menus) | 2026-06-11 | [spec-S2-05.md](archived/spec-S2-05.md) |
@@ -180,6 +170,16 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | Date | Event | By |
 |------|-------|----|
+| 2026-07-26 | /agtoosa-ship — Ship 🚀 repo ship PASS — BL-28 — `RootAppRouter` onboarding gate; 900 tests; ADR accepted; T-006 manual deferred | AgToosa |
+| 2026-07-26 | /agtoosa-review — Review ✅ Approved — BL-28 — 0 critical, 4 warnings; `docs/archived/review-BL-28.md` | AgToosa |
+| 2026-07-26 | /agtoosa-review — Review 🔍 Started — BL-28 — 4-persona review running | AgToosa |
+| 2026-07-26 | /agtoosa-build — Build 🔧 automated complete — BL-28 — `RootAppRouter` gates onboarding before shell; 7 routing tests; 900 full-suite tests; `dart analyze` clean; status → Awaiting Manual (3.3 iPhone smoke) | AgToosa |
+| 2026-07-26 | /agtoosa-spec — Spec ✅ Approved — BL-28 — `docs/archived/spec-BL-28.md`; estimate S; enrolled in cycle | User |
+| 2026-07-26 | /agtoosa-ship — Ship 🚀 repo ship PASS — BL-27 — verifier fixture suite green; JSON exit 0; no app deploy | AgToosa |
+| 2026-07-26 | /agtoosa-review — Review ✅ Approved — BL-27 — 0 critical, 3 warnings; `docs/archived/review-BL-27.md` | AgToosa |
+| 2026-07-26 | /agtoosa-review — Review 🔍 Started — BL-27 — 4-persona review running | AgToosa |
+| 2026-07-26 | /agtoosa-build — Build ✅ complete — BL-27 — 5/5 tasks; fixture suite green; verifier JSON exit 0 | AgToosa |
+| 2026-07-26 | /agtoosa-build — Build 🏗️ Started — BL-27 — 5 tasks; scope: docs/agtoosa-verify.sh, test/tools/agtoosa_verify_test.sh | AgToosa |
 | 2026-07-14 | /agtoosa-spec — Drafted BL-28–BL-38 product-readiness portfolio: 11 implementation-ready specs and AC-mapped test plans; all backlog-only and pending individual approval; BL-24 remains companion tutorial scope | AgToosa |
 | 2026-07-14 | /agtoosa-spec — BL-27 enrolled in Active Cycle after BL-25 automated completion; status 🟦 Todo; build not started | AgToosa |
 | 2026-07-14 | /agtoosa-build — Build ✅ automated tasks complete — BL-25 — 5/5 automated tasks green; 893 full-suite tests, 18 release tests, `dart analyze lib test` clean; status → Awaiting Manual (12 physical-device gates) | AgToosa |

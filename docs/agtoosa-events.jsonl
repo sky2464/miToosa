@@ -31,3 +31,11 @@
 {"ts":"2026-07-14T18:00:08Z","phase":"spec","event":"draft","story":"BL-36","by":"AgToosa","note":"product-readiness portfolio; backlog-only; pending approval"}
 {"ts":"2026-07-14T18:00:09Z","phase":"spec","event":"draft","story":"BL-37","by":"AgToosa","note":"product-readiness portfolio; backlog-only; pending approval"}
 {"ts":"2026-07-14T18:00:10Z","phase":"spec","event":"draft","story":"BL-38","by":"AgToosa","note":"product-readiness portfolio; backlog-only; pending approval"}
+{"ts":"2026-07-26T18:00:00Z","phase":"build","event":"start","story":"BL-27","by":"AgToosa"}
+{"ts":"2026-07-26T18:05:00Z","phase":"build","event":"complete","story":"BL-27","by":"AgToosa","note":"5/5 tasks; fixture suite + verifier JSON green"}
+{"ts":"2026-07-26T18:15:00Z","phase":"review","event":"approved","story":"BL-27","by":"AgToosa"}
+{"ts":"2026-07-26T18:30:00Z","phase":"ship","event":"complete","story":"BL-27","by":"AgToosa","note":"repo ship PASS; verifier ID parsing generalized"}
+{"ts":"2026-07-26T18:34:00Z","phase":"spec","event":"approved","story":"BL-28","by":"User","note":"enrolled Active Cycle; estimate S"}
+{"ts":"2026-07-26T19:15:00Z","phase":"build","event":"complete","story":"BL-28","by":"AgToosa","note":"RootAppRouter onboarding gate; 7 routing tests; 900 full-suite; Awaiting Manual 3.3"}
+{"ts":"2026-07-26T19:50:00Z","phase":"review","event":"approved","story":"BL-28","by":"AgToosa","note":"4-persona PASS; 0 critical; review-BL-28.md"}
+{"ts":"2026-07-26T19:55:00Z","phase":"ship","event":"complete","story":"BL-28","by":"AgToosa","note":"repo ship PASS; RootAppRouter; 900 tests; T-006 manual deferred"}
