@@ -1,7 +1,7 @@
 # Master-Plan
 
 > **Source of truth for active work.** Completed work lives in `Docs/archived/` — see Completed This Cycle for links.
-> **Last updated:** 2026-07-14 (/agtoosa-build BL-25 automated tasks complete; BL-27 enrolled; physical iPhone QA pending)
+> **Last updated:** 2026-07-14 (/agtoosa-spec drafted BL-28–BL-38 product-readiness portfolio; backlog-only; BL-25 manual QA and BL-27 Todo unchanged)
 
 ## Project Charter
 
@@ -100,7 +100,18 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | ID | Title | Type | Estimate | Epic | Priority | Status |
 |----|-------|------|----------|------|----------|--------|
+| BL-28 | Fix: First-run onboarding gate | Fix | S | EP-01 | P0 | ⬜ Backlog |
+| BL-29 | Feature: Free-games wedge delivery | Feature | M | EP-01 | P0 | ⬜ Backlog |
+| BL-30 | Feature: Track catalog integrity | Feature | M | EP-01 | P0 | ⬜ Backlog |
+| BL-31 | Fix: Truthful launch surfaces | Fix | M | EP-01 | P0 | ⬜ Backlog |
+| BL-32 | Chore: Privacy, consent, and iOS release configuration | Chore | M | EP-02 | P0 | ⬜ Backlog |
+| BL-33 | Feature: Production brand assets | Feature | S | EP-01 | P0 | ⬜ Backlog |
 | BL-24 | Feature: Interactive how-to demos | Feature | M | EP-01 | P1 | ⬜ Backlog |
+| BL-34 | Chore: Production SFX and persisted preferences | Chore | S | EP-04 | P1 | ⬜ Backlog |
+| BL-35 | Feature: Reachable daily rewards, streaks, and achievements | Feature | M | EP-01 | P1 | ⬜ Backlog |
+| BL-36 | Chore: iPhone accessibility and device hardening | Chore | M | EP-01 | P1 | ⬜ Backlog |
+| BL-37 | Chore: Privacy-respecting crash resilience | Chore | M | EP-02 | P1 | ⬜ Backlog |
+| BL-38 | Chore: Modularize oversized code and remove dead dependencies | Chore | L | EP-05 | P2 | ⬜ Backlog |
 | S1-03 | Feature: Manual wedge QA walkthrough | Feature | S | EP-01 | P1 | ⬜ Backlog |
 | S1-04 | Feature: Playtest survey + recruitment | Feature | M | EP-01 | P1 | ⬜ Backlog |
 | BL-04 | Feature: Backend leaderboard (post-playtest gate) | Feature | L | EP-03 | P2 | ⬜ Backlog |
@@ -114,11 +125,11 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | ID | Title | Stories | Status |
 |----|-------|---------|--------|
-| EP-01 | Epic: Launch Readiness & Validation | 5 open / 16 total | 🟨 In Progress |
-| EP-02 | Epic: Platform Release Infrastructure | 0 open / 4 total | 🟨 In Progress |
+| EP-01 | Epic: Launch Readiness & Validation | 12 open / 23 total | 🟨 In Progress |
+| EP-02 | Epic: Platform Release Infrastructure | 2 open / 6 total | 🟨 In Progress |
 | EP-03 | Epic: Retention & Monetization Expansion | 2 open / 5 total | ⬜ Backlog |
-| EP-04 | Epic: User Experience Polish | 0 open / 6 total | ✅ Mostly Done |
-| EP-05 | Epic: Technical Debt & Infrastructure | 3 open / 8 total | 🟨 In Progress |
+| EP-04 | Epic: User Experience Polish | 1 open / 7 total | 🟨 In Progress |
+| EP-05 | Epic: Technical Debt & Infrastructure | 4 open / 9 total | 🟨 In Progress |
 
 **EP-01 charter:** Prove product-market fit and ship v1.5.1 iPhone launch — staging/analytics where needed, playtest validation, launch docs, and App Store readiness. Success = TestFlight build accepted and wedge KPIs measurable.
 
@@ -169,6 +180,7 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | Date | Event | By |
 |------|-------|----|
+| 2026-07-14 | /agtoosa-spec — Drafted BL-28–BL-38 product-readiness portfolio: 11 implementation-ready specs and AC-mapped test plans; all backlog-only and pending individual approval; BL-24 remains companion tutorial scope | AgToosa |
 | 2026-07-14 | /agtoosa-spec — BL-27 enrolled in Active Cycle after BL-25 automated completion; status 🟦 Todo; build not started | AgToosa |
 | 2026-07-14 | /agtoosa-build — Build ✅ automated tasks complete — BL-25 — 5/5 automated tasks green; 893 full-suite tests, 18 release tests, `dart analyze lib test` clean; status → Awaiting Manual (12 physical-device gates) | AgToosa |
 | 2026-07-14 | /agtoosa-build — Tasks 🟢 1.1–1.3, 2.1 complete — BL-25 — TestFlight checklist, evidence template, launch-doc links, and focused release guard green (11 tests) | AgToosa |

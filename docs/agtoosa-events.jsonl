@@ -20,3 +20,14 @@
 {"ts":"2026-07-14T12:10:00Z","phase":"build","event":"start","story":"BL-25","by":"AgToosa"}
 {"ts":"2026-07-14T13:30:00Z","phase":"build","event":"complete","story":"BL-25","by":"AgToosa","note":"5 automated tasks complete; 12 manual-deferred"}
 {"ts":"2026-07-14T13:35:00Z","phase":"spec","event":"enrolled","story":"BL-27","by":"AgToosa","note":"after BL-25 automated completion; build not started"}
+{"ts":"2026-07-14T18:00:00Z","phase":"spec","event":"draft","story":"BL-28","by":"AgToosa","note":"product-readiness portfolio; backlog-only; pending approval"}
+{"ts":"2026-07-14T18:00:01Z","phase":"spec","event":"draft","story":"BL-29","by":"AgToosa","note":"product-readiness portfolio; backlog-only; pending approval"}
+{"ts":"2026-07-14T18:00:02Z","phase":"spec","event":"draft","story":"BL-30","by":"AgToosa","note":"product-readiness portfolio; backlog-only; pending approval"}
+{"ts":"2026-07-14T18:00:03Z","phase":"spec","event":"draft","story":"BL-31","by":"AgToosa","note":"product-readiness portfolio; backlog-only; pending approval"}
+{"ts":"2026-07-14T18:00:04Z","phase":"spec","event":"draft","story":"BL-32","by":"AgToosa","note":"product-readiness portfolio; backlog-only; pending approval"}
+{"ts":"2026-07-14T18:00:05Z","phase":"spec","event":"draft","story":"BL-33","by":"AgToosa","note":"product-readiness portfolio; backlog-only; pending approval"}
+{"ts":"2026-07-14T18:00:06Z","phase":"spec","event":"draft","story":"BL-34","by":"AgToosa","note":"product-readiness portfolio; backlog-only; pending approval"}
+{"ts":"2026-07-14T18:00:07Z","phase":"spec","event":"draft","story":"BL-35","by":"AgToosa","note":"product-readiness portfolio; backlog-only; pending approval"}
+{"ts":"2026-07-14T18:00:08Z","phase":"spec","event":"draft","story":"BL-36","by":"AgToosa","note":"product-readiness portfolio; backlog-only; pending approval"}
+{"ts":"2026-07-14T18:00:09Z","phase":"spec","event":"draft","story":"BL-37","by":"AgToosa","note":"product-readiness portfolio; backlog-only; pending approval"}
+{"ts":"2026-07-14T18:00:10Z","phase":"spec","event":"draft","story":"BL-38","by":"AgToosa","note":"product-readiness portfolio; backlog-only; pending approval"}
