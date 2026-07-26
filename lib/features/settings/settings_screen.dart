@@ -7,6 +7,7 @@ import '../../core/haptics_service.dart';
 import '../../core/music_service.dart';
 import '../../data/player_progress.dart';
 import '../../data/player_progress_provider.dart';
+import '../../features/progression/free_games_controller.dart';
 import '../../theme/design_system.dart';
 import '../../widgets/glass_card.dart';
 import '../../widgets/kinetic_background.dart';
@@ -114,7 +115,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'Level $level · ${widget.progress.diamonds} CR',
+                      'Level $level · ${widget.progress.totalGamesAvailable} free games',
                       style: AethericPulseDark.label(
                         color: AethericPulseDark.onSurfaceMuted,
                       ),
@@ -144,9 +145,9 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
         // Account
         const _SectionLabel('Account'),
         const SizedBox(height: 8),
-        const GlassCard(
+        GlassCard(
           borderRadius: AethericPulseDark.radiusCard,
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             vertical: 2,
             horizontal: AethericPulseDark.spaceMd,
           ),
@@ -158,7 +159,33 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
               SettingsRow(
                 icon: Icon(Icons.share_outlined),
                 title: 'Share miToosa',
-                subtitle: 'Earn +40 bonus sessions per share (once per day)',
+                subtitle: 'Earn +40 bonus free games once per day',
+                onTap: () async {
+                  final result = await ref
+                      .read(freeGamesControllerProvider)
+                      .requestShareBonus(DateTime.now());
+                  if (!context.mounted) return;
+                  final messenger = ScaffoldMessenger.of(context);
+                  switch (result) {
+                    case ShareGrantResult.granted:
+                      messenger.showSnackBar(
+                        const SnackBar(
+                          content: Text('+40 free games added for today!'),
+                        ),
+                      );
+                    case ShareGrantResult.alreadyClaimed:
+                      messenger.showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Daily share bonus already claimed today.',
+                          ),
+                        ),
+                      );
+                    case ShareGrantResult.dismissed:
+                    case ShareGrantResult.unavailable:
+                      break;
+                  }
+                },
                 trailing: Icon(
                   Icons.chevron_right,
                   size: 22,
@@ -170,7 +197,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                 icon: Icon(Icons.workspace_premium_outlined),
                 title: 'Go VIP',
                 subtitle:
-                    'Ad-free play, +10 bonus sessions daily, streak shield',
+                    'Ad-free play, extra daily free games, streak shield',
                 trailing: _PurpleChip(label: 'Upgrade'),
               ),
             ],
@@ -282,7 +309,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
           child: SettingsRow(
             icon: Icon(Icons.restart_alt_outlined),
             title: 'Reset progress',
-            subtitle: 'Clear all credits and stats',
+            subtitle: 'Clear all progress and stats',
             trailing: Icon(
               Icons.chevron_right,
               size: 22,

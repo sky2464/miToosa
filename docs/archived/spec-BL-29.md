@@ -2,7 +2,7 @@
 
 > **Story ID:** BL-29
 > **Epic:** EP-01 Launch Readiness & Validation
-> **Status:** ⬜ Backlog
+> **Status:** 🏁 Shipped  
 > **Estimate:** M
 > **Clarity:** ready
 > **Spec created:** 2026-07-14
@@ -171,3 +171,7 @@ No new project skill is proposed. The existing wedge-economy-auditor covers copy
 | Wedge language is constrained by the unedited canonical document. | Pass |
 | Local time and share-result limitations are explicit. | Pass |
 | No VIP, ad, or backend implementation is smuggled into scope. | Pass |
+
+## ✅ Spec Approved
+
+Approved: 2026-07-26 14:03

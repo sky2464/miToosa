@@ -39,3 +39,8 @@
 {"ts":"2026-07-26T19:15:00Z","phase":"build","event":"complete","story":"BL-28","by":"AgToosa","note":"RootAppRouter onboarding gate; 7 routing tests; 900 full-suite; Awaiting Manual 3.3"}
 {"ts":"2026-07-26T19:50:00Z","phase":"review","event":"approved","story":"BL-28","by":"AgToosa","note":"4-persona PASS; 0 critical; review-BL-28.md"}
 {"ts":"2026-07-26T19:55:00Z","phase":"ship","event":"complete","story":"BL-28","by":"AgToosa","note":"repo ship PASS; RootAppRouter; 900 tests; T-006 manual deferred"}
+{"ts":"2026-07-26T20:03:00Z","phase":"spec","event":"approved","story":"BL-29","by":"User","note":"enrolled Active Cycle; estimate M"}
+{"ts":"2026-07-26T20:50:00Z","phase":"build","event":"start","story":"BL-29","by":"AgToosa","note":"FreeGamesController, ShareBonusService, UI wiring, wedge tests"}
+{"ts":"2026-07-26T21:10:00Z","phase":"build","event":"complete","story":"BL-29","by":"AgToosa","note":"910 tests; copy audit clean; Awaiting Manual 4.3 iPhone share smoke"}
+{"ts":"2026-07-26T21:00:00Z","phase":"review","event":"approved","story":"BL-29","by":"AgToosa","note":"4-persona PASS; 0 critical; review-BL-29.md"}
+{"ts":"2026-07-26T21:05:00Z","phase":"ship","event":"complete","story":"BL-29","by":"AgToosa","note":"repo ship PASS; free-games wedge; T-007 manual deferred"}

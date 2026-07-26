@@ -71,7 +71,6 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final progressAsync = ref.watch(playerProgressProvider);
-    final coins = progressAsync.maybeWhen(data: (p) => p.coins, orElse: () => 0);
     final progress = progressAsync.maybeWhen(data: (p) => p, orElse: () => null);
     return Scaffold(
       backgroundColor: isDark
@@ -91,7 +90,6 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
           Column(
             children: [
               _SafeAppHeader(
-                coins: coins,
                 progress: progress,
                 onGoSettings: () => setState(() => _selectedIndex = 4),
               ),
@@ -112,25 +110,24 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
 
 // ─── Safe app header wrapper ──────────────────────────────────────────────────
 
-class _SafeAppHeader extends StatelessWidget {
-  final int coins;
+class _SafeAppHeader extends ConsumerWidget {
   final PlayerProgress? progress;
   final VoidCallback onGoSettings;
 
   const _SafeAppHeader({
-    required this.coins,
     required this.progress,
     required this.onGoSettings,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final top = MediaQuery.of(context).padding.top;
     final level = progress != null ? (progress!.totalXP ~/ 1000) + 1 : 1;
+    final freeGames = progress?.totalGamesAvailable ?? 0;
     return Padding(
       padding: EdgeInsets.only(top: top),
       child: AppHeader(
-        credits: coins,
+        freeGamesAvailable: freeGames,
         roleLabel: 'Pilot · Lv $level',
         onProfileTap: progress == null
             ? null
@@ -139,9 +136,13 @@ class _SafeAppHeader extends StatelessWidget {
                 progress: progress!,
                 onEditProfile: onGoSettings,
               ),
-        onCreditsTap: progress == null
+        onFreeGamesTap: progress == null
             ? null
-            : () => showCreditsMenuSheet(context, progress: progress!),
+            : () => showFreeGamesMenuSheet(
+                context,
+                ref: ref,
+                progress: progress!,
+              ),
       ),
     );
   }

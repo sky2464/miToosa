@@ -7,6 +7,8 @@ import '../../data/player_progress.dart';
 import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
 import '../gameplay/gameplay_screen.dart';
+import '../../features/progression/free_games_controller.dart';
+import '../../widgets/free_games_depleted_sheet.dart';
 
 class TrackDetailScreen extends ConsumerStatefulWidget {
   final TrackDefinition track;
@@ -305,6 +307,7 @@ class _TrackDetailScreenState extends ConsumerState<TrackDetailScreen>
                         onTap: isComplete || isCurrent
                             ? () => _showDifficultySheet(
                                 context,
+                                ref: ref,
                                 track: track,
                                 levelIndex: index,
                               )
@@ -330,6 +333,7 @@ class _TrackDetailScreenState extends ConsumerState<TrackDetailScreen>
                             onPressed: completed < track.targetLevelCount
                                 ? () => _showDifficultySheet(
                                     context,
+                                    ref: ref,
                                     track: track,
                                     levelIndex: firstIncomplete,
                                   )
@@ -354,6 +358,7 @@ class _TrackDetailScreenState extends ConsumerState<TrackDetailScreen>
 
 void _showDifficultySheet(
   BuildContext context, {
+  required WidgetRef ref,
   required TrackDefinition track,
   required int levelIndex,
 }) {
@@ -366,19 +371,39 @@ void _showDifficultySheet(
       ),
     ),
     builder: (_) => DifficultySelectionSheet(
-      onSelect: (tier) {
+      onSelect: (tier) async {
         Navigator.pop(context);
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => GameplayScreen(
-              track: track,
-              levelIndex: levelIndex,
-              initialDifficulty: tier,
-              sessionStartLevelIndex: levelIndex,
-              sessionXP: 0,
-            ),
-          ),
-        );
+        final result = await ref
+            .read(freeGamesControllerProvider)
+            .consumeGameForStart(DateTime.now());
+        if (!context.mounted) return;
+
+        switch (result) {
+          case GameStartResult.started:
+            await Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => GameplayScreen(
+                  track: track,
+                  levelIndex: levelIndex,
+                  initialDifficulty: tier,
+                  sessionStartLevelIndex: levelIndex,
+                  sessionXP: 0,
+                ),
+              ),
+            );
+          case GameStartResult.noAllowance:
+            final progress = await ref.read(playerProgressProvider.future);
+            if (!context.mounted) return;
+            await showFreeGamesDepletedSheet(
+              context,
+              ref: ref,
+              progress: progress,
+            );
+          case GameStartResult.failed:
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Could not start game. Try again.')),
+            );
+        }
       },
     ),
   );

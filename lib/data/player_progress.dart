@@ -311,8 +311,14 @@ class PlayerProgress {
   /// Returns false if already granted today.
   bool grantShareBonus(DateTime now) {
     checkAllowanceReset(now);
-    if (shareBonusGames > 0) return false;
+    if (lastShareDate != null &&
+        lastShareDate!.year == now.year &&
+        lastShareDate!.month == now.month &&
+        lastShareDate!.day == now.day) {
+      return false;
+    }
     shareBonusGames = shareBonusAmount;
+    lastShareDate = DateTime(now.year, now.month, now.day);
     return true;
   }
 

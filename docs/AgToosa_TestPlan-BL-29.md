@@ -1,7 +1,7 @@
 # Test Plan — BL-29 Free-Games Wedge Delivery
 
 > **Spec:** [spec-BL-29.md](archived/spec-BL-29.md)
-> **Status:** Draft pending approval
+> **Status:** Approved — shipped 2026-07-26 (repo); T-007 manual-deferred
 > **Created:** 2026-07-14
 
 ## Scope & Strategy
@@ -72,4 +72,14 @@ Verify the local allowance model through pure persistence/controller tests and p
 
 ## RED / GREEN Evidence Log
 
-Populated during /agtoosa-build.
+| Test ID | Phase | Result | Evidence |
+|---------|-------|--------|----------|
+| T-001 | GREEN | PASS | `test/features/progression/free_games_copy_test.dart` — header/world-map/depleted sheet copy |
+| T-002 | GREEN | PASS | `test/features/progression/free_games_controller_test.dart` — single consume |
+| T-003 | GREEN | PASS | Consume gated on difficulty tier confirm in `track_detail_screen.dart` (modal open does not consume) |
+| T-004 | GREEN | PASS | `free_games_copy_test.dart` — depleted sheet share CTA |
+| T-005 | GREEN | PASS | `free_games_controller_test.dart` — grant +40 on success |
+| T-006 | GREEN | PASS | `free_games_controller_test.dart` — same-day block + next-day grant |
+| T-007 | DEFERRED | manual | Physical iPhone share smoke (task 4.3) |
+
+**Verification (2026-07-26):** `dart analyze lib test` — 0 errors (6 info). `flutter test` — 910/910 PASS. Copy audit `rg` — no obsolete economy strings in `lib/features` / `lib/widgets` (comment-only hits excluded).

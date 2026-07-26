@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/player_progress.dart';
+import '../features/progression/free_games_controller.dart';
 import '../theme/design_system.dart';
 import '../theme/design_tokens.dart';
 
-/// Credits / economy menu — opened from the app header CR pill tap.
-Future<void> showCreditsMenuSheet(
+/// Free-games allowance menu — opened from the app header games pill.
+Future<void> showFreeGamesMenuSheet(
   BuildContext context, {
+  required WidgetRef ref,
   required PlayerProgress progress,
 }) {
   final theme = APTheme.of(context);
+  final now = DateTime.now();
+  final claimedToday = FreeGamesController.claimedShareBonusToday(
+    progress.lastShareDate,
+    now,
+  );
 
   return showModalBottomSheet<void>(
     context: context,
@@ -36,50 +44,59 @@ Future<void> showCreditsMenuSheet(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Credits', style: theme.headlineMd()),
+                Text('Free games', style: theme.headlineMd()),
                 const SizedBox(height: 8),
                 Text(
-                  '${progress.coins} CR',
+                  '${progress.totalGamesAvailable} games available today',
                   style: theme.display(color: theme.brandBlue),
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  'Earn credits by completing levels, hitting streak milestones, '
-                  'and finishing your daily session.',
+                  'You get 25 free games every day. They reset at midnight. '
+                  'Share miToosa once per day for +40 bonus games.',
                   style: theme.bodyMd(color: theme.fgMuted),
                 ),
                 const SizedBox(height: 16),
-                _CreditsRow(
-                  icon: Icons.star_outline,
-                  title: 'Level stars',
-                  subtitle: 'Bonus credits on first clear and high scores',
-                  theme: theme,
-                ),
-                _CreditsRow(
-                  icon: Icons.local_fire_department_outlined,
-                  title: 'Streak milestones',
-                  subtitle: 'Rewards at 3, 7, 14, 30+ day streaks',
-                  theme: theme,
-                ),
-                const Divider(height: 24),
-                _CreditsRow(
-                  icon: Icons.share_outlined,
-                  title: 'Share miToosa',
-                  subtitle: 'Earn +40 bonus sessions per share (once per day)',
-                  theme: theme,
-                ),
-                _CreditsRow(
-                  icon: Icons.workspace_premium_outlined,
-                  title: 'Go VIP',
+                _InfoRow(
+                  icon: Icons.calendar_today_outlined,
+                  title: 'Daily allowance',
                   subtitle:
-                      'Ad-free play, +10 bonus sessions daily, streak shield',
+                      '${progress.freeGamesRemaining} of 25 free games remaining',
                   theme: theme,
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  'Shop coming soon — credits will unlock boosts and cosmetics.',
-                  style: theme.label(color: theme.fgMuted),
-                ),
+                if (progress.shareBonusGames > 0)
+                  _InfoRow(
+                    icon: Icons.card_giftcard_outlined,
+                    title: 'Share bonus',
+                    subtitle: '${progress.shareBonusGames} bonus games left',
+                    theme: theme,
+                  ),
+                const Divider(height: 24),
+                if (!claimedToday)
+                  FilledButton.icon(
+                    key: const Key('free-games-menu-share'),
+                    onPressed: () async {
+                      final result = await ref
+                          .read(freeGamesControllerProvider)
+                          .requestShareBonus(now);
+                      if (!ctx.mounted) return;
+                      Navigator.of(ctx).pop();
+                      if (result == ShareGrantResult.granted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('+40 free games added for today!'),
+                          ),
+                        );
+                      }
+                    },
+                    icon: const Icon(Icons.share_outlined),
+                    label: const Text('Share for +40 games'),
+                  )
+                else
+                  Text(
+                    'Daily share bonus already claimed — come back tomorrow.',
+                    style: theme.label(color: theme.fgMuted),
+                  ),
               ],
             ),
           ),
@@ -89,18 +106,18 @@ Future<void> showCreditsMenuSheet(
   );
 }
 
-class _CreditsRow extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final APTheme theme;
-
-  const _CreditsRow({
+class _InfoRow extends StatelessWidget {
+  const _InfoRow({
     required this.icon,
     required this.title,
     required this.subtitle,
     required this.theme,
   });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final APTheme theme;
 
   @override
   Widget build(BuildContext context) {

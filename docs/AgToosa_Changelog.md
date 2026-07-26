@@ -8,6 +8,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), version
 ## [Unreleased]
 
 ### Shipped (AgToosa cycle)
+- 2026-07-26 — **BL-29** Free-games wedge delivery — `FreeGamesController` + `ShareBonusService`; header/world-map/settings copy; track-start gate; 910/910 `flutter test`; [review-BL-29.md](archived/review-BL-29.md) · [evidence-BL-29.md](archived/evidence-BL-29.md); iPhone share smoke **manual-deferred** (T-007 / task 4.3)
 - 2026-07-26 — **BL-28** First-run onboarding gate — `RootAppRouter` routes fresh players through onboarding before `MainAppShell`; 7 widget routing tests; 900/900 `flutter test`; [review-BL-28.md](archived/review-BL-28.md) · [evidence-BL-28.md](archived/evidence-BL-28.md); iPhone fresh-install smoke **manual-deferred** (T-006)
 - 2026-07-26 — **BL-27** Generalize lifecycle verifier project-ID parsing (EP-*/BL-* discovery) — [spec-BL-27.md](archived/spec-BL-27.md) · [review-BL-27.md](archived/review-BL-27.md) · [evidence-BL-27.md](archived/evidence-BL-27.md) · smoke **PASS** (6/6 fixture tests); repo ship only
 - 2026-07-11 — **BL-26** App Store metadata, privacy/support copy, screenshot checklist, doc guards — [spec-BL-26.md](archived/spec-BL-26.md) · [review-BL-26.md](archived/review-BL-26.md) · [ship-check-BL-26.md](archived/ship-check-BL-26.md) · smoke **PASS** (10/10 readiness tests); URL publish + ASC screenshots **manual-deferred**

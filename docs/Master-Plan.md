@@ -1,7 +1,7 @@
 # Master-Plan
 
 > **Source of truth for active work.** Completed work lives in `Docs/archived/` — see Completed This Cycle for links.
-> **Last updated:** 2026-07-26 (/agtoosa-ship BL-28 repo ship PASS)
+> **Last updated:** 2026-07-26 (/agtoosa-ship BL-29 repo ship PASS)
 
 ## Project Charter
 
@@ -11,7 +11,7 @@
 | Goal | Ship v1.5.1 to the iPhone App Store with a validated free-first wedge and Firebase analytics |
 | User outcome | Casual puzzle players get ADHD-optimized 3–5 minute sessions without sign-up friction; they understand the 25 free games/day + share bonus model |
 | Success condition | App Store submission accepted; TestFlight QA passed on physical iPhone; D1 retention signal ≥40% from playtest; analytics events visible in Firebase DebugView |
-| Proof / evidence | `flutter test` green (900 tests); `dart analyze` clean on lib/test; BL-28 onboarding gate shipped; BL-26 metadata/docs guards shipped; BL-23 FlutterFire shipped; T-005 DebugView manual pending |
+| Proof / evidence | `flutter test` green (910 tests); `dart analyze` clean on lib/test; BL-29 free-games wedge shipped; BL-28 onboarding gate shipped; T-005 DebugView manual pending |
 | Non-goals | Android/macOS/Web store launch in v1.5.0; backend leaderboard; IAP/VIP; server sync; referral tiers (see `docs/PRODUCT-WEDGE.md`) |
 | Assumptions | Apple Developer account and company formation proceed on owner timeline; Firebase + GA is the launch analytics stack; local-first Hive persistence remains canonical |
 | Risks | External gates (company, App Store Connect, Firebase console) block store release; physical-device QA not yet executed |
@@ -20,7 +20,7 @@
 | Milestone | v1.5.1 (next) — iPhone App Store launch |
 | Active cycle | Launch Sprint — iPhone readiness + UX polish (2026-06-02 → 2026-06-25) |
 | Cycle capacity | 13 story points |
-| Current phase | 🔧 Awaiting Manual — BL-25 physical TestFlight QA (12 owner steps); BL-28 T-006 iPhone smoke deferred |
+| Current phase | 🔧 Awaiting Manual — BL-25 TestFlight QA; next spec: BL-30 (backlog) |
 
 ## Active Cycle
 
@@ -65,6 +65,7 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | Story | Task # | Deferred Since | Description |
 |-------|--------|----------------|-------------|
+| BL-29 | 4.3 / T-007 | 2026-07-26 | Native iPhone share once/repeat smoke — shipped repo-side; device proof pending |
 | BL-28 | 3.3 / T-006 | 2026-07-26 | Fresh-install iPhone smoke — onboarding to first playable track within 60s (shipped repo-side; device proof pending) |
 | BL-25 | 3.1–5.2 | 2026-07-14 | Physical iPhone TestFlight QA, DebugView, evidence capture, and launch-doc closure (12 owner-executed steps) |
 | BL-26 | 4.1 | 2026-07-11 | Publish Privacy Policy + Support URLs and paste finals into ASC/metadata |
@@ -89,7 +90,6 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | ID | Title | Type | Estimate | Epic | Priority | Status |
 |----|-------|------|----------|------|----------|--------|
-| BL-29 | Feature: Free-games wedge delivery | Feature | M | EP-01 | P0 | ⬜ Backlog |
 | BL-30 | Feature: Track catalog integrity | Feature | M | EP-01 | P0 | ⬜ Backlog |
 | BL-31 | Fix: Truthful launch surfaces | Fix | M | EP-01 | P0 | ⬜ Backlog |
 | BL-32 | Chore: Privacy, consent, and iOS release configuration | Chore | M | EP-02 | P0 | ⬜ Backlog |
@@ -113,7 +113,7 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | ID | Title | Stories | Status |
 |----|-------|---------|--------|
-| EP-01 | Epic: Launch Readiness & Validation | 11 open / 23 total | 🟨 In Progress |
+| EP-01 | Epic: Launch Readiness & Validation | 10 open / 24 total | 🟨 In Progress |
 | EP-02 | Epic: Platform Release Infrastructure | 2 open / 6 total | 🟨 In Progress |
 | EP-03 | Epic: Retention & Monetization Expansion | 2 open / 5 total | ⬜ Backlog |
 | EP-04 | Epic: User Experience Polish | 1 open / 7 total | 🟨 In Progress |
@@ -141,6 +141,7 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | ID | Title | Shipped | Archived Spec |
 |----|-------|---------|--------------|
+| BL-29 | Feature: Free-games wedge delivery | 2026-07-26 | [spec-BL-29.md](archived/spec-BL-29.md) |
 | BL-28 | Fix: First-run onboarding gate | 2026-07-26 | [spec-BL-28.md](archived/spec-BL-28.md) |
 | BL-27 | Chore: Generalize lifecycle verifier project-ID parsing | 2026-07-26 | [spec-BL-27.md](archived/spec-BL-27.md) |
 | BL-26 | Chore: App Store metadata + screenshots prep | 2026-07-11 | [spec-BL-26.md](archived/spec-BL-26.md) |
@@ -170,6 +171,12 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | Date | Event | By |
 |------|-------|----|
+| 2026-07-26 | /agtoosa-ship — Ship 🚀 repo ship PASS — BL-29 — free-games wedge; 910 tests; review/evidence archived; T-007 manual deferred | AgToosa |
+| 2026-07-26 | /agtoosa-review — Review ✅ Approved — BL-29 — 0 critical, 3 warnings; `docs/archived/review-BL-29.md` | AgToosa |
+| 2026-07-26 | /agtoosa-review — Review 🔍 Started — BL-29 — 4-persona review (user expedite PASS) | AgToosa |
+| 2026-07-26 | /agtoosa-build — Build 🔧 automated complete — BL-29 — `FreeGamesController` + share adapter; header/world-map/settings copy; track start gate; 910 tests; copy audit clean; status → Awaiting Manual (4.3 iPhone share smoke) | AgToosa |
+| 2026-07-26 | /agtoosa-build — Build 🏗️ Started — BL-29 — 4 tasks; scope: free-games controller, share service, UI wiring, wedge tests | AgToosa |
+| 2026-07-26 | /agtoosa-spec — Spec ✅ Approved — BL-29 — `docs/archived/spec-BL-29.md`; estimate M; enrolled in cycle | User |
 | 2026-07-26 | /agtoosa-ship — Ship 🚀 repo ship PASS — BL-28 — `RootAppRouter` onboarding gate; 900 tests; ADR accepted; T-006 manual deferred | AgToosa |
 | 2026-07-26 | /agtoosa-review — Review ✅ Approved — BL-28 — 0 critical, 4 warnings; `docs/archived/review-BL-28.md` | AgToosa |
 | 2026-07-26 | /agtoosa-review — Review 🔍 Started — BL-28 — 4-persona review running | AgToosa |

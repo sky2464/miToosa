@@ -5,21 +5,21 @@ import '../theme/design_system.dart';
 import '../theme/design_tokens.dart';
 
 /// Sticky header showing avatar in gradient ring, gradient "miToosa" brand
-/// mark, and a credits pill with a diamond glyph.
+/// mark, and a free-games pill.
 class AppHeader extends StatelessWidget {
-  final int credits;
+  final int freeGamesAvailable;
   final String avatarAsset;
   final String roleLabel;
   final VoidCallback? onProfileTap;
-  final VoidCallback? onCreditsTap;
+  final VoidCallback? onFreeGamesTap;
 
   const AppHeader({
     super.key,
-    required this.credits,
+    required this.freeGamesAvailable,
     this.avatarAsset = 'assets/images/avatars/avatar_4.png',
     this.roleLabel = 'Pilot · Lv 1',
     this.onProfileTap,
-    this.onCreditsTap,
+    this.onFreeGamesTap,
   });
 
   @override
@@ -134,10 +134,10 @@ class AppHeader extends StatelessWidget {
                 ),
               ),
               Semantics(
-                button: onCreditsTap != null,
-                label: 'Open credits menu',
+                button: onFreeGamesTap != null,
+                label: '$freeGamesAvailable free games remaining',
                 child: GestureDetector(
-                  onTap: onCreditsTap,
+                  onTap: onFreeGamesTap,
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(8, 6, 12, 6),
                     decoration: BoxDecoration(
@@ -153,10 +153,14 @@ class AppHeader extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const _DiamondGlyph(size: 14),
+                        Icon(
+                          Icons.sports_esports_outlined,
+                          size: 16,
+                          color: theme.brandBlue,
+                        ),
                         const SizedBox(width: 6),
                         Text(
-                          _formatNumber(credits),
+                          _formatNumber(freeGamesAvailable),
                           style: TextStyle(
                             fontFamily: 'Inter',
                             fontSize: 13,
@@ -168,15 +172,15 @@ class AppHeader extends StatelessWidget {
                             letterSpacing: -0.13,
                           ),
                         ),
-                        const SizedBox(width: 6),
+                        const SizedBox(width: 4),
                         Text(
-                          'CR',
+                          'free games',
                           style: TextStyle(
                             fontFamily: 'Inter',
                             fontSize: 9,
                             fontWeight: FontWeight.w600,
                             color: theme.fgMeta,
-                            letterSpacing: 1.08,
+                            letterSpacing: 0.4,
                           ),
                         ),
                       ],
@@ -203,41 +207,3 @@ class AppHeader extends StatelessWidget {
   }
 }
 
-class _DiamondGlyph extends StatelessWidget {
-  final double size;
-  const _DiamondGlyph({required this.size});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: size,
-      height: size,
-      child: CustomPaint(painter: _DiamondPainter()),
-    );
-  }
-}
-
-class _DiamondPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final path = Path()
-      ..moveTo(size.width * 0.5, size.height * 0.125)
-      ..lineTo(size.width * 0.833, size.height * 0.417)
-      ..lineTo(size.width * 0.5, size.height * 0.875)
-      ..lineTo(size.width * 0.167, size.height * 0.417)
-      ..close();
-    final fill = Paint()
-      ..shader = const LinearGradient(
-        colors: [AP.blueLight, AP.purple],
-      ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
-    canvas.drawPath(path, fill);
-    final stroke = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 0.5
-      ..color = Colors.white.withValues(alpha: 0.95);
-    canvas.drawPath(path, stroke);
-  }
-
-  @override
-  bool shouldRepaint(_DiamondPainter old) => false;
-}
