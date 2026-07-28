@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mitoosa/data/privacy_preferences_repository.dart';
+import 'package:mitoosa/core/analytics_consent_service.dart';
 import 'package:mitoosa/data/player_progress.dart';
 import 'package:mitoosa/data/player_progress_provider.dart';
+import 'package:mitoosa/features/settings/analytics_privacy_controller.dart';
 import 'package:mitoosa/features/settings/settings_screen.dart';
 
 PlayerProgress _freshProgress() => PlayerProgress(playerId: 'test');
 
 Widget _wrap({PlayerProgress? progress}) {
+  bindPrivacyPreferencesRepository(FakePrivacyPreferencesRepository());
   final p = progress ?? _freshProgress();
   return ProviderScope(
-    overrides: [playerProgressProvider.overrideWith((_) => Future.value(p))],
+    overrides: [
+      playerProgressProvider.overrideWith((_) => Future.value(p)),
+      analyticsConsentServiceProvider.overrideWithValue(
+        AnalyticsConsentService(RecordingAnalyticsConsentAdapter()),
+      ),
+    ],
     child: const MaterialApp(home: SettingsScreen()),
   );
 }

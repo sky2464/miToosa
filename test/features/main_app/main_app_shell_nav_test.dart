@@ -7,13 +7,16 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mitoosa/core/analytics_consent_service.dart';
 import 'package:mitoosa/data/player_progress.dart';
 import 'package:mitoosa/data/player_progress_provider.dart';
+import 'package:mitoosa/data/privacy_preferences_repository.dart';
 import 'package:mitoosa/data/telemetry_event.dart';
 import 'package:mitoosa/data/telemetry_provider.dart';
 import 'package:mitoosa/data/telemetry_session_controller.dart';
 import 'package:mitoosa/data/telemetry_repository.dart';
 import 'package:mitoosa/features/main_app/main_app_shell.dart';
+import 'package:mitoosa/features/settings/analytics_privacy_controller.dart';
 import 'package:mitoosa/theme/design_system.dart';
 
 // ─── No-op stub TelemetryRepository ────────────────────────────────────────────
@@ -36,16 +39,22 @@ PlayerProgress _freshProgress() =>
 
 final _noOpController = TelemetrySessionController(_NoOpTelemetryRepository());
 
-Widget _wrap(PlayerProgress progress) => ProviderScope(
+Widget _wrap(PlayerProgress progress) {
+  bindPrivacyPreferencesRepository(FakePrivacyPreferencesRepository());
+  return ProviderScope(
   overrides: [
     playerProgressProvider.overrideWith((ref) async => progress),
     telemetrySessionControllerProvider.overrideWithValue(_noOpController),
+    analyticsConsentServiceProvider.overrideWithValue(
+      AnalyticsConsentService(RecordingAnalyticsConsentAdapter()),
+    ),
   ],
   child: MaterialApp(
     theme: AethericPulseDark.themeData,
     home: const MainAppShell(),
   ),
 );
+}
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
 

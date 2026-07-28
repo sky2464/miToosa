@@ -12,6 +12,9 @@ import '../../widgets/glass_card.dart';
 import '../../widgets/kinetic_background.dart';
 import '../../widgets/settings_row.dart';
 import '../../widgets/toggle_switch.dart';
+import 'analytics_privacy_controller.dart';
+import 'privacy_disclosure_copy.dart';
+import 'privacy_policy_screen.dart';
 import 'reset_progress_controller.dart';
 
 /// Shipped app version label — keep in sync with `pubspec.yaml` `version:`.
@@ -52,11 +55,52 @@ class _SettingsBody extends ConsumerStatefulWidget {
 
 class _SettingsBodyState extends ConsumerState<_SettingsBody> {
   late bool _soundEffectsEnabled;
+  bool _analyticsEnabled = true;
+  bool _analyticsUpdating = false;
 
   @override
   void initState() {
     super.initState();
     _soundEffectsEnabled = AudioService().enabled;
+    _loadAnalyticsPreference();
+  }
+
+  Future<void> _loadAnalyticsPreference() async {
+    final enabled = await ref
+        .read(analyticsPrivacyControllerProvider)
+        .loadEnabled();
+    if (!mounted) return;
+    setState(() => _analyticsEnabled = enabled);
+  }
+
+  Future<void> _onAnalyticsChanged(bool enabled) async {
+    if (_analyticsUpdating) return;
+    final previous = _analyticsEnabled;
+    setState(() {
+      _analyticsEnabled = enabled;
+      _analyticsUpdating = true;
+    });
+    try {
+      await ref.read(analyticsPrivacyControllerProvider).setEnabled(enabled);
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _analyticsEnabled = previous);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Could not update analytics preference. Try again.'),
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _analyticsUpdating = false);
+      }
+    }
+  }
+
+  void _openPrivacyPolicy() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => const PrivacyPolicyScreen()),
+    );
   }
 
   Future<void> _onResetProgressTap() async {
@@ -188,6 +232,46 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                         .saveProgress(widget.progress);
                     ref.invalidate(playerProgressProvider);
                   },
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        const _SectionLabel('Privacy'),
+        const SizedBox(height: 8),
+        GlassCard(
+          borderRadius: AethericPulseDark.radiusCard,
+          padding: const EdgeInsets.symmetric(
+            vertical: 2,
+            horizontal: AethericPulseDark.spaceMd,
+          ),
+          child: Column(
+            children: [
+              SettingsRow(
+                icon: const Icon(Icons.analytics_outlined),
+                title: kAnonymousAnalyticsTitle,
+                subtitle: _analyticsEnabled == false
+                    ? kAnonymousAnalyticsDisabledEffect
+                    : kAnonymousAnalyticsSubtitle,
+                trailing: ToggleSwitch(
+                        value: _analyticsEnabled,
+                        onChanged: _analyticsUpdating
+                            ? (_) {}
+                            : _onAnalyticsChanged,
+                      ),
+              ),
+              const Divider(height: 1, color: AethericPulseDark.glassBorder),
+              SettingsRow(
+                icon: const Icon(Icons.policy_outlined),
+                title: kPrivacyPolicyLinkLabel,
+                subtitle: 'How we handle local data and optional analytics',
+                onTap: _openPrivacyPolicy,
+                trailing: const Icon(
+                  Icons.chevron_right,
+                  size: 22,
+                  color: AethericPulseDark.onSurfaceMuted,
                 ),
               ),
             ],

@@ -1,7 +1,7 @@
 # Test Plan — BL-32 Privacy, Consent, and iOS Release Configuration
 
 > **Spec:** [spec-BL-32.md](archived/spec-BL-32.md)
-> **Status:** Draft pending approval
+> **Status:** Approved — GREEN evidence captured 2026-07-27
 > **Created:** 2026-07-14
 
 ## Scope & Strategy
@@ -72,4 +72,12 @@ Use fakes around Firebase analytics so collection and consent ordering are deter
 
 ## RED / GREEN Evidence Log
 
-Populated during /agtoosa-build.
+| Test ID | RED | GREEN |
+|---------|-----|-------|
+| T-001 | 2026-07-27 bootstrap order test added | 2026-07-27 PASS |
+| T-002 | 2026-07-27 ad consent tests added | 2026-07-27 PASS |
+| T-003 | 2026-07-27 persist/relaunch tests added | 2026-07-27 PASS |
+| T-004 | 2026-07-27 Settings disclosure tests added | 2026-07-27 PASS |
+| T-005 | 2026-07-27 plist/manifest static tests added | 2026-07-27 PASS |
+| T-006 | 2026-07-27 doc audit test added | 2026-07-27 PASS |
+| T-007 | — | manual-deferred |

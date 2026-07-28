@@ -36,7 +36,8 @@ Use this draft when creating the iOS App Store Connect record for the iPhone lau
 
 - No account is required.
 - Progress is local-first.
-- Firebase + Google Analytics are enabled for launch analytics only when `FIREBASE_ENABLED=true`.
+- Firebase + Google Analytics are enabled for launch analytics only when `FIREBASE_ENABLED=true`, and players can opt out in Settings.
+- No ad targeting, advertising ID collection, or ad personalization consent is granted.
 - No leaderboard, social graph, IAP, VIP, server sync, gambling, contests, chat, or user-generated content in this launch.
 - If App Review asks how to test analytics, launch a release/TestFlight build with `FIREBASE_ENABLED=true` and play one session.
 - Public policy/support pages: [PRIVACY-POLICY.md](PRIVACY-POLICY.md), [SUPPORT.md](SUPPORT.md).

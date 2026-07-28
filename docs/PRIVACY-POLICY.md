@@ -1,13 +1,13 @@
 
 # Privacy Policy — miToosa
 
-**Last Updated:** July 11, 2026
+**Last Updated:** July 27, 2026
 
 ---
 
 ## Summary
 
-miToosa is a **local-first** puzzle game. Game progress, preferences, and anonymous session telemetry are stored on your device. When the release build is launched with `FIREBASE_ENABLED=true`, the app may send **anonymous usage analytics** to Firebase and Google Analytics. We do not collect names, email addresses, or account credentials.
+miToosa is a **local-first** puzzle game. Game progress, preferences, and anonymous session telemetry are stored on your device. When the release build is launched with `FIREBASE_ENABLED=true`, the app may send **anonymous usage analytics** to Firebase and Google Analytics unless you turn analytics off in Settings. We do not collect names, email addresses, or account credentials, and we do not use ad targeting.
 
 ---
 
@@ -24,7 +24,7 @@ miToosa is a **local-first** puzzle game. Game progress, preferences, and anonym
 
 ### Sent when Firebase analytics is enabled (`FIREBASE_ENABLED=true`)
 
-When analytics is enabled in a release or TestFlight build, Firebase and Google Analytics may receive **anonymous, non-identifying** usage events such as app launch and session activity. These events are not linked to your real name, email, or Apple/Google account.
+When analytics is enabled in a release or TestFlight build, Firebase and Google Analytics may receive **anonymous, non-identifying** usage events such as app launch and session activity. These events are not linked to your real name, email, or Apple/Google account. You can disable anonymous analytics anytime in **Settings → Anonymous analytics**.
 
 ### What We Do NOT Collect
 
@@ -59,7 +59,7 @@ We do not sell personal information.
 - **Game progress:** Stored on your device until you uninstall the app or clear app data.
 - **Telemetry events:** Capped at 500 events locally; oldest events are automatically pruned.
 - **Analytics (when enabled):** Retained per Firebase / Google Analytics project settings in the developer console.
-- **Deletion:** Uninstalling the app removes on-device data. You can also reset progress in Settings.
+- **Deletion:** Uninstalling the app removes on-device data. You can also reset progress in Settings or turn off anonymous analytics in Settings.
 
 ---
 

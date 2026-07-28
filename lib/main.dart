@@ -11,6 +11,8 @@ import 'data/player_progress_provider.dart';
 import 'data/hive_persistence_provider.dart';
 import 'core/content_provider.dart';
 import 'data/telemetry_provider.dart';
+import 'core/analytics_consent_service.dart';
+import 'data/privacy_preferences_repository.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -19,22 +21,28 @@ void main() async {
   await ContentProvider().init();
   await HivePersistenceProvider().init();
 
+  final privacyRepo =
+      await SharedPreferencesPrivacyPreferencesRepository.create();
+  bindPrivacyPreferencesRepository(privacyRepo);
+
   if (kFirebaseEnabled) {
     if (Firebase.apps.isEmpty) {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
     }
-    final analytics = FirebaseAnalytics.instance;
-    await analytics.setConsent(
-      analyticsStorageConsentGranted: true,
-      adStorageConsentGranted: true,
-      adUserDataConsentGranted: true,
-      adPersonalizationSignalsConsentGranted: true,
+    final consentService = AnalyticsConsentService(
+      FirebaseAnalyticsConsentAdapter(),
     );
-    await analytics.setAnalyticsCollectionEnabled(true);
+    await bootstrapAnalyticsConsent(
+      preferences: privacyRepo,
+      consentService: consentService,
+    );
     if (kDebugMode) {
-      debugPrint('Firebase Analytics enabled for ${DefaultFirebaseOptions.ios.appId}');
+      final analytics = FirebaseAnalytics.instance;
+      debugPrint(
+        'Firebase Analytics configured for ${DefaultFirebaseOptions.ios.appId}',
+      );
       // Delay to give the native SDK time to apply Consent and Collection enablement
       Future.delayed(const Duration(seconds: 3), () async {
         debugPrint('Sending initial Firebase debug ping...');
@@ -57,7 +65,11 @@ void main() async {
     }
   }
 
-  runApp(const ProviderScope(child: MiToosaApp()));
+  runApp(
+    const ProviderScope(
+      child: MiToosaApp(),
+    ),
+  );
 }
 
 class MiToosaApp extends ConsumerWidget {

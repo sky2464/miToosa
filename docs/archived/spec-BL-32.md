@@ -2,10 +2,14 @@
 
 > **Story ID:** BL-32
 > **Epic:** EP-02 Platform Release Infrastructure
-> **Status:** ⬜ Backlog
+> **Status:** 🏁 Shipped (2026-07-27)
 > **Estimate:** M
 > **Clarity:** ready
 > **Spec created:** 2026-07-14
+
+## ✅ Spec Approved
+
+Approved 2026-07-27. Enrolled in Active Cycle for implementation.
 
 ## 1. Requirements
 

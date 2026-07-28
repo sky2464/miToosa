@@ -6,14 +6,17 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mitoosa/core/analytics_consent_service.dart';
 import 'package:mitoosa/core/content_provider.dart';
 import 'package:mitoosa/data/player_progress.dart';
 import 'package:mitoosa/data/player_progress_provider.dart';
+import 'package:mitoosa/data/privacy_preferences_repository.dart';
 import 'package:mitoosa/data/telemetry_event.dart';
 import 'package:mitoosa/data/telemetry_provider.dart';
 import 'package:mitoosa/data/telemetry_repository.dart';
 import 'package:mitoosa/data/telemetry_session_controller.dart';
 import 'package:mitoosa/features/main_app/main_app_shell.dart';
+import 'package:mitoosa/features/settings/analytics_privacy_controller.dart';
 import 'package:mitoosa/features/navigation/world_map_screen.dart';
 import 'package:mitoosa/features/settings/settings_screen.dart';
 import 'package:mitoosa/theme/design_system.dart';
@@ -34,23 +37,35 @@ final _noOpController = TelemetrySessionController(_NoOpTelemetryRepository());
 PlayerProgress _freshProgress() =>
     PlayerProgress.fresh(playerId: 'test-player');
 
-Widget _shell() => ProviderScope(
+Widget _shell() {
+  bindPrivacyPreferencesRepository(FakePrivacyPreferencesRepository());
+  return ProviderScope(
   overrides: [
     playerProgressProvider.overrideWith((ref) async => _freshProgress()),
     telemetrySessionControllerProvider.overrideWithValue(_noOpController),
+    analyticsConsentServiceProvider.overrideWithValue(
+      AnalyticsConsentService(RecordingAnalyticsConsentAdapter()),
+    ),
   ],
   child: MaterialApp(
     theme: AethericPulseDark.themeData,
     home: const MainAppShell(),
   ),
 );
+}
 
-Widget _settings() => ProviderScope(
+Widget _settings() {
+  bindPrivacyPreferencesRepository(FakePrivacyPreferencesRepository());
+  return ProviderScope(
   overrides: [
     playerProgressProvider.overrideWith((ref) async => _freshProgress()),
+    analyticsConsentServiceProvider.overrideWithValue(
+      AnalyticsConsentService(RecordingAnalyticsConsentAdapter()),
+    ),
   ],
-  child: const MaterialApp(home: SettingsScreen()),
-);
+    child: const MaterialApp(home: SettingsScreen()),
+  );
+}
 
 Widget _tracks() {
   ContentProvider().init();

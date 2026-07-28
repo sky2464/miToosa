@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Mitoosa</string>
+	<string>miToosa</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -56,8 +56,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
@@ -72,12 +70,7 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<false/>
 	</dict>
-	<!-- Required privacy descriptions for App Store submission -->
-	<key>NSLocalNetworkUsageDescription</key>
-	<string>This app does not require local network access.</string>
-	<key>NSBonjourServiceTypes</key>
-	<array/>
 	<key>FIREBASE_ANALYTICS_COLLECTION_ENABLED</key>
-	<true/>
+	<false/>
 </dict>
 </plist>

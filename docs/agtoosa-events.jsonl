@@ -54,3 +54,7 @@
 {"ts":"2026-07-27T00:12:00Z","phase":"review","event":"started","story":"BL-31","by":"AgToosa","note":"4-persona review"}
 {"ts":"2026-07-27T00:12:00Z","phase":"review","event":"approved","story":"BL-31","by":"AgToosa","note":"PASS 0 critical; review-BL-31.md"}
 {"ts":"2026-07-27T23:30:00Z","phase":"ship","event":"complete","story":"BL-31","by":"AgToosa","note":"repo ship PASS; 929 tests; task 4.3 manual deferred"}
+{"ts":"2026-07-28T01:33:00Z","phase":"spec","event":"approved","story":"BL-32","by":"User","note":"enrolled Active Cycle; estimate M"}
+{"ts":"2026-07-28T01:45:00Z","phase":"build","event":"complete","story":"BL-32","by":"AgToosa","note":"944 tests; AnalyticsConsentService; PrivacyInfo.xcprivacy"}
+{"ts":"2026-07-28T01:50:00Z","phase":"review","event":"approved","story":"BL-32","by":"AgToosa","note":"PASS 0 critical; review-BL-32.md"}
+{"ts":"2026-07-28T01:55:00Z","phase":"ship","event":"complete","story":"BL-32","by":"AgToosa","note":"repo ship PASS; 944 tests; task 4.2 manual deferred"}

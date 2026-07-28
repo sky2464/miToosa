@@ -244,4 +244,51 @@ void main() {
       },
     );
   });
+
+  group('iOS release metadata BL-32 @smoke T-005', () {
+    test('Info.plist uses miToosa display name and portrait iPhone orientations', () {
+      final plist = File('ios/Runner/Info.plist');
+      expect(plist.existsSync(), isTrue);
+      final text = plist.readAsStringSync();
+
+      expect(text, contains('<string>miToosa</string>'));
+      expect(text, isNot(contains('<string>Mitoosa</string>')));
+      final iphoneOrientations = RegExp(
+        r'<key>UISupportedInterfaceOrientations</key>\s*<array>(.*?)</array>',
+        dotAll: true,
+      ).firstMatch(text)?.group(1);
+      expect(iphoneOrientations, isNotNull);
+      expect(iphoneOrientations, contains('UIInterfaceOrientationPortrait'));
+      expect(iphoneOrientations, isNot(contains('Landscape')));
+      expect(text, isNot(contains('NSLocalNetworkUsageDescription')));
+      expect(text, contains('<key>FIREBASE_ANALYTICS_COLLECTION_ENABLED</key>'));
+      expect(text, contains('<false/>'));
+    });
+
+    test('PrivacyInfo.xcprivacy exists and is referenced in Xcode project', () {
+      final manifest = File('ios/Runner/PrivacyInfo.xcprivacy');
+      expect(manifest.existsSync(), isTrue);
+      final text = manifest.readAsStringSync();
+      expect(text, contains('NSPrivacyTracking'));
+      expect(text, contains('<false/>'));
+
+      final project = File('ios/Runner.xcodeproj/project.pbxproj').readAsStringSync();
+      expect(project, contains('PrivacyInfo.xcprivacy in Resources'));
+    });
+  });
+
+  group('Disclosure source-to-doc audit BL-32 @smoke T-006', () {
+    test('privacy policy and metadata describe optional analytics and no ad targeting', () {
+      final policy = File('docs/PRIVACY-POLICY.md').readAsStringSync();
+      final metadata = File('docs/APP-STORE-METADATA.md').readAsStringSync();
+
+      expect(policy.toLowerCase(), contains('anonymous'));
+      expect(
+        policy.toLowerCase(),
+        anyOf(contains('opt-out'), contains('turn analytics off')),
+      );
+      expect(policy, contains('No advertising ID'));
+      expect(metadata, contains('Firebase + Google Analytics'));
+    });
+  });
 }

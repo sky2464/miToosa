@@ -10,9 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mitoosa/app/root_app_router.dart';
+import 'package:mitoosa/core/analytics_consent_service.dart';
 import 'package:mitoosa/data/hive_persistence_provider.dart';
 import 'package:mitoosa/data/player_progress.dart';
 import 'package:mitoosa/data/player_progress_provider.dart';
+import 'package:mitoosa/data/privacy_preferences_repository.dart';
 import 'package:mitoosa/data/telemetry_event.dart';
 import 'package:mitoosa/data/telemetry_provider.dart';
 import 'package:mitoosa/data/telemetry_session_controller.dart';
@@ -20,6 +22,7 @@ import 'package:mitoosa/data/telemetry_repository.dart';
 import 'package:mitoosa/features/auth/auth_provider.dart';
 import 'package:mitoosa/features/auth/login_screen.dart';
 import 'package:mitoosa/features/main_app/main_app_shell.dart';
+import 'package:mitoosa/features/settings/analytics_privacy_controller.dart';
 import 'package:mitoosa/theme/design_system.dart';
 
 // ── Stubs ────────────────────────────────────────────────────────────────────
@@ -86,9 +89,13 @@ Future<void> _settleStartup(WidgetTester tester, {int frames = 5}) async {
 }
 
 Widget _wrap({required List overrides}) {
+  bindPrivacyPreferencesRepository(FakePrivacyPreferencesRepository());
   return ProviderScope(
     overrides: [
       telemetrySessionControllerProvider.overrideWithValue(_noOpTelemetry),
+      analyticsConsentServiceProvider.overrideWithValue(
+        AnalyticsConsentService(RecordingAnalyticsConsentAdapter()),
+      ),
       ...overrides,
     ],
     child: MaterialApp(
