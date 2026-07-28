@@ -1,7 +1,7 @@
 # Master-Plan
 
 > **Source of truth for active work.** Completed work lives in `Docs/archived/` — see Completed This Cycle for links.
-> **Last updated:** 2026-07-27 (/agtoosa-ship BL-32 repo ship PASS)
+> **Last updated:** 2026-07-28 (/agtoosa-ship — BL-33 repo ship PASS)
 
 ## Project Charter
 
@@ -20,7 +20,7 @@
 | Milestone | v1.5.1 (next) — iPhone App Store launch |
 | Active cycle | Launch Sprint — iPhone readiness + UX polish (2026-06-02 → 2026-06-25) |
 | Cycle capacity | 13 story points |
-| Current phase | 🔧 Awaiting Manual — BL-25 TestFlight QA; next spec: BL-33 |
+| Current phase | 🏁 Shipped — BL-33; Awaiting Manual — BL-25 TestFlight QA |
 
 ## Active Cycle
 
@@ -70,6 +70,7 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 | BL-29 | 4.3 / T-007 | 2026-07-26 | Native iPhone share once/repeat smoke — shipped repo-side; device proof pending |
 | BL-28 | 3.3 / T-006 | 2026-07-26 | Fresh-install iPhone smoke — onboarding to first playable track within 60s (shipped repo-side; device proof pending) |
 | BL-32 | 4.2 | 2026-07-27 | iPhone analytics opt-out/relaunch smoke — shipped repo-side; device proof pending |
+| BL-33 | 4.2 | 2026-07-28 | iPhone home-screen + cold-launch screenshot smoke — shipped repo-side; device proof pending |
 | BL-25 | 3.1–5.2 | 2026-07-14 | Physical iPhone TestFlight QA, DebugView, evidence capture, and launch-doc closure (12 owner-executed steps) |
 | BL-26 | 4.1 | 2026-07-11 | Publish Privacy Policy + Support URLs and paste finals into ASC/metadata |
 | BL-26 | 4.2 | 2026-07-11 | Capture iPhone screenshots per checklist and upload in App Store Connect |
@@ -93,7 +94,7 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | ID | Title | Type | Estimate | Epic | Priority | Status |
 |----|-------|------|----------|------|----------|--------|
-| BL-33 | Feature: Production brand assets | Feature | S | EP-01 | P0 | ⬜ Backlog |
+| BL-33 | Feature: Production brand assets | Feature | S | EP-01 | P0 | 🏁 Shipped |
 | BL-24 | Feature: Interactive how-to demos | Feature | M | EP-01 | P1 | ⬜ Backlog |
 | BL-34 | Chore: Production SFX and persisted preferences | Chore | S | EP-04 | P1 | ⬜ Backlog |
 | BL-35 | Feature: Reachable daily rewards, streaks, and achievements | Feature | M | EP-01 | P1 | ⬜ Backlog |
@@ -141,6 +142,7 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | ID | Title | Shipped | Archived Spec |
 |----|-------|---------|--------------|
+| BL-33 | Feature: Production brand assets | 2026-07-28 | [spec-BL-33.md](archived/spec-BL-33.md) |
 | BL-32 | Chore: Privacy, consent, and iOS release configuration | 2026-07-27 | [spec-BL-32.md](archived/spec-BL-32.md) |
 | BL-31 | Fix: Truthful launch surfaces | 2026-07-27 | [spec-BL-31.md](archived/spec-BL-31.md) |
 | BL-30 | Feature: Track catalog integrity | 2026-07-26 | [spec-BL-30.md](archived/spec-BL-30.md) |
@@ -174,6 +176,11 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 
 | Date | Event | By |
 |------|-------|----|
+| 2026-07-28 | /agtoosa-ship — Ship 🚀 repo ship PASS — BL-33 — Aetheric Pulse brand assets; 950 tests; task 4.2 manual deferred | AgToosa |
+| 2026-07-28 | /agtoosa-review — Review ✅ Approved — BL-33 — 0 critical, 1 warning (task 4.2 manual); `docs/archived/review-BL-33.md`; next `/agtoosa-next` → ship | AgToosa |
+| 2026-07-28 | /agtoosa-review — Review 🔍 Started — BL-33 — 4-persona review (served by `/agtoosa-next`) | AgToosa |
+| 2026-07-28 | /agtoosa-build — Build ✅ automated complete — BL-33 — Aetheric Pulse brand master, launcher icons, launch surface; 950 tests; task 4.2 manual deferred | AgToosa |
+| 2026-07-28 | /agtoosa-spec — Spec ✅ Approved — BL-33 — enrolled Active Cycle | User |
 | 2026-07-27 | /agtoosa-ship — Ship 🚀 repo ship PASS — BL-32 — privacy/consent + iOS manifest; 944 tests; task 4.2 manual deferred | AgToosa |
 | 2026-07-27 | /agtoosa-review — Review ✅ Approved — BL-32 — 0 critical; `docs/archived/review-BL-32.md` | AgToosa |
 | 2026-07-27 | /agtoosa-build — Build ✅ complete — BL-32 — consent service, Settings opt-out, PrivacyInfo.xcprivacy; 944 tests | AgToosa |

@@ -2,7 +2,7 @@
 
 > **Story ID:** BL-33
 > **Epic:** EP-01 Launch Readiness & Validation
-> **Status:** ⬜ Backlog
+> **Status:** 🏁 Shipped — 2026-07-28
 > **Estimate:** S
 > **Clarity:** ready
 > **Spec created:** 2026-07-14
@@ -114,17 +114,17 @@ Out of scope        : marketing assets, app copy, design-system redesign, runtim
 
 ### 3.1 Task Tree
 
-- [ ] **1. Asset contract tests:** Define source and generated-file requirements before replacement.
-  - [ ] 1.1 Add RED tests for required platform slots, dimensions, and placeholder rejection. — _Requirements: AC-002, AC-006_
-  - [ ] 1.2 Add a provenance-manifest validation test. — _Requirements: AC-004_
-- [ ] **2. Master and generation:** Create the approved identity and reproducible variants.
-  - [ ] 2.1 Add the approved constellation/spark master with provenance record. — _Requirements: AC-001, AC-004_
-  - [ ] 2.2 Add/pin generation workflow and produce iOS/Android icon variants. — _Requirements: AC-002, AC-006_
-- [ ] **3. Native launch surface:** Replace legacy placeholders.
-  - [ ] 3.1 Update the iOS launch surface to use branded non-placeholder assets. — _Requirements: AC-003, AC-005_
-  - [ ] 3.2 Remove obsolete one-pixel launch-image assets only after launch validation is green. — _Requirements: AC-003_
-- [ ] **4. Verification:** Inspect generated and installed presentation.
-  - [ ] 4.1 Run asset tests, flutter test, and iOS config build. — _Requirements: AC-002, AC-003, AC-004, AC-006_
+- [x] **1. Asset contract tests:** Define source and generated-file requirements before replacement.
+  - [x] 1.1 Add RED tests for required platform slots, dimensions, and placeholder rejection. — _Requirements: AC-002, AC-006_
+  - [x] 1.2 Add a provenance-manifest validation test. — _Requirements: AC-004_
+- [x] **2. Master and generation:** Create the approved identity and reproducible variants.
+  - [x] 2.1 Add the approved constellation/spark master with provenance record. — _Requirements: AC-001, AC-004_
+  - [x] 2.2 Add/pin generation workflow and produce iOS/Android icon variants. — _Requirements: AC-002, AC-006_
+- [x] **3. Native launch surface:** Replace legacy placeholders.
+  - [x] 3.1 Update the iOS launch surface to use branded non-placeholder assets. — _Requirements: AC-003, AC-005_
+  - [x] 3.2 Remove obsolete one-pixel launch-image assets only after launch validation is green. — _Requirements: AC-003_
+- [x] **4. Verification:** Inspect generated and installed presentation.
+  - [x] 4.1 Run asset tests, flutter test, and iOS config build. — _Requirements: AC-002, AC-003, AC-004, AC-006_
   - [ ] 4.2 Capture iPhone home-screen and cold-launch smoke screenshots. — _Requirements: AC-001, AC-003, AC-005_ [manual]
 
 ### 3.2 Wave Plan
@@ -155,11 +155,9 @@ Smoke set: T-001, T-002, T-003, T-005
 
 No new project skill is proposed. Asset generation is a bounded one-story workflow with a checked-in manifest and regression test.
 
-### 3.6 Spec Quality Analyzer
+---
 
-| Check | Result |
-|-------|--------|
-| Approved visual direction is explicit and no text wordmark is introduced. | Pass |
-| Asset provenance and repeatability are required. | Pass |
-| Every Must AC has testable platform evidence. | Pass |
-| In-app design changes remain out of scope. | Pass |
+## ✅ Spec Approved
+
+Approved 2026-07-28 — enrolled Active Cycle; next `/agtoosa-build`.
+

@@ -1,7 +1,7 @@
 # Test Plan — BL-33 Production Brand Assets
 
 > **Spec:** [spec-BL-33.md](archived/spec-BL-33.md)
-> **Status:** Draft pending approval
+> **Status:** Approved — build automated complete (task 4.2 manual deferred)
 > **Created:** 2026-07-14
 
 ## Scope & Strategy
