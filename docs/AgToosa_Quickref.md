@@ -3,17 +3,25 @@
 > One-page contract. Load this first; open the deep docs only when a command needs them.
 > Canonical detail lives in `Docs/AgToosa_Agent.md` — this file never contradicts it.
 
-## Day 1 — the 5-command lifecycle
+## Day 1 — two commands
 
 | Step | Command | Deep doc (read on use) |
 |------|---------|------------------------|
 | 0. Once per project | `/agtoosa-init` | `Docs/AgToosa_Init.md` |
-| 1. Spec & plan | `/agtoosa-spec <idea>` | `Docs/AgToosa_Spec.md` |
-| 2. TDD build | `/agtoosa-build` | `Docs/AgToosa_Build.md` |
-| 3. Review gate | `/agtoosa-review` | `Docs/AgToosa_Review.md` (`security` · `arch` · `debug` · `cross` · `cross-model` → `Docs/AgToosa_CrossModelReview.md`) |
-| 4. Ship & archive | `/agtoosa-ship` | `Docs/AgToosa_Ship.md` |
+| 1. Always | `/agtoosa-next` | `Docs/AgToosa_Next.md` — repeat after each phase |
 
-Utilities (on demand): `/agtoosa-status`, `/agtoosa-task`, `/agtoosa-qa`, `/agtoosa-goal`, `/agtoosa-update`, `/agtoosa-debug`, `/agtoosa-revert`, `/agtoosa-concise`, `/agtoosa-handoff`, `/agtoosa-import`, `/agtoosa-evidence`, `/agtoosa-help`, `/agtoosa-catalog`, `/agtoosa-tracker` (`Docs/AgToosa_TrackerSync.md`) — each other utility maps to `Docs/AgToosa_<Name>.md`.
+`/agtoosa-next` drives spec → build → review → ship (and tributaries: fix, test, docs) via SYNC. Say **next** again to advance.
+
+## Advanced lifecycle (parallel / personas)
+
+| Command | Deep doc |
+|---------|----------|
+| `/agtoosa-spec` | `Docs/AgToosa_Spec.md` |
+| `/agtoosa-build` | `Docs/AgToosa_Build.md` |
+| `/agtoosa-review` | `Docs/AgToosa_Review.md` |
+| `/agtoosa-ship` | `Docs/AgToosa_Ship.md` |
+
+Utilities (on demand): `/agtoosa-status`, `/agtoosa-task`, `/agtoosa-qa`, `/agtoosa-goal`, `/agtoosa-update`, `/agtoosa-debug`, `/agtoosa-revert`, `/agtoosa-concise`, `/agtoosa-handoff`, `/agtoosa-import`, `/agtoosa-evidence`, `/agtoosa-help`, `/agtoosa-catalog`, `/agtoosa-tracker` (`Docs/AgToosa_TrackerSync.md`) — each maps to `Docs/AgToosa_<Name>.md`.
 
 ## Non-negotiables
 
@@ -28,7 +36,7 @@ Utilities (on demand): `/agtoosa-status`, `/agtoosa-task`, `/agtoosa-qa`, `/agto
 5. **Stop at phase boundaries.** Finish the phase, report, wait for the user
    unless they explicitly asked to chain phases.
 6. **Freeform Project Intake.** Asks without `/agtoosa-*` use dual-mode intake
-   per `Docs/AgToosa_Agent.md` → Project Intake Protocol (Standing Corrections in `Docs/Context/workflow.md`; Natural Language Intent Map for "plan and code" / "build it").
+   per `Docs/AgToosa_Agent.md` → Project Intake Protocol (Standing Corrections in `Docs/Context/workflow.md`; **AgToosa Lifecycle Compass** anchors freeform asks to Spec → Build → Review → Ship).
 7. **Scope discipline.** Stay inside the spec's Build Scope; new ideas go to
    the Master-Plan Backlog, not into the current diff.
 7. **Work Package DAG (when present).** Specs may declare `### 3.4 Work Package DAG` rows; Build checks ownership before fan-out; Handoff/Import report gaps. Agent-instructed derivation; generator-enforced schema copies; bats/CI when wired.

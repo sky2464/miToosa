@@ -135,7 +135,7 @@ AgToosa caches `registry.json` locally so list/search/info work when the network
 
 **HTTPS trust model:** The registry index is downloaded over HTTPS from GitHub only. There is no fail-closed signed manifest for `registry.json` in v1 — treat the index as trusted to the same degree as the HTTPS origin. If you need a fresh index, delete the cache file (or wait for TTL expiry) and run `--registry list` again when online.
 
-**Optional minisign soft-warn (DEV-054):** When a signature sidecar or `signature.url` is present, AgToosa attempts `minisign -Vm` using `AGTOOSA_MINISIGN_PUBKEY` or `docs/security/agtoosa.minisign.pub`. On failure (invalid sig, missing tool, missing pubkey) it **warns and continues** if SHA-256 and the verified-flag gate still pass. Unsigned packs are unchanged. Fail-closed require-signatures remains **roadmap**. Private-key generation remains **manual** (`DEV-054 M-1`).
+**Optional minisign soft-warn (DEV-054):** When a signature sidecar or `signature.url` is present, AgToosa attempts `minisign -Vm` using `AGTOOSA_MINISIGN_PUBKEY` or `Docs/security/agtoosa.minisign.pub`. On failure (invalid sig, missing tool, missing pubkey) it **warns and continues** if SHA-256 and the verified-flag gate still pass. Unsigned packs are unchanged. Fail-closed require-signatures remains **roadmap**. Private-key generation remains **manual** (`DEV-054 M-1`).
 
 **High-assurance installs:** Pack tarballs are always SHA-256 checked against the hash in the index during install. For stricter environments, pre-seed `AGTOOSA_REGISTRY_CACHE_DIR` with a vetted `registry.json` and independently verify each pack's SHA-256 (e.g. `sha256sum`) against a trusted source before `bash agtoosa.sh --registry install <name>`. Optionally attach `.minisig` sidecars and set `AGTOOSA_MINISIGN_PUBKEY`.
 
@@ -254,6 +254,18 @@ Do not report a pack as published or available until that independent confirmati
 ### Install safety reminder
 
 **Labeling does not bypass** preview, consent, integrity (SHA-256), tar-slip pre-scan, file allowlist, or sensitive-path denylist. Verified and community packs both run the same generator-enforced install gates; `--allow-unverified` only opts into installing `verified: false` index rows after those gates still apply.
+
+### Pack behavioral scenario binding (DEV-121)
+
+Official and verified packs may document **required behavioral scenario ids** from `Docs/AgToosa_Behavioral_Conformance.md` (for example `lifecycle-compass-proof`). This extends — but does not replace — DEV-096 SHA/manifest validation and DEV-101 trust labels.
+
+| Layer | What it proves |
+|-------|----------------|
+| DEV-096 pack validation CI | Manifest + tarball integrity |
+| DEV-101 trust label | Maintainer review state |
+| BCL scenario id + `scenario-run.json` | Fixed proof task artifacts for a platform (maintainer-run; not default CI) |
+
+Pack README or metadata may list `behavioral_scenarios: ["lifecycle-compass-proof"]`. Passing static corpus bats does **not** claim live assistant execution or hosted certification.
 
 ---
 

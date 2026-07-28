@@ -62,65 +62,6 @@ else
 fi
 MP="$DOCS/Master-Plan.md"
 
-# Project ID: uppercase prefix + hyphen + digits (first table column only).
-# Used by Gates 2, 3, 4, 7 and duplicate-ID telemetry (BL-27).
-
-_agtoosa_extract_section_table_ids() {
-  local section_header="$1"
-  local mp_file="${2:-$MP}"
-  awk -v hdr="$section_header" '
-    function trim(s) { gsub(/^[ \t]+|[ \t]+$/, "", s); return s }
-    $0 == hdr { in_sec = 1; next }
-    in_sec && /^## / { exit }
-    in_sec && /^\|/ {
-      line = $0
-      sub(/^\|[ \t]*/, "", line)
-      n = split(line, cells, /\|/)
-      if (n >= 1) {
-        id = trim(cells[1])
-        if (id ~ /^[A-Z][A-Z0-9]*-[0-9]+$/) print id
-      }
-    }
-  ' "$mp_file" | sort -u
-}
-
-_agtoosa_extract_active_cycle_story_ids() {
-  _agtoosa_extract_section_table_ids "## Active Cycle" "$MP"
-}
-
-_agtoosa_extract_epic_ids() {
-  _agtoosa_extract_section_table_ids "## Epics" "$MP"
-}
-
-_agtoosa_extract_active_cycle_status_ids() {
-  local status_pattern="$1"
-  awk -v statuses="$status_pattern" '
-    function trim(s) { gsub(/^[ \t]+|[ \t]+$/, "", s); return s }
-    /^## Active Cycle/ { in_sec = 1; next }
-    in_sec && /^## / { exit }
-    in_sec && $0 ~ statuses && /^\|/ {
-      line = $0
-      sub(/^\|[ \t]*/, "", line)
-      split(line, cells, /\|/)
-      id = trim(cells[1])
-      if (id ~ /^[A-Z][A-Z0-9]*-[0-9]+$/) print id
-    }
-  ' "$MP" | sort -u
-}
-
-_agtoosa_master_plan_table_ids() {
-  awk '
-    function trim(s) { gsub(/^[ \t]+|[ \t]+$/, "", s); return s }
-    /^\|/ {
-      line = $0
-      sub(/^\|[ \t]*/, "", line)
-      split(line, cells, /\|/)
-      id = trim(cells[1])
-      if (id ~ /^[A-Z][A-Z0-9]*-[0-9]+$/) print id
-    }
-  ' "$MP"
-}
-
 PASS_COUNT=0
 WARN_COUNT=0
 FAIL_COUNT=0
@@ -312,8 +253,8 @@ fi
 
 # ── Gate 2: Master-Plan integrity ──────────────────────────────
 gate "Gate 2 — Master-Plan integrity"
-epic_ids=$(_agtoosa_extract_epic_ids)
-if [[ -n "$epic_ids" ]]; then
+if grep -qE '^\| DEV-[0-9]+ .*\| Epic' "$MP" || grep -qE '^\| DEV-[0-9]{3} \| Epic' "$MP" \
+   || grep -A5 '^## Epics' "$MP" | grep -qE '\| DEV-[0-9]+'; then
   pass "Epics section has at least one real epic row"
 else
   fail "G2-epics" "no real Epic rows in Master-Plan ## Epics (run /agtoosa-init)" \
@@ -321,7 +262,7 @@ else
     "Add at least one epic row under ## Epics (run /agtoosa-init)." enforced
 fi
 
-dup_ids=$(_agtoosa_master_plan_table_ids | sort | uniq -c | awk '$1 > 50 {print $2}')
+dup_ids=$(grep -oE 'DEV-[0-9]{3}' "$MP" | sort | uniq -c | awk '$1 > 50 {print $2}')
 if [[ -n "$dup_ids" ]]; then
   warn "G2-dup-ids" "story IDs appear unusually often (possible Update Log bloat): $(echo "$dup_ids" | tr '\n' ' ')" \
     "Update Log noise can hide real status changes." \
@@ -339,14 +280,26 @@ fi
 
 # ── Gate 3: active stories have approved specs ────────────────
 gate "Gate 3 — Spec approval and naming"
-active_ids=$(_agtoosa_extract_active_cycle_story_ids)
+active_ids=$(awk '/^## Active Cycle/,/^## [^A]/' "$MP" | grep -oE '^\| DEV-[0-9]{3}' | grep -oE 'DEV-[0-9]{3}' | sort -u)
 if [[ -z "$active_ids" ]]; then
-  if awk '/^## Active Cycle/,/^## [^A]/' "$MP" | grep -qiE 'cycle parked|_\(none'; then
-    pass "Active Cycle idle (parked — spec checks skipped)"
+  cycle_state=$(awk -F'|' '
+    /^## Project Charter[[:space:]]*$/ { in_charter=1; next }
+    in_charter && /^## / { exit }
+    in_charter && /^\|/ {
+      key=$2
+      value=$3
+      gsub(/^[[:space:]]+|[[:space:]]+$/, "", key)
+      gsub(/^[[:space:]]+|[[:space:]]+$/, "", value)
+      if (tolower(key) == "cycle state") { print value; exit }
+    }
+  ' "$MP")
+  cycle_state_lc=$(printf '%s' "$cycle_state" | tr '[:upper:]' '[:lower:]')
+  if [[ "$cycle_state_lc" == "idle" || "$cycle_state_lc" == "idle "* ]]; then
+    pass "Active Cycle idle (explicit Cycle state: Idle — spec checks skipped)"
   else
     warn "G3-idle" "no stories found in ## Active Cycle (idle is fine; verify skipped spec checks)" \
       "No active story means lifecycle gates for specs/tests are skipped." \
-      "Enroll a story via /agtoosa-spec or park the Active Cycle explicitly." guided
+      "Enroll a story via /agtoosa-spec or set Project Charter Cycle state to Idle with a reason." guided
   fi
 else
   for id in $active_ids; do
@@ -450,7 +403,7 @@ fi
 
 # ── Gate 4: review artifacts for Done stories ─────────────────
 gate "Gate 4 — Review artifacts"
-done_ids=$(_agtoosa_extract_active_cycle_status_ids '✅ Done|🏁 Shipped')
+done_ids=$(awk '/^## Active Cycle/,/^## [^A]/' "$MP" | grep -E '✅ Done|🏁 Shipped' | grep -oE 'DEV-[0-9]{3}' | sort -u)
 for id in $done_ids; do
   if ls "$DOCS/archived/review-${id}"*.md >/dev/null 2>&1 || ls "$DOCS/archived/review-"*"${id}"*.md >/dev/null 2>&1; then
     pass "$id: review artifact archived"
@@ -468,6 +421,15 @@ if [[ -f "$ROOT/agtoosa.sh" && -f "$ROOT/agtoosa.ps1" ]]; then
   pv=$(grep -m1 'AGTOOSA_VERSION' "$ROOT/agtoosa.ps1" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1 || true)
   if [[ -n "$bv" && "$bv" == "$pv" ]]; then
     pass "generator version parity (bash=$bv, ps1=$pv)"
+    tech_stack=""
+    for ts_candidate in "$ROOT/docs/Context/tech-stack.md" "$ROOT/Docs/Context/tech-stack.md"; do
+      [[ -f "$ts_candidate" ]] && tech_stack="$ts_candidate" && break
+    done
+    if [[ -n "$tech_stack" ]] && grep -q '^deploy_command:' "$tech_stack"; then
+      warn "G5-release-tag" "deploy_command is documented — verify the GitHub tag is published before claiming Release shipped" \
+        "Docs-only version bumps without git tag push leave adopters on stale releases." \
+        "Run: bash scripts/check-launch-readiness.sh --mode private (release-tag gate) and deploy_verify from tech-stack." guided
+    fi
   else
     fail "G5-version-mismatch" "generator version mismatch (bash=$bv, ps1=$pv)" \
       "Mismatched generator versions break install/update consistency." \
@@ -613,8 +575,8 @@ PY
       pass "evidence profile active=${epv_active} (deterministic presence/exit-code checks only)"
 
       # Active / Done-boundary story ids (reuse Gate 3/4 scans).
-      epv_active_ids=$(_agtoosa_extract_active_cycle_story_ids)
-      epv_done_ids=$(_agtoosa_extract_active_cycle_status_ids '✅ Done|🏁 Shipped|🔍 In Review')
+      epv_active_ids=$(awk '/^## Active Cycle/,/^## [^A]/' "$MP" | grep -oE '^\| DEV-[0-9]{3}' | grep -oE 'DEV-[0-9]{3}' | sort -u)
+      epv_done_ids=$(awk '/^## Active Cycle/,/^## [^A]/' "$MP" | grep -E '✅ Done|🏁 Shipped|🔍 In Review' | grep -oE 'DEV-[0-9]{3}' | sort -u)
 
       IFS=',' read -r -a epv_req <<< "$epv_tokens"
       for tok in "${epv_req[@]}"; do
