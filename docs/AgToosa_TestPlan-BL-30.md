@@ -1,7 +1,7 @@
 # Test Plan — BL-30 Track Catalog Integrity
 
 > **Spec:** [spec-BL-30.md](archived/spec-BL-30.md)
-> **Status:** Draft pending approval
+> **Status:** Approved — enrolled Active Cycle (2026-07-26)
 > **Created:** 2026-07-14
 
 ## Scope & Strategy
@@ -65,4 +65,14 @@ Content validation is the primary gate: all shipped tracks, category filters, ar
 
 ## RED / GREEN Evidence Log
 
-Populated during /agtoosa-build.
+| Test ID | Phase | Result | Evidence |
+|---------|-------|--------|----------|
+| T-001 | GREEN | PASS | `catalog_validation_test.dart` — 23 IDs, categories |
+| T-002 | GREEN | PASS | `catalog_validation_test.dart` + `tracks_screen_test.dart` |
+| T-003 | GREEN | PASS | `rootBundle.load` per iconAsset |
+| T-004 | GREEN | PASS | `validateTrackRecord` rejects missing category |
+| T-005 | GREEN | PASS | No `levels.json` in lib or pubspec |
+| T-006 | GREEN | PASS | `docs/brand/track-asset-manifest.md` |
+| T-007 | DEFERRED | manual | iPhone viewport card review (task 4.3) |
+
+**Verification (2026-07-26):** `flutter test` — 920/920 PASS. `dart analyze lib test` — 0 errors.

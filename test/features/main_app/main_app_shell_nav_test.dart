@@ -1,4 +1,4 @@
-/// Widget tests for [MainAppShell] navigation — all 5 tabs present,
+/// Widget tests for [MainAppShell] navigation — all 4 release tabs present,
 /// tab switching works, and no crash on init.
 ///
 /// Test IDs: T-006, T-007 (AC-005, AC-008)
@@ -51,7 +51,7 @@ Widget _wrap(PlayerProgress progress) => ProviderScope(
 
 void main() {
   group('MainAppShell — navigation bar (AC-005, T-006)', () {
-    testWidgets('all 5 tab labels are visible', (tester) async {
+    testWidgets('all 4 release tab labels are visible', (tester) async {
       tester.view.physicalSize = const Size(600, 932);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() {
@@ -64,8 +64,8 @@ void main() {
       expect(find.text('Tracks'), findsOneWidget);
       expect(find.text('Path'), findsOneWidget);
       expect(find.text('Progress'), findsOneWidget);
-      expect(find.text('Leaders'), findsOneWidget);
       expect(find.text('Settings'), findsOneWidget);
+      expect(find.text('Leaders'), findsNothing);
     });
 
     testWidgets('first tab (Tracks) is active on launch', (tester) async {

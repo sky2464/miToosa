@@ -4,13 +4,11 @@ import '../core/engine/progression_engine.dart';
 import '../data/player_progress.dart';
 import '../theme/design_system.dart';
 import '../theme/design_tokens.dart';
-import 'ghost_button.dart';
 
 /// Profile menu — opened from the app header avatar / brand tap.
 Future<void> showProfileMenuSheet(
   BuildContext context, {
   required PlayerProgress progress,
-  VoidCallback? onEditProfile,
 }) {
   final level = (progress.totalXP ~/ 1000) + 1;
   final tier = ProgressionEngine.computeMasteryTier(progress.adaptiveHistory);
@@ -80,15 +78,6 @@ Future<void> showProfileMenuSheet(
                 Text(
                   'Your progress is stored only on this device.',
                   style: theme.bodyMd(color: theme.fgMuted),
-                ),
-                const SizedBox(height: 16),
-                GhostButton(
-                  fullWidth: true,
-                  onPressed: () {
-                    Navigator.of(ctx).pop();
-                    onEditProfile?.call();
-                  },
-                  child: const Text('Edit profile'),
                 ),
               ],
             ),

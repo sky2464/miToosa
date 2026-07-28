@@ -11,6 +11,7 @@ void main() {
         'subtitle': 'Match identical patterns',
         'rule': 'matchIdentical',
         'icon': '🧩',
+        'iconAsset': 'assets/images/icons/track_pattern_match.png',
         'levelCount': 15,
       };
       expect(TrackDefinition.fromJson(json).targetLevelCount, 15);
@@ -23,6 +24,7 @@ void main() {
         'subtitle': 'Old entry',
         'rule': 'countShapes',
         'icon': '🔢',
+        'iconAsset': 'assets/images/icons/track_shape_counter.png',
       };
       expect(TrackDefinition.fromJson(json).targetLevelCount, 10);
     });
@@ -34,6 +36,7 @@ void main() {
         'subtitle': 'Fill in the blanks',
         'rule': 'findMissing',
         'icon': '🧠',
+        'iconAsset': 'assets/images/icons/track_memory.png',
         'levelCount': 10,
       };
       final count1 = TrackDefinition.fromJson(json).targetLevelCount;
@@ -60,6 +63,58 @@ void main() {
         targetLevelCount: 12,
       );
       expect(track.targetLevelCount, 12);
+    });
+
+    test('fromJson reads category from JSON', () {
+      final json = {
+        'id': 'track_logic',
+        'name': 'Logic Gates',
+        'subtitle': 'Boolean puzzles',
+        'rule': 'logicGate',
+        'icon': '🔀',
+        'category': 'logic',
+        'iconAsset': 'assets/images/icons/track_logic_gates.png',
+      };
+      expect(TrackDefinition.fromJson(json).category, 'logic');
+    });
+
+    test('fromJson defaults category to Default when absent', () {
+      final json = {
+        'id': 'track_legacy',
+        'name': 'Legacy',
+        'subtitle': 'No category field',
+        'rule': 'countShapes',
+        'icon': '🔢',
+      };
+      expect(TrackDefinition.fromJson(json).category, 'Default');
+    });
+
+    test('fromJson reads iconAsset from JSON', () {
+      final json = {
+        'id': 'track_memory',
+        'name': 'Memory Match',
+        'subtitle': 'Recall patterns',
+        'rule': 'matchIdentical',
+        'icon': '🧠',
+        'category': 'memory',
+        'iconAsset': 'assets/images/icons/track_memory.png',
+      };
+      expect(
+        TrackDefinition.fromJson(json).iconAsset,
+        'assets/images/icons/track_memory.png',
+      );
+    });
+
+    test('fromJson defaults iconAsset to empty when absent', () {
+      final json = {
+        'id': 'track_legacy',
+        'name': 'Legacy',
+        'subtitle': 'No iconAsset field',
+        'rule': 'oddOneOut',
+        'icon': '🧩',
+        'category': 'memory',
+      };
+      expect(TrackDefinition.fromJson(json).iconAsset, '');
     });
   });
 }

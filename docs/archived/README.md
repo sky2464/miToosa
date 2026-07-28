@@ -40,7 +40,7 @@ For current plans and specifications, see:
 - `spec-engagement-loop-v1.md` — Engagement loop feature spec
 - `spec-itoosa-feature-migration-v1.md` — iToosa → miToosa feature gap analysis
 - `spec-launch-readiness-v1.md` — Launch readiness closeout spec
-- `spec-local-network-qr-play-v1.md` — Local network QR play (deferred)
+- `spec-LP-01.md` — Local network QR play (deferred; was `spec-local-network-qr-play-v1.md`)
 - `spec-local-telemetry-collection-v1.md` — Local telemetry collection spec
 
 ### Plans

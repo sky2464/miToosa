@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/services.dart';
+import 'content/catalog_validator.dart';
 import 'models/gameplay_level.dart';
 import 'models/puzzle.dart';
 import 'engine/puzzle_generator.dart';
+
+export 'content/catalog_validator.dart';
 
 class TrackDefinition {
   final String id;
@@ -11,6 +14,7 @@ class TrackDefinition {
   final String subtitle;
   final PuzzleRule rule;
   final String icon;
+  final String iconAsset;
   final int targetLevelCount;
   final String category;
 
@@ -20,6 +24,7 @@ class TrackDefinition {
     required this.subtitle,
     required this.rule,
     this.icon = '🧩',
+    this.iconAsset = '',
     this.targetLevelCount = 10,
     this.category = 'Default',
   });
@@ -32,6 +37,7 @@ class TrackDefinition {
       rule: PuzzleRule.values.firstWhere((e) => e.name == json['rule']),
       category: json['category'] ?? 'Default',
       icon: json['icon'] ?? '🧩',
+      iconAsset: json['iconAsset'] as String? ?? '',
       targetLevelCount: (json['levelCount'] as int?) ?? 10,
     );
   }
@@ -53,7 +59,12 @@ class ContentProvider {
       'assets/content/worlds.json',
     );
     final List<dynamic> jsonList = jsonDecode(jsonString);
-    tracks = jsonList.map((e) => TrackDefinition.fromJson(e)).toList();
+    tracks = jsonList.map((e) {
+      final map = e as Map<String, dynamic>;
+      CatalogValidator.validateTrackRecord(map);
+      return TrackDefinition.fromJson(map);
+    }).toList();
+    CatalogValidator.validateTracks(tracks);
   }
 
   /// Procedural level builder with progressive difficulty.
@@ -111,3 +122,4 @@ class ContentProvider {
     );
   }
 }
+

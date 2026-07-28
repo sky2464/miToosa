@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../navigation/world_map_screen.dart';
 import '../navigation/world_map_path_screen.dart';
 import 'progress_screen.dart';
-import 'leaderboard_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../data/player_progress.dart';
 import '../../data/player_progress_provider.dart';
@@ -36,7 +35,6 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
     WorldMapScreen(),
     WorldMapPathScreen(),
     ProgressScreen(),
-    LeaderboardScreen(),
     SettingsScreen(),
   ];
 
@@ -89,10 +87,7 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
             ),
           Column(
             children: [
-              _SafeAppHeader(
-                progress: progress,
-                onGoSettings: () => setState(() => _selectedIndex = 4),
-              ),
+              _SafeAppHeader(progress: progress),
               Expanded(
                 child: IndexedStack(index: _selectedIndex, children: _pages),
               ),
@@ -112,12 +107,8 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
 
 class _SafeAppHeader extends ConsumerWidget {
   final PlayerProgress? progress;
-  final VoidCallback onGoSettings;
 
-  const _SafeAppHeader({
-    required this.progress,
-    required this.onGoSettings,
-  });
+  const _SafeAppHeader({required this.progress});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -134,7 +125,6 @@ class _SafeAppHeader extends ConsumerWidget {
             : () => showProfileMenuSheet(
                 context,
                 progress: progress!,
-                onEditProfile: onGoSettings,
               ),
         onFreeGamesTap: progress == null
             ? null
@@ -167,11 +157,6 @@ class _FloatingGlassNav extends StatelessWidget {
       icon: Icons.insights_outlined,
       activeIcon: Icons.insights,
       label: 'Progress',
-    ),
-    (
-      icon: Icons.leaderboard_outlined,
-      activeIcon: Icons.leaderboard,
-      label: 'Leaders',
     ),
     (
       icon: Icons.settings_outlined,

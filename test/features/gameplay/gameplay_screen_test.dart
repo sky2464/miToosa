@@ -30,6 +30,7 @@ TrackDefinition _mathTrack() => TrackDefinition(
   name: 'Math Test',
   subtitle: 'Test track',
   rule: PuzzleRule.mathAddSub,
+  iconAsset: 'assets/images/icons/track_number_crunch.png',
   targetLevelCount: 5,
   category: 'Test',
 );

@@ -6,6 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 import 'persistence_provider.dart';
 import 'player_progress.dart';
+import 'leaderboard_prefs.dart';
 
 class HivePersistenceProvider implements IPersistenceProvider {
   static const String _boxName = 'player_progress_box';
@@ -222,6 +223,18 @@ class HivePersistenceProvider implements IPersistenceProvider {
     final granted = progress.grantShareBonus(now);
     if (granted) await saveProgress(progress);
     return granted;
+  }
+
+  @override
+  Future<void> resetGameProgress(String playerId) async {
+    final fresh = PlayerProgress.fresh(playerId: playerId);
+    await saveProgress(fresh);
+
+    if (Hive.isBoxOpen(kLeaderboardPrefsBoxName)) {
+      await LeaderboardPrefs(
+        Hive.box<dynamic>(kLeaderboardPrefsBoxName),
+      ).clear();
+    }
   }
 
   Future<void> _mutate(

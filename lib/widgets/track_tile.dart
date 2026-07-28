@@ -52,14 +52,9 @@ class TrackTile extends StatelessWidget {
               ),
               child: Center(
                 child: Image.asset(
-                  AP.trackIcon(track.id),
+                  track.iconAsset,
                   width: 28,
                   height: 28,
-                  errorBuilder: (_, err, stack) => Icon(
-                    Icons.grid_view_rounded,
-                    size: 24,
-                    color: theme.brandBlue,
-                  ),
                 ),
               ),
             ),

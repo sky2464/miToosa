@@ -7,12 +7,15 @@ import '../../core/haptics_service.dart';
 import '../../core/music_service.dart';
 import '../../data/player_progress.dart';
 import '../../data/player_progress_provider.dart';
-import '../../features/progression/free_games_controller.dart';
 import '../../theme/design_system.dart';
 import '../../widgets/glass_card.dart';
 import '../../widgets/kinetic_background.dart';
 import '../../widgets/settings_row.dart';
 import '../../widgets/toggle_switch.dart';
+import 'reset_progress_controller.dart';
+
+/// Shipped app version label — keep in sync with `pubspec.yaml` `version:`.
+const String kShippedAppVersionLabel = '1.5.1';
 
 // ─── Settings screen — Aetheric Pulse ────────────────────────────────────────
 
@@ -56,12 +59,36 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
     _soundEffectsEnabled = AudioService().enabled;
   }
 
+  Future<void> _onResetProgressTap() async {
+    final result = await ref
+        .read(resetProgressControllerProvider)
+        .confirmAndReset(context);
+    if (!mounted) return;
+
+    final messenger = ScaffoldMessenger.of(context);
+    switch (result) {
+      case ResetProgressResult.success:
+        messenger.showSnackBar(
+          const SnackBar(content: Text('Progress reset. Starting fresh!')),
+        );
+      case ResetProgressResult.failed:
+        messenger.showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Could not reset progress. Please try again.',
+            ),
+          ),
+        );
+      case ResetProgressResult.cancelled:
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final tier = ProgressionEngine.computeMasteryTier(
       widget.progress.adaptiveHistory,
     );
-    final level = (widget.progress.totalXP ~/ 1000) + 1;
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(
@@ -74,66 +101,6 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
         Text('Settings', style: AethericPulseDark.headlineLg()),
         const SizedBox(height: AethericPulseDark.spaceMd),
 
-        // Profile card
-        GlassCard(
-          borderRadius: AethericPulseDark.radiusCard,
-          padding: const EdgeInsets.all(18),
-          child: Row(
-            children: [
-              Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AethericPulseDark.brandBlue,
-                    width: 1,
-                  ),
-                  boxShadow: AethericPulseDark.blueGlow,
-                  image: const DecorationImage(
-                    image: AssetImage('assets/images/avatars/avatar_4.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Semantics(
-                      label:
-                          'Anonymous pilot ID PILOT_042. Your progress is stored only on this device.',
-                      child: ExcludeSemantics(
-                        child: Text(
-                          'PILOT_042',
-                          style: AethericPulseDark.bodyMd(
-                            color: AethericPulseDark.onSurface,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      'Level $level · ${widget.progress.totalGamesAvailable} free games',
-                      style: AethericPulseDark.label(
-                        color: AethericPulseDark.onSurfaceMuted,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(
-                Icons.chevron_right,
-                size: 22,
-                color: AethericPulseDark.onSurfaceMuted,
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-
-        // Mastery badge
         const _SectionLabel('Your Mastery'),
         const SizedBox(height: 8),
         _MasteryCard(
@@ -142,70 +109,6 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
         ),
         const SizedBox(height: 16),
 
-        // Account
-        const _SectionLabel('Account'),
-        const SizedBox(height: 8),
-        GlassCard(
-          borderRadius: AethericPulseDark.radiusCard,
-          padding: const EdgeInsets.symmetric(
-            vertical: 2,
-            horizontal: AethericPulseDark.spaceMd,
-          ),
-          child: Column(
-            children: [
-              // BL-08 Economy Messaging Clarity: subtitles spell out the
-              // "what you get / when" so players understand value without
-              // tapping into the screen.
-              SettingsRow(
-                icon: Icon(Icons.share_outlined),
-                title: 'Share miToosa',
-                subtitle: 'Earn +40 bonus free games once per day',
-                onTap: () async {
-                  final result = await ref
-                      .read(freeGamesControllerProvider)
-                      .requestShareBonus(DateTime.now());
-                  if (!context.mounted) return;
-                  final messenger = ScaffoldMessenger.of(context);
-                  switch (result) {
-                    case ShareGrantResult.granted:
-                      messenger.showSnackBar(
-                        const SnackBar(
-                          content: Text('+40 free games added for today!'),
-                        ),
-                      );
-                    case ShareGrantResult.alreadyClaimed:
-                      messenger.showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            'Daily share bonus already claimed today.',
-                          ),
-                        ),
-                      );
-                    case ShareGrantResult.dismissed:
-                    case ShareGrantResult.unavailable:
-                      break;
-                  }
-                },
-                trailing: Icon(
-                  Icons.chevron_right,
-                  size: 22,
-                  color: AethericPulseDark.onSurfaceMuted,
-                ),
-              ),
-              Divider(height: 1, color: AethericPulseDark.glassBorder),
-              SettingsRow(
-                icon: Icon(Icons.workspace_premium_outlined),
-                title: 'Go VIP',
-                subtitle:
-                    'Ad-free play, extra daily free games, streak shield',
-                trailing: _PurpleChip(label: 'Upgrade'),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-
-        // System preferences
         const _SectionLabel('System'),
         const SizedBox(height: 8),
         GlassCard(
@@ -239,13 +142,6 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                     setState(() {});
                   },
                 ),
-              ),
-              const Divider(height: 1, color: AethericPulseDark.glassBorder),
-              SettingsRow(
-                icon: const Icon(Icons.notifications_outlined),
-                title: 'Daily reminder',
-                subtitle: 'Nudges if your streak is at risk',
-                trailing: ToggleSwitch(value: true, onChanged: (_) {}),
               ),
               const Divider(height: 1, color: AethericPulseDark.glassBorder),
               SettingsRow(
@@ -299,18 +195,18 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
         ),
         const SizedBox(height: 16),
 
-        // Danger zone
-        const GlassCard(
+        GlassCard(
           borderRadius: AethericPulseDark.radiusCard,
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             vertical: 2,
             horizontal: AethericPulseDark.spaceMd,
           ),
           child: SettingsRow(
-            icon: Icon(Icons.restart_alt_outlined),
+            icon: const Icon(Icons.restart_alt_outlined),
             title: 'Reset progress',
             subtitle: 'Clear all progress and stats',
-            trailing: Icon(
+            onTap: _onResetProgressTap,
+            trailing: const Icon(
               Icons.chevron_right,
               size: 22,
               color: AethericPulseDark.onSurfaceMuted,
@@ -321,7 +217,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
 
         Center(
           child: Text(
-            'MITOOSA · V1.4.0',
+            'MITOOSA · V$kShippedAppVersionLabel',
             style: AethericPulseDark.label(
               color: AethericPulseDark.onSurfaceMuted,
             ),
@@ -345,32 +241,6 @@ class _SectionLabel extends StatelessWidget {
       child: Text(
         label.toUpperCase(),
         style: AethericPulseDark.label(color: AethericPulseDark.onSurfaceMuted),
-      ),
-    );
-  }
-}
-
-// ─── Purple chip ──────────────────────────────────────────────────────────────
-
-class _PurpleChip extends StatelessWidget {
-  final String label;
-  const _PurpleChip({required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: AethericPulseDark.brandPurple.withValues(alpha: 0.18),
-        border: Border.all(
-          color: AethericPulseDark.brandPurple.withValues(alpha: 0.40),
-          width: 1,
-        ),
-        borderRadius: BorderRadius.circular(AethericPulseDark.radiusPill),
-      ),
-      child: Text(
-        label.toUpperCase(),
-        style: AethericPulseDark.label(color: AethericPulseDark.onSurface),
       ),
     );
   }

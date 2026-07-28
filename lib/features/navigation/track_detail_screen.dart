@@ -115,7 +115,7 @@ class _TrackDetailScreenState extends ConsumerState<TrackDetailScreen>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(track.icon, style: const TextStyle(fontSize: 64)),
+                      Image.asset(track.iconAsset, width: 64, height: 64),
                       const SizedBox(height: MiToosaTheme.spacingMd),
                       Text(
                         track.name,

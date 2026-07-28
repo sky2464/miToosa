@@ -12,6 +12,7 @@ TrackDefinition _track() => TrackDefinition(
   subtitle: 'Pick the shape that completes the rule.',
   rule: PuzzleRule.matchIdentical,
   icon: '🧠',
+  iconAsset: 'assets/images/icons/track_memory.png',
 );
 
 Widget _wrap(Widget child) => MaterialApp(
@@ -32,7 +33,7 @@ void main() {
       await tester.pumpWidget(
         _wrap(HowToPlayModal(track: _track(), onStart: () {})),
       );
-      expect(find.text('🧠'), findsOneWidget);
+      expect(find.byType(Image), findsOneWidget);
     });
 
     testWidgets('renders subtitle/rule description', (tester) async {

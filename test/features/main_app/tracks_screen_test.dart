@@ -7,6 +7,8 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mitoosa/core/content_provider.dart';
+import 'package:mitoosa/core/models/puzzle.dart';
 import 'package:mitoosa/data/player_progress.dart';
 import 'package:mitoosa/data/player_progress_provider.dart';
 import 'package:mitoosa/features/navigation/world_map_screen.dart';
@@ -28,6 +30,41 @@ Widget _wrap(PlayerProgress progress) => ProviderScope(
     home: const Scaffold(body: WorldMapScreen()),
   ),
 );
+
+List<TrackDefinition> _categoryFilterTracks() => [
+  TrackDefinition(
+    id: 'track_mem_alpha',
+    name: 'Memory Alpha',
+    subtitle: 'Recall patterns',
+    rule: PuzzleRule.matchIdentical,
+    category: 'memory',
+    iconAsset: 'assets/images/icons/track_memory.png',
+  ),
+  TrackDefinition(
+    id: 'track_mem_beta',
+    name: 'Memory Beta',
+    subtitle: 'Shape memory',
+    rule: PuzzleRule.findMissing,
+    category: 'memory',
+    iconAsset: 'assets/images/icons/track_memory.png',
+  ),
+  TrackDefinition(
+    id: 'track_logic_alpha',
+    name: 'Logic Alpha',
+    subtitle: 'Boolean gates',
+    rule: PuzzleRule.logicGate,
+    category: 'logic',
+    iconAsset: 'assets/images/icons/track_logic_gates.png',
+  ),
+  TrackDefinition(
+    id: 'track_logic_beta',
+    name: 'Logic Beta',
+    subtitle: 'Binary decode',
+    rule: PuzzleRule.binaryDecode,
+    category: 'logic',
+    iconAsset: 'assets/images/icons/track_logic_gates.png',
+  ),
+];
 
 void main() {
   group('WorldMapScreen — Daily Spark hero (AC-001, T-003)', () {
@@ -99,9 +136,45 @@ void main() {
       });
       await tester.pumpWidget(_wrap(_freshProgress()));
       await tester.pump();
-      await tester.tap(find.text('Logic').first);
-      await tester.pump();
+      await tester.tap(find.text('Logic').last);
+      await tester.pump(const Duration(milliseconds: 250));
       expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('filters tracks by Logic and All categories', (tester) async {
+      addTearDown(() => ContentProvider().tracks = []);
+
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
+      ContentProvider().tracks = _categoryFilterTracks();
+      await tester.pumpWidget(_wrap(_freshProgress()));
+      await tester.pump();
+
+      expect(find.text('Memory Alpha'), findsOneWidget);
+      expect(find.text('Memory Beta'), findsOneWidget);
+      expect(find.text('Logic Alpha'), findsOneWidget);
+      expect(find.text('Logic Beta'), findsOneWidget);
+
+      await tester.tap(find.text('Logic').last);
+      await tester.pump(const Duration(milliseconds: 250));
+
+      expect(find.text('Logic Alpha'), findsOneWidget);
+      expect(find.text('Logic Beta'), findsOneWidget);
+      expect(find.text('Memory Alpha'), findsNothing);
+      expect(find.text('Memory Beta'), findsNothing);
+
+      await tester.tap(find.text('All').first);
+      await tester.pump(const Duration(milliseconds: 250));
+
+      expect(find.text('Memory Alpha'), findsOneWidget);
+      expect(find.text('Memory Beta'), findsOneWidget);
+      expect(find.text('Logic Alpha'), findsOneWidget);
+      expect(find.text('Logic Beta'), findsOneWidget);
     });
   });
 

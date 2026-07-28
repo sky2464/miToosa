@@ -17,4 +17,8 @@ abstract class IPersistenceProvider {
   Future<void> completeOnboarding(String playerId);
   Future<bool> consumeFreeGame(String playerId, DateTime now);
   Future<bool> grantShareBonus(String playerId, DateTime now);
+
+  /// Replaces saved game progress with a fresh [PlayerProgress] for [playerId].
+  /// Preserves anonymous identity — does not rotate player ID or encryption keys.
+  Future<void> resetGameProgress(String playerId);
 }

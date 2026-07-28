@@ -56,7 +56,7 @@ class HowToPlayModal extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Center(
-                child: Text(track.icon, style: const TextStyle(fontSize: 40)),
+                child: Image.asset(track.iconAsset, width: 40, height: 40),
               ),
             ),
             const SizedBox(height: MiToosaTheme.spacingMd),

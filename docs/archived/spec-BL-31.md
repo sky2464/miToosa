@@ -2,7 +2,7 @@
 
 > **Story ID:** BL-31
 > **Epic:** EP-01 Launch Readiness & Validation
-> **Status:** ⬜ Backlog
+> **Status:** 🏁 Shipped
 > **Estimate:** M
 > **Clarity:** ready
 > **Spec created:** 2026-07-14
@@ -115,18 +115,18 @@ Out of scope        : leaderboard backend, local-play protocol, profile/VIP/remi
 
 ### 3.1 Task Tree
 
-- [ ] **1. Release-surface tests:** Capture every visible route/action that must be truthful.
-  - [ ] 1.1 Add RED shell and Settings tests for unsupported route/control absence. — _Requirements: AC-001, AC-002, AC-006_
-  - [ ] 1.2 Add RED reset confirmation, success, cancel, and failure tests. — _Requirements: AC-003, AC-004, AC-005_
-- [ ] **2. Gate unsupported experiences:** Trim release navigation and Settings.
-  - [ ] 2.1 Remove leaderboard and local-play release entry points. — _Requirements: AC-001, AC-006_
-  - [ ] 2.2 Curate supported Settings rows and eliminate stale copy. — _Requirements: AC-002_
-- [ ] **3. Implement reset:** Add safe persistence and provider refresh behavior.
-  - [ ] 3.1 Add a reset operation scoped to game progress for the current player ID. — _Requirements: AC-004, AC-005_
-  - [ ] 3.2 Wire confirmation dialog, state feedback, and retry handling. — _Requirements: AC-003, AC-004, AC-005_
-- [ ] **4. Verification:** Prove the release surface is honest.
-  - [ ] 4.1 Add source-scan/widget regression tests for preview strings and unsupported routes. — _Requirements: AC-001, AC-002, AC-006_
-  - [ ] 4.2 Run dart analyze and flutter test. — _Requirements: AC-001 through AC-006_
+- [x] **1. Release-surface tests:** Capture every visible route/action that must be truthful.
+  - [x] 1.1 Add RED shell and Settings tests for unsupported route/control absence. — _Requirements: AC-001, AC-002, AC-006_
+  - [x] 1.2 Add RED reset confirmation, success, cancel, and failure tests. — _Requirements: AC-003, AC-004, AC-005_
+- [x] **2. Gate unsupported experiences:** Trim release navigation and Settings.
+  - [x] 2.1 Remove leaderboard and local-play release entry points. — _Requirements: AC-001, AC-006_
+  - [x] 2.2 Curate supported Settings rows and eliminate stale copy. — _Requirements: AC-002_
+- [x] **3. Implement reset:** Add safe persistence and provider refresh behavior.
+  - [x] 3.1 Add a reset operation scoped to game progress for the current player ID. — _Requirements: AC-004, AC-005_
+  - [x] 3.2 Wire confirmation dialog, state feedback, and retry handling. — _Requirements: AC-003, AC-004, AC-005_
+- [x] **4. Verification:** Prove the release surface is honest.
+  - [x] 4.1 Add source-scan/widget regression tests for preview strings and unsupported routes. — _Requirements: AC-001, AC-002, AC-006_
+  - [x] 4.2 Run dart analyze and flutter test. — _Requirements: AC-001 through AC-006_
   - [ ] 4.3 Run physical iPhone Settings/reset smoke. — _Requirements: AC-003, AC-004, AC-005_ [manual]
 
 ### 3.2 Wave Plan
@@ -165,3 +165,7 @@ No new project skill is proposed. This story enforces product truthfulness with 
 | Deferred features are excluded rather than silently promised. | Pass |
 | Reset is limited to local progress and preserves identity. | Pass |
 | BL-29 owns active share economics to avoid overlap. | Pass |
+
+## ✅ Spec Approved
+
+Approved: 2026-07-26 16:32

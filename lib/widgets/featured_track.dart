@@ -82,14 +82,9 @@ class FeaturedTrack extends StatelessWidget {
             ),
             child: Center(
               child: Image.asset(
-                AP.trackIcon(track.id),
+                track.iconAsset,
                 width: 48,
                 height: 48,
-                errorBuilder: (_, err, stack) => Icon(
-                  Icons.grid_view_rounded,
-                  size: 36,
-                  color: theme.brandBlue,
-                ),
               ),
             ),
           ),

@@ -59,10 +59,26 @@ void main() {
       expect(find.text('SYSTEM'), findsOneWidget);
     });
 
-    testWidgets('mastery tier shows Bronze for fresh player', (tester) async {
+    testWidgets('shows reset progress row', (tester) async {
       await tester.pumpWidget(_wrap());
       await tester.pumpAndSettle();
-      expect(find.textContaining('Bronze'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.text('Reset progress'),
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
+      expect(find.text('Reset progress'), findsOneWidget);
+    });
+
+    testWidgets('shows shipped version label', (tester) async {
+      await tester.pumpWidget(_wrap());
+      await tester.pumpAndSettle();
+      await tester.scrollUntilVisible(
+        find.textContaining('V1.5.1'),
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
+      expect(find.textContaining('V1.5.1'), findsOneWidget);
     });
   });
 }

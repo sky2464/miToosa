@@ -1,7 +1,7 @@
 # Test Plan — BL-31 Truthful Launch Surfaces
 
 > **Spec:** [spec-BL-31.md](archived/spec-BL-31.md)
-> **Status:** Draft pending approval
+> **Status:** Approved — GREEN evidence logged (2026-07-26 build)
 > **Created:** 2026-07-14
 
 ## Scope & Strategy
@@ -72,4 +72,13 @@ Exercise release navigation and Settings as the player sees them. Reset uses a f
 
 ## RED / GREEN Evidence Log
 
-Populated during /agtoosa-build.
+| Test ID | Phase | Result | Evidence |
+|---------|-------|--------|----------|
+| T-001 | GREEN | PASS | `test/features/settings/truthful_launch_surfaces_test.dart` — 4-tab shell, no Leaders |
+| T-002 | GREEN | PASS | `test/features/settings/truthful_launch_surfaces_test.dart` — no VIP/share/reminder/profile |
+| T-003 | GREEN | PASS | `test/features/settings/reset_progress_controller_test.dart` — cancel + dismiss |
+| T-004 | GREEN | PASS | `test/features/settings/reset_progress_controller_test.dart` — confirm resets stats, keeps ID |
+| T-005 | GREEN | PASS | `test/features/settings/reset_progress_controller_test.dart` — failure preserves data |
+| T-006 | GREEN | PASS | `truthful_launch_surfaces_test.dart` — no local play; source scan clean |
+
+`dart analyze lib test` — 0 issues · `flutter test` — **929/929** PASS (2026-07-26)

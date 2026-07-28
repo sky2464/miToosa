@@ -14,7 +14,6 @@ import '../../widgets/progress_ring.dart';
 import '../../widgets/stat_pill.dart';
 import '../../widgets/track_tile.dart';
 import 'track_detail_screen.dart';
-import '../local_play/local_play_mode_screen.dart';
 
 // ─── Tracks screen — Aetheric Pulse "Daily Training" dashboard ────────────────
 
@@ -181,12 +180,6 @@ class _TracksBodyState extends State<_TracksBody> {
           ),
         const SizedBox(height: 16),
         _StatsCard(progress: progress),
-        const SizedBox(height: 12),
-        _LocalPlayCard(
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => const LocalPlayModeScreen()),
-          ),
-        ),
       ],
     );
   }
@@ -338,7 +331,7 @@ class _FilterChips extends StatelessWidget {
 
   const _FilterChips({required this.selected, required this.onSelected});
 
-  static const _labels = ['all', 'memory', 'logic', 'speed', 'spatial'];
+  static List<String> get _labels => ['all', ...TrackCategory.allowlist];
 
   @override
   Widget build(BuildContext context) {
@@ -473,61 +466,6 @@ class _LabeledBar extends StatelessWidget {
         const SizedBox(height: 6),
         KineticProgressBar(value: percent / 100, height: 3.0),
       ],
-    );
-  }
-}
-
-// ─── Local Play Card ──────────────────────────────────────────────────────────
-
-class _LocalPlayCard extends StatelessWidget {
-  final VoidCallback onTap;
-  const _LocalPlayCard({required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return GlassCard(
-      borderRadius: AethericPulseDark.radiusCard,
-      padding: const EdgeInsets.all(AethericPulseDark.spaceMd),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AethericPulseDark.radiusCard),
-        child: Row(
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: AethericPulseDark.brandBlue.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Icon(
-                Icons.wifi_rounded,
-                size: 26,
-                color: AethericPulseDark.brandBlue,
-              ),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Play Locally', style: AethericPulseDark.headlineMd()),
-                  const SizedBox(height: 2),
-                  Text(
-                    'Challenge a friend on the same Wi-Fi',
-                    style: AethericPulseDark.bodyMd(),
-                  ),
-                ],
-              ),
-            ),
-            const Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 14,
-              color: AethericPulseDark.onSurfaceMuted,
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

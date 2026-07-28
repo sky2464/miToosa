@@ -2,7 +2,7 @@
 
 > **Story ID:** BL-30
 > **Epic:** EP-01 Launch Readiness & Validation
-> **Status:** ⬜ Backlog
+> **Status:** 🏁 Shipped
 > **Estimate:** M
 > **Clarity:** ready
 > **Spec created:** 2026-07-14
@@ -164,3 +164,7 @@ No new project skill is proposed. Asset provenance is a narrow manifest requirem
 | Content ownership is isolated from UI filtering. | Pass |
 | Asset licensing/provenance is explicit. | Pass |
 | Static level cleanup has a no-reader proof before removal. | Pass |
+
+## ✅ Spec Approved
+
+Approved: 2026-07-26 15:18

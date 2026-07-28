@@ -1,9 +1,12 @@
-# Specification: Local Network QR Code Play
+# Spec: LP-01 — Local Network QR Play (deferred POC)
 
-**Status**: Draft  
-**Version**: 1.0  
-**Date**: April 22, 2026  
-**Epic**: Enable casual local multiplayer via QR code scanning on home network
+> **Story ID:** LP-01
+> **Epic:** EP-05 Technical Debt & Infrastructure
+> **Status:** ⬜ Backlog (deferred POC — not v1.5.1 launch scope)
+> **Estimate:** L
+> **Clarity:** ready (legacy draft)
+> **Spec created:** 2026-04-22
+> **Legacy filename:** `spec-local-network-qr-play-v1.md`
 
 ---
 

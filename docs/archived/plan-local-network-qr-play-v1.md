@@ -3,7 +3,7 @@
 **Status**: Complete  
 **Version**: 1.0  
 **Date**: April 22, 2026  
-**Based on**: `docs/spec-local-network-qr-play-v1.md`
+**Based on**: `docs/archived/spec-LP-01.md`
 
 ---
 
