@@ -28,7 +28,7 @@
 
 | ID | Title | Type | Estimate | Status | Tasks Done |
 |----|-------|------|----------|--------|-----------|
-| BL-25 | Feature: Physical iPhone TestFlight QA pass | Feature | M | 🔧 Awaiting Manual | 5/5 tasks (12 manual-deferred) |
+| BL-25 | Feature: Physical iPhone TestFlight QA pass (#46) | Feature | M | 🔧 Awaiting Manual | 5/5 tasks (12 manual-deferred) |
 
 Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blocked · 🔧 Awaiting Manual · 🏁 Shipped
 
@@ -95,18 +95,18 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 | ID | Title | Type | Estimate | Epic | Priority | Status |
 |----|-------|------|----------|------|----------|--------|
 | BL-33 | Feature: Production brand assets | Feature | S | EP-01 | P0 | 🏁 Shipped |
-| BL-24 | Feature: Interactive how-to demos | Feature | M | EP-01 | P1 | ⬜ Backlog |
-| BL-34 | Chore: Production SFX and persisted preferences | Chore | S | EP-04 | P1 | ⬜ Backlog |
-| BL-35 | Feature: Reachable daily rewards, streaks, and achievements | Feature | M | EP-01 | P1 | ⬜ Backlog |
-| BL-36 | Chore: iPhone accessibility and device hardening | Chore | M | EP-01 | P1 | ⬜ Backlog |
-| BL-37 | Chore: Privacy-respecting crash resilience | Chore | M | EP-02 | P1 | ⬜ Backlog |
-| BL-38 | Chore: Modularize oversized code and remove dead dependencies | Chore | L | EP-05 | P2 | ⬜ Backlog |
-| S1-03 | Feature: Manual wedge QA walkthrough | Feature | S | EP-01 | P1 | ⬜ Backlog |
-| S1-04 | Feature: Playtest survey + recruitment | Feature | M | EP-01 | P1 | ⬜ Backlog |
-| BL-04 | Feature: Backend leaderboard (post-playtest gate) | Feature | L | EP-03 | P2 | ⬜ Backlog |
-| BL-05 | Feature: VIP / IAP flow | Feature | L | EP-03 | P2 | ⬜ Backlog |
-| DX-01 | Chore: Complete gstack `/plan-tune` QA + ship docs | Chore | XS | EP-05 | P4 | ⬜ Backlog |
-| LP-01 | Chore: Local network QR play (deferred POC) | Chore | L | EP-05 | P3 | ⬜ Backlog |
+| BL-24 | Feature: Interactive how-to demos (#47) | Feature | M | EP-01 | P1 | ⬜ Backlog |
+| BL-34 | Chore: Production SFX and persisted preferences (#48) | Chore | S | EP-04 | P1 | ⬜ Backlog |
+| BL-35 | Feature: Reachable daily rewards, streaks, and achievements (#49) | Feature | M | EP-01 | P1 | ⬜ Backlog |
+| BL-36 | Chore: iPhone accessibility and device hardening (#50) | Chore | M | EP-01 | P1 | ⬜ Backlog |
+| BL-37 | Chore: Privacy-respecting crash resilience (#51) | Chore | M | EP-02 | P1 | ⬜ Backlog |
+| BL-38 | Chore: Modularize oversized code and remove dead dependencies (#52) | Chore | L | EP-05 | P2 | ⬜ Backlog |
+| S1-03 | Feature: Manual wedge QA walkthrough (#5) | Feature | S | EP-01 | P1 | ⬜ Backlog |
+| S1-04 | Feature: Playtest survey + recruitment (#6) | Feature | M | EP-01 | P1 | ⬜ Backlog |
+| BL-04 | Feature: Backend leaderboard (post-playtest gate) (#10) | Feature | L | EP-03 | P2 | ⬜ Backlog |
+| BL-05 | Feature: VIP / IAP flow (#12) | Feature | L | EP-03 | P2 | ⬜ Backlog |
+| DX-01 | Chore: Complete gstack `/plan-tune` QA + ship docs (#53) | Chore | XS | EP-05 | P4 | ⬜ Backlog |
+| LP-01 | Chore: Local network QR play (deferred POC) (#54) | Chore | L | EP-05 | P3 | ⬜ Backlog |
 
 ## Epics
 
