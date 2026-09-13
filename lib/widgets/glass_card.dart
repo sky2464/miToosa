@@ -25,7 +25,8 @@ class GlassCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = APTheme.of(context);
-    final shadows = boxShadow ??
+    final shadows =
+        boxShadow ??
         (neonGlow ? AethericPulseDark.blueGlow : theme.cardShadows);
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius),

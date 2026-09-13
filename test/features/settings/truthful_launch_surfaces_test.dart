@@ -40,29 +40,29 @@ PlayerProgress _freshProgress() =>
 Widget _shell() {
   bindPrivacyPreferencesRepository(FakePrivacyPreferencesRepository());
   return ProviderScope(
-  overrides: [
-    playerProgressProvider.overrideWith((ref) async => _freshProgress()),
-    telemetrySessionControllerProvider.overrideWithValue(_noOpController),
-    analyticsConsentServiceProvider.overrideWithValue(
-      AnalyticsConsentService(RecordingAnalyticsConsentAdapter()),
+    overrides: [
+      playerProgressProvider.overrideWith((ref) async => _freshProgress()),
+      telemetrySessionControllerProvider.overrideWithValue(_noOpController),
+      analyticsConsentServiceProvider.overrideWithValue(
+        AnalyticsConsentService(RecordingAnalyticsConsentAdapter()),
+      ),
+    ],
+    child: MaterialApp(
+      theme: AethericPulseDark.themeData,
+      home: const MainAppShell(),
     ),
-  ],
-  child: MaterialApp(
-    theme: AethericPulseDark.themeData,
-    home: const MainAppShell(),
-  ),
-);
+  );
 }
 
 Widget _settings() {
   bindPrivacyPreferencesRepository(FakePrivacyPreferencesRepository());
   return ProviderScope(
-  overrides: [
-    playerProgressProvider.overrideWith((ref) async => _freshProgress()),
-    analyticsConsentServiceProvider.overrideWithValue(
-      AnalyticsConsentService(RecordingAnalyticsConsentAdapter()),
-    ),
-  ],
+    overrides: [
+      playerProgressProvider.overrideWith((ref) async => _freshProgress()),
+      analyticsConsentServiceProvider.overrideWithValue(
+        AnalyticsConsentService(RecordingAnalyticsConsentAdapter()),
+      ),
+    ],
     child: const MaterialApp(home: SettingsScreen()),
   );
 }
@@ -126,7 +126,9 @@ void main() {
   });
 
   group('Truthful launch surfaces — preview reachability (T-006)', () {
-    testWidgets('tracks screen does not expose local play entry', (tester) async {
+    testWidgets('tracks screen does not expose local play entry', (
+      tester,
+    ) async {
       await tester.pumpWidget(_tracks());
       await tester.pumpAndSettle();
 

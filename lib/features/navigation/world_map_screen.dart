@@ -250,10 +250,7 @@ class _DailySparkHero extends StatelessWidget {
                     centerChild: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          '$gamesComplete/5',
-                          style: theme.headlineMd(),
-                        ),
+                        Text('$gamesComplete/5', style: theme.headlineMd()),
                         Text('games', style: theme.label()),
                       ],
                     ),

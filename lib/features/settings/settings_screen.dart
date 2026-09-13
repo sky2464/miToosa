@@ -118,9 +118,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
       case ResetProgressResult.failed:
         messenger.showSnackBar(
           const SnackBar(
-            content: Text(
-              'Could not reset progress. Please try again.',
-            ),
+            content: Text('Could not reset progress. Please try again.'),
           ),
         );
       case ResetProgressResult.cancelled:
@@ -256,11 +254,9 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                     ? kAnonymousAnalyticsDisabledEffect
                     : kAnonymousAnalyticsSubtitle,
                 trailing: ToggleSwitch(
-                        value: _analyticsEnabled,
-                        onChanged: _analyticsUpdating
-                            ? (_) {}
-                            : _onAnalyticsChanged,
-                      ),
+                  value: _analyticsEnabled,
+                  onChanged: _analyticsUpdating ? (_) {} : _onAnalyticsChanged,
+                ),
               ),
               const Divider(height: 1, color: AethericPulseDark.glassBorder),
               SettingsRow(

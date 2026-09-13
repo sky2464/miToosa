@@ -32,7 +32,9 @@ Widget _wrap({
   final consentAdapter = adapter ?? RecordingAnalyticsConsentAdapter();
   return ProviderScope(
     overrides: [
-      playerProgressProvider.overrideWith((_) => Future.value(progress ?? _freshProgress())),
+      playerProgressProvider.overrideWith(
+        (_) => Future.value(progress ?? _freshProgress()),
+      ),
       analyticsConsentServiceProvider.overrideWithValue(
         AnalyticsConsentService(consentAdapter),
       ),
@@ -43,7 +45,9 @@ Widget _wrap({
 
 void main() {
   group('Settings privacy disclosure T-004', () {
-    testWidgets('shows anonymous analytics disclosure and toggle', (tester) async {
+    testWidgets('shows anonymous analytics disclosure and toggle', (
+      tester,
+    ) async {
       await tester.pumpWidget(_wrap());
       await tester.pumpAndSettle();
       await _scrollToPrivacy(tester);
@@ -56,7 +60,9 @@ void main() {
 
     testWidgets('shows opt-out effect when analytics disabled', (tester) async {
       await tester.pumpWidget(
-        _wrap(preferences: FakePrivacyPreferencesRepository()..storedValue = false),
+        _wrap(
+          preferences: FakePrivacyPreferencesRepository()..storedValue = false,
+        ),
       );
       await tester.pumpAndSettle();
       await _scrollToPrivacy(tester);
@@ -76,10 +82,14 @@ void main() {
       expect(find.text(kPrivacyPolicySummary), findsOneWidget);
     });
 
-    testWidgets('toggle persists preference and applies consent', (tester) async {
+    testWidgets('toggle persists preference and applies consent', (
+      tester,
+    ) async {
       final preferences = FakePrivacyPreferencesRepository();
       final adapter = RecordingAnalyticsConsentAdapter();
-      await tester.pumpWidget(_wrap(preferences: preferences, adapter: adapter));
+      await tester.pumpWidget(
+        _wrap(preferences: preferences, adapter: adapter),
+      );
       await tester.pumpAndSettle();
       await _scrollToPrivacy(tester);
 

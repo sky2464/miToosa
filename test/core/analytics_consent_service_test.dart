@@ -5,7 +5,8 @@ import 'package:mitoosa/data/privacy_preferences_repository.dart';
 void main() {
   group('bootstrapAnalyticsConsent @smoke T-001', () {
     test('loads preference before enabling collection', () async {
-      final preferences = FakePrivacyPreferencesRepository()..storedValue = false;
+      final preferences = FakePrivacyPreferencesRepository()
+        ..storedValue = false;
       final adapter = RecordingAnalyticsConsentAdapter();
       final service = AnalyticsConsentService(adapter);
 
@@ -21,18 +22,21 @@ void main() {
   });
 
   group('AnalyticsConsentService @smoke T-002', () {
-    test('grants analytics storage only and denies all ad flags when enabled', () async {
-      final adapter = RecordingAnalyticsConsentAdapter();
-      final service = AnalyticsConsentService(adapter);
+    test(
+      'grants analytics storage only and denies all ad flags when enabled',
+      () async {
+        final adapter = RecordingAnalyticsConsentAdapter();
+        final service = AnalyticsConsentService(adapter);
 
-      await service.applyFromPreference(true);
+        await service.applyFromPreference(true);
 
-      expect(adapter.lastAnalyticsStorage, isTrue);
-      expect(adapter.lastAdStorage, isFalse);
-      expect(adapter.lastAdUserData, isFalse);
-      expect(adapter.lastAdPersonalization, isFalse);
-      expect(adapter.lastCollectionEnabled, isTrue);
-    });
+        expect(adapter.lastAnalyticsStorage, isTrue);
+        expect(adapter.lastAdStorage, isFalse);
+        expect(adapter.lastAdUserData, isFalse);
+        expect(adapter.lastAdPersonalization, isFalse);
+        expect(adapter.lastCollectionEnabled, isTrue);
+      },
+    );
 
     test('denies analytics and ad flags when disabled', () async {
       final adapter = RecordingAnalyticsConsentAdapter();

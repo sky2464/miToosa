@@ -3,7 +3,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Bound at app startup from [main]; tests may rebind with a fake.
 IPrivacyPreferencesRepository? _boundPrivacyPreferencesRepository;
 
-void bindPrivacyPreferencesRepository(IPrivacyPreferencesRepository repository) {
+void bindPrivacyPreferencesRepository(
+  IPrivacyPreferencesRepository repository,
+) {
   _boundPrivacyPreferencesRepository = repository;
 }
 
@@ -49,7 +51,8 @@ class SharedPreferencesPrivacyPreferencesRepository
 }
 
 /// In-memory fake for unit tests.
-class FakePrivacyPreferencesRepository implements IPrivacyPreferencesRepository {
+class FakePrivacyPreferencesRepository
+    implements IPrivacyPreferencesRepository {
   bool? storedValue;
 
   @override

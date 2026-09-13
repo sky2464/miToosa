@@ -42,18 +42,18 @@ final _noOpController = TelemetrySessionController(_NoOpTelemetryRepository());
 Widget _wrap(PlayerProgress progress) {
   bindPrivacyPreferencesRepository(FakePrivacyPreferencesRepository());
   return ProviderScope(
-  overrides: [
-    playerProgressProvider.overrideWith((ref) async => progress),
-    telemetrySessionControllerProvider.overrideWithValue(_noOpController),
-    analyticsConsentServiceProvider.overrideWithValue(
-      AnalyticsConsentService(RecordingAnalyticsConsentAdapter()),
+    overrides: [
+      playerProgressProvider.overrideWith((ref) async => progress),
+      telemetrySessionControllerProvider.overrideWithValue(_noOpController),
+      analyticsConsentServiceProvider.overrideWithValue(
+        AnalyticsConsentService(RecordingAnalyticsConsentAdapter()),
+      ),
+    ],
+    child: MaterialApp(
+      theme: AethericPulseDark.themeData,
+      home: const MainAppShell(),
     ),
-  ],
-  child: MaterialApp(
-    theme: AethericPulseDark.themeData,
-    home: const MainAppShell(),
-  ),
-);
+  );
 }
 
 // ─── Tests ────────────────────────────────────────────────────────────────────

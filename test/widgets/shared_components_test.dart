@@ -99,7 +99,9 @@ void main() {
 
     testWidgets('renders roleLabel in uppercase', (tester) async {
       await tester.pumpWidget(
-        _wrap(const AppHeader(freeGamesAvailable: 0, roleLabel: 'Pilot · Lv 3')),
+        _wrap(
+          const AppHeader(freeGamesAvailable: 0, roleLabel: 'Pilot · Lv 3'),
+        ),
       );
       expect(find.text('PILOT · LV 3'), findsOneWidget);
     });
@@ -107,7 +109,9 @@ void main() {
     testWidgets('onProfileTap fires when avatar is tapped', (tester) async {
       var tapped = false;
       await tester.pumpWidget(
-        _wrap(AppHeader(freeGamesAvailable: 0, onProfileTap: () => tapped = true)),
+        _wrap(
+          AppHeader(freeGamesAvailable: 0, onProfileTap: () => tapped = true),
+        ),
       );
       await tester.tap(find.byType(GestureDetector).first);
       expect(tapped, isTrue);
@@ -116,16 +120,25 @@ void main() {
     testWidgets('onProfileTap fires when brand name is tapped', (tester) async {
       var tapped = false;
       await tester.pumpWidget(
-        _wrap(AppHeader(freeGamesAvailable: 0, onProfileTap: () => tapped = true)),
+        _wrap(
+          AppHeader(freeGamesAvailable: 0, onProfileTap: () => tapped = true),
+        ),
       );
       await tester.tap(find.text('miToosa'));
       expect(tapped, isTrue);
     });
 
-    testWidgets('onFreeGamesTap fires when games pill is tapped', (tester) async {
+    testWidgets('onFreeGamesTap fires when games pill is tapped', (
+      tester,
+    ) async {
       var tapped = false;
       await tester.pumpWidget(
-        _wrap(AppHeader(freeGamesAvailable: 100, onFreeGamesTap: () => tapped = true)),
+        _wrap(
+          AppHeader(
+            freeGamesAvailable: 100,
+            onFreeGamesTap: () => tapped = true,
+          ),
+        ),
       );
       await tester.tap(find.text('100'));
       expect(tapped, isTrue);

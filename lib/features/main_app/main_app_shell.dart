@@ -69,7 +69,10 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final progressAsync = ref.watch(playerProgressProvider);
-    final progress = progressAsync.maybeWhen(data: (p) => p, orElse: () => null);
+    final progress = progressAsync.maybeWhen(
+      data: (p) => p,
+      orElse: () => null,
+    );
     return Scaffold(
       backgroundColor: isDark
           ? AethericPulseDark.surface
@@ -122,10 +125,7 @@ class _SafeAppHeader extends ConsumerWidget {
         roleLabel: 'Pilot · Lv $level',
         onProfileTap: progress == null
             ? null
-            : () => showProfileMenuSheet(
-                context,
-                progress: progress!,
-              ),
+            : () => showProfileMenuSheet(context, progress: progress!),
         onFreeGamesTap: progress == null
             ? null
             : () => showFreeGamesMenuSheet(

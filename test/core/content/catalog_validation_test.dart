@@ -41,9 +41,11 @@ void main() {
           contains(track.category),
           reason: 'track ${track.id} category',
         );
-        final row = rows.firstWhere(
-          (r) => (r as Map<String, dynamic>)['id'] == track.id,
-        ) as Map<String, dynamic>;
+        final row =
+            rows.firstWhere(
+                  (r) => (r as Map<String, dynamic>)['id'] == track.id,
+                )
+                as Map<String, dynamic>;
         expect(row['iconAsset'], isNotNull);
         expect(row['iconAsset'], isNotEmpty);
       }

@@ -262,9 +262,7 @@ void main() {
       var retried = false;
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: AppStartupError(onRetry: () => retried = true),
-        ),
+        MaterialApp(home: AppStartupError(onRetry: () => retried = true)),
       );
 
       await tester.tap(find.byKey(AppStartupError.retryKey));

@@ -216,7 +216,6 @@ class APTheme {
   TextStyle display({Color? color}) => AP.display(color: color ?? fg);
   TextStyle headlineMd({Color? color}) => AP.headlineMd(color: color ?? fg);
   TextStyle headlineLg({Color? color}) => AP.headlineLg(color: color ?? fg);
-  TextStyle bodyMd({Color? color}) =>
-      AP.bodyMd(color: color ?? fgSecondary);
+  TextStyle bodyMd({Color? color}) => AP.bodyMd(color: color ?? fgSecondary);
   TextStyle label({Color? color}) => AP.label(color: color ?? fgMeta);
 }
