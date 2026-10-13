@@ -9,9 +9,13 @@ import 'app/root_app_router.dart';
 import 'data/player_progress_provider.dart';
 
 import 'data/hive_persistence_provider.dart';
+import 'core/audio_service.dart';
 import 'core/content_provider.dart';
+import 'core/haptics_service.dart';
+import 'core/music_service.dart';
 import 'data/telemetry_provider.dart';
 import 'core/analytics_consent_service.dart';
+import 'data/audio_preferences_repository.dart';
 import 'data/privacy_preferences_repository.dart';
 import 'firebase_options.dart';
 
@@ -24,6 +28,16 @@ void main() async {
   final privacyRepo =
       await SharedPreferencesPrivacyPreferencesRepository.create();
   bindPrivacyPreferencesRepository(privacyRepo);
+
+  // BL-34: persisted Sound FX / Music / Haptics toggles — apply before the
+  // first frame so playback services honor the player's saved choices.
+  final audioRepo =
+      await SharedPreferencesAudioPreferencesRepository.create();
+  bindAudioPreferencesRepository(audioRepo);
+  final audioPrefs = await audioRepo.load();
+  AudioService().enabled = audioPrefs.soundEnabled;
+  MusicService().enabled = audioPrefs.musicEnabled;
+  HapticsService().enabled = audioPrefs.hapticsEnabled;
 
   if (kFirebaseEnabled) {
     if (Firebase.apps.isEmpty) {

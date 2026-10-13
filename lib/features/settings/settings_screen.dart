@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/engine/progression_engine.dart';
-import '../../core/audio_service.dart';
-import '../../core/haptics_service.dart';
-import '../../core/music_service.dart';
 import '../../data/player_progress.dart';
 import '../../data/player_progress_provider.dart';
 import '../../theme/design_system.dart';
@@ -13,6 +10,7 @@ import '../../widgets/kinetic_background.dart';
 import '../../widgets/settings_row.dart';
 import '../../widgets/toggle_switch.dart';
 import 'analytics_privacy_controller.dart';
+import 'audio_preferences_controller.dart';
 import 'privacy_disclosure_copy.dart';
 import 'privacy_policy_screen.dart';
 import 'reset_progress_controller.dart';
@@ -54,15 +52,30 @@ class _SettingsBody extends ConsumerStatefulWidget {
 }
 
 class _SettingsBodyState extends ConsumerState<_SettingsBody> {
-  late bool _soundEffectsEnabled;
+  // BL-34: persisted audio/haptic toggles; hydrated from storage in initState.
+  bool _soundEffectsEnabled = true;
+  bool _musicEnabled = true;
+  bool _hapticsEnabled = true;
   bool _analyticsEnabled = true;
   bool _analyticsUpdating = false;
 
   @override
   void initState() {
     super.initState();
-    _soundEffectsEnabled = AudioService().enabled;
+    _loadAudioPreferences();
     _loadAnalyticsPreference();
+  }
+
+  Future<void> _loadAudioPreferences() async {
+    final prefs = await ref
+        .read(audioPreferencesControllerProvider)
+        .loadAndApply();
+    if (!mounted) return;
+    setState(() {
+      _soundEffectsEnabled = prefs.soundEnabled;
+      _musicEnabled = prefs.musicEnabled;
+      _hapticsEnabled = prefs.hapticsEnabled;
+    });
   }
 
   Future<void> _loadAnalyticsPreference() async {
@@ -166,8 +179,11 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                 title: 'Sound FX',
                 trailing: ToggleSwitch(
                   value: _soundEffectsEnabled,
-                  onChanged: (v) {
-                    AudioService().enabled = v;
+                  onChanged: (v) async {
+                    await ref
+                        .read(audioPreferencesControllerProvider)
+                        .setSoundEnabled(v);
+                    if (!mounted) return;
                     setState(() => _soundEffectsEnabled = v);
                   },
                 ),
@@ -178,10 +194,13 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                 title: 'Music',
                 subtitle: 'Background music during gameplay',
                 trailing: ToggleSwitch(
-                  value: MusicService().enabled,
-                  onChanged: (v) {
-                    MusicService().enabled = v;
-                    setState(() {});
+                  value: _musicEnabled,
+                  onChanged: (v) async {
+                    await ref
+                        .read(audioPreferencesControllerProvider)
+                        .setMusicEnabled(v);
+                    if (!mounted) return;
+                    setState(() => _musicEnabled = v);
                   },
                 ),
               ),
@@ -190,10 +209,13 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                 icon: const Icon(Icons.vibration_outlined),
                 title: 'Haptics',
                 trailing: ToggleSwitch(
-                  value: HapticsService().enabled,
-                  onChanged: (v) {
-                    HapticsService().enabled = v;
-                    setState(() {});
+                  value: _hapticsEnabled,
+                  onChanged: (v) async {
+                    await ref
+                        .read(audioPreferencesControllerProvider)
+                        .setHapticsEnabled(v);
+                    if (!mounted) return;
+                    setState(() => _hapticsEnabled = v);
                   },
                 ),
               ),
