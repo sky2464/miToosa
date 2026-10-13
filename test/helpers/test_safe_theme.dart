@@ -12,4 +12,5 @@ ThemeData testSafeTheme(ThemeData theme) {
 }
 
 /// Default [ThemeData] for widget tests that tap Material buttons.
-ThemeData get testSafeMaterialTheme => testSafeTheme(ThemeData(useMaterial3: true));
+ThemeData get testSafeMaterialTheme =>
+    testSafeTheme(ThemeData(useMaterial3: true));

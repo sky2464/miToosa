@@ -29,11 +29,7 @@ class AppHeader extends StatelessWidget {
         ? const LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xD90A0D17),
-              Color(0x8C0A0D17),
-              Colors.transparent,
-            ],
+            colors: [Color(0xD90A0D17), Color(0x8C0A0D17), Colors.transparent],
             stops: [0.0, 0.7, 1.0],
           )
         : LinearGradient(
@@ -166,9 +162,7 @@ class AppHeader extends StatelessWidget {
                             fontSize: 13,
                             fontWeight: FontWeight.w700,
                             color: theme.fg,
-                            fontFeatures: const [
-                              FontFeature.tabularFigures(),
-                            ],
+                            fontFeatures: const [FontFeature.tabularFigures()],
                             letterSpacing: -0.13,
                           ),
                         ),
@@ -206,4 +200,3 @@ class AppHeader extends StatelessWidget {
     return buf.toString();
   }
 }
-

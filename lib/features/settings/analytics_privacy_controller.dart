@@ -27,15 +27,17 @@ final privacyPreferencesRepositoryProvider =
       return boundPrivacyPreferencesRepository;
     });
 
-final analyticsConsentServiceProvider = Provider<AnalyticsConsentService>((ref) {
+final analyticsConsentServiceProvider = Provider<AnalyticsConsentService>((
+  ref,
+) {
   return AnalyticsConsentService(FirebaseAnalyticsConsentAdapter());
 });
 
-final analyticsPrivacyControllerProvider = Provider<AnalyticsPrivacyController>((
-  ref,
-) {
-  return AnalyticsPrivacyController(
-    preferences: ref.watch(privacyPreferencesRepositoryProvider),
-    consentService: ref.watch(analyticsConsentServiceProvider),
-  );
-});
+final analyticsPrivacyControllerProvider = Provider<AnalyticsPrivacyController>(
+  (ref) {
+    return AnalyticsPrivacyController(
+      preferences: ref.watch(privacyPreferencesRepositoryProvider),
+      consentService: ref.watch(analyticsConsentServiceProvider),
+    );
+  },
+);

@@ -17,9 +17,8 @@ class RootAppRouter extends ConsumerWidget {
 
     return authState.when(
       loading: () => const AppStartupLoading(),
-      error: (_, _) => AppStartupError(
-        onRetry: () => ref.invalidate(authProvider),
-      ),
+      error: (_, _) =>
+          AppStartupError(onRetry: () => ref.invalidate(authProvider)),
       data: (playerId) {
         if (playerId.isEmpty) {
           return const LoginScreen();

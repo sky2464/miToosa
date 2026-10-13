@@ -65,11 +65,7 @@ void main() async {
     }
   }
 
-  runApp(
-    const ProviderScope(
-      child: MiToosaApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: MiToosaApp()));
 }
 
 class MiToosaApp extends ConsumerWidget {

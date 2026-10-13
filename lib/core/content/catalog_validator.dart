@@ -4,12 +4,7 @@ import 'package:mitoosa/core/content_provider.dart';
 class TrackCategory {
   TrackCategory._();
 
-  static const Set<String> allowlist = {
-    'memory',
-    'logic',
-    'speed',
-    'spatial',
-  };
+  static const Set<String> allowlist = {'memory', 'logic', 'speed', 'spatial'};
 }
 
 /// Thrown when bundled catalog content fails schema or integrity checks.
@@ -19,8 +14,7 @@ class CatalogValidationException implements Exception {
   final List<String> errors;
 
   @override
-  String toString() =>
-      'CatalogValidationException: ${errors.join('; ')}';
+  String toString() => 'CatalogValidationException: ${errors.join('; ')}';
 }
 
 /// Validates worlds.json rows and parsed [TrackDefinition] lists.
@@ -72,9 +66,7 @@ class CatalogValidator {
     final errors = <String>[];
 
     if (tracks.length != expectedTrackCount) {
-      errors.add(
-        'expected $expectedTrackCount tracks, got ${tracks.length}',
-      );
+      errors.add('expected $expectedTrackCount tracks, got ${tracks.length}');
     }
 
     final ids = <String>{};

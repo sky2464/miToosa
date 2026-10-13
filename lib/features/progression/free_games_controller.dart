@@ -96,10 +96,8 @@ class FreeGamesController {
 
 final freeGamesControllerProvider = Provider<FreeGamesController>((ref) {
   return FreeGamesController(
-    playerId: () async => ref.read(authProvider).maybeWhen(
-      data: (id) => id,
-      orElse: () => null,
-    ),
+    playerId: () async =>
+        ref.read(authProvider).maybeWhen(data: (id) => id, orElse: () => null),
     persistence: ref.watch(persistenceProvider),
     shareBonus: ref.watch(shareBonusServiceProvider),
     invalidateProgress: () => ref.invalidate(playerProgressProvider),

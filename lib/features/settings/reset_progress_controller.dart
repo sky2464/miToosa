@@ -64,10 +64,8 @@ final resetProgressControllerProvider = Provider<ResetProgressController>((
   ref,
 ) {
   return ResetProgressController(
-    playerId: () async => ref.read(authProvider).maybeWhen(
-      data: (id) => id,
-      orElse: () => null,
-    ),
+    playerId: () async =>
+        ref.read(authProvider).maybeWhen(data: (id) => id, orElse: () => null),
     persistence: ref.watch(persistenceProvider),
     invalidateProgress: () => ref.invalidate(playerProgressProvider),
   );

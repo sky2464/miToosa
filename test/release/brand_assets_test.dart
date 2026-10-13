@@ -22,7 +22,9 @@ void main() {
 
   group('BL-33 brand assets @smoke T-002', () {
     test('iOS AppIcon slots are populated from custom master', () {
-      final iconDir = Directory('$repoRoot/ios/Runner/Assets.xcassets/AppIcon.appiconset');
+      final iconDir = Directory(
+        '$repoRoot/ios/Runner/Assets.xcassets/AppIcon.appiconset',
+      );
       expect(iconDir.existsSync(), isTrue);
 
       final contents = File('${iconDir.path}/Contents.json').readAsStringSync();
@@ -37,15 +39,26 @@ void main() {
         expect(File('${iconDir.path}/$filename').existsSync(), isTrue);
       }
 
-      final marketing = _sha256File('${iconDir.path}/Icon-App-1024x1024@1x.png');
+      final marketing = _sha256File(
+        '${iconDir.path}/Icon-App-1024x1024@1x.png',
+      );
       expect(marketing, isNot(equals(_stockFlutterIconSha256)));
-      expect(marketing, isNot(equals(_approvedMasterSha256))); // iOS strips alpha
+      expect(
+        marketing,
+        isNot(equals(_approvedMasterSha256)),
+      ); // iOS strips alpha
     });
 
     test('Android launcher mipmaps exist', () {
       for (final density in ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi']) {
-        final file = File('$repoRoot/android/app/src/main/res/mipmap-$density/ic_launcher.png');
-        expect(file.existsSync(), isTrue, reason: 'Missing $density launcher icon');
+        final file = File(
+          '$repoRoot/android/app/src/main/res/mipmap-$density/ic_launcher.png',
+        );
+        expect(
+          file.existsSync(),
+          isTrue,
+          reason: 'Missing $density launcher icon',
+        );
         expect(file.lengthSync(), greaterThan(100));
       }
     });
@@ -56,14 +69,23 @@ void main() {
       final launchDir = Directory(
         '$repoRoot/ios/Runner/Assets.xcassets/LaunchImage.imageset',
       );
-      for (final name in ['LaunchImage.png', 'LaunchImage@2x.png', 'LaunchImage@3x.png']) {
+      for (final name in [
+        'LaunchImage.png',
+        'LaunchImage@2x.png',
+        'LaunchImage@3x.png',
+      ]) {
         final file = File('${launchDir.path}/$name');
         expect(file.existsSync(), isTrue);
-        expect(file.lengthSync(), greaterThan(500), reason: '$name must not be 1px placeholder');
+        expect(
+          file.lengthSync(),
+          greaterThan(500),
+          reason: '$name must not be 1px placeholder',
+        );
       }
 
-      final storyboard = File('$repoRoot/ios/Runner/Base.lproj/LaunchScreen.storyboard')
-          .readAsStringSync();
+      final storyboard = File(
+        '$repoRoot/ios/Runner/Base.lproj/LaunchScreen.storyboard',
+      ).readAsStringSync();
       expect(storyboard, contains('LaunchImage'));
       expect(storyboard, contains('0.039')); // Aetheric Pulse dark background
     });
@@ -71,7 +93,9 @@ void main() {
 
   group('BL-33 provenance @smoke T-004', () {
     test('manifest records master hash and generation command', () {
-      final manifest = File('$repoRoot/docs/brand/launch-asset-manifest.md').readAsStringSync();
+      final manifest = File(
+        '$repoRoot/docs/brand/launch-asset-manifest.md',
+      ).readAsStringSync();
       expect(manifest, contains(_approvedMasterSha256));
       expect(manifest, contains('tool/generate_brand_assets.py'));
       expect(manifest, contains('flutter_launcher_icons'));
@@ -87,7 +111,8 @@ void main() {
 
   group('BL-33 placeholder regression @smoke T-006', () {
     test('marketing icon is not stock Flutter artwork', () {
-      final path = '$repoRoot/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png';
+      final path =
+          '$repoRoot/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png';
       expect(_sha256File(path), isNot(equals(_stockFlutterIconSha256)));
     });
   });

@@ -23,7 +23,9 @@ Widget _wrap(Widget child, {PlayerProgress? progress}) {
 
 void main() {
   group('BL-29 top-level copy (T-001)', () {
-    testWidgets('AppHeader shows free games, not credits or CR', (tester) async {
+    testWidgets('AppHeader shows free games, not credits or CR', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         _wrap(const Scaffold(body: AppHeader(freeGamesAvailable: 18))),
       );
@@ -34,7 +36,9 @@ void main() {
       expect(find.textContaining('credit'), findsNothing);
     });
 
-    testWidgets('WorldMapScreen stat strip uses free games label', (tester) async {
+    testWidgets('WorldMapScreen stat strip uses free games label', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(390, 844);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() {

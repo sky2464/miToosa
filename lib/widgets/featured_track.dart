@@ -81,11 +81,7 @@ class FeaturedTrack extends StatelessWidget {
               boxShadow: theme.isDark ? AethericPulseDark.blueGlow : null,
             ),
             child: Center(
-              child: Image.asset(
-                track.iconAsset,
-                width: 48,
-                height: 48,
-              ),
+              child: Image.asset(track.iconAsset, width: 48, height: 48),
             ),
           ),
         ],

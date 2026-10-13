@@ -58,10 +58,7 @@ void main() {
     persistence = _MemPersistence();
   });
 
-  Future<void> seedProgress({
-    int freeGames = 25,
-    int shareBonus = 0,
-  }) async {
+  Future<void> seedProgress({int freeGames = 25, int shareBonus = 0}) async {
     final progress = await persistence.loadProgress('player-1');
     progress.freeGamesRemaining = freeGames;
     progress.shareBonusGames = shareBonus;

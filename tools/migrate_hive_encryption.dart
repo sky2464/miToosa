@@ -1,4 +1,5 @@
 #!/usr/bin/env dart
+
 // Simple migration helper to migrate a plaintext Hive box to an encrypted box.
 // Usage: dart run tools/migrate_hive_encryption.dart [storageDir]
 

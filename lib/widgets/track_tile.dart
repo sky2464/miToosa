@@ -51,11 +51,7 @@ class TrackTile extends StatelessWidget {
                 ),
               ),
               child: Center(
-                child: Image.asset(
-                  track.iconAsset,
-                  width: 28,
-                  height: 28,
-                ),
+                child: Image.asset(track.iconAsset, width: 28, height: 28),
               ),
             ),
             const SizedBox(height: 10),
@@ -66,10 +62,7 @@ class TrackTile extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: 2),
-            Text(
-              track.category,
-              style: theme.label(color: theme.fgMuted),
-            ),
+            Text(track.category, style: theme.label(color: theme.fgMuted)),
             const SizedBox(height: 6),
             Text(
               '$completed / $total',
