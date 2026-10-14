@@ -19,6 +19,7 @@ class HivePersistenceProvider implements IPersistenceProvider {
     : _secureStorage = secureStorage ?? PlatformSecureStorage();
 
   final SecureStorage _secureStorage;
+  Future<void> _writeQueue = Future.value();
 
   @override
   Future<void> init() async {
@@ -202,82 +203,58 @@ class HivePersistenceProvider implements IPersistenceProvider {
   }
 
   @override
-  Future<void> updateLevelStar(
+  Future<T> updateProgress<T>(
     String playerId,
-    String levelId,
-    int stars,
-  ) async {
-    final progress = await loadProgress(playerId);
-
-    final currentStars = progress.levelStars[levelId] ?? 0;
-    if (stars > currentStars) {
-      final updatedStars = Map<String, int>.from(progress.levelStars);
-      updatedStars[levelId] = stars;
-      progress.levelStars = updatedStars;
+    T Function(PlayerProgress progress) mutate,
+  ) {
+    final result = _writeQueue.then((_) async {
+      final progress = await loadProgress(playerId);
+      final value = mutate(progress);
       await saveProgress(progress);
-    }
+      return value;
+    });
+    _writeQueue = result.then<void>((_) {}, onError: (_) {});
+    return result;
   }
 
   @override
   Future<void> deductHeart(String playerId) =>
-      _mutate(playerId, (p) => p.deductHeart());
+      updateProgress(playerId, (p) => p.deductHeart());
 
   @override
-  Future<bool> refuelHeartsWithDiamond(String playerId) async {
-    final progress = await loadProgress(playerId);
-    final ok = progress.refuelHeartsWithDiamond();
-    if (ok) await saveProgress(progress);
-    return ok;
-  }
+  Future<bool> refuelHeartsWithDiamond(String playerId) =>
+      updateProgress(playerId, (p) => p.refuelHeartsWithDiamond());
 
   @override
   Future<void> addDiamond(String playerId, [int count = 1]) =>
-      _mutate(playerId, (p) => p.addDiamond(count));
+      updateProgress(playerId, (p) => p.addDiamond(count));
 
   @override
-  Future<bool> checkAndRefuelHeart(String playerId, DateTime now) async {
-    final progress = await loadProgress(playerId);
-    final ok = progress.checkAndRefuelHeart(now);
-    if (ok) await saveProgress(progress);
-    return ok;
-  }
-
-  @override
-  Future<void> refuelHeartLowerLevel(String playerId) =>
-      _mutate(playerId, (p) => p.refuelHeartLowerLevel());
+  Future<bool> checkAndRefuelHeart(String playerId, DateTime now) =>
+      updateProgress(playerId, (p) => p.checkAndRefuelHeart(now));
 
   @override
   Future<void> markTutorialSeen(String playerId, String worldId) =>
-      _mutate(playerId, (p) => p.markTutorialSeen(worldId));
+      updateProgress(playerId, (p) => p.markTutorialSeen(worldId));
 
   @override
-  Future<bool> shareAndRefuel(String playerId, DateTime now) async {
-    final progress = await loadProgress(playerId);
-    final granted = progress.shareAndRefuel(now);
-    if (granted) await saveProgress(progress);
-    return granted;
-  }
+  Future<bool> shareAndRefuel(String playerId, DateTime now) =>
+      updateProgress(playerId, (p) => p.shareAndRefuel(now));
 
   @override
   Future<void> completeOnboarding(String playerId) =>
-      _mutate(playerId, (p) => p.completeOnboarding());
+      updateProgress(playerId, (p) => p.completeOnboarding());
 
   @override
-  Future<bool> consumeFreeGame(String playerId, DateTime now) async {
-    final progress = await loadProgress(playerId);
-    progress.checkAllowanceReset(now);
-    final consumed = progress.consumeFreeGame();
-    if (consumed) await saveProgress(progress);
-    return consumed;
-  }
+  Future<bool> consumeFreeGame(String playerId, DateTime now) =>
+      updateProgress(playerId, (p) {
+        p.checkAllowanceReset(now);
+        return p.consumeFreeGame();
+      });
 
   @override
-  Future<bool> grantShareBonus(String playerId, DateTime now) async {
-    final progress = await loadProgress(playerId);
-    final granted = progress.grantShareBonus(now);
-    if (granted) await saveProgress(progress);
-    return granted;
-  }
+  Future<bool> grantShareBonus(String playerId, DateTime now) =>
+      updateProgress(playerId, (p) => p.grantShareBonus(now));
 
   @override
   Future<bool> claimDailyReward(String playerId, DateTime now) async {
@@ -310,14 +287,5 @@ class HivePersistenceProvider implements IPersistenceProvider {
         Hive.box<dynamic>(kLeaderboardPrefsBoxName),
       ).clear();
     }
-  }
-
-  Future<void> _mutate(
-    String playerId,
-    void Function(PlayerProgress) fn,
-  ) async {
-    final progress = await loadProgress(playerId);
-    fn(progress);
-    await saveProgress(progress);
   }
 }

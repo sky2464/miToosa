@@ -275,4 +275,79 @@ void main() {
       },
     );
   });
+
+  group('HivePersistenceProvider — atomic results (BL-41)', () {
+    test(
+      'a brand-new player keeps the stars and XP of their first level result',
+      () async {
+        final provider = HivePersistenceProvider(
+          secureStorage: _FakeSecureStorage(),
+        );
+        await provider.init();
+
+        await provider.updateProgress(
+          'rookie',
+          (p) => p.commitLevelResult(
+            levelId: 'track_0',
+            levelIndex: 0,
+            stars: 4,
+            hintUsed: false,
+            timeSeconds: 30,
+          ),
+        );
+
+        final reloaded = await provider.loadProgress('rookie');
+        expect(
+          reloaded.levelStars['track_0'],
+          4,
+          reason: 'The first result must not be overwritten by a stale copy',
+        );
+        expect(reloaded.totalXP, 8);
+        expect(reloaded.unlockedAchievements, ['first_steps']);
+      },
+    );
+
+    test(
+      'competing mutations on a new player are all applied, none lost',
+      () async {
+        final provider = HivePersistenceProvider(
+          secureStorage: _FakeSecureStorage(),
+        );
+        await provider.init();
+
+        await Future.wait([
+          for (var i = 0; i < 10; i++)
+            provider.updateProgress('racer', (p) => p.addCoins(1)),
+        ]);
+
+        final reloaded = await provider.loadProgress('racer');
+        expect(reloaded.coins, 10);
+      },
+    );
+
+    test('a committed result is still there after relaunch', () async {
+      final store = _FakeSecureStorage();
+      final first = HivePersistenceProvider(secureStorage: store);
+      await first.init();
+      await first.updateProgress(
+        'relaunch',
+        (p) => p.commitLevelResult(
+          levelId: 'track_0',
+          levelIndex: 0,
+          stars: 5,
+          hintUsed: false,
+          timeSeconds: 12,
+        ),
+      );
+
+      await Hive.close();
+
+      final second = HivePersistenceProvider(secureStorage: store);
+      await second.init();
+      final reloaded = await second.loadProgress('relaunch');
+      expect(reloaded.levelStars['track_0'], 5);
+      expect(reloaded.unlockedAchievements, ['first_steps']);
+      expect(reloaded.coins, 10 + 25 + 20 + 10);
+    });
+  });
 }
