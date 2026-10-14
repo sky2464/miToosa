@@ -31,8 +31,7 @@ void main() async {
 
   // BL-34: persisted Sound FX / Music / Haptics toggles — apply before the
   // first frame so playback services honor the player's saved choices.
-  final audioRepo =
-      await SharedPreferencesAudioPreferencesRepository.create();
+  final audioRepo = await SharedPreferencesAudioPreferencesRepository.create();
   bindAudioPreferencesRepository(audioRepo);
   final audioPrefs = await audioRepo.load();
   AudioService().enabled = audioPrefs.soundEnabled;

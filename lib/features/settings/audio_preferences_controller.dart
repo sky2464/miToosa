@@ -11,9 +11,8 @@ import '../../data/audio_preferences_repository.dart';
 /// BL-34: the singletons alone are in-memory only; this controller is the
 /// preference-aware boundary every toggle routes through.
 class AudioPreferencesController {
-  AudioPreferencesController({
-    required IAudioPreferencesRepository preferences,
-  }) : _preferences = preferences;
+  AudioPreferencesController({required IAudioPreferencesRepository preferences})
+    : _preferences = preferences;
 
   final IAudioPreferencesRepository _preferences;
 
@@ -47,9 +46,10 @@ final audioPreferencesRepositoryProvider =
       return boundAudioPreferencesRepository;
     });
 
-final audioPreferencesControllerProvider =
-    Provider<AudioPreferencesController>((ref) {
-      return AudioPreferencesController(
-        preferences: ref.watch(audioPreferencesRepositoryProvider),
-      );
-    });
+final audioPreferencesControllerProvider = Provider<AudioPreferencesController>(
+  (ref) {
+    return AudioPreferencesController(
+      preferences: ref.watch(audioPreferencesRepositoryProvider),
+    );
+  },
+);
