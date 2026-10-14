@@ -98,16 +98,16 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 | BL-33 | Feature: Production brand assets | Feature | S | EP-01 | P0 | 🏁 Shipped |
 | BL-24 | Feature: Interactive how-to demos (#47) | Feature | M | EP-01 | P1 | ⬜ Backlog |
 | BL-34 | Chore: Production SFX and persisted preferences (#48) | Chore | S | EP-04 | P1 | ⬜ Backlog |
-| BL-35 | Feature: Reachable daily rewards, streaks, and achievements (#49) | Feature | M | EP-01 | P1 | ⬜ Backlog |
+| BL-35 | Feature: Reachable daily rewards, streaks, and achievements (#49) | Feature | M | EP-01 | P1 | ✅ Completed (PR #61) |
 | BL-36 | Chore: iPhone accessibility and device hardening (#50) | Chore | M | EP-01 | P1 | ⬜ Backlog |
-| BL-37 | Chore: Privacy-respecting crash resilience (#51) | Chore | M | EP-02 | P1 | ⬜ Backlog |
+| BL-37 | Chore: Privacy-respecting crash resilience (#51) | Chore | M | EP-02 | P1 | ✅ Completed (PR #61) |
 | BL-38 | Chore: Modularize oversized code and remove dead dependencies (#52) | Chore | L | EP-05 | P2 | ⬜ Backlog |
 | S1-03 | Feature: Manual wedge QA walkthrough (#5) | Feature | S | EP-01 | P1 | ⬜ Backlog |
 | S1-04 | Feature: Playtest survey + recruitment (#6) | Feature | M | EP-01 | P1 | ⬜ Backlog |
 | BL-04 | Feature: Backend leaderboard (post-playtest gate) (#10) | Feature | L | EP-03 | P2 | ⬜ Backlog |
 | BL-05 | Feature: VIP / IAP flow (#12) | Feature | L | EP-03 | P2 | ⬜ Backlog |
 | DX-01 | Chore: Complete gstack `/plan-tune` QA + ship docs (#53) | Chore | XS | EP-05 | P4 | ✅ Completed |
-| LP-01 | Chore: Local network QR play (deferred POC) (#54) | Chore | L | EP-05 | P3 | ⬜ Backlog |
+| LP-01 | Chore: Local network QR play (deferred POC) (#54) | Chore | L | EP-05 | P3 | 🟡 Deferred ([deferral-LP-01.md](archived/deferral-LP-01.md)) |
 | BL-39 | Chore: Puzzle correctness audit and solvability fixes (23 rules) | Chore | L | EP-06 | P0 | ⬜ Backlog |
 | BL-40 | Chore: Durable saves, validated migration, and recovery UI | Chore | L | EP-01 | P0 | ⬜ Backlog |
 | BL-41 | Chore: Atomic puzzle-result commits and reward integrity | Chore | M | EP-06 | P0 | ⬜ Backlog |
@@ -386,6 +386,7 @@ Key dependencies: durable saves (BL-40) precede atomic results (BL-41); committe
 
 | Date | Event | By |
 |------|-------|----|
+| 2026-10-14 | Worker 4/4 — **DX-01** gstack `/plan-tune` QA evidence shipped ([evidence-DX-01.md](archived/evidence-DX-01.md)); **LP-01** deferral recorded ([deferral-LP-01.md](archived/deferral-LP-01.md)); **BL-35/BL-37** marked complete per merged PR #61 (#49/#51) | AgToosa |
 | 2026-09-10 | Documentation planning update (manual edit, not an /agtoosa-* command) — added Premium Quality Roadmap section, EP-06, and BL-39–BL-54 (16 backlog items); extended BL-24, BL-34–BL-38, S1-03/S1-04, BL-25/BL-26 with premium-quality scope notes; updated Charter long-term quality objective and Non-goals; no code changes, no runtime APIs changed | Claude |
 | 2026-07-28 | /agtoosa-ship — Ship 🚀 repo ship PASS — BL-33 — Aetheric Pulse brand assets; 950 tests; task 4.2 manual deferred | AgToosa |
 | 2026-07-28 | /agtoosa-review — Review ✅ Approved — BL-33 — 0 critical, 1 warning (task 4.2 manual); `docs/archived/review-BL-33.md`; next `/agtoosa-next` → ship | AgToosa |

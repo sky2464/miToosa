@@ -36,3 +36,18 @@
 |------|---------|----------|
 | Analyze | `dart analyze` | No issues |
 | Tests | `flutter test` | All pass (unchanged app code) |
+
+---
+
+## TDD / QA evidence (2026-10-14)
+
+| ID | Result | Notes |
+|----|--------|-------|
+| T-001 | PASS | `gstack-config get question_tuning` → `true` |
+| T-002 | PASS | `~/.gstack/developer-profile.json` — five declared keys, `declared_at` ISO timestamp |
+| T-003 | PASS | `gstack-developer-profile --profile` matches approved table (detail 0.85) |
+| T-004 | PASS | `docs/Context/agent-preferences.md` — no credential literals |
+| T-005 | PASS | v1 observational wording present |
+| T-006 | PASS | `~/.gstack/analytics/` creatable; question log path available |
+
+Ledger: [docs/archived/evidence-DX-01.md](archived/evidence-DX-01.md)

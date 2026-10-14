@@ -2,7 +2,7 @@
 
 > **Story ID:** LP-01
 > **Epic:** EP-05 Technical Debt & Infrastructure
-> **Status:** ⬜ Backlog (deferred POC — not v1.5.1 launch scope)
+> **Status:** 🟡 Deferred POC (documented 2026-10-14 — not v1.5.1 launch scope; see [deferral-LP-01.md](deferral-LP-01.md))
 > **Estimate:** L
 > **Clarity:** ready (legacy draft)
 > **Spec created:** 2026-04-22
