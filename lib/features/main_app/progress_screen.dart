@@ -11,6 +11,10 @@ import '../../widgets/progress_ring.dart';
 import '../../widgets/skill_radar.dart';
 import '../../widgets/stat_pill.dart';
 import '../../widgets/weekly_bars.dart';
+import '../achievements/achievements_screen.dart';
+import '../engagement/daily_reward_controller.dart';
+import '../engagement/daily_reward_prompt.dart';
+import '../streak/streak_calendar_screen.dart';
 
 /// Progress screen — XP hero, cognitive radar, weekly activity, achievements.
 class ProgressScreen extends ConsumerWidget {
@@ -34,7 +38,7 @@ class ProgressScreen extends ConsumerWidget {
   }
 }
 
-class _ProgressBody extends StatelessWidget {
+class _ProgressBody extends ConsumerWidget {
   final PlayerProgress progress;
   const _ProgressBody({required this.progress});
 
@@ -130,8 +134,9 @@ class _ProgressBody extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final xp = progress.totalXP;
+    final daily = DailyRewardController(progress: progress);
     final level = (xp ~/ 1000) + 1;
     final levelXp = xp % 1000;
     final levelPct = levelXp / 10.0; // 0–100
@@ -276,6 +281,58 @@ class _ProgressBody extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        // ── Engagement (BL-35) ────────────────────────────────────────────
+        GlassCard(
+          borderRadius: 24,
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Column(
+            children: [
+              _EngagementNavRow(
+                icon: Icons.card_giftcard_outlined,
+                title: 'Daily rewards',
+                subtitle: daily.canClaim
+                    ? 'Reward ready — day ${daily.highlightDay}'
+                    : 'Claimed for today',
+                onTap: () =>
+                    showDailyRewardSheet(context, ref: ref, progress: progress),
+              ),
+              const Divider(height: 1, indent: 56),
+              _EngagementNavRow(
+                icon: Icons.local_fire_department_outlined,
+                title: 'Streak calendar',
+                subtitle:
+                    '${progress.streakCount} day streak · best ${progress.bestStreak}',
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => StreakCalendarScreen(
+                        streakCount: progress.streakCount,
+                        bestStreak: progress.bestStreak,
+                        playHistory: progress.playHistory,
+                        streakFreezeCount: progress.streakFreezeCount,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              const Divider(height: 1, indent: 56),
+              _EngagementNavRow(
+                icon: Icons.emoji_events_outlined,
+                title: 'Achievements',
+                subtitle: '$unlockedCount of ${achievements.length} unlocked',
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const AchievementsScreen(),
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -450,6 +507,69 @@ class _ProgressBody extends StatelessWidget {
           itemBuilder: (_, i) => AchievementCard(a: achievements[i]),
         ),
       ],
+    );
+  }
+}
+
+class _EngagementNavRow extends StatelessWidget {
+  const _EngagementNavRow({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: '$title. $subtitle',
+      child: InkWell(
+        onTap: onTap,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            minHeight: AethericPulseDark.minTapTarget,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Row(
+              children: [
+                Icon(icon, color: AP.blueLight),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: AP.headlineMd().copyWith(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle,
+                        style: const TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 11,
+                          color: AP.fgMeta,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(Icons.chevron_right, color: AP.fgMuted),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

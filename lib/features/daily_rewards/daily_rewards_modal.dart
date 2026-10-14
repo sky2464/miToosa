@@ -6,11 +6,13 @@ import '../../theme/design_system.dart';
 /// Bottom-sheet modal showing the 7-day daily reward cycle.
 class DailyRewardsModal extends StatelessWidget {
   final int currentDay; // 1–7 (which day to highlight)
-  final VoidCallback onClaim;
+  final bool canClaim;
+  final VoidCallback? onClaim;
 
   const DailyRewardsModal({
     super.key,
     required this.currentDay,
+    this.canClaim = true,
     required this.onClaim,
   });
 
@@ -48,10 +50,17 @@ class DailyRewardsModal extends StatelessWidget {
           const SizedBox(height: MiToosaTheme.spacingMd),
           SizedBox(
             width: double.infinity,
-            child: FilledButton(
-              key: const ValueKey('daily_reward_claim'),
-              onPressed: onClaim,
-              child: const Text('Claim Reward'),
+            child: Semantics(
+              button: true,
+              enabled: canClaim,
+              label: canClaim
+                  ? 'Claim daily reward for day $currentDay'
+                  : 'Daily reward already claimed',
+              child: FilledButton(
+                key: const ValueKey('daily_reward_claim'),
+                onPressed: canClaim ? onClaim : null,
+                child: Text(canClaim ? 'Claim Reward' : 'Come back tomorrow'),
+              ),
             ),
           ),
         ],

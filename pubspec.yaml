@@ -28,6 +28,7 @@ dependencies:
   network_info_plus: ^5.0.0
   firebase_core: ^4.8.0
   firebase_analytics: ^12.4.0
+  firebase_crashlytics: ^5.4.0
 
 dev_dependencies:
   flutter_test:
