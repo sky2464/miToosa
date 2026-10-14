@@ -48,6 +48,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/content/worlds.json
+    - assets/content/tutorials.json
     - assets/audio/
     - assets/images/avatars/
     - assets/images/badges/

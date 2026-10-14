@@ -21,6 +21,7 @@ import '../../widgets/dot_progress_strip.dart';
 import '../../widgets/feedback_toast.dart';
 import '../../widgets/ghost_button.dart';
 import '../../widgets/how_to_play_modal.dart';
+import '../../widgets/tutorial/tutorial_objective_strip.dart';
 import '../../widgets/primary_button.dart';
 import '../../widgets/run_timer_overlay.dart';
 import '../auth/auth_provider.dart';
@@ -518,6 +519,21 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
                       child: Column(
                         children: [
                           const SizedBox(height: MiToosaTheme.spacingMd),
+                          if (ContentProvider().tutorials.forTrack(
+                                widget.track.id,
+                              ) !=
+                              null)
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: MiToosaTheme.spacingSm,
+                              ),
+                              child: TutorialObjectiveStrip(
+                                objective: ContentProvider().tutorials
+                                    .forTrack(widget.track.id)!
+                                    .objectiveTemplate,
+                                livePrompt: level.puzzle.prompt,
+                              ),
+                            ),
                           // Prompt
                           Text(
                             level.puzzle.prompt,
@@ -750,11 +766,19 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
               // Reopen how-to-play
               IconButton(
                 key: const ValueKey('how_to_play_reopen'),
-                onPressed: () => HowToPlayModal.show(
-                  context,
-                  track: widget.track,
-                  onStart: () => Navigator.of(context).pop(),
-                ),
+                onPressed: () {
+                  final tutorial = ContentProvider().tutorials.forTrack(
+                    widget.track.id,
+                  );
+                  if (tutorial == null) return;
+                  HowToPlayModal.show(
+                    context,
+                    track: widget.track,
+                    tutorial: tutorial,
+                    helpMode: true,
+                    onStart: () => Navigator.of(context).pop(),
+                  );
+                },
                 icon: Icon(
                   Icons.help_outline_rounded,
                   color: theme.colorScheme.primary.withValues(alpha: 0.6),

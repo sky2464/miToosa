@@ -8,6 +8,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), version
 ## [Unreleased]
 
 ### Shipped (AgToosa cycle)
+- 2026-10-14 — **DX-01** gstack `/plan-tune` docs shipped — `docs/Context/agent-preferences.md`, `question_tuning=true` verified locally, Master-Plan row closed (#53)
 - 2026-07-28 — **BL-33** Production brand assets — Aetheric Pulse constellation/spark master, `flutter_launcher_icons` iOS/Android slots, branded launch surface; `test/release/brand_assets_test.dart`; 950/950 `flutter test`; [review-BL-33.md](archived/review-BL-33.md) · [evidence-BL-33.md](archived/evidence-BL-33.md) · [ship-check-BL-33.md](archived/ship-check-BL-33.md); iPhone screenshot smoke **manual-deferred** (task 4.2)
 - 2026-07-27 — **BL-32** Privacy, consent, and iOS release configuration — `PrivacyPreferencesRepository`, `AnalyticsConsentService`, Settings opt-out, `PrivacyInfo.xcprivacy`, iOS plist truth; 944/944 `flutter test`; [review-BL-32.md](archived/review-BL-32.md) · [evidence-BL-32.md](archived/evidence-BL-32.md) · [ship-check-BL-32.md](archived/ship-check-BL-32.md); iPhone opt-out smoke **manual-deferred** (task 4.2)
 - 2026-07-27 — **BL-31** Truthful launch surfaces — 4-tab shell; local-play/leaderboard gated; curated Settings; `ResetProgressController` + `resetGameProgress`; 929/929 `flutter test`; [review-BL-31.md](archived/review-BL-31.md) · [evidence-BL-31.md](archived/evidence-BL-31.md) · [ship-check-BL-31.md](archived/ship-check-BL-31.md); iPhone Settings/reset smoke **manual-deferred** (task 4.3)
