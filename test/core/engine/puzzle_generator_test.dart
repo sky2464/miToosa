@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mitoosa/core/engine/puzzle_generator.dart';
 import 'package:mitoosa/core/models/puzzle.dart';
+import 'package:mitoosa/core/models/shape_item.dart';
 
 void main() {
   group('PuzzleGenerator — correctness guarantees', () {
@@ -248,6 +249,82 @@ void main() {
       expect(puzzle.targetItems.length, greaterThanOrEqualTo(3));
     });
 
+    // ─── findMissing: the gap must be solvable, not just well-formed ───
+    //
+    // The missing item must be inferable from a repeated value still
+    // visible in the sequence — not a value only the generator knows.
+
+    const findMissingPlaceholder = ShapeItem(
+      shape: Shape.diamond,
+      color: ShapeColor.yellow,
+      fill: ShapeFill.outlined,
+    );
+
+    void expectFindMissingIsSolvable(
+      Puzzle puzzle,
+      int seed,
+      DifficultyParameters difficulty,
+    ) {
+      final correct = puzzle.options.firstWhere(
+        (o) => o.id == puzzle.correctOptionId,
+      );
+      expect(
+        correct.items.length,
+        1,
+        reason:
+            'findMissing correct option must hold exactly one item '
+            '(seed=$seed, difficulty=$difficulty)',
+      );
+      final missingItem = correct.items.single;
+      final visibleItems = puzzle.targetItems.where(
+        (item) => item != findMissingPlaceholder,
+      );
+      expect(
+        visibleItems.contains(missingItem),
+        isTrue,
+        reason:
+            'findMissing: the missing item ($missingItem) must be inferable '
+            'from a repeated value still visible in the sequence '
+            '(seed=$seed, difficulty=$difficulty)',
+      );
+    }
+
+    test('findMissing: missing item is inferable from a repeated visible '
+        'item (1,000 seeds)', () {
+      for (int seed = 0; seed < 1000; seed++) {
+        final gen = PuzzleGenerator(Random(seed));
+        final puzzle = gen.generate(
+          rule: PuzzleRule.findMissing,
+          difficulty: baseDifficulty,
+        );
+        expectFindMissingIsSolvable(puzzle, seed, baseDifficulty);
+      }
+    });
+
+    test('findMissing: still solvable at minimum and maximum difficulty '
+        '(500 seeds each)', () {
+      const minDifficulty = DifficultyParameters(
+        shapeCount: 3,
+        colorCount: 2,
+        choiceCount: 3,
+      );
+      const maxDifficulty = DifficultyParameters(
+        shapeCount: 8,
+        colorCount: 6,
+        choiceCount: 7,
+      );
+      for (final difficulty in [minDifficulty, maxDifficulty]) {
+        for (int seed = 0; seed < 500; seed++) {
+          final gen = PuzzleGenerator(Random(seed));
+          final puzzle = gen.generate(
+            rule: PuzzleRule.findMissing,
+            difficulty: difficulty,
+          );
+          expectFindMissingIsSolvable(puzzle, seed, difficulty);
+        }
+      }
+    });
+
     test('cipherBreak: correct label is a non-empty string', () {
       final puzzle = generator.generate(
         rule: PuzzleRule.cipherBreak,
@@ -349,6 +426,54 @@ void main() {
         }
       });
     }
+
+    // ─── numberGrid: correct label actually satisfies the stated
+    // "rows sum equal" relation, not just a parseable positive int ──
+
+    test(
+      'numberGrid: correct label satisfies "rows sum equal" (1,000 seeds)',
+      () {
+        final promptPattern = RegExp(
+          r'Complete the grid:\n(\d+)  (\d+)\n(\d+)  \?',
+        );
+        for (int seed = 0; seed < 1000; seed++) {
+          final gen = PuzzleGenerator(Random(seed));
+          final puzzle = gen.generate(
+            rule: PuzzleRule.numberGrid,
+            difficulty: baseDifficulty,
+          );
+          final match = promptPattern.firstMatch(puzzle.prompt);
+          expect(
+            match,
+            isNotNull,
+            reason:
+                'numberGrid prompt format changed unexpectedly '
+                '(seed=$seed)',
+          );
+          final a = int.parse(match!.group(1)!);
+          final b = int.parse(match.group(2)!);
+          final c = int.parse(match.group(3)!);
+          final correct = puzzle.options.firstWhere(
+            (o) => o.id == puzzle.correctOptionId,
+          );
+          final answer = int.parse(correct.label!);
+          expect(
+            answer,
+            greaterThan(0),
+            reason:
+                'numberGrid: answer must be a positive integer '
+                '(seed=$seed)',
+          );
+          expect(
+            c + answer,
+            a + b,
+            reason:
+                'numberGrid: row sums must be equal — c+answer ($c+$answer) '
+                'must equal a+b ($a+$b) (seed=$seed)',
+          );
+        }
+      },
+    );
 
     // ─── mathFraction: correct label is a valid fraction string ─
 
@@ -490,6 +615,7 @@ void main() {
       PuzzleRule.mathAlgebra,
       PuzzleRule.binaryDecode,
       PuzzleRule.cipherBreak,
+      PuzzleRule.numberGrid,
     ]) {
       test('$rule: no two options share the same label (stress test)', () {
         final gen = PuzzleGenerator(Random(77));

@@ -399,10 +399,22 @@ class PuzzleGenerator {
   Puzzle _generateFindMissing(DifficultyParameters difficulty) {
     final palette = _pickColors(difficulty.colorCount);
 
-    // Create a full sequence, then remove one element
-    final fullSequence = List.generate(
-      difficulty.shapeCount,
+    // Build a repeating pattern (same approach as sequenceNext) so the
+    // "gap" is always inferable from a repeated value still visible
+    // elsewhere in the sequence, rather than a value only the generator
+    // knows.
+    final patternLen = 2 + _random.nextInt(2); // 2 or 3
+    final pattern = List.generate(
+      patternLen,
       (_) => _randomItem(palette: palette),
+    );
+
+    // At least 2 full cycles so every pattern slot repeats at least once
+    // even after one occurrence is hidden as the gap.
+    final cycles = max(2, (difficulty.shapeCount / patternLen).ceil());
+    final fullSequence = List.generate(
+      patternLen * cycles,
+      (i) => pattern[i % patternLen],
     );
 
     final missingIndex = _random.nextInt(fullSequence.length);
@@ -422,13 +434,23 @@ class PuzzleGenerator {
       items: [missingItem],
     );
 
+    // Keep distractors visually distinct from every pattern value, not
+    // just the missing one, so nothing on screen hints at a second
+    // plausible answer.
+    ShapeItem randomDistractorItem() {
+      ShapeItem candidate;
+      int tries = 0;
+      do {
+        candidate = _randomItem(palette: palette);
+        tries++;
+      } while (pattern.contains(candidate) && tries < 20);
+      return candidate;
+    }
+
     var wrongOptions = <PuzzleOption>[];
     for (int i = 0; i < difficulty.choiceCount - 1; i++) {
       wrongOptions.add(
-        PuzzleOption(
-          id: _uuid(),
-          items: [_randomItem(palette: palette)],
-        ),
+        PuzzleOption(id: _uuid(), items: [randomDistractorItem()]),
       );
     }
 
@@ -436,10 +458,7 @@ class PuzzleGenerator {
       correctOption,
       wrongOptions,
       () => [
-        PuzzleOption(
-          id: _uuid(),
-          items: [_randomItem(palette: palette)],
-        ),
+        PuzzleOption(id: _uuid(), items: [randomDistractorItem()]),
       ],
     );
 
@@ -1330,19 +1349,20 @@ class PuzzleGenerator {
   // ─── numberGrid: Sudoku-style ─────────────────────────────
 
   Puzzle _generateNumberGrid(DifficultyParameters difficulty) {
-    // Simple 2x2 grid where each row and column sums to a target
-    final a = _random.nextInt(5) + 1;
-    final b = _random.nextInt(5) + 1;
-    final c = _random.nextInt(5) + 1;
-    final answer = a + b - c; // This ensures the grid is solvable
-
+    // 2x2 grid where the two rows sum to the same total.
     // Grid: [a, b]
     //       [c, ?]
-    // Row sums and column sums must match
+    // Choose c from [1, a+b-1] so answer = a+b-c is always a positive
+    // integer that actually satisfies "rows sum equal" — never a
+    // substituted value that breaks the stated relation.
+    final a = _random.nextInt(5) + 1;
+    final b = _random.nextInt(5) + 1;
+    final c = _random.nextInt(a + b - 1) + 1;
+    final answer = a + b - c;
 
     return _buildMathPuzzle(
       prompt: 'Complete the grid:\n$a  $b\n$c  ?\n(rows sum equal)',
-      answer: answer > 0 ? answer : answer.abs() + 2,
+      answer: answer,
       difficulty: difficulty,
       rule: PuzzleRule.numberGrid,
     );
