@@ -82,6 +82,8 @@ class _FakePersistence implements IPersistenceProvider {
   Future<bool> consumeFreeGame(String playerId, DateTime now) async => false;
   @override
   Future<bool> grantShareBonus(String playerId, DateTime now) async => false;
+  @override
+  Future<bool> claimDailyReward(String playerId, DateTime now) async => false;
 }
 
 RecoveryController _controller({

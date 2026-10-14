@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'theme/design_system.dart';
 import 'app/root_app_router.dart';
 import 'data/player_progress_provider.dart';
@@ -15,6 +16,9 @@ import 'core/haptics_service.dart';
 import 'core/music_service.dart';
 import 'data/telemetry_provider.dart';
 import 'core/analytics_consent_service.dart';
+import 'core/crash_diagnostics_service.dart';
+import 'core/crash_reporter.dart';
+import 'core/error_boundary.dart';
 import 'data/audio_preferences_repository.dart';
 import 'data/privacy_preferences_repository.dart';
 import 'firebase_options.dart';
@@ -38,6 +42,11 @@ void main() async {
   MusicService().enabled = audioPrefs.musicEnabled;
   HapticsService().enabled = audioPrefs.hapticsEnabled;
 
+  final crashReporter = kFirebaseEnabled
+      ? FirebaseCrashReporter(FirebaseCrashlytics.instance)
+      : NoopCrashReporter();
+  bindCrashReporter(crashReporter);
+
   if (kFirebaseEnabled) {
     if (Firebase.apps.isEmpty) {
       await Firebase.initializeApp(
@@ -51,6 +60,15 @@ void main() async {
       preferences: privacyRepo,
       consentService: consentService,
     );
+    final crashDiagnostics = CrashDiagnosticsService(
+      FirebaseCrashDiagnosticsAdapter(),
+    );
+    await bootstrapCrashDiagnostics(
+      preferences: privacyRepo,
+      diagnosticsService: crashDiagnostics,
+      reporter: crashReporter,
+    );
+    installErrorBoundary(crashReporter);
     if (kDebugMode) {
       final analytics = FirebaseAnalytics.instance;
       debugPrint(

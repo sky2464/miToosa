@@ -4,6 +4,7 @@ import 'dart:developer' as developer;
 import 'platform_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
+import '../core/engine/daily_reward_engine.dart';
 import 'persistence_provider.dart';
 import 'player_progress.dart';
 import 'leaderboard_prefs.dart';
@@ -276,6 +277,25 @@ class HivePersistenceProvider implements IPersistenceProvider {
     final granted = progress.grantShareBonus(now);
     if (granted) await saveProgress(progress);
     return granted;
+  }
+
+  @override
+  Future<bool> claimDailyReward(String playerId, DateTime now) async {
+    final progress = await loadProgress(playerId);
+    if (!DailyRewardEngine.canClaim(
+      lastClaim: progress.lastDailyRewardClaim,
+      now: now,
+    )) {
+      return false;
+    }
+    final day = progress.dailyRewardDay <= 0
+        ? 1
+        : DailyRewardEngine.nextDay(progress.dailyRewardDay);
+    final coins = DailyRewardEngine.rewardForDay(day).coins;
+    progress.addCoins(coins);
+    progress.claimDailyReward(day, now);
+    await saveProgress(progress);
+    return true;
   }
 
   @override

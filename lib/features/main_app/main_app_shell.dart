@@ -18,6 +18,8 @@ import '../../widgets/atmosphere.dart';
 import '../../widgets/credits_menu_sheet.dart';
 import '../../widgets/kinetic_background.dart';
 import '../../widgets/profile_menu_sheet.dart';
+import '../../core/engine/daily_reward_engine.dart';
+import '../engagement/daily_reward_prompt.dart';
 
 class MainAppShell extends ConsumerStatefulWidget {
   const MainAppShell({super.key});
@@ -28,6 +30,7 @@ class MainAppShell extends ConsumerStatefulWidget {
 
 class _MainAppShellState extends ConsumerState<MainAppShell> {
   int _selectedIndex = 0;
+  bool _dailyRewardPromptShown = false;
   late final AppLifecycleListener _lifecycleListener;
   late final TelemetrySessionController _telemetryController;
 
@@ -48,6 +51,26 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
       onDetach: _endTelemetrySession,
     );
     unawaited(_startTelemetrySession());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      unawaited(_offerDailyRewardIfEligible());
+    });
+  }
+
+  Future<void> _offerDailyRewardIfEligible() async {
+    if (_dailyRewardPromptShown || !mounted) return;
+    final progress = ref.read(playerProgressProvider).maybeWhen(
+      data: (p) => p,
+      orElse: () => null,
+    );
+    if (progress == null) return;
+    if (!DailyRewardEngine.canClaim(
+      lastClaim: progress.lastDailyRewardClaim,
+      now: DateTime.now(),
+    )) {
+      return;
+    }
+    _dailyRewardPromptShown = true;
+    await showDailyRewardSheet(context, ref: ref, progress: progress);
   }
 
   Future<void> _startTelemetrySession() async {
