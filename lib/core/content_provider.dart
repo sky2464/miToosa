@@ -5,8 +5,11 @@ import 'content/catalog_validator.dart';
 import 'models/gameplay_level.dart';
 import 'models/puzzle.dart';
 import 'engine/puzzle_generator.dart';
+import 'tutorial/tutorial_repository.dart';
 
 export 'content/catalog_validator.dart';
+export 'tutorial/tutorial_definition.dart';
+export 'tutorial/tutorial_repository.dart';
 
 class TrackDefinition {
   final String id;
@@ -53,6 +56,7 @@ class ContentProvider {
 
   List<TrackDefinition> tracks = [];
   final PuzzleGenerator _generator = PuzzleGenerator();
+  final TutorialRepository tutorials = TutorialRepository();
 
   Future<void> init() async {
     final String jsonString = await rootBundle.loadString(
@@ -65,6 +69,14 @@ class ContentProvider {
       return TrackDefinition.fromJson(map);
     }).toList();
     CatalogValidator.validateTracks(tracks);
+    await tutorials.loadFromAsset('assets/content/tutorials.json');
+    tutorials.validateAgainstTracks(tracks);
+  }
+
+  /// Resolved icon asset for a track (BL-24 AC-007).
+  String iconAssetForTrack(TrackDefinition track) {
+    if (track.iconAsset.isNotEmpty) return track.iconAsset;
+    return 'assets/images/icons/track_memory.png';
   }
 
   /// Procedural level builder with progressive difficulty.

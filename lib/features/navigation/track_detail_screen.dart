@@ -9,6 +9,8 @@ import '../../theme/design_system.dart';
 import '../gameplay/gameplay_screen.dart';
 import '../../features/progression/free_games_controller.dart';
 import '../../widgets/free_games_depleted_sheet.dart';
+import '../../widgets/how_to_play_modal.dart';
+import '../auth/auth_provider.dart';
 
 class TrackDetailScreen extends ConsumerStatefulWidget {
   final TrackDefinition track;
@@ -305,7 +307,7 @@ class _TrackDetailScreenState extends ConsumerState<TrackDetailScreen>
                       label: semanticLabel,
                       child: GestureDetector(
                         onTap: isComplete || isCurrent
-                            ? () => _showDifficultySheet(
+                            ? () => showDifficultyWithTutorialGate(
                                 context,
                                 ref: ref,
                                 track: track,
@@ -331,7 +333,7 @@ class _TrackDetailScreenState extends ConsumerState<TrackDetailScreen>
                         children: [
                           FilledButton(
                             onPressed: completed < track.targetLevelCount
-                                ? () => _showDifficultySheet(
+                                ? () => showDifficultyWithTutorialGate(
                                     context,
                                     ref: ref,
                                     track: track,
@@ -356,7 +358,45 @@ class _TrackDetailScreenState extends ConsumerState<TrackDetailScreen>
   }
 }
 
-void _showDifficultySheet(
+Future<void> showDifficultyWithTutorialGate(
+  BuildContext context, {
+  required WidgetRef ref,
+  required TrackDefinition track,
+  required int levelIndex,
+}) async {
+  final progress = await ref.read(playerProgressProvider.future);
+  final tutorial = ContentProvider().tutorials.forTrack(track.id);
+  final needsTutorial =
+      tutorial != null && !progress.seenTutorialWorlds.contains(track.id);
+
+  if (needsTutorial && context.mounted) {
+    await HowToPlayModal.show(
+      context,
+      track: track,
+      tutorial: tutorial,
+      onStart: () async {
+        final playerId = ref.playerId;
+        if (playerId != null) {
+          await ref
+              .read(persistenceProvider)
+              .markTutorialSeen(playerId, track.id);
+          ref.invalidate(playerProgressProvider);
+        }
+        if (context.mounted) Navigator.of(context).pop();
+      },
+    );
+  }
+
+  if (!context.mounted) return;
+  showTrackDifficultySheet(
+    context,
+    ref: ref,
+    track: track,
+    levelIndex: levelIndex,
+  );
+}
+
+void showTrackDifficultySheet(
   BuildContext context, {
   required WidgetRef ref,
   required TrackDefinition track,

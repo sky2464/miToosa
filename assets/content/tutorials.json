@@ -1,0 +1,642 @@
+[
+  {
+    "trackId": "track_1",
+    "rule": "matchIdentical",
+    "goal": "Pick the option that matches the target pattern.",
+    "steps": [
+      "Read the goal for Pattern Match.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "shapeMatch",
+    "correctAction": "correct",
+    "objectiveTemplate": "Pick the option that matches the target pattern.",
+    "demoPrompt": "Practice: Match identical patterns",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "Not this one"
+      },
+      {
+        "id": "correct",
+        "label": "Correct answer"
+      },
+      {
+        "id": "wrong_b",
+        "label": "Try again"
+      }
+    ]
+  },
+  {
+    "trackId": "track_2",
+    "rule": "countShapes",
+    "goal": "Count the shapes and tap the right number.",
+    "steps": [
+      "Read the goal for Shape Counter.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "count",
+    "correctAction": "correct",
+    "objectiveTemplate": "Count the shapes and tap the right number.",
+    "demoPrompt": "Practice: Count and calculate",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "Not this one"
+      },
+      {
+        "id": "correct",
+        "label": "Correct answer"
+      },
+      {
+        "id": "wrong_b",
+        "label": "Try again"
+      }
+    ]
+  },
+  {
+    "trackId": "track_3",
+    "rule": "oddOneOut",
+    "goal": "Tap the shape that does not belong.",
+    "steps": [
+      "Read the goal for Odd One Out.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "oddOneOut",
+    "correctAction": "correct",
+    "objectiveTemplate": "Tap the shape that does not belong.",
+    "demoPrompt": "Practice: Find what doesn't belong",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "Not this one"
+      },
+      {
+        "id": "correct",
+        "label": "Correct answer"
+      },
+      {
+        "id": "wrong_b",
+        "label": "Try again"
+      }
+    ]
+  },
+  {
+    "trackId": "track_4",
+    "rule": "colorPattern",
+    "goal": "Tap the color pattern that matches the code.",
+    "steps": [
+      "Read the goal for Color Code.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "sequence",
+    "correctAction": "correct",
+    "objectiveTemplate": "Tap the color pattern that matches the code.",
+    "demoPrompt": "Practice: Master color patterns",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "Not this one"
+      },
+      {
+        "id": "correct",
+        "label": "Correct answer"
+      },
+      {
+        "id": "wrong_b",
+        "label": "Try again"
+      }
+    ]
+  },
+  {
+    "trackId": "track_5",
+    "rule": "findMissing",
+    "goal": "Tap the piece that completes the sequence.",
+    "steps": [
+      "Read the goal for Missing Piece.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "sequence",
+    "correctAction": "correct",
+    "objectiveTemplate": "Tap the piece that completes the sequence.",
+    "demoPrompt": "Practice: Fill in the blanks",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "Not this one"
+      },
+      {
+        "id": "correct",
+        "label": "Correct answer"
+      },
+      {
+        "id": "wrong_b",
+        "label": "Try again"
+      }
+    ]
+  },
+  {
+    "trackId": "track_6",
+    "rule": "sequenceNext",
+    "goal": "Tap what comes next in the pattern.",
+    "steps": [
+      "Read the goal for Sequence.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "sequence",
+    "correctAction": "correct",
+    "objectiveTemplate": "Tap what comes next in the pattern.",
+    "demoPrompt": "Practice: Continue the pattern",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "Not this one"
+      },
+      {
+        "id": "correct",
+        "label": "Correct answer"
+      },
+      {
+        "id": "wrong_b",
+        "label": "Try again"
+      }
+    ]
+  },
+  {
+    "trackId": "track_7",
+    "rule": "binaryDecode",
+    "goal": "Decode the dots and tap the number.",
+    "steps": [
+      "Read the goal for Binary Logic.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "binary",
+    "correctAction": "correct",
+    "objectiveTemplate": "Decode the dots and tap the number.",
+    "demoPrompt": "Practice: Think in 0s and 1s",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "3"
+      },
+      {
+        "id": "correct",
+        "label": "5"
+      },
+      {
+        "id": "wrong_b",
+        "label": "7"
+      }
+    ]
+  },
+  {
+    "trackId": "track_8",
+    "rule": "logicGate",
+    "goal": "Apply the gate and tap true or false.",
+    "steps": [
+      "Read the goal for Logic Gates.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "boolean",
+    "correctAction": "correct",
+    "objectiveTemplate": "Apply the gate and tap true or false.",
+    "demoPrompt": "Practice: AND, OR, XOR puzzles",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "TRUE"
+      },
+      {
+        "id": "correct",
+        "label": "FALSE"
+      }
+    ]
+  },
+  {
+    "trackId": "track_9",
+    "rule": "cipherBreak",
+    "goal": "Use the key and tap the decoded answer.",
+    "steps": [
+      "Read the goal for Cipher Break.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "cipher",
+    "correctAction": "correct",
+    "objectiveTemplate": "Use the key and tap the decoded answer.",
+    "demoPrompt": "Practice: Crack the code",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "Not this one"
+      },
+      {
+        "id": "correct",
+        "label": "Correct answer"
+      },
+      {
+        "id": "wrong_b",
+        "label": "Try again"
+      }
+    ]
+  },
+  {
+    "trackId": "track_10",
+    "rule": "mathAddSub",
+    "goal": "Solve the math and tap the answer.",
+    "steps": [
+      "Read the goal for Add & Subtract.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "math",
+    "correctAction": "correct",
+    "objectiveTemplate": "Solve the math and tap the answer.",
+    "demoPrompt": "Practice: Quick mental math",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "Not this one"
+      },
+      {
+        "id": "correct",
+        "label": "Correct answer"
+      },
+      {
+        "id": "wrong_b",
+        "label": "Try again"
+      }
+    ]
+  },
+  {
+    "trackId": "track_11",
+    "rule": "mathMulDiv",
+    "goal": "Solve the problem and tap the answer.",
+    "steps": [
+      "Read the goal for Multiply & Divide.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "math",
+    "correctAction": "correct",
+    "objectiveTemplate": "Solve the problem and tap the answer.",
+    "demoPrompt": "Practice: Times tables & beyond",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "Not this one"
+      },
+      {
+        "id": "correct",
+        "label": "Correct answer"
+      },
+      {
+        "id": "wrong_b",
+        "label": "Try again"
+      }
+    ]
+  },
+  {
+    "trackId": "track_12",
+    "rule": "mathExponent",
+    "goal": "Solve the exponent or root and tap the answer.",
+    "steps": [
+      "Read the goal for Powers & Roots.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "math",
+    "correctAction": "correct",
+    "objectiveTemplate": "Solve the exponent or root and tap the answer.",
+    "demoPrompt": "Practice: Exponents & square roots",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "Not this one"
+      },
+      {
+        "id": "correct",
+        "label": "Correct answer"
+      },
+      {
+        "id": "wrong_b",
+        "label": "Try again"
+      }
+    ]
+  },
+  {
+    "trackId": "track_13",
+    "rule": "mathModulo",
+    "goal": "Find the remainder and tap the answer.",
+    "steps": [
+      "Read the goal for Remainders.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "math",
+    "correctAction": "correct",
+    "objectiveTemplate": "Find the remainder and tap the answer.",
+    "demoPrompt": "Practice: Modulo & division tricks",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "Not this one"
+      },
+      {
+        "id": "correct",
+        "label": "Correct answer"
+      },
+      {
+        "id": "wrong_b",
+        "label": "Try again"
+      }
+    ]
+  },
+  {
+    "trackId": "track_14",
+    "rule": "mathFraction",
+    "goal": "Pick the correct fraction answer.",
+    "steps": [
+      "Read the goal for Fractions.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "math",
+    "correctAction": "correct",
+    "objectiveTemplate": "Pick the correct fraction answer.",
+    "demoPrompt": "Practice: Simplify & compare",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "Not this one"
+      },
+      {
+        "id": "correct",
+        "label": "Correct answer"
+      },
+      {
+        "id": "wrong_b",
+        "label": "Try again"
+      }
+    ]
+  },
+  {
+    "trackId": "track_15",
+    "rule": "mathAlgebra",
+    "goal": "Solve for x and tap the value.",
+    "steps": [
+      "Read the goal for Algebra Lab.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "math",
+    "correctAction": "correct",
+    "objectiveTemplate": "Solve for x and tap the value.",
+    "demoPrompt": "Practice: Solve for X",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "Not this one"
+      },
+      {
+        "id": "correct",
+        "label": "Correct answer"
+      },
+      {
+        "id": "wrong_b",
+        "label": "Try again"
+      }
+    ]
+  },
+  {
+    "trackId": "track_16",
+    "rule": "geometryArea",
+    "goal": "Calculate the area and tap the answer.",
+    "steps": [
+      "Read the goal for Area Master.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "geometry",
+    "correctAction": "correct",
+    "objectiveTemplate": "Calculate the area and tap the answer.",
+    "demoPrompt": "Practice: Calculate shape areas",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "Not this one"
+      },
+      {
+        "id": "correct",
+        "label": "Correct answer"
+      },
+      {
+        "id": "wrong_b",
+        "label": "Try again"
+      }
+    ]
+  },
+  {
+    "trackId": "track_17",
+    "rule": "geometryAngles",
+    "goal": "Find the missing angle and tap it.",
+    "steps": [
+      "Read the goal for Angle Finder.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "geometry",
+    "correctAction": "correct",
+    "objectiveTemplate": "Find the missing angle and tap it.",
+    "demoPrompt": "Practice: Missing triangle angles",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "Not this one"
+      },
+      {
+        "id": "correct",
+        "label": "Correct answer"
+      },
+      {
+        "id": "wrong_b",
+        "label": "Try again"
+      }
+    ]
+  },
+  {
+    "trackId": "track_18",
+    "rule": "geometrySymmetry",
+    "goal": "Count symmetry lines and tap the answer.",
+    "steps": [
+      "Read the goal for Symmetry Lab.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "geometry",
+    "correctAction": "correct",
+    "objectiveTemplate": "Count symmetry lines and tap the answer.",
+    "demoPrompt": "Practice: Lines of symmetry",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "Not this one"
+      },
+      {
+        "id": "correct",
+        "label": "Correct answer"
+      },
+      {
+        "id": "wrong_b",
+        "label": "Try again"
+      }
+    ]
+  },
+  {
+    "trackId": "track_19",
+    "rule": "physicsGravity",
+    "goal": "Tap the heaviest object.",
+    "steps": [
+      "Read the goal for Gravity Drop.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "physics",
+    "correctAction": "correct",
+    "objectiveTemplate": "Tap the heaviest object.",
+    "demoPrompt": "Practice: Which is heavier?",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "Not this one"
+      },
+      {
+        "id": "correct",
+        "label": "Correct answer"
+      },
+      {
+        "id": "wrong_b",
+        "label": "Try again"
+      }
+    ]
+  },
+  {
+    "trackId": "track_20",
+    "rule": "physicsMomentum",
+    "goal": "Predict the direction and tap it.",
+    "steps": [
+      "Read the goal for Momentum.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "physics",
+    "correctAction": "correct",
+    "objectiveTemplate": "Predict the direction and tap it.",
+    "demoPrompt": "Practice: Collision direction",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "Not this one"
+      },
+      {
+        "id": "correct",
+        "label": "Correct answer"
+      },
+      {
+        "id": "wrong_b",
+        "label": "Try again"
+      }
+    ]
+  },
+  {
+    "trackId": "track_21",
+    "rule": "physicsBalance",
+    "goal": "Balance the lever and tap the missing weight.",
+    "steps": [
+      "Read the goal for Balance Lab.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "physics",
+    "correctAction": "correct",
+    "objectiveTemplate": "Balance the lever and tap the missing weight.",
+    "demoPrompt": "Practice: Lever equilibrium",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "Not this one"
+      },
+      {
+        "id": "correct",
+        "label": "Correct answer"
+      },
+      {
+        "id": "wrong_b",
+        "label": "Try again"
+      }
+    ]
+  },
+  {
+    "trackId": "track_22",
+    "rule": "numberGrid",
+    "goal": "Complete the grid pattern.",
+    "steps": [
+      "Read the goal for Number Grid.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "grid",
+    "correctAction": "correct",
+    "objectiveTemplate": "Complete the grid pattern.",
+    "demoPrompt": "Practice: Fill the magic grid",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "Not this one"
+      },
+      {
+        "id": "correct",
+        "label": "Correct answer"
+      },
+      {
+        "id": "wrong_b",
+        "label": "Try again"
+      }
+    ]
+  },
+  {
+    "trackId": "track_23",
+    "rule": "balanceEquation",
+    "goal": "Make both sides equal and tap the total.",
+    "steps": [
+      "Read the goal for Equation Balance.",
+      "Try the mini puzzle below.",
+      "Tap the correct answer to continue."
+    ],
+    "demoType": "math",
+    "correctAction": "correct",
+    "objectiveTemplate": "Make both sides equal and tap the total.",
+    "demoPrompt": "Practice: Make both sides equal",
+    "demoOptions": [
+      {
+        "id": "wrong_a",
+        "label": "Not this one"
+      },
+      {
+        "id": "correct",
+        "label": "Correct answer"
+      },
+      {
+        "id": "wrong_b",
+        "label": "Try again"
+      }
+    ]
+  }
+]
