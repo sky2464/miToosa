@@ -10,6 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mitoosa/core/analytics_consent_service.dart';
 import 'package:mitoosa/data/player_progress.dart';
 import 'package:mitoosa/data/player_progress_provider.dart';
+import 'package:mitoosa/data/audio_preferences_repository.dart';
 import 'package:mitoosa/data/privacy_preferences_repository.dart';
 import 'package:mitoosa/data/telemetry_event.dart';
 import 'package:mitoosa/data/telemetry_provider.dart';
@@ -41,6 +42,7 @@ final _noOpController = TelemetrySessionController(_NoOpTelemetryRepository());
 
 Widget _wrap(PlayerProgress progress) {
   bindPrivacyPreferencesRepository(FakePrivacyPreferencesRepository());
+  bindAudioPreferencesRepository(FakeAudioPreferencesRepository());
   return ProviderScope(
     overrides: [
       playerProgressProvider.overrideWith((ref) async => progress),

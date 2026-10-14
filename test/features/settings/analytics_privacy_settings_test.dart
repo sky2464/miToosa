@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mitoosa/core/analytics_consent_service.dart';
 import 'package:mitoosa/data/player_progress.dart';
 import 'package:mitoosa/data/player_progress_provider.dart';
+import 'package:mitoosa/data/audio_preferences_repository.dart';
 import 'package:mitoosa/data/privacy_preferences_repository.dart';
 import 'package:mitoosa/features/settings/analytics_privacy_controller.dart';
 import 'package:mitoosa/features/settings/privacy_disclosure_copy.dart';
@@ -29,6 +30,7 @@ Widget _wrap({
 }) {
   final prefs = preferences ?? FakePrivacyPreferencesRepository();
   bindPrivacyPreferencesRepository(prefs);
+  bindAudioPreferencesRepository(FakeAudioPreferencesRepository());
   final consentAdapter = adapter ?? RecordingAnalyticsConsentAdapter();
   return ProviderScope(
     overrides: [
