@@ -14,7 +14,6 @@ import 'audio_preferences_controller.dart';
 import 'privacy_disclosure_copy.dart';
 import 'privacy_policy_screen.dart';
 import 'reset_progress_controller.dart';
-import '../local_play/local_play_mode_screen.dart';
 
 /// Shipped app version label — keep in sync with `pubspec.yaml` `version:`.
 const String kShippedAppVersionLabel = '1.5.1';
@@ -294,35 +293,6 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                 ),
               ),
             ],
-          ),
-        ),
-        const SizedBox(height: 16),
-
-        const _SectionLabel('Experimental'),
-        const SizedBox(height: 8),
-        GlassCard(
-          borderRadius: AethericPulseDark.radiusCard,
-          padding: const EdgeInsets.symmetric(
-            vertical: 2,
-            horizontal: AethericPulseDark.spaceMd,
-          ),
-          child: SettingsRow(
-            icon: const Icon(Icons.wifi_tethering_rounded),
-            title: 'Local play (POC)',
-            subtitle:
-                'Host or join on the same Wi‑Fi via QR — not launch scope',
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => const LocalPlayModeScreen(),
-                ),
-              );
-            },
-            trailing: const Icon(
-              Icons.chevron_right,
-              size: 22,
-              color: AethericPulseDark.onSurfaceMuted,
-            ),
           ),
         ),
         const SizedBox(height: 16),

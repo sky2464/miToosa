@@ -106,7 +106,7 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 | S1-04 | Feature: Playtest survey + recruitment (#6) | Feature | M | EP-01 | P1 | ⬜ Backlog |
 | BL-04 | Feature: Backend leaderboard (post-playtest gate) (#10) | Feature | L | EP-03 | P2 | ⬜ Backlog |
 | BL-05 | Feature: VIP / IAP flow (#12) | Feature | L | EP-03 | P2 | ⬜ Backlog |
-| DX-01 | Chore: Complete gstack `/plan-tune` QA + ship docs (#53) | Chore | XS | EP-05 | P4 | ✅ Completed |
+| DX-01 | Chore: Complete gstack `/plan-tune` QA + ship docs (#53) | Chore | XS | EP-05 | P4 | ⬜ Backlog |
 | LP-01 | Chore: Local network QR play (deferred POC) (#54) | Chore | L | EP-05 | P3 | ⬜ Backlog |
 | BL-39 | Chore: Puzzle correctness audit and solvability fixes (23 rules) | Chore | L | EP-06 | P0 | ⬜ Backlog |
 | BL-40 | Chore: Durable saves, validated migration, and recovery UI | Chore | L | EP-01 | P0 | ⬜ Backlog |
