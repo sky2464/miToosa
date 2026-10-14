@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:hive/hive.dart';
 
+import '../core/engine/achievement_engine.dart';
 import '../core/engine/progression_engine.dart';
 import '../core/engine/streak_engine.dart';
 
@@ -104,6 +105,61 @@ class PlayerProgress {
         ? updated.sublist(updated.length - 20)
         : updated;
     adaptiveVersion = 2;
+  }
+
+  /// Applies one completed puzzle to this record in a single step: star,
+  /// XP, bests, daily XP, coins, adaptive history, lower-level heart refuel
+  /// and achievement unlocks. Returns the ids of achievements newly unlocked
+  /// by this result. Callers must persist the same object afterwards.
+  List<String> commitLevelResult({
+    required String levelId,
+    required int levelIndex,
+    required int stars,
+    required bool hintUsed,
+    required int timeSeconds,
+    String? difficultyName,
+  }) {
+    final previousStars = levelStars[levelId] ?? 0;
+    final isFirstClear = previousStars == 0 && stars > 0;
+    if (stars > previousStars) {
+      levelStars = Map<String, int>.from(levelStars)..[levelId] = stars;
+    }
+
+    final gainedXP = ProgressionEngine.computeXP(stars, hintUsed: hintUsed);
+    totalXP += gainedXP;
+    recordLevelXP(levelId, gainedXP);
+    recordLevelTime(levelId, timeSeconds);
+    if (difficultyName != null) recordLevelDifficulty(levelId, difficultyName);
+    addDailyXP(gainedXP);
+    recordLevelResult(stars);
+    addCoins(
+      ProgressionEngine.computeCoinReward(
+        stars: stars,
+        isFirstClear: isFirstClear,
+      ),
+    );
+
+    final completedCount = levelStars.values.where((s) => s > 0).length;
+    if (ProgressionEngine.isLowerLevel(levelIndex, completedCount)) {
+      refuelHeartLowerLevel();
+    }
+
+    final newlyUnlocked = AchievementEngine.evaluateAll(
+      totalLevelsCompleted: completedCount,
+      totalStars: levelStars.values.fold(0, (sum, s) => sum + s),
+      totalXP: totalXP,
+      currentStreak: streakCount,
+      achievementProgress: achievementProgress,
+      alreadyUnlocked: unlockedAchievements,
+    );
+    for (final achievement in newlyUnlocked) {
+      addCoins(achievement.coinReward);
+    }
+    unlockedAchievements = [
+      ...unlockedAchievements,
+      for (final achievement in newlyUnlocked) achievement.id,
+    ];
+    return [for (final achievement in newlyUnlocked) achievement.id];
   }
 
   /// Records a login, updating the streak and granting any new milestone

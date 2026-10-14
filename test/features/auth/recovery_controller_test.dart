@@ -56,11 +56,16 @@ class _FakePersistence implements IPersistenceProvider {
 
   // Unused by these tests — not exercised by RecoveryController.
   @override
-  Future<void> updateLevelStar(
+  Future<T> updateProgress<T>(
     String playerId,
-    String levelId,
-    int stars,
-  ) async {}
+    T Function(PlayerProgress progress) mutate,
+  ) async {
+    final progress = await loadProgress(playerId);
+    final value = mutate(progress);
+    await saveProgress(progress);
+    return value;
+  }
+
   @override
   Future<void> deductHeart(String playerId) async {}
   @override
@@ -70,8 +75,6 @@ class _FakePersistence implements IPersistenceProvider {
   @override
   Future<bool> checkAndRefuelHeart(String playerId, DateTime now) async =>
       false;
-  @override
-  Future<void> refuelHeartLowerLevel(String playerId) async {}
   @override
   Future<void> markTutorialSeen(String playerId, String worldId) async {}
   @override

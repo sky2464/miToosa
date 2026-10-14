@@ -397,7 +397,6 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
   Future<void> _saveProgress() async {
     final playerId = ref.playerId;
     if (playerId == null) return;
-    final persistence = ref.read(persistenceProvider);
     final levelId = '${widget.track.id}_${widget.levelIndex}';
     final state = ref.read(gameplayViewModelProvider(level));
     final stars = level.stars(
@@ -405,47 +404,19 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
       hintUsed: state.hintUsed,
     );
 
-    // Load progress BEFORE updating level star to detect first-clear
-    final progress = await persistence.loadProgress(playerId);
-    final previousStars = progress.levelStars[levelId] ?? 0;
-    final isFirstClear = previousStars == 0 && stars > 0;
-
-    await persistence.updateLevelStar(playerId, levelId, stars);
-
-    // Update XP using stars-based formula (max 10 XP per level)
-    final gainedXP = ProgressionEngine.computeXP(
-      stars,
-      hintUsed: state.hintUsed,
-    );
-    progress.totalXP = progress.totalXP + gainedXP;
-
-    // v6: record per-level bests
-    progress.recordLevelXP(levelId, gainedXP);
-    progress.recordLevelTime(
-      levelId,
-      DateTime.now().difference(_levelStartTime).inSeconds,
-    );
-    if (widget.initialDifficulty != null) {
-      progress.recordLevelDifficulty(levelId, widget.initialDifficulty!.name);
-    }
-    progress.addDailyXP(gainedXP);
-
-    // Award coins based on stars and first-clear status
-    final coinReward = ProgressionEngine.computeCoinReward(
-      stars: stars,
-      isFirstClear: isFirstClear,
-    );
-    progress.addCoins(coinReward);
-
-    await persistence.saveProgress(progress);
-
-    // Reward: completing a lower level grants a heart refuel
-    final completedCount = progress.levelStars.values
-        .where((s) => s > 0)
-        .length;
-    if (ProgressionEngine.isLowerLevel(widget.levelIndex, completedCount)) {
-      await persistence.refuelHeartLowerLevel(playerId);
-    }
+    await ref
+        .read(persistenceProvider)
+        .updateProgress(
+          playerId,
+          (progress) => progress.commitLevelResult(
+            levelId: levelId,
+            levelIndex: widget.levelIndex,
+            stars: stars,
+            hintUsed: state.hintUsed,
+            timeSeconds: DateTime.now().difference(_levelStartTime).inSeconds,
+            difficultyName: widget.initialDifficulty?.name,
+          ),
+        );
 
     // Refresh global progress provider so UI (world map / header) shows updated XP
     ref.invalidate(playerProgressProvider);
