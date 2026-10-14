@@ -34,5 +34,4 @@ void main() {
     expect(find.text('Streak calendar'), findsOneWidget);
     expect(find.text('Achievements'), findsOneWidget);
   });
-
 }
