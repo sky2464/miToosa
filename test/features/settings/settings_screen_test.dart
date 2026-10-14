@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mitoosa/data/audio_preferences_repository.dart';
 import 'package:mitoosa/data/privacy_preferences_repository.dart';
 import 'package:mitoosa/core/analytics_consent_service.dart';
 import 'package:mitoosa/data/player_progress.dart';
@@ -12,6 +13,7 @@ PlayerProgress _freshProgress() => PlayerProgress(playerId: 'test');
 
 Widget _wrap({PlayerProgress? progress}) {
   bindPrivacyPreferencesRepository(FakePrivacyPreferencesRepository());
+  bindAudioPreferencesRepository(FakeAudioPreferencesRepository());
   final p = progress ?? _freshProgress();
   return ProviderScope(
     overrides: [
