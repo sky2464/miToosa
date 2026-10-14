@@ -3,7 +3,7 @@
 > **Story ID:** DX-01
 > **GitHub Issue:** N/A (Master-Plan.md source of truth)
 > **Epic:** EP-05 — Technical Debt & Infrastructure
-> **Status:** 🟨 In Progress
+> **Status:** ✅ Done (docs shipped 2026-10-14, #53)
 > **Type:** Chore
 > **Priority:** P4
 > **Estimate:** XS
@@ -115,15 +115,15 @@ flowchart LR
 - [x] 2.1 `gstack-config set question_tuning true` — _AC-001_
 - [x] 2.2 Write declared profile JSON — _AC-002_
 - [x] 2.3 Add `docs/Context/agent-preferences.md` — _AC-004_
-- [ ] 3.1 QA plan + manual verification — _AC-003, AC-005_
-- [ ] 4.1 Ship docs (changelog + complete story) — _DoD_
+- [x] 3.1 QA plan + manual verification — _AC-003, AC-005_ — [evidence-DX-01.md](evidence-DX-01.md)
+- [x] 4.1 Ship docs (changelog + complete story) — _DoD_
 
 ### 3.2 Definition of Done
 
-- [ ] All Must ACs verified (T-001–T-003 smoke pass)
-- [ ] `docs/Context/agent-preferences.md` present with no secrets
-- [ ] Master-Plan DX-01 in Completed This Cycle
-- [ ] Changelog entry added
+- [x] All Must ACs verified (T-001–T-003 smoke pass)
+- [x] `docs/Context/agent-preferences.md` present with no secrets
+- [x] Master-Plan DX-01 in Completed This Cycle
+- [x] Changelog entry added
 
 ---
 

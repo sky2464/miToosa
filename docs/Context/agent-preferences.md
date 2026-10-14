@@ -1,6 +1,6 @@
 # Agent preferences (gstack developer profile)
 
-> **Story:** DX-01 · **Last updated:** 2026-06-01  
+> **Story:** DX-01 · **Last updated:** 2026-10-14 (QA evidence: [evidence-DX-01.md](../archived/evidence-DX-01.md))  
 > **Live state:** `~/.gstack/developer-profile.json` on the developer machine (not in git).  
 > **Tune:** `/plan-tune` or `tune: never-ask` / `tune: always-ask` in your message (user-origin only).
 
