@@ -58,10 +58,9 @@ class _MainAppShellState extends ConsumerState<MainAppShell> {
 
   Future<void> _offerDailyRewardIfEligible() async {
     if (_dailyRewardPromptShown || !mounted) return;
-    final progress = ref.read(playerProgressProvider).maybeWhen(
-      data: (p) => p,
-      orElse: () => null,
-    );
+    final progress = ref
+        .read(playerProgressProvider)
+        .maybeWhen(data: (p) => p, orElse: () => null);
     if (progress == null) return;
     if (!DailyRewardEngine.canClaim(
       lastClaim: progress.lastDailyRewardClaim,

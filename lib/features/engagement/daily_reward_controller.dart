@@ -3,19 +3,17 @@ import '../../data/player_progress.dart';
 
 /// Coordinates daily-reward availability and claim targeting for UI layers.
 class DailyRewardController {
-  DailyRewardController({
-    required PlayerProgress progress,
-    DateTime? clock,
-  })  : _progress = progress,
-        _now = clock ?? DateTime.now();
+  DailyRewardController({required PlayerProgress progress, DateTime? clock})
+    : _progress = progress,
+      _now = clock ?? DateTime.now();
 
   final PlayerProgress _progress;
   final DateTime _now;
 
   bool get canClaim => DailyRewardEngine.canClaim(
-        lastClaim: _progress.lastDailyRewardClaim,
-        now: _now,
-      );
+    lastClaim: _progress.lastDailyRewardClaim,
+    now: _now,
+  );
 
   /// Day highlighted in the 7-day grid.
   int get highlightDay {
@@ -31,6 +29,5 @@ class DailyRewardController {
     return DailyRewardEngine.nextDay(day);
   }
 
-  int get coinsForClaim =>
-      DailyRewardEngine.rewardForDay(claimTargetDay).coins;
+  int get coinsForClaim => DailyRewardEngine.rewardForDay(claimTargetDay).coins;
 }

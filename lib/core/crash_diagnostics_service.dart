@@ -9,7 +9,7 @@ abstract class CrashDiagnosticsAdapter {
 
 class FirebaseCrashDiagnosticsAdapter implements CrashDiagnosticsAdapter {
   FirebaseCrashDiagnosticsAdapter([FirebaseCrashlytics? crashlytics])
-      : _crashlytics = crashlytics ?? FirebaseCrashlytics.instance;
+    : _crashlytics = crashlytics ?? FirebaseCrashlytics.instance;
 
   final FirebaseCrashlytics _crashlytics;
 

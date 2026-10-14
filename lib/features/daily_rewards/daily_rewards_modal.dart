@@ -59,9 +59,7 @@ class DailyRewardsModal extends StatelessWidget {
               child: FilledButton(
                 key: const ValueKey('daily_reward_claim'),
                 onPressed: canClaim ? onClaim : null,
-                child: Text(
-                  canClaim ? 'Claim Reward' : 'Come back tomorrow',
-                ),
+                child: Text(canClaim ? 'Claim Reward' : 'Come back tomorrow'),
               ),
             ),
           ),

@@ -9,10 +9,12 @@ bool _reportingNestedError = false;
 void installErrorBoundary(CrashReporter reporter) {
   final previousFlutterHandler = FlutterError.onError;
   FlutterError.onError = (FlutterErrorDetails details) {
-    _safeReport(() => reporter.recordFatal(
-          details.exception,
-          details.stack ?? StackTrace.current,
-        ));
+    _safeReport(
+      () => reporter.recordFatal(
+        details.exception,
+        details.stack ?? StackTrace.current,
+      ),
+    );
     previousFlutterHandler?.call(details);
   };
 

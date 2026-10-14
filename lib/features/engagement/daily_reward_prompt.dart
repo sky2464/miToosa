@@ -35,10 +35,9 @@ Future<void> _claimAndClose(
   BuildContext context, {
   required WidgetRef ref,
 }) async {
-  final playerId = ref.read(authProvider).maybeWhen(
-    data: (id) => id,
-    orElse: () => null,
-  );
+  final playerId = ref
+      .read(authProvider)
+      .maybeWhen(data: (id) => id, orElse: () => null);
   if (playerId == null || playerId.isEmpty) return;
 
   final persistence = ref.read(persistenceProvider);

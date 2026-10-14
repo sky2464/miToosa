@@ -299,11 +299,8 @@ class _ProgressBody extends ConsumerWidget {
                 subtitle: daily.canClaim
                     ? 'Reward ready — day ${daily.highlightDay}'
                     : 'Claimed for today',
-                onTap: () => showDailyRewardSheet(
-                  context,
-                  ref: ref,
-                  progress: progress,
-                ),
+                onTap: () =>
+                    showDailyRewardSheet(context, ref: ref, progress: progress),
               ),
               const Divider(height: 1, indent: 56),
               _EngagementNavRow(
