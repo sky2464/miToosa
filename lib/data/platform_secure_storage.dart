@@ -43,7 +43,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 ///     ciphertext, so a fresh anonymous user ID is generated. This is the
 ///     same behavior as `flutter_secure_storage` on platforms where the
 ///     keychain is reset.
-class PlatformSecureStorage {
+/// Minimal secure key-value storage contract. Lets callers that only need
+/// a handful of secret values (encryption/integrity keys) depend on an
+/// injectable interface instead of the concrete platform implementation,
+/// so tests can supply an in-memory fake with no platform channel.
+abstract class SecureStorage {
+  Future<bool> containsKey({required String key});
+  Future<String?> read({required String key});
+  Future<void> write({required String key, required String value});
+  Future<void> delete({required String key});
+}
+
+class PlatformSecureStorage implements SecureStorage {
   /// Key used to store the per-install salt in `localStorage` on Web.
   static const String _kSaltKey = '_miToosa_web_storage_salt_v2';
 
@@ -60,6 +71,7 @@ class PlatformSecureStorage {
   /// Cached per-install salt for the lifetime of this isolate.
   List<int>? _saltCache;
 
+  @override
   Future<bool> containsKey({required String key}) async {
     if (kIsWeb) {
       final prefs = await SharedPreferences.getInstance();
@@ -68,6 +80,7 @@ class PlatformSecureStorage {
     return await _secure.containsKey(key: key);
   }
 
+  @override
   Future<String?> read({required String key}) async {
     if (kIsWeb) {
       final prefs = await SharedPreferences.getInstance();
@@ -78,6 +91,7 @@ class PlatformSecureStorage {
     return await _secure.read(key: key);
   }
 
+  @override
   Future<void> write({required String key, required String value}) async {
     if (kIsWeb) {
       final prefs = await SharedPreferences.getInstance();
@@ -88,6 +102,7 @@ class PlatformSecureStorage {
     await _secure.write(key: key, value: value);
   }
 
+  @override
   Future<void> delete({required String key}) async {
     if (kIsWeb) {
       final prefs = await SharedPreferences.getInstance();

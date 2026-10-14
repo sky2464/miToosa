@@ -10,14 +10,22 @@ import 'leaderboard_prefs.dart';
 
 class HivePersistenceProvider implements IPersistenceProvider {
   static const String _boxName = 'player_progress_box';
+  static const String _recoveryBoxName = 'player_progress_recovery_box';
   static const String _encryptionKeyName = 'hive_encryption_key_v1';
   static const String _integrityKeyName = 'hive_integrity_key_v1';
-  final _secureStorage = PlatformSecureStorage();
+
+  HivePersistenceProvider({SecureStorage? secureStorage})
+    : _secureStorage = secureStorage ?? PlatformSecureStorage();
+
+  final SecureStorage _secureStorage;
 
   @override
   Future<void> init() async {
     await Hive.initFlutter();
-    Hive.registerAdapter(PlayerProgressAdapter());
+    final adapter = PlayerProgressAdapter();
+    if (!Hive.isAdapterRegistered(adapter.typeId)) {
+      Hive.registerAdapter(adapter);
+    }
 
     // Migration strategy:
     // - If an encryption key already exists in secure storage, open the
@@ -85,6 +93,7 @@ class HivePersistenceProvider implements IPersistenceProvider {
         );
       }
 
+      await _openRecoveryBox(encryptionKey);
       return;
     }
 
@@ -92,6 +101,18 @@ class HivePersistenceProvider implements IPersistenceProvider {
     final encryptionKey = await _getOrCreateEncryptionKey();
     await Hive.openBox<PlayerProgress>(
       _boxName,
+      encryptionCipher: HiveAesCipher(encryptionKey),
+    );
+    await _openRecoveryBox(encryptionKey);
+  }
+
+  /// Opens the quarantine box used to hold progress records that failed
+  /// an integrity check, so they can be recovered explicitly instead of
+  /// being deleted outright (BL-40).
+  Future<void> _openRecoveryBox(Uint8List encryptionKey) async {
+    if (Hive.isBoxOpen(_recoveryBoxName)) return;
+    await Hive.openBox<PlayerProgress>(
+      _recoveryBoxName,
       encryptionCipher: HiveAesCipher(encryptionKey),
     );
   }
@@ -123,19 +144,51 @@ class HivePersistenceProvider implements IPersistenceProvider {
     }
 
     if (!progressRaw.isValid(integrityKey)) {
-      // Integrity check failed. Treat as corrupted and fail-secure: do not re-sign or merge.
+      // Integrity check failed. Treat as corrupted and fail-secure: do not
+      // re-sign or merge it back into live use. But never silently discard
+      // it either — quarantine it so the player can be offered an
+      // explicit recovery choice (BL-40), then serve fresh progress so the
+      // app can continue.
       if (progressRaw.integrityHash != null) {
         developer.log(
-          'PlayerProgress integrity check failed for $playerId. Deleting corrupted record.',
+          'PlayerProgress integrity check failed for $playerId. '
+          'Quarantining for recovery and serving fresh progress.',
           level: 1000,
           name: 'security.hive_persistence',
         );
+        await Hive.box<PlayerProgress>(
+          _recoveryBoxName,
+        ).put(playerId, progressRaw);
         await box.delete(playerId);
         return PlayerProgress.fresh(playerId: playerId);
       }
     }
 
     return progressRaw;
+  }
+
+  @override
+  Future<PlayerProgress?> checkForRecoverableProgress(String playerId) async {
+    return Hive.box<PlayerProgress>(_recoveryBoxName).get(playerId);
+  }
+
+  @override
+  Future<PlayerProgress> restoreRecoverableProgress(String playerId) async {
+    final recoveryBox = Hive.box<PlayerProgress>(_recoveryBoxName);
+    final quarantined = recoveryBox.get(playerId);
+    if (quarantined == null) {
+      throw StateError('No recoverable progress for $playerId');
+    }
+    // Re-sign so it's trusted again before it re-enters live use, then
+    // clear the quarantine slot.
+    await saveProgress(quarantined);
+    await recoveryBox.delete(playerId);
+    return quarantined;
+  }
+
+  @override
+  Future<void> discardRecoverableProgress(String playerId) async {
+    await Hive.box<PlayerProgress>(_recoveryBoxName).delete(playerId);
   }
 
   @override
@@ -229,6 +282,8 @@ class HivePersistenceProvider implements IPersistenceProvider {
   Future<void> resetGameProgress(String playerId) async {
     final fresh = PlayerProgress.fresh(playerId: playerId);
     await saveProgress(fresh);
+    // An explicit reset should not leave a stale recovery prompt behind.
+    await discardRecoverableProgress(playerId);
 
     if (Hive.isBoxOpen(kLeaderboardPrefsBoxName)) {
       await LeaderboardPrefs(

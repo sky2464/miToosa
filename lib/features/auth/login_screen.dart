@@ -6,6 +6,7 @@ import '../../theme/design_system.dart';
 import '../../widgets/kinetic_background.dart';
 import '../../widgets/glass_card.dart';
 import 'auth_provider.dart';
+import 'recovery_controller.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -63,7 +64,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       }
 
       final persistence = ref.read(persistenceProvider);
-      final progress = await persistence.loadProgress(playerId);
+      var progress = await persistence.loadProgress(playerId);
+
+      if (mounted) {
+        final recovery = ref.read(recoveryControllerProvider);
+        final restored = await recovery.checkAndPromptRecovery(
+          context,
+          playerId,
+        );
+        if (restored != null) progress = restored;
+      }
+
       progress.recordLogin();
       await persistence.saveProgress(progress);
       ref.invalidate(playerProgressProvider);
