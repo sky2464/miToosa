@@ -7,12 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Header menus** — profile and credits bottom sheets wired from app header (S2-05)
+- **Interactive tutorials** — per-track how-to content with interactive demo panel; first visit to a track opens the tutorial, gameplay keeps objective strip and help reopen (BL-24, #47)
+- **Daily rewards & engagement** — daily rewards, streak calendar, and achievements reachable from Progress and idle-shell prompts (BL-35, #35)
+- **Crashlytics** — privacy-bounded Firebase Crashlytics with global error boundaries; collection follows Settings anonymous-analytics opt-out (BL-37, #37)
+- **Progress recovery** — when a save fails integrity checks, progress is quarantined and a non-dismissible dialog offers recover or start fresh (BL-40)
+
 ### Fixed
 - **Tracks light mode** — theme-aware `GlassCard`, hero typography, and progress dots via `APTheme` (S2-05)
 - **Start session CTA** — removed harsh horizontal line on primary button; hero uses `glow: false` (S2-05)
+- **Missing Piece & Number Grid** — puzzles are solvable from visible clues; repeating-pattern generation for Missing Piece and valid positive row-sum answers for Number Grid (BL-39)
+- **Corrupted saves** — quarantine invalid progress instead of silently deleting it (BL-40)
+- **Settings toggles** — Sound FX, Music, and Haptics preferences persist across cold restart (#48)
+- **Level results** — stars, XP, bests, achievements, and heart refuel commit atomically so first-level and concurrent writes are not lost (BL-41)
 
-### Added
-- **Header menus** — profile and credits bottom sheets wired from app header (S2-05)
+### Changed
+- **Engagement navigation** — semantic labels and 44pt minimum tap targets on new Progress navigation rows (partial BL-36)
 
 ## [1.5.0] — 2026-04-22
 
