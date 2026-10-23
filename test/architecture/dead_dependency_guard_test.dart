@@ -25,4 +25,24 @@ void main() {
       );
     }
   });
+
+  test('network_info_plus is not declared in pubspec.yaml', () {
+    final pubspec = File(
+      '$repoRoot${Platform.pathSeparator}pubspec.yaml',
+    ).readAsStringSync();
+    expect(pubspec.contains('network_info_plus'), isFalse);
+  });
+
+  test('network_info_plus has no production Dart readers under lib/', () {
+    final lib = Directory('$repoRoot${Platform.pathSeparator}lib');
+    for (final entity in lib.listSync(recursive: true)) {
+      if (entity is! File || !entity.path.endsWith('.dart')) continue;
+      final content = entity.readAsStringSync();
+      expect(
+        content.contains('network_info_plus'),
+        isFalse,
+        reason: '${entity.path} references network_info_plus',
+      );
+    }
+  });
 }
