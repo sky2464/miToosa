@@ -1,7 +1,7 @@
 # Master-Plan
 
 > **Source of truth for active work.** Completed work lives in `Docs/archived/` — see Completed This Cycle for links.
-> **Last updated:** 2026-09-10 (Documentation planning update — Premium Quality Roadmap added)
+> **Last updated:** 2026-10-17 (BL-39/BL-40/BL-41 Status synced to shipped)
 
 ## Project Charter
 
@@ -108,9 +108,9 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 | BL-05 | Feature: VIP / IAP flow (#12) | Feature | L | EP-03 | P2 | ⬜ Backlog |
 | DX-01 | Chore: Complete gstack `/plan-tune` QA + ship docs (#53) | Chore | XS | EP-05 | P4 | ✅ Completed |
 | LP-01 | Chore: Local network QR play (deferred POC) (#54) | Chore | L | EP-05 | P3 | 🟡 Deferred ([deferral-LP-01.md](archived/deferral-LP-01.md)) |
-| BL-39 | Chore: Puzzle correctness audit and solvability fixes (23 rules) | Chore | L | EP-06 | P0 | ⬜ Backlog |
-| BL-40 | Chore: Durable saves, validated migration, and recovery UI | Chore | L | EP-01 | P0 | ⬜ Backlog |
-| BL-41 | Chore: Atomic puzzle-result commits and reward integrity | Chore | M | EP-06 | P0 | ⬜ Backlog |
+| BL-39 | Chore: Puzzle correctness audit and solvability fixes (23 rules) | Chore | L | EP-06 | P0 | ✅ Completed (PR #58) |
+| BL-40 | Chore: Durable saves, validated migration, and recovery UI | Chore | L | EP-01 | P0 | ✅ Completed (PR #59) |
+| BL-41 | Chore: Atomic puzzle-result commits and reward integrity | Chore | M | EP-06 | P0 | ✅ Completed (PR #65) |
 | BL-42 | Feature: Five-puzzle session contract | Feature | L | EP-06 | P0 | ⬜ Backlog |
 | BL-43 | Chore: Real product-analytics instrumentation | Chore | M | EP-01 | P1 | ⬜ Backlog |
 | BL-44 | Feature: Working adaptive difficulty and rule curriculum | Feature | M | EP-06 | P1 | ⬜ Backlog |
@@ -386,6 +386,7 @@ Key dependencies: durable saves (BL-40) precede atomic results (BL-41); committe
 
 | Date | Event | By |
 |------|-------|----|
+| 2026-10-17 | Backlog table Status synced for **BL-39** (PR #58), **BL-40** (PR #59), **BL-41** (PR #65) — all three shipped and merged but the backlog table still read `⬜ Backlog`, contradicting CHANGELOG.md and the roadmap detail table further down this file (#68) | DreamToosa |
 | 2026-10-14 | Worker 4/4 — **DX-01** gstack `/plan-tune` QA evidence shipped ([evidence-DX-01.md](archived/evidence-DX-01.md)); **LP-01** deferral recorded ([deferral-LP-01.md](archived/deferral-LP-01.md)); **BL-35/BL-37** marked complete per merged PR #61 (#49/#51) | AgToosa |
 | 2026-09-10 | Documentation planning update (manual edit, not an /agtoosa-* command) — added Premium Quality Roadmap section, EP-06, and BL-39–BL-54 (16 backlog items); extended BL-24, BL-34–BL-38, S1-03/S1-04, BL-25/BL-26 with premium-quality scope notes; updated Charter long-term quality objective and Non-goals; no code changes, no runtime APIs changed | Claude |
 | 2026-07-28 | /agtoosa-ship — Ship 🚀 repo ship PASS — BL-33 — Aetheric Pulse brand assets; 950 tests; task 4.2 manual deferred | AgToosa |
