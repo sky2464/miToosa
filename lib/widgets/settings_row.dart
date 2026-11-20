@@ -23,7 +23,7 @@ class SettingsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
+    final row = Material(
       type: MaterialType.transparency,
       child: InkWell(
         onTap: onTap,
@@ -86,6 +86,13 @@ class SettingsRow extends StatelessWidget {
           ),
         ),
       ),
+    );
+    if (onTap == null) return row;
+    return Semantics(
+      button: true,
+      label: subtitle == null ? title : '$title. $subtitle',
+      excludeSemantics: true,
+      child: row,
     );
   }
 }

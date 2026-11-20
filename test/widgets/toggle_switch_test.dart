@@ -10,7 +10,13 @@ void main() {
   group('ToggleSwitch', () {
     testWidgets('off state renders without gradient', (tester) async {
       await tester.pumpWidget(
-        _wrap(ToggleSwitch(value: false, onChanged: (_) {})),
+        _wrap(
+          ToggleSwitch(
+            semanticsLabel: 'Test toggle',
+            value: false,
+            onChanged: (_) {},
+          ),
+        ),
       );
       final container = tester.widget<AnimatedContainer>(
         find.descendant(
@@ -24,7 +30,13 @@ void main() {
 
     testWidgets('on state uses gradient', (tester) async {
       await tester.pumpWidget(
-        _wrap(ToggleSwitch(value: true, onChanged: (_) {})),
+        _wrap(
+          ToggleSwitch(
+            semanticsLabel: 'Test toggle',
+            value: true,
+            onChanged: (_) {},
+          ),
+        ),
       );
       final container = tester.widget<AnimatedContainer>(
         find.descendant(
@@ -39,7 +51,13 @@ void main() {
     testWidgets('tap fires onChanged with inverted value', (tester) async {
       bool? received;
       await tester.pumpWidget(
-        _wrap(ToggleSwitch(value: false, onChanged: (v) => received = v)),
+        _wrap(
+          ToggleSwitch(
+            semanticsLabel: 'Test toggle',
+            value: false,
+            onChanged: (v) => received = v,
+          ),
+        ),
       );
       await tester.tap(find.byType(ToggleSwitch));
       expect(received, isTrue);
@@ -47,7 +65,13 @@ void main() {
 
     testWidgets('tap-target is at least 44×44 pt (WCAG 2.5.5)', (tester) async {
       await tester.pumpWidget(
-        _wrap(ToggleSwitch(value: false, onChanged: (_) {})),
+        _wrap(
+          ToggleSwitch(
+            semanticsLabel: 'Test toggle',
+            value: false,
+            onChanged: (_) {},
+          ),
+        ),
       );
       final size = tester.getSize(find.byType(ToggleSwitch));
       expect(size.width, greaterThanOrEqualTo(44));

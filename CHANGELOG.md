@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Engagement navigation** — semantic labels and 44pt minimum tap targets on new Progress navigation rows (partial BL-36)
+- **Core accessibility** — onboarding, navigation, gameplay, and Settings honor VoiceOver labels, 44pt targets, large text, and reduced motion (BL-36). Physical-device smoke stays a manual gate.
 
 ## [1.5.0] — 2026-04-22
 

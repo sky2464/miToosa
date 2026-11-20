@@ -72,6 +72,7 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 | BL-28 | 3.3 / T-006 | 2026-07-26 | Fresh-install iPhone smoke — onboarding to first playable track within 60s (shipped repo-side; device proof pending) |
 | BL-32 | 4.2 | 2026-07-27 | iPhone analytics opt-out/relaunch smoke — shipped repo-side; device proof pending |
 | BL-33 | 4.2 | 2026-07-28 | iPhone home-screen + cold-launch screenshot smoke — shipped repo-side; device proof pending |
+| BL-36 | 4.2 | 2026-11-20 | Physical iPhone VoiceOver, Dynamic Type, Reduce Motion, and portrait smoke — repo-side accessibility shipped; device proof pending |
 | BL-25 | 3.1–5.2 | 2026-07-14 | Physical iPhone TestFlight QA, DebugView, evidence capture, and launch-doc closure (12 owner-executed steps) |
 | BL-26 | 4.1 | 2026-07-11 | Publish Privacy Policy + Support URLs and paste finals into ASC/metadata |
 | BL-26 | 4.2 | 2026-07-11 | Capture iPhone screenshots per checklist and upload in App Store Connect |
@@ -99,7 +100,7 @@ Status key: ⬜ Backlog · 🟦 Todo · 🟨 In Progress · ✅ Done · 🚫 Blo
 | BL-24 | Feature: Interactive how-to demos (#47) | Feature | M | EP-01 | P1 | ⬜ Backlog |
 | BL-34 | Chore: Production SFX and persisted preferences (#48) | Chore | S | EP-04 | P1 | ⬜ Backlog |
 | BL-35 | Feature: Reachable daily rewards, streaks, and achievements (#49) | Feature | M | EP-01 | P1 | ✅ Completed (PR #61) |
-| BL-36 | Chore: iPhone accessibility and device hardening (#50) | Chore | M | EP-01 | P1 | ⬜ Backlog |
+| BL-36 | Chore: iPhone accessibility and device hardening (#50) | Chore | M | EP-01 | P1 | ✅ Completed (repo-side; device smoke deferred) |
 | BL-37 | Chore: Privacy-respecting crash resilience (#51) | Chore | M | EP-02 | P1 | ✅ Completed (PR #61) |
 | BL-38 | Chore: Modularize oversized code and remove dead dependencies (#52) | Chore | L | EP-05 | P2 | ⬜ Backlog |
 | S1-03 | Feature: Manual wedge QA walkthrough (#5) | Feature | S | EP-01 | P1 | ⬜ Backlog |
@@ -386,6 +387,7 @@ Key dependencies: durable saves (BL-40) precede atomic results (BL-41); committe
 
 | Date | Event | By |
 |------|-------|----|
+| 2026-11-20 | BL-36 repo-side accessibility landed — VoiceOver labels, 44pt targets, large-text layout, and reduced motion on core launch screens; task 4.2 physical smoke remains manual-deferred | AgToosa |
 | 2026-10-17 | Backlog table Status synced for **BL-39** (PR #58), **BL-40** (PR #59), **BL-41** (PR #65) — all three shipped and merged but the backlog table still read `⬜ Backlog`, contradicting CHANGELOG.md and the roadmap detail table further down this file (#68) | DreamToosa |
 | 2026-10-14 | Worker 4/4 — **DX-01** gstack `/plan-tune` QA evidence shipped ([evidence-DX-01.md](archived/evidence-DX-01.md)); **LP-01** deferral recorded ([deferral-LP-01.md](archived/deferral-LP-01.md)); **BL-35/BL-37** marked complete per merged PR #61 (#49/#51) | AgToosa |
 | 2026-09-10 | Documentation planning update (manual edit, not an /agtoosa-* command) — added Premium Quality Roadmap section, EP-06, and BL-39–BL-54 (16 backlog items); extended BL-24, BL-34–BL-38, S1-03/S1-04, BL-25/BL-26 with premium-quality scope notes; updated Charter long-term quality objective and Non-goals; no code changes, no runtime APIs changed | Claude |

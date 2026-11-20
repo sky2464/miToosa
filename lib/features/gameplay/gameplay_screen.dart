@@ -915,8 +915,12 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
                   ? null
                   : () => setState(() => _pendingOption = option),
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 250),
+                duration: MiToosaAccessibility.motionDuration(
+                  context,
+                  const Duration(milliseconds: 250),
+                ),
                 width: double.infinity,
+                constraints: MiToosaAccessibility.minTouchTargetConstraints,
                 padding: const EdgeInsets.symmetric(
                   horizontal: MiToosaTheme.spacingLg,
                   vertical: MiToosaTheme.spacingMd,
@@ -992,9 +996,13 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
             ? null
             : () => setState(() => _pendingOption = option),
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
+          duration: MiToosaAccessibility.motionDuration(
+            context,
+            const Duration(milliseconds: 200),
+          ),
           curve: Curves.easeOut,
           width: cardWidth.clamp(120.0, 200.0),
+          constraints: MiToosaAccessibility.minTouchTargetConstraints,
           transform: Matrix4.diagonal3Values(
             preCompletionSelected ? 1.02 : 1.0,
             preCompletionSelected ? 1.02 : 1.0,
@@ -1060,6 +1068,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
         children: [
           GhostButton(
             key: const ValueKey('hint_ghost_button'),
+            semanticsLabel: 'Hint',
             onPressed: () {
               if (!hintAvailable) {
                 if (hearts <= 0) {
@@ -1092,6 +1101,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen>
           Expanded(
             child: PrimaryButton(
               key: const ValueKey('submit_primary_button'),
+              semanticsLabel: 'Submit answer',
               fullWidth: true,
               glow: canSubmit,
               onPressed: canSubmit

@@ -179,6 +179,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                 icon: const Icon(Icons.volume_up_outlined),
                 title: 'Sound FX',
                 trailing: ToggleSwitch(
+                  semanticsLabel: 'Sound FX',
                   value: _soundEffectsEnabled,
                   onChanged: (v) async {
                     await ref
@@ -195,6 +196,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                 title: 'Music',
                 subtitle: 'Background music during gameplay',
                 trailing: ToggleSwitch(
+                  semanticsLabel: 'Music',
                   value: _musicEnabled,
                   onChanged: (v) async {
                     await ref
@@ -210,6 +212,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                 icon: const Icon(Icons.vibration_outlined),
                 title: 'Haptics',
                 trailing: ToggleSwitch(
+                  semanticsLabel: 'Haptics',
                   value: _hapticsEnabled,
                   onChanged: (v) async {
                     await ref
@@ -226,6 +229,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                 title: 'Adaptive Difficulty',
                 subtitle: 'Adjusts puzzles to your skill level',
                 trailing: ToggleSwitch(
+                  semanticsLabel: 'Adaptive Difficulty',
                   value:
                       widget.progress.difficultyMode == DifficultyMode.adaptive,
                   onChanged: (enabled) async {
@@ -277,6 +281,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                     ? kAnonymousAnalyticsDisabledEffect
                     : kAnonymousAnalyticsSubtitle,
                 trailing: ToggleSwitch(
+                  semanticsLabel: kAnonymousAnalyticsTitle,
                   value: _analyticsEnabled,
                   onChanged: _analyticsUpdating ? (_) {} : _onAnalyticsChanged,
                 ),

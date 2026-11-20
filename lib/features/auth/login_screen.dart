@@ -29,7 +29,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     _pulseController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 2000),
-    )..repeat(reverse: true);
+    );
     _pulseAnim = Tween<double>(begin: 0.95, end: 1.05).animate(
       CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
     );
@@ -37,10 +37,31 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     _floatController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 3000),
-    )..repeat(reverse: true);
+    );
     _floatAnim = Tween<double>(begin: -8, end: 8).animate(
       CurvedAnimation(parent: _floatController, curve: Curves.easeInOut),
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _syncDecorativeMotion();
+  }
+
+  void _syncDecorativeMotion() {
+    if (!mounted) return;
+    if (MiToosaAccessibility.prefersReducedMotion(context)) {
+      _pulseController.stop();
+      _floatController.stop();
+    } else {
+      if (!_pulseController.isAnimating) {
+        _pulseController.repeat(reverse: true);
+      }
+      if (!_floatController.isAnimating) {
+        _floatController.repeat(reverse: true);
+      }
+    }
   }
 
   @override

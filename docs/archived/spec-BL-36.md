@@ -2,7 +2,7 @@
 
 > **Story ID:** BL-36
 > **Epic:** EP-01 Launch Readiness & Validation
-> **Status:** ⬜ Backlog
+> **Status:** ✅ Repo-side complete — device smoke manual-deferred (task 4.2)
 > **Estimate:** M
 > **Clarity:** ready
 > **Spec created:** 2026-07-14
@@ -160,3 +160,7 @@ No new project skill is proposed. iphone-launch-gate already owns launch-phase m
 | Automated evidence and unavoidable device proof are distinguished. | Pass |
 | Engine/UI separation is preserved. | Pass |
 | All Must ACs map to tests. | Pass |
+
+## ✅ Spec Approved
+
+Approved 2026-11-20 when landing the existing BL-36 implementation. AC-001 through AC-005 are covered by automated tests. AC-006 remains manual-deferred on a physical iPhone.

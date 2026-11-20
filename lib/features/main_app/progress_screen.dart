@@ -159,27 +159,30 @@ class _ProgressBody extends ConsumerWidget {
                 percent: levelPct,
                 size: 132,
                 strokeWidth: 10,
-                centerChild: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ShaderMask(
-                      shaderCallback: (r) => AP.gradPrimary.createShader(r),
-                      child: Text(
-                        '$xp',
-                        style: const TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 28,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                          fontFeatures: [FontFeature.tabularFigures()],
-                          height: 1.0,
-                          letterSpacing: -0.84,
+                centerChild: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ShaderMask(
+                        shaderCallback: (r) => AP.gradPrimary.createShader(r),
+                        child: Text(
+                          '$xp',
+                          style: const TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 28,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white,
+                            fontFeatures: [FontFeature.tabularFigures()],
+                            height: 1.0,
+                            letterSpacing: -0.84,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text('TOTAL XP', style: AP.eyebrow()),
-                  ],
+                      const SizedBox(height: 2),
+                      Text('TOTAL XP', style: AP.eyebrow()),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(width: 18),
