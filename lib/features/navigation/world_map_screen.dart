@@ -247,12 +247,15 @@ class _DailySparkHero extends StatelessWidget {
                     percent: (gamesComplete / 5 * 100).clamp(0, 100).toDouble(),
                     size: 96,
                     strokeWidth: 7,
-                    centerChild: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('$gamesComplete/5', style: theme.headlineMd()),
-                        Text('games', style: theme.label()),
-                      ],
+                    centerChild: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('$gamesComplete/5', style: theme.headlineMd()),
+                          Text('games', style: theme.label()),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(width: 20),

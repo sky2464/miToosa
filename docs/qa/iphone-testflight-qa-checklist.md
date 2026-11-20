@@ -36,11 +36,13 @@ Use this checklist on a physical iPhone running the TestFlight build. Record eve
 
 - [ ] Enable VoiceOver and navigate onboarding, a track entry point, and one gameplay control.
 - [ ] Confirm each critical control has a useful spoken label.
+- [ ] Complete the detailed steps in [iphone-accessibility-smoke.md](iphone-accessibility-smoke.md) (BL-36 T-006) and attach evidence.
 
 ## Dynamic Type
 
 - [ ] Set iOS text size to its largest setting and inspect onboarding and gameplay instructions.
 - [ ] Confirm no critical instructions are clipped or hidden.
+- [ ] Record BL-36 Dynamic Type outcomes in [iphone-accessibility-smoke.md](iphone-accessibility-smoke.md).
 
 ## Wedge Copy
 

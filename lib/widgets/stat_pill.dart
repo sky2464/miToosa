@@ -79,27 +79,36 @@ class StatPill extends StatelessWidget {
         border: Border.all(color: t.bd, width: 1),
         boxShadow: glow ? [BoxShadow(color: t.bd, blurRadius: 14)] : null,
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (icon != null) ...[
-            IconTheme(
-              data: IconThemeData(color: t.c, size: 14),
-              child: icon!,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: Alignment.centerLeft,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null) ...[
+              IconTheme(
+                data: IconThemeData(color: t.c, size: 14),
+                child: icon!,
+              ),
+              const SizedBox(width: 6),
+            ],
+            Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textScaler: MediaQuery.textScalerOf(
+                context,
+              ).clamp(maxScaleFactor: 1.35),
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: t.c,
+                fontFeatures: const [FontFeature.tabularFigures()],
+              ),
             ),
-            const SizedBox(width: 6),
           ],
-          Text(
-            label,
-            style: TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: t.c,
-              fontFeatures: const [FontFeature.tabularFigures()],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

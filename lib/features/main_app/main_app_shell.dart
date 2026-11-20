@@ -195,39 +195,45 @@ class _FloatingGlassNav extends StatelessWidget {
     final navBorder = isDark
         ? const Color(0x26FFFFFF)
         : const Color(0x2A1A1B2B);
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-        16,
-        0,
-        16,
-        bottomInset > 0 ? bottomInset + 6 : 14,
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(AethericPulseDark.radiusCard),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
-            decoration: BoxDecoration(
-              color: navFill,
-              border: Border.all(color: navBorder, width: 1),
-              borderRadius: BorderRadius.circular(AethericPulseDark.radiusCard),
-              boxShadow: isDark
-                  ? AethericPulseDark.cardOuter
-                  : AethericPulseLight.shadowSoftBlue,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                for (var i = 0; i < _items.length; i++)
-                  _NavItem(
-                    icon: _items[i].icon,
-                    activeIcon: _items[i].activeIcon,
-                    label: _items[i].label,
-                    isActive: selectedIndex == i,
-                    onTap: () => onTap(i),
-                  ),
-              ],
+    return MediaQuery.withClampedTextScaling(
+      maxScaleFactor: 1.25,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          16,
+          0,
+          16,
+          bottomInset > 0 ? bottomInset + 6 : 14,
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(AethericPulseDark.radiusCard),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+              decoration: BoxDecoration(
+                color: navFill,
+                border: Border.all(color: navBorder, width: 1),
+                borderRadius: BorderRadius.circular(
+                  AethericPulseDark.radiusCard,
+                ),
+                boxShadow: isDark
+                    ? AethericPulseDark.cardOuter
+                    : AethericPulseLight.shadowSoftBlue,
+              ),
+              child: Row(
+                children: [
+                  for (var i = 0; i < _items.length; i++)
+                    Expanded(
+                      child: _NavItem(
+                        icon: _items[i].icon,
+                        activeIcon: _items[i].activeIcon,
+                        label: _items[i].label,
+                        isActive: selectedIndex == i,
+                        onTap: () => onTap(i),
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
         ),
@@ -253,6 +259,10 @@ class _NavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hoverDuration = MiToosaAccessibility.motionDuration(
+      context,
+      AethericPulseDark.durHover,
+    );
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final activeColor = isDark
         ? AethericPulseDark.brandBlue
@@ -270,9 +280,9 @@ class _NavItem extends StatelessWidget {
       button: true,
       selected: isActive,
       label: '$label tab',
+      excludeSemantics: true,
       child: ConstrainedBox(
         constraints: const BoxConstraints(
-          minWidth: AethericPulseDark.minTapTarget,
           minHeight: AethericPulseDark.minTapTarget,
         ),
         child: GestureDetector(
@@ -285,7 +295,7 @@ class _NavItem extends StatelessWidget {
                 height: 2,
                 child: Center(
                   child: AnimatedContainer(
-                    duration: AethericPulseDark.durHover,
+                    duration: hoverDuration,
                     width: isActive ? 20.0 : 0.0,
                     height: 2,
                     decoration: isActive
@@ -304,12 +314,9 @@ class _NavItem extends StatelessWidget {
                 ),
               ),
               AnimatedContainer(
-                duration: AethericPulseDark.durHover,
+                duration: hoverDuration,
                 curve: Curves.easeOutCubic,
-                padding: EdgeInsets.symmetric(
-                  horizontal: isActive ? 14 : 10,
-                  vertical: 8,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
                 decoration: BoxDecoration(
                   color: isActive ? activeFill : Colors.transparent,
                   border: Border.all(
@@ -334,6 +341,11 @@ class _NavItem extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textScaler: MediaQuery.textScalerOf(
+                        context,
+                      ).clamp(maxScaleFactor: 1.25),
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                         fontWeight: FontWeight.w700,
                         letterSpacing: 1.0,

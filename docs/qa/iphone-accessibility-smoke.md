@@ -1,22 +1,50 @@
-# iPhone accessibility smoke (BL-36)
+# iPhone Accessibility Smoke (BL-36 / AC-006)
 
-Physical-device procedure for VoiceOver, Dynamic Type, and Reduce Motion. Automated coverage lives in `test/accessibility/core_flow_accessibility_test.dart`.
+Manual proof for VoiceOver, Dynamic Type, Reduce Motion, and narrow portrait layouts. Complements automated coverage in `test/accessibility/core_flow_accessibility_test.dart` and maps to **T-006** in [AgToosa_TestPlan-BL-36.md](../AgToosa_TestPlan-BL-36.md).
 
-## Prerequisites
+Record results in the TestFlight evidence template or a dated BL-36 note. Block launch sign-off if any **Must** step fails.
 
-- TestFlight or release-profile build on a physical iPhone
-- VoiceOver, largest Dynamic Type, and Reduce Motion available in Settings
+## Preconditions
 
-## Core flow (≈15 minutes)
+- Physical iPhone on a TestFlight or release-candidate build (`dev.atoosa.mitoosa`).
+- Device model, iOS version, build number, tester, and date recorded.
+- Fresh install or cleared app data available for onboarding.
 
-1. **Onboarding** — Enable VoiceOver; cold launch; verify primary CTA has a non-empty label; disable VoiceOver for gameplay timing.
-2. **World map** — Open a track card; confirm track entry control is reachable (44pt) and labeled.
-3. **Gameplay** — Start a level; verify help (`?`) and at least one answer option have semantics labels.
-4. **Progress** — Open Progress tab; verify streak, achievements, and daily reward rows are labeled.
-5. **Settings** — Open Settings; verify toggles (sound, analytics) announce state.
-6. **Dynamic Type** — Set largest text size; repeat steps 1 and 3; confirm no clipped instructional text on onboarding and gameplay objective strip.
-7. **Reduce Motion** — Enable Reduce Motion; launch app; confirm decorative pulses/animations are suppressed without freezing timers.
+## VoiceOver
 
-## Evidence
+1. Enable **Settings → Accessibility → VoiceOver**.
+2. Cold launch and complete onboarding (or Skip).
+3. From the main shell, open **Tracks**, start a puzzle, and reach Hint + Submit. Confirm the help control and at least one answer option have labels.
+4. Open **Progress** and confirm Daily rewards, Streak calendar, and Achievements rows are labeled.
+5. Open **Settings** and focus Sound FX and Reset progress. Toggles should announce on/off state.
 
-Record pass/fail in `docs/qa/iphone-testflight-evidence-template.md` (BL-25 AC-008 / AC-013 cross-link).
+**Pass:** Each actionable control announces a clear label; selected tabs and toggles reflect state.  
+**Fail:** Icon-only controls with no label, duplicate/conflicting names, or unreachable primary actions.
+
+## Dynamic Type
+
+1. Set **Settings → Accessibility → Display & Text Size → Larger Text** to the largest comfortable size (or Maximum).
+2. Repeat onboarding (or first screen), main shell header, one gameplay round (including the objective strip), Progress, and Settings.
+
+**Pass:** Critical copy and CTAs remain readable (scroll if needed); no clipped destructive actions.  
+**Fail:** RenderFlex overflow, hidden CTAs, or unreadable instructions.
+
+## Reduce Motion
+
+1. Enable **Settings → Accessibility → Motion → Reduce Motion**.
+2. Launch login/onboarding and main shell; start one gameplay round and submit an answer.
+
+**Pass:** Decorative motion calms or stops; puzzles still advance and timers behave normally.  
+**Fail:** Blocking animation loops or changed scoring/timer outcomes tied to motion settings.
+
+## Portrait widths
+
+1. On the smallest supported iPhone in portrait (e.g. SE / 320pt logical width), repeat: onboarding → shell → Settings → one puzzle.
+
+**Pass:** No layout overflow; bottom nav and primary actions stay reachable above the home indicator.  
+**Fail:** Yellow/black overflow stripes or controls obscured by safe areas.
+
+## Cross-links
+
+- Automated matrix: `flutter test test/accessibility/core_flow_accessibility_test.dart`
+- Broader device gate: [iphone-testflight-qa-checklist.md](iphone-testflight-qa-checklist.md) (VoiceOver / Dynamic Type sections)

@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
+import '../theme/design_system.dart';
 import '../theme/design_tokens.dart';
 
 /// Animated atmosphere background — three radial gradient blobs + a faint star
@@ -24,7 +25,23 @@ class _AtmosphereState extends State<Atmosphere> with TickerProviderStateMixin {
     _ctrl = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 22),
-    )..repeat();
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _syncMotionPreference();
+  }
+
+  void _syncMotionPreference() {
+    if (!mounted) return;
+    if (MiToosaAccessibility.prefersReducedMotion(context)) {
+      _ctrl.stop();
+      _ctrl.value = 0;
+    } else if (!_ctrl.isAnimating) {
+      _ctrl.repeat();
+    }
   }
 
   @override

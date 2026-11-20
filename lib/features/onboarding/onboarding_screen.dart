@@ -82,7 +82,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               ),
             ),
             // Indicators & Navigation
-            Padding(
+            SingleChildScrollView(
               padding: const EdgeInsets.all(MiToosaTheme.spacingLg),
               child: Column(
                 children: [
@@ -90,13 +90,25 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   if (_currentPage < _kPageCount - 1)
                     Align(
                       alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () => _completeOnboarding(ref),
-                        child: Text(
-                          'Skip',
-                          style: TextStyle(
-                            color: theme.colorScheme.onSurface.withValues(
-                              alpha: 0.5,
+                      child: Semantics(
+                        button: true,
+                        label: 'Skip onboarding',
+                        excludeSemantics: true,
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            minimumSize: const Size(
+                              MiToosaAccessibility.minTouchTarget,
+                              MiToosaAccessibility.minTouchTarget,
+                            ),
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
+                          onPressed: () => _completeOnboarding(ref),
+                          child: Text(
+                            'Skip',
+                            style: TextStyle(
+                              color: theme.colorScheme.onSurface.withValues(
+                                alpha: 0.5,
+                              ),
                             ),
                           ),
                         ),
@@ -128,35 +140,64 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     children: [
                       if (_currentPage > 0)
                         Expanded(
-                          child: OutlinedButton(
-                            onPressed: () {
-                              _pageController.previousPage(
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.easeInOut,
-                              );
-                            },
-                            child: const Text('Back'),
+                          child: Semantics(
+                            button: true,
+                            label: 'Back to previous onboarding page',
+                            excludeSemantics: true,
+                            child: OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                minimumSize: const Size(
+                                  MiToosaAccessibility.minTouchTarget,
+                                  MiToosaAccessibility.minTouchTarget,
+                                ),
+                              ),
+                              onPressed: () {
+                                _pageController.previousPage(
+                                  duration: MiToosaAccessibility.motionDuration(
+                                    context,
+                                    const Duration(milliseconds: 300),
+                                  ),
+                                  curve: Curves.easeInOut,
+                                );
+                              },
+                              child: const Text('Back'),
+                            ),
                           ),
                         ),
                       if (_currentPage > 0)
                         const SizedBox(width: MiToosaTheme.spacingMd),
                       Expanded(
-                        child: FilledButton(
-                          onPressed: () {
-                            if (_currentPage < _kPageCount - 1) {
-                              _pageController.nextPage(
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.easeInOut,
-                              );
-                            } else {
-                              // Mark onboarding as complete
-                              _completeOnboarding(ref);
-                            }
-                          },
-                          child: Text(
-                            _currentPage < _kPageCount - 1
-                                ? 'Next'
-                                : 'Get Started',
+                        child: Semantics(
+                          button: true,
+                          label: _currentPage < _kPageCount - 1
+                              ? 'Next onboarding page'
+                              : 'Get started with miToosa',
+                          excludeSemantics: true,
+                          child: FilledButton(
+                            style: FilledButton.styleFrom(
+                              minimumSize: const Size(
+                                MiToosaAccessibility.minTouchTarget,
+                                MiToosaAccessibility.minTouchTarget,
+                              ),
+                            ),
+                            onPressed: () {
+                              if (_currentPage < _kPageCount - 1) {
+                                _pageController.nextPage(
+                                  duration: MiToosaAccessibility.motionDuration(
+                                    context,
+                                    const Duration(milliseconds: 300),
+                                  ),
+                                  curve: Curves.easeInOut,
+                                );
+                              } else {
+                                _completeOnboarding(ref);
+                              }
+                            },
+                            child: Text(
+                              _currentPage < _kPageCount - 1
+                                  ? 'Next'
+                                  : 'Get Started',
+                            ),
                           ),
                         ),
                       ),
@@ -191,33 +232,38 @@ class _OnboardingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(icon, style: const TextStyle(fontSize: 96)),
-          const SizedBox(height: MiToosaTheme.spacingLg),
-          Text(
-            title,
-            style: theme.textTheme.displaySmall?.copyWith(
-              fontWeight: FontWeight.w900,
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(vertical: MiToosaTheme.spacingLg),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ExcludeSemantics(
+              child: Text(icon, style: const TextStyle(fontSize: 96)),
             ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: MiToosaTheme.spacingMd),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: MiToosaTheme.spacingXl,
-            ),
-            child: Text(
-              description,
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+            const SizedBox(height: MiToosaTheme.spacingLg),
+            Text(
+              title,
+              style: theme.textTheme.displaySmall?.copyWith(
+                fontWeight: FontWeight.w900,
               ),
               textAlign: TextAlign.center,
             ),
-          ),
-        ],
+            const SizedBox(height: MiToosaTheme.spacingMd),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: MiToosaTheme.spacingXl,
+              ),
+              child: Text(
+                description,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

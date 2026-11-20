@@ -14,3 +14,4 @@ library;
 export 'aetheric_pulse_dark.dart';
 export 'aetheric_pulse_light.dart';
 export 'kinetic_obsidian.dart';
+export 'mitoosa_accessibility.dart';
